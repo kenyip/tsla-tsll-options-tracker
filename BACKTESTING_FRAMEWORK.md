@@ -1,29 +1,40 @@
-# Backtesting Framework (v6.11+)
+# Backtesting Framework - Full History & Current State (v6.11)
 
-## Goal
-Stop guessing deltas. Use data to find the optimal parameters for our strategy.
+## Strategy Evolution History
 
-## Current Status
-- Created `backtest_short_term_calls.py`
-- Uses synthetic data (Geometric Brownian Motion)
-- Tests different deltas for 5 DTE calls
-- Outputs: Win Rate, Avg P/L, Max Loss, Profit Factor
+**May 12, 2026 - Morning**
+- Started with short-term calls at delta 0.22 (too tight at 440 strike)
+- User correctly identified risk of big upside moves
+- Added short strangle idea (sell both calls + puts)
+- Built backtester with synthetic data
+- Found optimal short-term call delta ≈ 0.17–0.20
 
-## How to Use
-```bash
-python backtest_short_term_calls.py
-```
+**May 12, 2026 - Afternoon**
+- Upgraded to v6.10: More conservative short-term calls (delta 0.17, 450 strike)
+- Added credit estimation
+- Added early exit simulation (45% profit target, 2x max loss)
+- Created full strangle backtester
 
-## Next Steps
-1. Add real historical data support (yfinance or Polygon)
-2. Test different DTEs (not just 5)
-3. Add transaction costs and slippage
-4. Run Monte Carlo simulations
-5. Integrate with main strategy (auto-optimize delta)
+## Current State (v6.11)
 
-## Why Synthetic Data First?
-- Fast iteration
-- No data dependency
-- Good for testing logic before going live with real data
+**Core Strategy**:
+- Weeklies only (simplified)
+- Dynamic direction (Puts in bullish, Calls/Strangles in reversal)
+- DTE-adjusted strikes
+- Early exit rules (45% profit / 2x loss)
+- Credit estimation included
 
-**This is the foundation for making our strategy truly systematic and data-driven.**
+**Backtesting Status**:
+- Synthetic data backtester complete
+- Short Call only vs Short Strangle comparison ready
+- Early exit logic implemented
+
+**Next Priorities**:
+1. Run full comparison: Short Call vs Strangle
+2. Add real historical data
+3. Optimize delta per DTE using backtest results
+4. Integrate best parameters back into live strategy
+
+**Key Lesson**: Never guess deltas. Always backtest.
+
+*This document is updated after every major change.*

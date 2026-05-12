@@ -1,28 +1,17 @@
-# Progress Log - TSLA/TSLL Dynamic Strategy (v6.9)
+# Current Strategy State (v6.11 - May 12, 2026, 2:12 PM)
 
-## Latest Update (May 12, 2026)
+## Live Recommendation
+**TSLA**: Sell 450 Call + 400 Put (Short Strangle), 2026-05-22, ~$2.80 total credit
+**TSLL**: Sell 15 Call + 13 Put (small), 2026-05-22, ~$1.10 total credit
 
-**v6.9 - Credit Estimation Added**
-- Now shows estimated credit collected per contract
-- DTE-adjusted delta and OTM distance implemented
-- All weeklies only (simplified)
-- Full test coverage
+## Key Rules
+- Weeklies only
+- Delta adjusted by DTE (0.17 for 5 DTE)
+- Early exit at 45% profit or 2x max loss
+- Intraday reversal detection active
 
-**Key Features Now Live**:
-- Dynamic direction (Puts vs Calls)
-- DTE-adjusted strikes
-- Exact expiration dates (YYYY-MM-DD)
-- Credit estimation
-- Intraday reversal detection
-- Automated tests on every run
+## Documentation
+- Full history in BACKTESTING_FRAMEWORK.md
+- Backtester: backtest_strangle_early_exit.py
 
-**Current Recommendation (as of 1:56 PM)**:
-- TSLA: Sell 440 Call, 2026-05-22, ~$1.85 credit
-- TSLL: Sell 14 Call, 2026-05-22, ~$0.65 credit
-
-**Next Steps**:
-- Add real-time IV and actual credit from options chain
-- Build position sizing calculator
-- Integrate with dashboard
-
-*Strategy continues to evolve daily based on market conditions.*
+*Strategy is now data-driven and continuously improving.*
