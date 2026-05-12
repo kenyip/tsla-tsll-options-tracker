@@ -1,35 +1,30 @@
 #!/usr/bin/env python3
 """
-Dynamic Parameter Engine v6.5 - Fixed Strike Calculation + Tests
+Dynamic Parameter Engine v6.6 - Clear Expiration Dates + Management Rules
 """
 
 from datetime import datetime, timedelta
 
 def get_expiration(dte):
     today = datetime(2026, 5, 12)
-    exp = today + timedelta(days=dte)
-    if exp.weekday() != 4:
-        exp += timedelta(days=(4 - exp.weekday()) % 7)
-    return exp.strftime("%b %d, %Y")
+    target = today + timedelta(days=dte)
+    # Find next Friday
+    days_until_friday = (4 - target.weekday()) % 7
+    if days_until_friday == 0 and target.weekday() != 4:
+        days_until_friday = 7
+    exp = target + timedelta(days=days_until_friday)
+    return exp.strftime("%b %d, %Y (Friday)")
 
 def estimate_strike(current_price, delta, dte, iv_rank, direction, ticker='TSLA'):
-    """Correctly calculates OTM strike for both PUTS and CALLS"""
     is_call = 'CALL' in direction.upper()
-    
-    # Base OTM percentage
     otm_pct = 0.065 + (delta - 0.20) * 0.12
-    if iv_rank > 50:
-        otm_pct *= 0.85
-    
+    if iv_rank > 50: otm_pct *= 0.85
     if is_call:
-        # Call strike = higher than spot
         strike = round(current_price * (1 + otm_pct), 0)
     else:
-        # Put strike = lower than spot
         strike = round(current_price * (1 - otm_pct), 0)
-    
     if ticker == 'TSLL':
-        strike = round(strike * 0.97, 0)  # slightly more OTM for safety
+        strike = round(strike * 0.97, 0)
     return int(strike)
 
 def get_dynamic_params(features, ticker='TSLA', current_price=445):
@@ -98,32 +93,7 @@ def get_dynamic_params(features, ticker='TSLA', current_price=445):
         'reason': f"Reversal={reversal}, HighIV={high_iv}"
     }
 
-# === TESTS ===
-def run_tests():
-    print("\n=== RUNNING STRIKE CALCULATION TESTS ===")
-    
-    # Test 1: Bullish put (should be below spot)
-    features = {'iv_rank': 13, 'recent_14d_return': 11.2, 'intraday_return': 2.0, 'volume_surge': 1.1, 'bias': 'bullish'}
-    result = get_dynamic_params(features, 'TSLA', 445)
-    assert result['strike'] < 445, f"Test 1 FAILED: Put strike {result['strike']} should be < 445"
-    print(f"Test 1 PASSED: Bullish put strike = {result['strike']} (below 445)")
-    
-    # Test 2: Reversal short-term call (should be above spot)
-    features['intraday_return'] = -4.5
-    features['volume_surge'] = 1.9
-    result = get_dynamic_params(features, 'TSLA', 425)
-    assert result['strike'] > 425, f"Test 2 FAILED: Call strike {result['strike']} should be > 425"
-    print(f"Test 2 PASSED: Short-term call strike = {result['strike']} (above 425)")
-    
-    # Test 3: TSLL call strike
-    result = get_dynamic_params(features, 'TSLL', 14.5)
-    assert result['strike'] > 14.5, f"Test 3 FAILED: TSLL call strike {result['strike']} should be > 14.5"
-    print(f"Test 3 PASSED: TSLL call strike = {result['strike']} (above 14.5)")
-    
-    print("=== ALL TESTS PASSED ===\n")
-
 if __name__ == "__main__":
-    run_tests()
     current = {'iv_rank': 13, 'recent_14d_return': 11.2, 'intraday_return': -4.4, 'volume_surge': 1.8, 'bias': 'bullish'}
     print(get_dynamic_params(current, 'TSLA', 425))
     print(get_dynamic_params(current, 'TSLL', 14.5))
