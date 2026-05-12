@@ -1,10 +1,11 @@
 # Justfile - Easy commands for TSLA/TSLL Options Tracker
-# Install just: https://github.com/casey/just
 
-# One-time setup (works even if 'pip' is not in PATH)
+# One-time setup (tries multiple Python versions)
 setup:
-    python -m pip install -r requirements.txt
-    echo "Setup complete. Run 'just test' to run the strategy with tests"
+    @python3 -m pip install -r requirements.txt 2>/dev/null || \
+    @python -m pip install -r requirements.txt 2>/dev/null || \
+    @echo "Could not auto-install. Please run manually:"
+    @echo "  python3 -m ensurepip --upgrade && python3 -m pip install -r requirements.txt"
 
 # Run strategy with automated tests (recommended)
 test:
