@@ -1,11 +1,11 @@
 # Justfile - Easy commands for TSLA/TSLL Options Tracker
 
-# One-time setup (tries multiple Python versions)
+# One-time setup
 setup:
-    @python3 -m pip install -r requirements.txt 2>/dev/null || \
-    @python -m pip install -r requirements.txt 2>/dev/null || \
-    @echo "Could not auto-install. Please run manually:"
-    @echo "  python3 -m ensurepip --upgrade && python3 -m pip install -r requirements.txt"
+    python3 -m pip install -r requirements.txt || \
+    python -m pip install -r requirements.txt || \
+    echo "Setup may have failed. Try manually:"
+    echo "  python3 -m ensurepip --upgrade && python3 -m pip install -r requirements.txt"
 
 # Run strategy with automated tests (recommended)
 test:
