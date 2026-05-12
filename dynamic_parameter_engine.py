@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Dynamic Parameter Engine v6.9 - With Credit Estimation
+Dynamic Parameter Engine v6.10 - More Conservative Short-Term Calls
 """
 
 from datetime import datetime, timedelta
@@ -18,8 +18,6 @@ def get_expiration(dte):
     return exp.strftime("%Y-%m-%d")
 
 def estimate_credit(strike, delta, dte, current_price):
-    """Rough credit estimation (rule of thumb)"""
-    # Base credit as % of strike, adjusted by delta and DTE
     base_credit_pct = 0.008 + (delta - 0.18) * 0.015
     dte_factor = min(dte / 30, 1.0)
     credit = round(strike * base_credit_pct * dte_factor, 2)
@@ -28,9 +26,9 @@ def estimate_credit(strike, delta, dte, current_price):
 def estimate_strike(current_price, delta, dte, iv_rank, direction, ticker='TSLA'):
     is_call = 'CALL' in direction.upper()
     if dte <= 7:
-        base_otm = 0.045
+        base_otm = 0.055          # Wider for safety on short DTE
     elif dte <= 15:
-        base_otm = 0.055
+        base_otm = 0.06
     else:
         base_otm = 0.065
     otm_pct = base_otm + (delta - 0.20) * 0.10
@@ -58,7 +56,7 @@ def get_dynamic_params(features, ticker='TSLA', current_price=445):
     if ticker == 'TSLA':
         if use_short_term_calls:
             direction = 'SELL SHORT-TERM CALLS'
-            delta = 0.22
+            delta = 0.17          # More conservative for short DTE
             dte = 5
             profit_target = 0.45
             size_note = "0.6% risk - tight management"
@@ -83,7 +81,7 @@ def get_dynamic_params(features, ticker='TSLA', current_price=445):
     else:
         if use_short_term_calls:
             direction = 'SELL SHORT-TERM CALLS (small)'
-            delta = 0.19
+            delta = 0.16
             dte = 4
             profit_target = 0.40
             size_note = "0.4% risk max"
