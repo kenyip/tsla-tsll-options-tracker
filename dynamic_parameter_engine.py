@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Dynamic Parameter Engine v6.3 - With Intraday Reversal Detection
+Dynamic Parameter Engine v6.4 - With Short-Term Call Selling Module
 """
 
 from datetime import datetime, timedelta
@@ -23,33 +23,34 @@ def get_dynamic_params(features, ticker='TSLA', current_price=445):
     iv = features.get('iv_rank', 13)
     ret_14d = features.get('recent_14d_return', 11.2)
     bias = features.get('bias', 'bullish')
-    intraday_return = features.get('intraday_return', 0.0)  # NEW
+    intraday_return = features.get('intraday_return', 0.0)
     volume_surge = features.get('volume_surge', 1.0)
     
-    # === NEW: Intraday Reversal Detection ===
-    reversal = False
-    if intraday_return < -3.0 and volume_surge > 1.5:
-        reversal = True
+    reversal = intraday_return < -3.0 and volume_surge > 1.5
+    high_iv = iv > 50
+    
+    # === Short-Term Call Selling Logic ===
+    use_short_term_calls = reversal or high_iv
     
     if ticker == 'TSLA':
-        if reversal:
+        if use_short_term_calls:
+            direction = 'SELL SHORT-TERM CALLS'
+            delta = 0.20
+            dte = 5          # 3-7 DTE sweet spot
+            profit_target = 0.45
+            size_note = "0.6% risk - tight management"
+        elif reversal:
             direction = 'DEFENSIVE - SELL CALLS or IRON CONDOR'
             delta = 0.20
             dte = 22
             profit_target = 0.45
-            size_note = "0.8% risk max - tight stops"
-        elif bias == 'bullish' and ret_14d > 5 and iv < 40 and not reversal:
+            size_note = "0.8% risk max"
+        elif bias == 'bullish' and ret_14d > 5 and iv < 40:
             direction = 'SELL PUTS'
             delta = 0.25
             dte = 30
             profit_target = 0.55
             size_note = "1-2% risk"
-        elif bias == 'bearish' or ret_14d < -10:
-            direction = 'SELL CALLS'
-            delta = 0.19
-            dte = 20
-            profit_target = 0.45
-            size_note = "0.8% risk"
         else:
             direction = 'SELL PUTS (reduced)'
             delta = 0.22
@@ -57,18 +58,12 @@ def get_dynamic_params(features, ticker='TSLA', current_price=445):
             profit_target = 0.50
             size_note = "1% risk"
     else:  # TSLL
-        if reversal:
-            direction = 'REDUCE RISK - No new puts'
-            delta = 0.16
-            dte = 18
+        if use_short_term_calls:
+            direction = 'SELL SHORT-TERM CALLS (small)'
+            delta = 0.17
+            dte = 4
             profit_target = 0.40
-            size_note = "0.3% risk max - focus on core"
-        elif bias == 'bullish' and ret_14d > 5 and iv < 40:
-            direction = 'SELL PUTS (smaller)'
-            delta = 0.19
-            dte = 24
-            profit_target = 0.50
-            size_note = "0.5-0.8% risk"
+            size_note = "0.4% risk max"
         else:
             direction = 'SELL PUTS (conservative)'
             delta = 0.18
@@ -88,12 +83,11 @@ def get_dynamic_params(features, ticker='TSLA', current_price=445):
         'strike': strike,
         'profit_target': profit_target,
         'size_note': size_note,
-        'reversal_detected': reversal,
-        'reason': f"14d={ret_14d}%, Intraday={intraday_return}%, IV={iv}"
+        'short_term_calls_active': use_short_term_calls,
+        'reason': f"Reversal={reversal}, HighIV={high_iv}"
     }
 
 if __name__ == "__main__":
-    # Current real-time example
     current = {'iv_rank': 13, 'recent_14d_return': 11.2, 'intraday_return': -4.4, 'volume_surge': 1.8, 'bias': 'bullish'}
-    print("TSLA:", get_dynamic_params(current, 'TSLA', 425))
-    print("TSLL:", get_dynamic_params(current, 'TSLL', 14.5))
+    print(get_dynamic_params(current, 'TSLA', 425))
+    print(get_dynamic_params(current, 'TSLL', 14.5))
