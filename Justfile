@@ -6,25 +6,13 @@ setup:
     pip install -r requirements.txt
     echo "Setup complete. Run 'just run' to launch dashboard"
 
-# Launch the Streamlit dashboard
-run:
-    streamlit run tsla_options_dashboard.py
-
 # Run strategy with automated tests (recommended)
 test:
     python strategy_v6_dynamic.py
 
-# Quick backtest on recent synthetic data
-backtest:
-    python -c '
-from tsla_tsll_options_tracker import TSLA_TSLL_OptionsTracker
-tracker = TSLA_TSLL_OptionsTracker(starting_capital=250000)
-tracker.load_or_generate_historical("TSLA", periods=400)
-print("\n=== TSLA Recent Performance Backtest (last 20 days) ===")
-tracker.backtest_premium_selling("TSLA", start_idx=380)
-print("\n=== TSLL Recent Performance Backtest (last 20 days) ===")
-tracker.backtest_premium_selling("TSLL", start_idx=380)
-'
+# Launch the Streamlit dashboard
+run:
+    streamlit run tsla_options_dashboard.py
 
 # Detailed last 2 weeks trade log
 recent-trades:
@@ -38,3 +26,6 @@ optimize:
 clean:
     rm -f *.png
     echo "Cleaned generated files"
+
+# Note: 'backtest' recipe removed due to just parsing issues with multi-line python -c
+# Use: python -c "from tsla_tsll_options_tracker import TSLA_TSLL_OptionsTracker; ..." directly if needed
