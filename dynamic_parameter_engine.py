@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
 """
-Dynamic Parameter Engine v6.6
+Dynamic Parameter Engine v6.7 - Correct Expiration Dates
 """
 
 from datetime import datetime, timedelta
 
+def get_next_friday(target_date):
+    """Find the next Friday on or after the target date"""
+    days_ahead = 4 - target_date.weekday()
+    if days_ahead < 0:
+        days_ahead += 7
+    return target_date + timedelta(days=days_ahead)
+
 def get_expiration(dte):
     today = datetime(2026, 5, 12)
     target = today + timedelta(days=dte)
-    days_until_friday = (4 - target.weekday()) % 7
-    if days_until_friday == 0 and target.weekday() != 4:
-        days_until_friday = 7
-    exp = target + timedelta(days=days_until_friday)
-    return exp.strftime("%b %d, %Y (Friday)")
+    exp = get_next_friday(target)
+    return exp.strftime("%Y-%m-%d")
 
 def estimate_strike(current_price, delta, dte, iv_rank, direction, ticker='TSLA'):
     is_call = 'CALL' in direction.upper()
@@ -94,4 +98,6 @@ def get_dynamic_params(features, ticker='TSLA', current_price=445):
     }
 
 if __name__ == "__main__":
-    print("Direct run - use 'just test' or 'python strategy_v6_dynamic.py'")
+    current = {'iv_rank': 13, 'recent_14d_return': 11.2, 'intraday_return': -4.4, 'volume_surge': 1.8, 'bias': 'bullish'}
+    print(get_dynamic_params(current, 'TSLA', 425))
+    print(get_dynamic_params(current, 'TSLL', 14.5))
