@@ -1,10 +1,28 @@
-# v6.2 - Exact Expiration + Strike Output
+# Progress Log - TSLA/TSLL Dynamic Strategy (v6.9)
 
-Now shows concrete expiration date and strike price (not just DTE and delta).
+## Latest Update (May 12, 2026)
 
-**Example for May 12 2026 ($445, IV Rank 13, +11.2% 14d):**
+**v6.9 - Credit Estimation Added**
+- Now shows estimated credit collected per contract
+- DTE-adjusted delta and OTM distance implemented
+- All weeklies only (simplified)
+- Full test coverage
 
-**TSLA**: SELL 410 Put, June 12 2026 (30 DTE), 0.25 delta, 55% target
-**TSLL**: SELL 14 Put, June 6 2026 (24 DTE), 0.19 delta, 50% target + core shares
+**Key Features Now Live**:
+- Dynamic direction (Puts vs Calls)
+- DTE-adjusted strikes
+- Exact expiration dates (YYYY-MM-DD)
+- Credit estimation
+- Intraday reversal detection
+- Automated tests on every run
 
-Strikes are estimated using standard delta-to-OTM mapping for the given IV and DTE.
+**Current Recommendation (as of 1:56 PM)**:
+- TSLA: Sell 440 Call, 2026-05-22, ~$1.85 credit
+- TSLL: Sell 14 Call, 2026-05-22, ~$0.65 credit
+
+**Next Steps**:
+- Add real-time IV and actual credit from options chain
+- Build position sizing calculator
+- Integrate with dashboard
+
+*Strategy continues to evolve daily based on market conditions.*

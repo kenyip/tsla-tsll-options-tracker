@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-TSLA/TSLL Strategy v6.6 - With Safe Import
+TSLA/TSLL Strategy v6.9 - Full Featured
 """
 
 try:
@@ -24,14 +24,14 @@ def main():
     tsla = get_dynamic_params(current, 'TSLA', 425)
     tsll = get_dynamic_params(current, 'TSLL', 14.5)
     
-    print("="*95)
-    print(f"TSLA ${425} | IV {13} | 14d +{11.2}% | Intraday {-4.4}%")
-    print("="*95)
-    print(f"TSLA: {tsla['direction']} {tsla['strike']} @ {tsla['delta']} delta | {tsla['dte']} DTE | {tsla['expiration']} | {tsla['size_note']}")
-    print(f"TSLL: {tsll['direction']} {tsll['strike']} @ {tsll['delta']} delta | {tsll['dte']} DTE | {tsll['expiration']} | {tsll['size_note']}")
+    print("="*100)
+    print(f"TSLA ${425} | IV {13} | 14d +{11.2}% | Intraday {-4.4}% | {tsla['expiration']}")
+    print("="*100)
+    print(f"TSLA: {tsla['direction']} {tsla['strike']} @ {tsla['delta']} delta | {tsla['dte']} DTE | Est. Credit: ${tsla['estimated_credit']}")
+    print(f"TSLL: {tsll['direction']} {tsll['strike']} @ {tsll['delta']} delta | {tsll['dte']} DTE | Est. Credit: ${tsll['estimated_credit']}")
     if tsla.get('short_term_calls_active'):
         print("\n>>> SHORT-TERM CALL SELLING MODULE ACTIVE <<<")
-    print("="*95)
+    print("="*100)
 
 if __name__ == "__main__":
     main()

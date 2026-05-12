@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Dynamic Parameter Engine v6.8 - DTE-Adjusted Delta/Strike
+Dynamic Parameter Engine v6.9 - With Credit Estimation
 """
 
 from datetime import datetime, timedelta
@@ -17,26 +17,29 @@ def get_expiration(dte):
     exp = get_next_friday(target)
     return exp.strftime("%Y-%m-%d")
 
+def estimate_credit(strike, delta, dte, current_price):
+    """Rough credit estimation (rule of thumb)"""
+    # Base credit as % of strike, adjusted by delta and DTE
+    base_credit_pct = 0.008 + (delta - 0.18) * 0.015
+    dte_factor = min(dte / 30, 1.0)
+    credit = round(strike * base_credit_pct * dte_factor, 2)
+    return credit
+
 def estimate_strike(current_price, delta, dte, iv_rank, direction, ticker='TSLA'):
     is_call = 'CALL' in direction.upper()
-    
-    # Adjust OTM % based on DTE (shorter DTE = tighter strike = higher delta)
     if dte <= 7:
-        base_otm = 0.045          # ~4.5% OTM for short-term
+        base_otm = 0.045
     elif dte <= 15:
         base_otm = 0.055
     else:
-        base_otm = 0.065          # wider for longer DTE
-    
+        base_otm = 0.065
     otm_pct = base_otm + (delta - 0.20) * 0.10
     if iv_rank > 50:
         otm_pct *= 0.85
-    
     if is_call:
         strike = round(current_price * (1 + otm_pct), 0)
     else:
         strike = round(current_price * (1 - otm_pct), 0)
-    
     if ticker == 'TSLL':
         strike = round(strike * 0.97, 0)
     return int(strike)
@@ -55,7 +58,7 @@ def get_dynamic_params(features, ticker='TSLA', current_price=445):
     if ticker == 'TSLA':
         if use_short_term_calls:
             direction = 'SELL SHORT-TERM CALLS'
-            delta = 0.22          # Slightly higher delta for short DTE
+            delta = 0.22
             dte = 5
             profit_target = 0.45
             size_note = "0.6% risk - tight management"
@@ -93,6 +96,7 @@ def get_dynamic_params(features, ticker='TSLA', current_price=445):
     
     exp_date = get_expiration(dte)
     strike = estimate_strike(current_price, delta, dte, iv, direction, ticker)
+    credit = estimate_credit(strike, delta, dte, current_price)
     
     return {
         'ticker': ticker,
@@ -103,6 +107,7 @@ def get_dynamic_params(features, ticker='TSLA', current_price=445):
         'strike': strike,
         'profit_target': profit_target,
         'size_note': size_note,
+        'estimated_credit': credit,
         'short_term_calls_active': use_short_term_calls,
         'reason': f"Reversal={reversal}, HighIV={high_iv}"
     }
