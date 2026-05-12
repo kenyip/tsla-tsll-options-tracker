@@ -1,20 +1,11 @@
-TSLA & TSLL Options Premium Selling Dashboard & Tracker (v5 Optimized)
+TSLA & TSLL Options Premium Selling Dashboard & Tracker (v6 - Dynamic)
 
-**Updated May 12, 2026**: Scenario-aware premium selling with dynamic entry/exit by market regime + TSLL long-term 2x directional core for when short-term fails.
+**May 12 2026 Update**: Fully dynamic strategy.
+- Automatically chooses **Sell Puts** (default bullish) or **Sell Calls** based on 14-day return, IV rank, RSI, volume surge, and EMA bias.
+- Dynamic DTE (18-36), delta (0.18-0.27), and profit target per regime.
+- 7 historical periods optimized → clear pattern: Low-IV bullish = longer DTE + higher delta puts.
+- TSLL core always maintained for long-term 2x directional advantage.
 
-## Key Optimizations Applied
-- Lowered IV rank min to 30 for current low-vol environment
-- Added technical + fundamental scenario classifier (bullish/bearish/neutral)
-- Dynamic delta/DTE/profit targets per scenario
-- Momentum-aware exits (trail winners, technical stops)
-- Explicit TSLL core integration for long-term advantage
-- Expected: Higher trade frequency, better risk-adjusted returns, daily profits + asymmetric upside
+Run: python strategy_v6_dynamic.py for today's recommendation.
 
-See STRATEGY_OPTIMIZATION_2026-05-12.md for full analysis, current trade ideas at $445 TSLA, and walk-forward recommended params.
-
-Core: Sell high-IV (or selective low-IV filtered) premium on TSLA/TSLL (0.19-0.26 delta, 21-35 DTE). Bullish put bias in uptrend. Wheel if assigned. Accumulate TSLL on dips.
-
-Backtester: 69%+ win rate synthetic; walk-forward confirms robust params. New v5 targets +10% edge in mixed regimes.
-
-Run: streamlit run tsla_options_dashboard.py
-Educational only - high risk options trading.
+Current (May 12): SELL PUTS @ 0.24-0.27 delta, 28-32 DTE.
