@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """
-Dynamic Parameter Engine v6.7 - Correct Expiration Dates
+Dynamic Parameter Engine v6.8 - DTE-Adjusted Delta/Strike
 """
 
 from datetime import datetime, timedelta
 
 def get_next_friday(target_date):
-    """Find the next Friday on or after the target date"""
     days_ahead = 4 - target_date.weekday()
     if days_ahead < 0:
         days_ahead += 7
@@ -20,13 +19,24 @@ def get_expiration(dte):
 
 def estimate_strike(current_price, delta, dte, iv_rank, direction, ticker='TSLA'):
     is_call = 'CALL' in direction.upper()
-    otm_pct = 0.065 + (delta - 0.20) * 0.12
+    
+    # Adjust OTM % based on DTE (shorter DTE = tighter strike = higher delta)
+    if dte <= 7:
+        base_otm = 0.045          # ~4.5% OTM for short-term
+    elif dte <= 15:
+        base_otm = 0.055
+    else:
+        base_otm = 0.065          # wider for longer DTE
+    
+    otm_pct = base_otm + (delta - 0.20) * 0.10
     if iv_rank > 50:
         otm_pct *= 0.85
+    
     if is_call:
         strike = round(current_price * (1 + otm_pct), 0)
     else:
         strike = round(current_price * (1 - otm_pct), 0)
+    
     if ticker == 'TSLL':
         strike = round(strike * 0.97, 0)
     return int(strike)
@@ -45,7 +55,7 @@ def get_dynamic_params(features, ticker='TSLA', current_price=445):
     if ticker == 'TSLA':
         if use_short_term_calls:
             direction = 'SELL SHORT-TERM CALLS'
-            delta = 0.20
+            delta = 0.22          # Slightly higher delta for short DTE
             dte = 5
             profit_target = 0.45
             size_note = "0.6% risk - tight management"
@@ -57,7 +67,7 @@ def get_dynamic_params(features, ticker='TSLA', current_price=445):
             size_note = "0.8% risk max"
         elif bias == 'bullish' and ret_14d > 5 and iv < 40:
             direction = 'SELL PUTS'
-            delta = 0.25
+            delta = 0.24
             dte = 30
             profit_target = 0.55
             size_note = "1-2% risk"
@@ -70,7 +80,7 @@ def get_dynamic_params(features, ticker='TSLA', current_price=445):
     else:
         if use_short_term_calls:
             direction = 'SELL SHORT-TERM CALLS (small)'
-            delta = 0.17
+            delta = 0.19
             dte = 4
             profit_target = 0.40
             size_note = "0.4% risk max"
