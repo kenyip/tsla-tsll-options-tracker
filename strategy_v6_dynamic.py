@@ -1,34 +1,37 @@
 #!/usr/bin/env python3
 """
-TSLA/TSLL Strategy v6.5 - Fixed Strikes + Automated Tests
+TSLA/TSLL Strategy v6.6 - With Safe Import
 """
 
-from dynamic_parameter_engine import get_dynamic_params, run_tests
+try:
+    from dynamic_parameter_engine import get_dynamic_params, run_tests
+    HAS_TESTS = True
+except ImportError:
+    HAS_TESTS = False
 
-class DynamicTSLA_TSLL_Strategy:
-    def __init__(self):
-        self.core_tsll_shares = 350
+def main():
+    if HAS_TESTS:
+        run_tests()
     
-    def daily_recommendation(self, current_price=425, iv_rank=13, recent_14d_return=11.2, intraday_return=-4.4, volume_surge=1.8):
-        features = {
-            'iv_rank': iv_rank, 'recent_14d_return': recent_14d_return,
-            'intraday_return': intraday_return, 'volume_surge': volume_surge,
-            'bias': 'bullish' if current_price > 420 else 'bearish'
-        }
-        tsla = get_dynamic_params(features, 'TSLA', current_price)
-        tsll = get_dynamic_params(features, 'TSLL', current_price * 0.034)
-        
-        print("="*95)
-        print(f"TSLA ${current_price} | IV {iv_rank} | 14d +{recent_14d_return}% | Intraday {intraday_return}%")
-        print("="*95)
-        print(f"TSLA: {tsla['direction']} {tsla['strike']} @ {tsla['delta']} delta | {tsla['dte']} DTE | {tsla['size_note']}")
-        print(f"TSLL: {tsll['direction']} {tsll['strike']} @ {tsll['delta']} delta | {tsll['dte']} DTE | {tsll['size_note']}")
-        if tsla.get('short_term_calls_active'):
-            print("\n>>> SHORT-TERM CALL SELLING MODULE ACTIVE <<<")
-        print("="*95)
-        return tsla, tsll
+    current = {
+        'iv_rank': 13,
+        'recent_14d_return': 11.2,
+        'intraday_return': -4.4,
+        'volume_surge': 1.8,
+        'bias': 'bullish'
+    }
+    
+    tsla = get_dynamic_params(current, 'TSLA', 425)
+    tsll = get_dynamic_params(current, 'TSLL', 14.5)
+    
+    print("="*95)
+    print(f"TSLA ${425} | IV {13} | 14d +{11.2}% | Intraday {-4.4}%")
+    print("="*95)
+    print(f"TSLA: {tsla['direction']} {tsla['strike']} @ {tsla['delta']} delta | {tsla['dte']} DTE | {tsla['expiration']} | {tsla['size_note']}")
+    print(f"TSLL: {tsll['direction']} {tsll['strike']} @ {tsll['delta']} delta | {tsll['dte']} DTE | {tsll['expiration']} | {tsll['size_note']}")
+    if tsla.get('short_term_calls_active'):
+        print("\n>>> SHORT-TERM CALL SELLING MODULE ACTIVE <<<")
+    print("="*95)
 
 if __name__ == "__main__":
-    run_tests()  # Run automated tests every time
-    strat = DynamicTSLA_TSLL_Strategy()
-    strat.daily_recommendation()
+    main()

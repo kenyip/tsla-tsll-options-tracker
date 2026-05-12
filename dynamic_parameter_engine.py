@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Dynamic Parameter Engine v6.6 - Clear Expiration Dates + Management Rules
+Dynamic Parameter Engine v6.6
 """
 
 from datetime import datetime, timedelta
@@ -8,7 +8,6 @@ from datetime import datetime, timedelta
 def get_expiration(dte):
     today = datetime(2026, 5, 12)
     target = today + timedelta(days=dte)
-    # Find next Friday
     days_until_friday = (4 - target.weekday()) % 7
     if days_until_friday == 0 and target.weekday() != 4:
         days_until_friday = 7
@@ -18,7 +17,8 @@ def get_expiration(dte):
 def estimate_strike(current_price, delta, dte, iv_rank, direction, ticker='TSLA'):
     is_call = 'CALL' in direction.upper()
     otm_pct = 0.065 + (delta - 0.20) * 0.12
-    if iv_rank > 50: otm_pct *= 0.85
+    if iv_rank > 50:
+        otm_pct *= 0.85
     if is_call:
         strike = round(current_price * (1 + otm_pct), 0)
     else:
@@ -94,6 +94,4 @@ def get_dynamic_params(features, ticker='TSLA', current_price=445):
     }
 
 if __name__ == "__main__":
-    current = {'iv_rank': 13, 'recent_14d_return': 11.2, 'intraday_return': -4.4, 'volume_surge': 1.8, 'bias': 'bullish'}
-    print(get_dynamic_params(current, 'TSLA', 425))
-    print(get_dynamic_params(current, 'TSLL', 14.5))
+    print("Direct run - use 'just test' or 'python strategy_v6_dynamic.py'")
