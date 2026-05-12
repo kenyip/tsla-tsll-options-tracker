@@ -1,10 +1,10 @@
 # Justfile - Easy commands for TSLA/TSLL Options Tracker
 # Install just: https://github.com/casey/just
 
-# One-time setup
+# One-time setup (works even if 'pip' is not in PATH)
 setup:
-    pip install -r requirements.txt
-    echo "Setup complete. Run 'just run' to launch dashboard"
+    python -m pip install -r requirements.txt
+    echo "Setup complete. Run 'just test' to run the strategy with tests"
 
 # Run strategy with automated tests (recommended)
 test:
@@ -26,6 +26,3 @@ optimize:
 clean:
     rm -f *.png
     echo "Cleaned generated files"
-
-# Note: 'backtest' recipe removed due to just parsing issues with multi-line python -c
-# Use: python -c "from tsla_tsll_options_tracker import TSLA_TSLL_OptionsTracker; ..." directly if needed
