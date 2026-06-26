@@ -46,6 +46,136 @@ def save_pmcc_positions(records: list[dict], path: Path | str = PMCC_POSITIONS_P
     p.write_text(yaml.dump({"pmcc_positions": records}, default_flow_style=False, sort_keys=False))
 
 
+def _today_iso() -> str:
+    return datetime.now(timezone.utc).date().isoformat()
+
+
+def make_leaps_record(
+    *,
+    ticker: str = "TSLA",
+    leaps_strike: float,
+    leaps_expiration: str,
+    leaps_debit: float,
+    contracts: int = 1,
+    spot_at_entry: float | None = None,
+    entry_date: str | None = None,
+    income_floor_daily: float = 10.0,
+    income_good_daily: float = 15.0,
+    income_strong_daily: float = 20.0,
+    notes: str = "",
+) -> dict:
+    """New LEAPS-only lot — no open short until you log an open trade."""
+    return {
+        "ticker": ticker.upper(),
+        "leaps_strike": float(leaps_strike),
+        "leaps_expiration": str(leaps_expiration)[:10],
+        "leaps_debit": float(leaps_debit),
+        "entry_date": entry_date or _today_iso(),
+        "spot_at_entry": spot_at_entry,
+        "contracts": int(contracts),
+        "open_short": False,
+        "income_floor_daily": float(income_floor_daily),
+        "income_good_daily": float(income_good_daily),
+        "income_strong_daily": float(income_strong_daily),
+        "notes": notes,
+    }
+
+
+def open_short_on_record(
+    record: dict,
+    *,
+    strike: float,
+    expiration: str,
+    credit: float,
+    contracts: int = 1,
+    opened: str | None = None,
+    short_iv: float | None = None,
+    notes: str = "",
+) -> dict:
+    """Attach an open short leg to an existing LEAPS lot."""
+    if _has_open_short(record):
+        raise ValueError("position already has an open short — close it first")
+    record = dict(record)
+    record.update({
+        "short_strike": float(strike),
+        "short_expiration": str(expiration)[:10],
+        "short_credit": float(credit),
+        "short_contracts": int(contracts),
+        "short_open_date": opened or _today_iso(),
+        "open_short": True,
+    })
+    if short_iv is not None:
+        record["short_iv"] = float(short_iv)
+    if notes:
+        record["notes"] = notes
+    return record
+
+
+def close_short_on_record(
+    record: dict,
+    *,
+    close_debit: float,
+    closed: str | None = None,
+    contracts: int | None = None,
+    notes: str = "",
+) -> dict:
+    """Close the open short and append a row to closed_shorts[]."""
+    if not _has_open_short(record):
+        raise ValueError("no open short on this position")
+    record = dict(record)
+    closed_day = str(closed or _today_iso())[:10]
+    n = int(contracts or record.get("short_contracts", 1))
+    credit = float(record["short_credit"])
+    debit = float(close_debit)
+    trade = {
+        "strike": float(record["short_strike"]),
+        "expiration": str(record["short_expiration"])[:10],
+        "contracts": n,
+        "opened": str(record.get("short_open_date", record.get("entry_date", closed_day)))[:10],
+        "credit": credit,
+        "closed": closed_day,
+        "close_debit": debit,
+        "realized_pnl": (credit - debit) * n,
+        "notes": notes,
+    }
+    history = list(record.get("closed_shorts") or [])
+    history.append(trade)
+    record["closed_shorts"] = history
+    record["open_short"] = False
+    record["last_short_strike"] = float(record["short_strike"])
+    record["last_short_expiration"] = str(record["short_expiration"])[:10]
+    record["last_short_open_date"] = str(record.get("short_open_date", ""))[:10]
+    for key in ("short_strike", "short_expiration", "short_credit", "short_open_date", "short_contracts"):
+        record.pop(key, None)
+    return record
+
+
+def closed_shorts_trade_rows(record: dict) -> list[dict]:
+    """Flatten closed_shorts[] for display as a transaction log."""
+    rows: list[dict] = []
+    for i, sh in enumerate(record.get("closed_shorts") or [], start=1):
+        credit = float(sh.get("credit", sh.get("short_credit", 0.0)))
+        debit = float(sh.get("close_debit", sh.get("debit", 0.0)))
+        contracts = int(sh.get("contracts", 1))
+        pnl = sh.get("realized_pnl")
+        if pnl is None:
+            pnl = (credit - debit) * contracts
+        rows.append({
+            "#": i,
+            "action": "close",
+            "strike": f"${float(sh['strike']):.0f}",
+            "exp": str(sh.get("expiration", ""))[:10],
+            "contracts": contracts,
+            "opened": str(sh.get("opened", ""))[:10],
+            "credit": f"${credit:,.0f}",
+            "closed": str(sh.get("closed", ""))[:10],
+            "close_debit": f"${debit:,.0f}",
+            "realized": f"${float(pnl):+,.0f}",
+            "notes": sh.get("notes", ""),
+        })
+    return rows
+
+
 def _has_open_short(record: dict) -> bool:
     return (
         record.get("open_short", True) is not False

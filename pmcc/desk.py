@@ -172,8 +172,8 @@ def candidate_is_preferred(c: dict) -> bool:
     return c.get("income") in {"carry", "good", "strong"} and c.get("risk") in {"balanced", "wide"}
 
 
-def build_position_rows(statuses: list[dict]) -> list[dict]:
-    """Flatten check_pmcc_position results into rich per-leg table rows."""
+def build_position_summary_rows(statuses: list[dict]) -> list[dict]:
+    """One row per tracked lot — main MY POSITIONS table."""
     rows: list[dict] = []
     for s in statuses:
         p: PmccPair = s["pair"]
@@ -181,71 +181,90 @@ def build_position_rows(statuses: list[dict]) -> list[dict]:
         contracts = s.get("contracts", 1)
         spot = float(s.get("spot_now") or rec.get("spot_at_entry") or p.spot_entry or 0.0)
         ticker = str(rec.get("ticker", "TSLA")).upper()
-        short_label = "" if s.get("no_open_short") else f"/{int(p.short_strike)}"
-        diag = (
-            f"{ticker} {int(p.leaps_strike)}{short_label} "
-            f"x{contracts} ${float(rec.get('leaps_debit', p.leaps_debit)):,.0f}"
-        )
+        leaps_m = s["leaps_mark"]
+        leaps_mark = leaps_m["price"] * 100
+        if s.get("no_open_short"):
+            closed_n = len(rec.get("closed_shorts") or [])
+            if closed_n:
+                short_cell = f"{closed_n} banked · ${float(s.get('realized_short_total', 0)):+,.0f} realized"
+            else:
+                short_cell = "no short yet"
+            net_label = f"${s['net_pnl_total']:+,.0f} total"
+        else:
+            short_cell = f"${p.short_strike:.0f} open · {str(p.short_exp)[:10]}"
+            net_label = f"${s['net_pnl']:+,.0f}/ct"
+        rows.append({
+            "position": (
+                f"{ticker} ${int(p.leaps_strike)} LEAPS "
+                f"x{contracts} @ ${float(rec.get('leaps_debit', p.leaps_debit)):,.0f}"
+            ),
+            "leaps mark": f"${leaps_mark:,.0f}",
+            "short": short_cell,
+            "net P/L": net_label,
+            "upside": f"{(p.leaps_strike / spot - 1) * 100:+.1f}%",
+            "status": s.get("primary_action", "—"),
+            "_status_key": s,
+        })
+    return rows
 
+
+def build_position_leg_rows(statuses: list[dict]) -> list[dict]:
+    """Per-leg marks inside expanders — LEAPS plus open short or banked summary."""
+    rows: list[dict] = []
+    for s in statuses:
+        p: PmccPair = s["pair"]
+        rec = s["record"]
+        contracts = s.get("contracts", 1)
+        spot = float(s.get("spot_now") or rec.get("spot_at_entry") or p.spot_entry or 0.0)
         leaps_m = s["leaps_mark"]
         leaps_mark = leaps_m["price"] * 100
         rows.append({
-            "diagonal": diag,
-            "leg": "LEAPS",
-            "strike_exp_dte": f"${p.leaps_strike:.0f} · {str(p.leaps_exp)[:10]} · {p.leaps_dte}d",
-            "entry_cost": f"${p.leaps_debit:,.0f}",
+            "leg": "LEAPS (long)",
+            "strike · exp · DTE": f"${p.leaps_strike:.0f} · {str(p.leaps_exp)[:10]} · {p.leaps_dte}d",
+            "entry": f"${p.leaps_debit:,.0f}",
             "mark": f"${leaps_mark:,.0f}",
-            "leg_pnl": f"${s['leaps_leg_pnl']:+,.0f}",
-            "net_pnl": f"${s['net_pnl']:+,.0f}/ct",
+            "leg P/L": f"${s['leaps_leg_pnl']:+,.0f}",
             "delta": f"{leaps_m.get('delta', 0):.3f}",
-            "per_day": "—",
-            "upside_pct": f"{(p.leaps_strike / spot - 1) * 100:+.1f}%",
-            "status": s.get("primary_action", "—"),
-            "contracts": contracts,
+            "upside": f"{(p.leaps_strike / spot - 1) * 100:+.1f}%",
             "_status_key": s,
         })
 
         if s.get("no_open_short"):
             realized = float(s.get("realized_short_total", 0.0))
-            rows.append({
-                "diagonal": diag,
-                "leg": "Closed shorts",
-                "strike_exp_dte": "realized P/L",
-                "entry_cost": "—",
-                "mark": "—",
-                "leg_pnl": f"${realized:+,.0f}",
-                "net_pnl": f"${s['net_pnl_total']:+,.0f} total",
-                "delta": "—",
-                "per_day": "—",
-                "upside_pct": "—",
-                "status": "LEAPS ONLY",
-                "contracts": contracts,
-                "_status_key": s,
-            })
+            if realized or rec.get("closed_shorts"):
+                rows.append({
+                    "leg": "Banked shorts (sum)",
+                    "strike · exp · DTE": f"{len(rec.get('closed_shorts') or [])} closed trade(s)",
+                    "entry": "—",
+                    "mark": "—",
+                    "leg P/L": f"${realized:+,.0f}",
+                    "delta": "—",
+                    "upside": "—",
+                    "_status_key": s,
+                })
             continue
 
         short_m = s["short_mark"] or {}
         carry = s.get("carry") or {}
         short_mark = short_m.get("price", 0) * 100
-        upside = (p.short_strike / spot - 1) * 100
         pace = carry.get("current_profit_daily")
         per_day = f"${pace:+.1f}/d" if pace is not None else "—"
         rows.append({
-            "diagonal": diag,
-            "leg": "Short",
-            "strike_exp_dte": f"${p.short_strike:.0f} · {str(p.short_exp)[:10]} · {p.short_dte}d",
-            "entry_cost": f"${p.short_credit:,.0f}",
+            "leg": "Short (open)",
+            "strike · exp · DTE": f"${p.short_strike:.0f} · {str(p.short_exp)[:10]} · {p.short_dte}d",
+            "entry": f"${p.short_credit:,.0f}",
             "mark": f"${short_mark:,.0f}",
-            "leg_pnl": f"${s['short_leg_pnl']:+,.0f}",
-            "net_pnl": f"${s['net_pnl']:+,.0f}/ct",
+            "leg P/L": f"${s['short_leg_pnl']:+,.0f}",
             "delta": f"{short_m.get('delta', 0):.3f}",
-            "per_day": per_day,
-            "upside_pct": f"{upside:+.1f}%",
-            "status": s.get("primary_action", "—"),
-            "contracts": contracts,
+            "upside": f"{(p.short_strike / spot - 1) * 100:+.1f}% · {per_day}",
             "_status_key": s,
         })
     return rows
+
+
+def build_position_rows(statuses: list[dict]) -> list[dict]:
+    """Backward-compatible alias — summary rows for desk bundle / gating."""
+    return build_position_summary_rows(statuses)
 
 
 def _reload_mode(statuses: list[dict], staged: dict | None) -> str:
@@ -619,12 +638,9 @@ def desk_gating_lines(bundle: DeskBundle) -> list[str]:
         lines.append(f"STAGED NEXT: {bundle.staged.get('next_step')}")
         lines.append(f"STAGED EVENTS: {bundle.staged.get('events')}")
 
-    nvda_leaps = [
-        r for r in bundle.position_rows
-        if "NVDA" in r.get("diagonal", "") and r.get("leg") == "LEAPS"
-    ]
-    if nvda_leaps:
-        lines.append(f"NVDA upside: {nvda_leaps[0]['upside_pct']}")
+    nvda_summary = [r for r in bundle.position_rows if r.get("position", "").startswith("NVDA")]
+    if nvda_summary:
+        lines.append(f"NVDA upside: {nvda_summary[0]['upside']}")
 
     candidates = bundle.next_short.get("candidates") or []
     prefer_n = sum(1 for c in candidates if c.get("_prefer"))

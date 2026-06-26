@@ -230,13 +230,18 @@ with tab_today:
     from pmcc.chain_data import format_chain_source
     from pmcc.desk import (
         assemble_pmcc_desk,
+        build_position_leg_rows,
         candidate_table_styler,
         position_record_key,
         position_remove_match,
     )
     from pmcc.positions import (
         PMCC_POSITIONS_PATH,
+        close_short_on_record,
+        closed_shorts_trade_rows,
         load_pmcc_positions,
+        make_leaps_record,
+        open_short_on_record,
         save_pmcc_positions,
     )
 
@@ -273,14 +278,15 @@ with tab_today:
         f"chain {situation['chain_age_minutes']:.0f}m old"
         if situation.get("chain_age_minutes") is not None else "chain age —"
     )
-    s1, s2, s3, s4 = st.columns(4)
-    s1.metric("TSLA spot", f"${situation['spot']:.2f}" if spot_pmcc else "—", age_caption)
     icon = _PMCC_LEVEL_ICON.get(situation["primary_level"], "•")
-    s2.metric("Next action", f"{icon} {situation['primary_action']}")
-    s3.metric("Patience", situation["patience_budget"])
-    s4.metric("Catalyst", situation["catalyst"][:40] + ("…" if len(situation["catalyst"]) > 40 else ""))
-    if situation["primary_detail"]:
-        st.caption(situation["primary_detail"])
+    spot_col, pulse_col = st.columns([1, 3])
+    spot_col.metric("TSLA spot", f"${situation['spot']:.2f}" if spot_pmcc else "—", age_caption)
+    with pulse_col:
+        st.markdown(f"**Next action** — {icon} {situation['primary_action']}")
+        if situation["primary_detail"]:
+            st.caption(situation["primary_detail"])
+        st.markdown(f"**Patience** — {situation['patience_budget']}")
+        st.markdown(f"**Catalyst** — {situation['catalyst']}")
     expires = situation["patience_expires"]
     if expires.get("label") and expires["label"] != "—":
         st.markdown(f"**{expires['label']}** ({expires.get('explanation', '')})")
@@ -293,16 +299,22 @@ with tab_today:
     elif not pmcc_statuses:
         st.warning("No positions marked — check chain loads per ticker above.")
     else:
-        pos_rows = bundle.position_rows
-        display_cols = [
-            "diagonal", "leg", "strike_exp_dte", "entry_cost", "mark",
-            "leg_pnl", "net_pnl", "delta", "per_day", "upside_pct", "status",
-        ]
+        summary_cols = ["position", "leaps mark", "short", "net P/L", "upside", "status"]
         st.dataframe(
-            pd.DataFrame(pos_rows)[display_cols],
+            pd.DataFrame(bundle.position_rows)[summary_cols],
             hide_index=True,
             width="stretch",
         )
+        st.caption(
+            "One row per LEAPS lot. **Short** shows the open call or banked closed trades; "
+            "leg-level marks and the full short transaction log are inside each playbook expander."
+        )
+        leg_by_key = {
+            position_record_key(s["record"]): [
+                r for r in build_position_leg_rows([s])
+            ]
+            for s in pmcc_statuses
+        }
 
         for i, s in enumerate(pmcc_statuses):
             p = s["pair"]
@@ -317,6 +329,16 @@ with tab_today:
                 f" — playbook"
             )
             with st.expander(label, expanded=s["primary_level"] in ("alert", "warn")):
+                leg_rows = leg_by_key.get(position_record_key(rec), [])
+                if leg_rows:
+                    leg_df = pd.DataFrame(leg_rows)
+                    leg_cols = [c for c in leg_df.columns if not c.startswith("_")]
+                    st.markdown("**Leg marks**")
+                    st.dataframe(leg_df[leg_cols], hide_index=True, width="stretch")
+                trade_log = closed_shorts_trade_rows(rec)
+                if trade_log:
+                    st.markdown("**Short transaction log**")
+                    st.dataframe(pd.DataFrame(trade_log), hide_index=True, width="stretch")
                 for item in s["checks"]:
                     lvl = item["level"]
                     fn = {"alert": st.error, "warn": st.warning, "info": st.info}.get(lvl, st.success)
@@ -345,33 +367,120 @@ with tab_today:
                     save_pmcc_positions(fresh)
                     st.rerun()
 
-        with st.expander("Add / edit PMCC positions"):
-            with st.form("add_pmcc_position", clear_on_submit=True):
-                c1, c2, c3 = st.columns(3)
-                in_leaps_k = c1.number_input("LEAPS strike", step=5.0, value=380.0)
-                in_leaps_exp = c2.date_input("LEAPS exp")
-                in_leaps_debit = c3.number_input("LEAPS debit $", step=50.0, value=11000.0)
-                c4, c5, c6 = st.columns(3)
-                in_short_k = c4.number_input("Short strike", step=5.0, value=490.0)
-                in_short_exp = c5.date_input("Short exp")
-                in_short_credit = c6.number_input("Short credit $", step=25.0, value=700.0)
-                in_contracts = st.number_input("Contracts", min_value=1, value=1, step=1)
-                if st.form_submit_button("Add diagonal"):
-                    if spot_pmcc is None:
-                        st.warning("PMCC chain not loaded.")
-                    else:
-                        save_pmcc_positions(load_pmcc_positions() + [{
-                            "ticker": "TSLA",
-                            "leaps_strike": float(in_leaps_k),
-                            "leaps_expiration": str(in_leaps_exp),
-                            "leaps_debit": float(in_leaps_debit),
-                            "short_strike": float(in_short_k),
-                            "short_expiration": str(in_short_exp),
-                            "short_credit": float(in_short_credit),
-                            "spot_at_entry": spot_pmcc,
-                            "contracts": int(in_contracts),
-                        }])
+        def _has_open_short(rec: dict) -> bool:
+            return (
+                rec.get("open_short", True) is not False
+                and rec.get("short_strike") is not None
+                and rec.get("short_expiration") is not None
+                and rec.get("short_credit") is not None
+            )
+
+        position_options = {
+            position_record_key(r): (
+                f"{r.get('ticker', 'TSLA')} ${int(r['leaps_strike'])} LEAPS "
+                f"x{int(r.get('contracts', 1))} @ ${float(r['leaps_debit']):,.0f}"
+            )
+            for r in pmcc_records
+        }
+        leaps_only_keys = [position_record_key(r) for r in pmcc_records if not _has_open_short(r)]
+        open_short_keys = [position_record_key(r) for r in pmcc_records if _has_open_short(r)]
+
+        with st.expander("Add / manage PMCC positions"):
+            tab_leaps, tab_open, tab_close = st.tabs(["Add LEAPS lot", "Open short", "Close short"])
+
+            with tab_leaps:
+                with st.form("add_pmcc_leaps", clear_on_submit=True):
+                    c1, c2, c3 = st.columns(3)
+                    in_ticker = c1.text_input("Ticker", value="TSLA")
+                    in_leaps_k = c2.number_input("LEAPS strike", step=5.0, value=380.0)
+                    in_contracts = c3.number_input("LEAPS contracts", min_value=1, value=1, step=1)
+                    c4, c5, c6 = st.columns(3)
+                    in_leaps_exp = c4.date_input("LEAPS exp")
+                    in_leaps_debit = c5.number_input("LEAPS debit $ (per contract)", step=50.0, value=11000.0)
+                    in_entry = c6.date_input("Entry date")
+                    in_notes = st.text_area("Notes", height=68)
+                    if st.form_submit_button("Add LEAPS lot"):
+                        spot = bundle.spots_by_ticker.get(in_ticker.upper(), spot_pmcc)
+                        save_pmcc_positions(load_pmcc_positions() + [make_leaps_record(
+                            ticker=in_ticker,
+                            leaps_strike=float(in_leaps_k),
+                            leaps_expiration=str(in_leaps_exp),
+                            leaps_debit=float(in_leaps_debit),
+                            contracts=int(in_contracts),
+                            spot_at_entry=spot,
+                            entry_date=str(in_entry),
+                            notes=in_notes,
+                        )])
                         st.rerun()
+
+            with tab_open:
+                if not leaps_only_keys:
+                    st.caption("No LEAPS-only lots — add a LEAPS lot first.")
+                else:
+                    with st.form("open_pmcc_short", clear_on_submit=True):
+                        pick_key = st.selectbox(
+                            "LEAPS lot",
+                            leaps_only_keys,
+                            format_func=lambda k: position_options[k],
+                        )
+                        c1, c2, c3 = st.columns(3)
+                        in_short_k = c1.number_input("Short strike", step=5.0, value=490.0)
+                        in_short_exp = c2.date_input("Short exp")
+                        in_short_credit = c3.number_input("Short credit $ (per contract)", step=25.0, value=700.0)
+                        c4, c5 = st.columns(2)
+                        in_short_ct = c4.number_input("Short contracts", min_value=1, value=1, step=1)
+                        in_opened = c5.date_input("Opened")
+                        in_open_notes = st.text_input("Trade notes")
+                        if st.form_submit_button("Log open short"):
+                            records = load_pmcc_positions()
+                            updated = []
+                            for r in records:
+                                if position_record_key(r) == pick_key:
+                                    updated.append(open_short_on_record(
+                                        r,
+                                        strike=float(in_short_k),
+                                        expiration=str(in_short_exp),
+                                        credit=float(in_short_credit),
+                                        contracts=int(in_short_ct),
+                                        opened=str(in_opened),
+                                        notes=in_open_notes,
+                                    ))
+                                else:
+                                    updated.append(r)
+                            save_pmcc_positions(updated)
+                            st.rerun()
+
+            with tab_close:
+                if not open_short_keys:
+                    st.caption("No open shorts — use **Open short** after you sell a call.")
+                else:
+                    with st.form("close_pmcc_short", clear_on_submit=True):
+                        pick_key = st.selectbox(
+                            "Open short",
+                            open_short_keys,
+                            format_func=lambda k: position_options[k],
+                        )
+                        c1, c2, c3 = st.columns(3)
+                        in_close_debit = c1.number_input("Close debit $ (per contract)", step=25.0, value=400.0)
+                        in_closed = c2.date_input("Closed")
+                        in_close_ct = c3.number_input("Contracts to close", min_value=1, value=1, step=1)
+                        in_close_notes = st.text_input("Close notes")
+                        if st.form_submit_button("Log close short"):
+                            records = load_pmcc_positions()
+                            updated = []
+                            for r in records:
+                                if position_record_key(r) == pick_key:
+                                    updated.append(close_short_on_record(
+                                        r,
+                                        close_debit=float(in_close_debit),
+                                        closed=str(in_closed),
+                                        contracts=int(in_close_ct),
+                                        notes=in_close_notes,
+                                    ))
+                                else:
+                                    updated.append(r)
+                            save_pmcc_positions(updated)
+                            st.rerun()
 
     # ── Block 3: NEXT SHORT TO SELL ───────────────────────────────────────
     st.subheader("NEXT SHORT TO SELL")

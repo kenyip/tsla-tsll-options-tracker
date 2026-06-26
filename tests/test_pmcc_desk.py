@@ -15,7 +15,12 @@ from pmcc.desk import (
     position_remove_match,
 )
 from pmcc.income import reentry_candidates
-from pmcc.positions import load_pmcc_positions
+from pmcc.positions import (
+    close_short_on_record,
+    load_pmcc_positions,
+    make_leaps_record,
+    open_short_on_record,
+)
 
 
 class AssemblePmccDeskIntegrationTest(unittest.TestCase):
@@ -30,12 +35,9 @@ class AssemblePmccDeskIntegrationTest(unittest.TestCase):
         keys = {position_record_key(r) for r in records}
         self.assertEqual(len(keys), len(records))
 
-        nvda_rows = [
-            r for r in bundle.position_rows
-            if "NVDA" in r.get("diagonal", "") and r.get("leg") == "LEAPS"
-        ]
+        nvda_rows = [r for r in bundle.position_rows if r.get("position", "").startswith("NVDA")]
         if nvda_rows:
-            upside = float(nvda_rows[0]["upside_pct"].rstrip("%"))
+            upside = float(nvda_rows[0]["upside"].rstrip("%"))
             self.assertGreater(upside, 0.0)
 
         for s in bundle.statuses:
@@ -143,6 +145,34 @@ class ComputePatienceExpiresTest(unittest.TestCase):
         )
         self.assertEqual(result["date"], "2026-07-17")
         self.assertEqual(result["explanation"], "earnings − 5 calendar days")
+
+
+class PmccTradeLogTest(unittest.TestCase):
+    def test_open_and_close_short_appends_transaction(self) -> None:
+        lot = make_leaps_record(
+            ticker="TSLA",
+            leaps_strike=400,
+            leaps_expiration="2028-06-16",
+            leaps_debit=11000,
+            contracts=2,
+        )
+        with_short = open_short_on_record(
+            lot,
+            strike=500,
+            expiration="2026-08-21",
+            credit=725,
+            contracts=1,
+            opened="2026-06-22",
+        )
+        closed = close_short_on_record(
+            with_short,
+            close_debit=400,
+            closed="2026-06-23",
+            notes="harvest",
+        )
+        self.assertFalse(closed.get("short_strike"))
+        self.assertEqual(len(closed["closed_shorts"]), 1)
+        self.assertEqual(closed["closed_shorts"][0]["realized_pnl"], 325)
 
 
 if __name__ == "__main__":
