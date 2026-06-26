@@ -71,6 +71,8 @@ class AssemblePmccDeskIntegrationTest(unittest.TestCase):
         self.assertIn("VERIFY OK", lines)
         self.assertTrue(any(line.startswith("RECORDS:") for line in lines))
         self.assertTrue(any(line.startswith("REENTRY COUNT:") for line in lines))
+        self.assertTrue(any("STYLED HTML background-color: present" in line for line in lines))
+        self.assertTrue(any("background-color:" in line for line in lines))
 
     def test_position_record_key_distinguishes_same_strike_lots(self) -> None:
         a = {
