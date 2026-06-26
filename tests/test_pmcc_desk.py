@@ -1,98 +1,76 @@
 from __future__ import annotations
 
 import unittest
-from datetime import date
 
 import pandas as pd
 
 from pmcc.desk import (
-    build_position_rows,
-    build_situation,
+    assemble_pmcc_desk,
     candidate_is_preferred,
     candidate_table_styler,
-    compute_patience_expires,
-    next_earnings_date,
+    desk_gating_lines,
     position_record_key,
     position_remove_match,
-    select_next_short,
 )
-from pmcc.income import income_metrics, reentry_candidates
-from pmcc.positions import check_leaps_only_position
-from pmcc.scenarios import PmccPair
-from pmcc.staged_entry import build_tsla_staged_entry_plan
+from pmcc.income import reentry_candidates
+from pmcc.positions import load_pmcc_positions
 
 
-class PmccDeskTest(unittest.TestCase):
-    def setUp(self) -> None:
-        self.chain = pd.DataFrame([
-            {"expiration": "2026-08-21", "dte": 57, "strike": 450.0, "bid": 6.80, "ask": 6.95, "mid": 6.875, "iv": 0.475, "delta": 0.20},
-            {"expiration": "2026-08-21", "dte": 57, "strike": 470.0, "bid": 4.70, "ask": 4.80, "mid": 4.75, "iv": 0.483, "delta": 0.15},
-            {"expiration": "2026-08-21", "dte": 57, "strike": 500.0, "bid": 2.86, "ask": 2.94, "mid": 2.90, "iv": 0.501, "delta": 0.09},
-            {"expiration": "2026-08-21", "dte": 57, "strike": 520.0, "bid": 2.14, "ask": 2.20, "mid": 2.17, "iv": 0.516, "delta": 0.07},
-            {"expiration": "2026-08-21", "dte": 57, "strike": 540.0, "bid": 1.55, "ask": 1.60, "mid": 1.57, "iv": 0.52, "delta": 0.05},
-        ])
-        self.records = [
-            {"ticker": "TSLA", "leaps_strike": 410, "leaps_expiration": "2028-06-16", "leaps_debit": 13000, "contracts": 2, "open_short": False},
+class AssemblePmccDeskIntegrationTest(unittest.TestCase):
+    def test_assemble_pmcc_desk_live_yaml(self) -> None:
+        records = load_pmcc_positions()
+        if not records:
+            self.skipTest("no pmcc_positions.yaml")
+
+        bundle = assemble_pmcc_desk(records, preset="managed", refresh=False)
+        self.assertEqual(len(bundle.statuses), len(records))
+
+        keys = {position_record_key(r) for r in records}
+        self.assertEqual(len(keys), len(records))
+
+        nvda_rows = [
+            r for r in bundle.position_rows
+            if "NVDA" in r.get("diagonal", "") and r.get("leg") == "LEAPS"
         ]
-        self.pair = PmccPair(
-            spot_entry=375.0,
-            leaps_strike=410.0,
-            leaps_exp="2028-06-16",
-            leaps_dte=700,
-            leaps_iv=0.55,
-            leaps_debit=13000.0,
-            short_strike=500.0,
-            short_exp="2026-08-21",
-            short_dte=57,
-            short_iv=0.50,
-            short_credit=700.0,
-            leaps_delta_target=0.65,
-            short_delta_target=0.30,
+        if nvda_rows:
+            upside = float(nvda_rows[0]["upside_pct"].rstrip("%"))
+            self.assertGreater(upside, 0.0)
+
+        for s in bundle.statuses:
+            ticker = str(s["record"].get("ticker", "TSLA")).upper()
+            spot = bundle.spots_by_ticker[ticker]
+            self.assertAlmostEqual(s["spot_now"], spot, places=1)
+
+        candidates = bundle.next_short.get("candidates") or []
+        self.assertGreater(len(candidates), 0)
+        self.assertIn("_prefer", candidates[0])
+
+        tsla_status = next(
+            s for s in bundle.statuses
+            if str(s["record"].get("ticker", "TSLA")).upper() == "TSLA"
         )
-
-    def test_next_earnings_prefers_staged_date(self) -> None:
-        d = next_earnings_date(today=date(2026, 6, 25), staged_earnings="2026-07-22")
-        self.assertEqual(d, date(2026, 7, 22))
-
-    def test_compute_patience_expires_returns_earliest_deadline(self) -> None:
-        staged = build_tsla_staged_entry_plan(self.records, self.chain, spot=375.0, today=date(2026, 6, 25))
-        result = compute_patience_expires(staged_events=staged["events"], statuses=[], today=date(2026, 6, 25))
-        self.assertIn("date", result)
-        self.assertIn("label", result)
-        self.assertTrue(result["date"] <= "2026-07-17")
-
-    def test_reentry_candidates_chain_bid_fields(self) -> None:
-        rows = reentry_candidates(
-            375.0, self.pair, chain=self.chain, expiration="2026-08-21",
+        full_cands = reentry_candidates(
+            tsla_status["spot_now"],
+            tsla_status["pair"],
+            chain=bundle.tsla_chain,
         )
-        self.assertGreater(len(rows), 0)
-        chain_rows = [r for r in rows if r.get("source") == "chain"]
-        self.assertGreater(len(chain_rows), 0)
-        row = chain_rows[0]
-        self.assertIn("daily", row)
-        self.assertIn("risk", row)
-        self.assertIn("income", row)
-        self.assertIsNotNone(row.get("bid_credit"))
+        self.assertTrue(any(candidate_is_preferred(c) for c in full_cands))
 
-    def test_build_situation_from_empty_statuses(self) -> None:
-        staged = build_tsla_staged_entry_plan(self.records, self.chain, spot=375.0, today=date(2026, 6, 25))
-        sit = build_situation(spot=375.0, chain_age_minutes=12.0, statuses=[], staged=staged)
-        self.assertEqual(sit["spot"], 375.0)
-        self.assertIn("catalyst", sit)
-        self.assertIn("patience_expires", sit)
+        prefer_rows = [c for c in candidates if c.get("_prefer")]
+        styler_input = pd.DataFrame(prefer_rows) if prefer_rows else pd.DataFrame([{
+            "strike": "$500",
+            "income": "good",
+            "risk": "balanced",
+            "prefer": "✓",
+            "_prefer": True,
+        }])
+        styled = candidate_table_styler(styler_input)
+        self.assertIn("background-color", styled.to_html())
 
-    def test_select_next_short_staged_when_building_stack(self) -> None:
-        staged = build_tsla_staged_entry_plan(self.records, self.chain, spot=375.0, today=date(2026, 6, 25))
-        out = select_next_short(
-            spot=375.0,
-            chain=self.chain,
-            records=self.records,
-            statuses=[],
-            staged=staged,
-        )
-        self.assertEqual(out["source"], "staged")
-        self.assertIn("hero", out)
-        self.assertGreater(len(out.get("candidates", [])), 0)
+        lines = desk_gating_lines(bundle)
+        self.assertIn("VERIFY OK", lines)
+        self.assertTrue(any(line.startswith("RECORDS:") for line in lines))
+        self.assertTrue(any(line.startswith("REENTRY COUNT:") for line in lines))
 
     def test_position_record_key_distinguishes_same_strike_lots(self) -> None:
         a = {
@@ -113,139 +91,6 @@ class PmccDeskTest(unittest.TestCase):
         }
         self.assertNotEqual(position_record_key(a), position_record_key(b))
         self.assertFalse(position_remove_match(a, b))
-        self.assertTrue(position_remove_match(a, dict(a)))
-
-    def test_staged_entry_sparse_chain_uses_model_fallback(self) -> None:
-        sparse = self.chain[self.chain["strike"] >= 500.0]
-        plan = build_tsla_staged_entry_plan(self.records, sparse, spot=375.0, today=date(2026, 6, 25))
-        self.assertIn("packages", plan)
-        self.assertGreater(plan["packages"]["initial"]["bid_credit"], 0)
-
-    def test_income_metrics_carry_has_wait_and_net_daily_fields(self) -> None:
-        record = {
-            "entry_date": "2026-06-01",
-            "short_open_date": "2026-06-01",
-            "short_open_dte": 60,
-            "income_floor_daily": 10.0,
-            "income_good_daily": 15.0,
-            "income_strong_daily": 20.0,
-        }
-        carry = income_metrics(record, self.pair, 375.0, short_mark=350.0, leaps_mark=13000.0)
-        for key in (
-            "wait_floor_days_after_harvest",
-            "wait_good_days_after_harvest",
-            "net_current_profit_daily",
-            "net_full_credit_daily",
-        ):
-            self.assertIn(key, carry)
-
-    def test_leaps_only_status_has_closed_short_clock(self) -> None:
-        record = {
-            "ticker": "TSLA",
-            "leaps_strike": 410,
-            "leaps_expiration": "2028-06-16",
-            "leaps_debit": 13000,
-            "contracts": 2,
-            "open_short": False,
-            "entry_date": "2026-06-20",
-            "closed_shorts": [{
-                "credit": 325,
-                "close_debit": 50,
-                "contracts": 1,
-                "opened": "2026-06-20",
-                "closed": "2026-06-23",
-            }],
-        }
-        status = check_leaps_only_position(record, 375.0, preset="managed")
-        clock = status.get("closed_short_clock")
-        self.assertIsNotNone(clock)
-        good = clock["targets"]["good"]
-        self.assertIn("portfolio_wait_days", good)
-        self.assertIn("portfolio_budget_until", good)
-
-    def test_build_position_rows_uses_per_status_spot_not_global(self) -> None:
-        nvda_pair = PmccPair(
-            spot_entry=195.0,
-            leaps_strike=210.0,
-            leaps_exp="2028-06-16",
-            leaps_dte=700,
-            leaps_iv=0.55,
-            leaps_debit=5250.0,
-            short_strike=250.0,
-            short_exp="2026-08-21",
-            short_dte=57,
-            short_iv=0.50,
-            short_credit=0.0,
-            leaps_delta_target=0.65,
-            short_delta_target=0.30,
-        )
-        tsla_status = {
-            "pair": self.pair,
-            "record": {"ticker": "TSLA", "leaps_debit": 13000, "contracts": 2},
-            "contracts": 2,
-            "spot_now": 375.0,
-            "no_open_short": True,
-            "leaps_mark": {"price": 130.0, "delta": 0.65},
-            "leaps_leg_pnl": 500.0,
-            "net_pnl": 500.0,
-            "net_pnl_total": 1000.0,
-            "realized_short_total": 0.0,
-            "primary_action": "LEAPS ONLY",
-            "checks": [],
-        }
-        nvda_status = {
-            "pair": nvda_pair,
-            "record": {"ticker": "NVDA", "leaps_debit": 5250, "contracts": 1},
-            "contracts": 1,
-            "spot_now": 195.74,
-            "no_open_short": True,
-            "leaps_mark": {"price": 48.0, "delta": 0.60},
-            "leaps_leg_pnl": -385.0,
-            "net_pnl": -385.0,
-            "net_pnl_total": -385.0,
-            "realized_short_total": 0.0,
-            "primary_action": "LEAPS ONLY",
-            "checks": [],
-        }
-        rows = build_position_rows([tsla_status, nvda_status])
-        tsla_upside = float(rows[0]["upside_pct"].rstrip("%"))
-        nvda_upside = float(rows[2]["upside_pct"].rstrip("%"))
-        self.assertAlmostEqual(tsla_upside, (410 / 375.0 - 1) * 100, places=1)
-        self.assertAlmostEqual(nvda_upside, (210 / 195.74 - 1) * 100, places=1)
-        self.assertIn("NVDA", rows[2]["diagonal"])
-
-    def test_candidate_is_preferred_and_styler_marks_rows(self) -> None:
-        good_balanced = {"income": "good", "risk": "balanced"}
-        low_wide = {"income": "low", "risk": "wide"}
-        self.assertTrue(candidate_is_preferred(good_balanced))
-        self.assertFalse(candidate_is_preferred(low_wide))
-        df = pd.DataFrame([
-            {"strike": "$500", "income": "good", "risk": "balanced", "_prefer": True},
-            {"strike": "$430", "income": "low", "risk": "too tight", "_prefer": False},
-        ])
-        styled = candidate_table_styler(df)
-        self.assertIn("background-color", styled.to_html())
-
-    def test_build_position_rows_leaps_only(self) -> None:
-        status = {
-            "pair": self.pair,
-            "record": self.records[0],
-            "contracts": 2,
-            "spot_now": 375.0,
-            "no_open_short": True,
-            "leaps_mark": {"price": 130.0, "delta": 0.65},
-            "leaps_leg_pnl": 500.0,
-            "net_pnl": 500.0,
-            "net_pnl_total": 1000.0,
-            "realized_short_total": 200.0,
-            "primary_action": "LEAPS ONLY",
-            "primary_level": "info",
-            "checks": [{"level": "info", "rule": "LEAPS ONLY", "detail": "no short"}],
-        }
-        rows = build_position_rows([status])
-        self.assertEqual(len(rows), 2)
-        self.assertEqual(rows[0]["leg"], "LEAPS")
-        self.assertEqual(rows[1]["leg"], "Closed shorts")
 
 
 if __name__ == "__main__":

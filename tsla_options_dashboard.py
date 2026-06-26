@@ -227,22 +227,18 @@ tab_today, tab_research = st.tabs(["Today", "Research"])
 # TODAY — unified PMCC desk
 # ═══════════════════════════════════════════════════════════════════════════
 with tab_today:
-    from pmcc.chain_data import chain_fetch_meta, format_chain_source
+    from pmcc.chain_data import format_chain_source
     from pmcc.desk import (
-        build_position_rows,
-        build_situation,
+        assemble_pmcc_desk,
         candidate_table_styler,
         position_record_key,
         position_remove_match,
-        select_next_short,
     )
     from pmcc.positions import (
         PMCC_POSITIONS_PATH,
-        check_pmcc_position,
         load_pmcc_positions,
         save_pmcc_positions,
     )
-    from pmcc.staged_entry import build_tsla_staged_entry_plan
 
     c_pmcc_preset, c_pmcc_refresh = st.columns([1, 2])
     pmcc_preset = c_pmcc_preset.selectbox(
@@ -251,57 +247,26 @@ with tab_today:
     pmcc_refresh = c_pmcc_refresh.checkbox("Refresh PMCC chain", value=False, key="today_pmcc_refresh")
 
     pmcc_records = load_pmcc_positions()
-    tickers = sorted({str(r.get("ticker", "TSLA")).upper() for r in pmcc_records} or {"TSLA"})
-    spots_by_ticker: dict[str, float] = {}
-    chains_by_ticker: dict[str, pd.DataFrame] = {}
-    chain_meta = None
-    for ticker in tickers:
-        try:
-            spots_by_ticker[ticker], chains_by_ticker[ticker] = load_call_chain(ticker, pmcc_refresh)
-            if ticker == "TSLA":
-                chain_meta = chain_fetch_meta()
-        except Exception as ex:
-            st.warning(f"Chain load failed for {ticker}: {ex}")
+    bundle = assemble_pmcc_desk(pmcc_records, preset=pmcc_preset, refresh=pmcc_refresh)
+    for err in bundle.chain_errors:
+        st.warning(f"Chain load failed — {err}")
+    for err in bundle.status_errors:
+        st.warning(f"Position check failed — {err}")
+    if bundle.staged_error:
+        st.warning(f"Staged plan unavailable: {bundle.staged_error}")
 
-    spot_pmcc = spots_by_ticker.get("TSLA")
-    plan_chain = chains_by_ticker.get("TSLA", pd.DataFrame())
-    if chain_meta is not None:
-        _pmcc_market_banner(chain_meta)
-        st.caption(format_chain_source(chain_meta))
-    elif spots_by_ticker:
-        st.caption(", ".join(f"{t} ${v:,.2f}" for t, v in sorted(spots_by_ticker.items())))
+    spot_pmcc = bundle.spot_tsla
+    if bundle.chain_meta is not None:
+        _pmcc_market_banner(bundle.chain_meta)
+        st.caption(format_chain_source(bundle.chain_meta))
+    elif bundle.spots_by_ticker:
+        st.caption(", ".join(
+            f"{t} ${v:,.2f}" for t, v in sorted(bundle.spots_by_ticker.items())
+        ))
 
-    pmcc_statuses: list[dict] = []
-    staged = None
-
-    if spot_pmcc is not None:
-        try:
-            staged = build_tsla_staged_entry_plan(pmcc_records, plan_chain, spot=spot_pmcc)
-        except Exception as ex:
-            st.warning(f"Staged plan unavailable: {ex}")
-
-    for r in pmcc_records:
-        ticker = str(r.get("ticker", "TSLA")).upper()
-        spot = spots_by_ticker.get(ticker)
-        if spot is None:
-            st.warning(
-                f"Position check skipped — no spot for {ticker} "
-                f"LEAPS {r.get('leaps_strike', '?')}"
-            )
-            continue
-        try:
-            pmcc_statuses.append(check_pmcc_position(r, spot, preset=pmcc_preset))
-        except Exception as ex:
-            st.warning(
-                f"Position check failed for {ticker} LEAPS {r.get('leaps_strike', '?')}: {ex}"
-            )
-
-    situation = build_situation(
-        spot=spot_pmcc or 0.0,
-        chain_age_minutes=chain_meta.age_minutes if chain_meta else None,
-        statuses=pmcc_statuses,
-        staged=staged,
-    )
+    situation = bundle.situation
+    pmcc_statuses = bundle.statuses
+    staged = bundle.staged
 
     # ── Block 1: Situation bar ────────────────────────────────────────────
     age_caption = (
@@ -328,7 +293,7 @@ with tab_today:
     elif not pmcc_statuses:
         st.warning("No positions marked — check chain loads per ticker above.")
     else:
-        pos_rows = build_position_rows(pmcc_statuses)
+        pos_rows = bundle.position_rows
         display_cols = [
             "diagonal", "leg", "strike_exp_dte", "entry_cost", "mark",
             "leg_pnl", "net_pnl", "delta", "per_day", "upside_pct", "status",
@@ -414,14 +379,7 @@ with tab_today:
     if spot_pmcc is None:
         st.warning("Chain unavailable — cannot quote candidates.")
     else:
-        next_short = select_next_short(
-            spot=spot_pmcc,
-            chain=plan_chain,
-            records=pmcc_records,
-            statuses=pmcc_statuses,
-            staged=staged,
-            preset=pmcc_preset,
-        )
+        next_short = bundle.next_short
         st.success(f"**{next_short['hero']}**")
         st.caption(f"Source: {next_short.get('source', '—')}")
         cand_df = pd.DataFrame(next_short.get("candidates") or [])

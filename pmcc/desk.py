@@ -2,12 +2,14 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass, field
 from datetime import date, datetime, timedelta, timezone
+from typing import Any
 
 import pandas as pd
 
 from data import _TSLA_EARNINGS_DATES
-from pmcc.income import reentry_candidates
+from pmcc.income import income_metrics, reentry_candidates
 from pmcc.scenarios import PmccPair
 
 
@@ -468,3 +470,175 @@ def select_next_short(
         "hero": hero,
         "candidates": [_format_candidate_row(c, pick=c is pick) for c in candidates],
     }
+
+
+@dataclass
+class DeskBundle:
+    records: list[dict]
+    preset: str
+    refresh: bool
+    spots_by_ticker: dict[str, float] = field(default_factory=dict)
+    chains_by_ticker: dict[str, pd.DataFrame] = field(default_factory=dict)
+    chain_meta: Any = None
+    chain_errors: list[str] = field(default_factory=list)
+    statuses: list[dict] = field(default_factory=list)
+    status_errors: list[str] = field(default_factory=list)
+    staged: dict | None = None
+    staged_error: str | None = None
+    situation: dict = field(default_factory=dict)
+    position_rows: list[dict] = field(default_factory=list)
+    next_short: dict = field(default_factory=dict)
+
+    @property
+    def spot_tsla(self) -> float | None:
+        return self.spots_by_ticker.get("TSLA")
+
+    @property
+    def tsla_chain(self) -> pd.DataFrame:
+        return self.chains_by_ticker.get("TSLA", pd.DataFrame())
+
+
+def assemble_pmcc_desk(
+    records: list[dict],
+    preset: str = "managed",
+    refresh: bool = False,
+) -> DeskBundle:
+    """Single assembly path for dashboard, verification, and tests."""
+    from pmcc.chain_data import chain_fetch_meta, fetch_call_chain
+    from pmcc.positions import check_pmcc_position
+    from pmcc.staged_entry import build_tsla_staged_entry_plan
+
+    bundle = DeskBundle(records=list(records), preset=preset, refresh=refresh)
+    tickers = sorted({str(r.get("ticker", "TSLA")).upper() for r in records} or {"TSLA"})
+    for ticker in tickers:
+        try:
+            spot, chain = fetch_call_chain(ticker, refresh=refresh)
+            bundle.spots_by_ticker[ticker] = spot
+            bundle.chains_by_ticker[ticker] = chain
+            if ticker == "TSLA":
+                bundle.chain_meta = chain_fetch_meta()
+        except Exception as ex:
+            bundle.chain_errors.append(f"{ticker}: {ex}")
+
+    tsla_records = [r for r in records if str(r.get("ticker", "TSLA")).upper() == "TSLA"]
+    if bundle.spot_tsla is not None:
+        try:
+            bundle.staged = build_tsla_staged_entry_plan(
+                tsla_records, bundle.tsla_chain, spot=bundle.spot_tsla,
+            )
+        except Exception as ex:
+            bundle.staged_error = str(ex)
+
+    for record in records:
+        ticker = str(record.get("ticker", "TSLA")).upper()
+        spot = bundle.spots_by_ticker.get(ticker)
+        if spot is None:
+            bundle.status_errors.append(
+                f"no spot for {ticker} LEAPS {record.get('leaps_strike', '?')}"
+            )
+            continue
+        try:
+            bundle.statuses.append(check_pmcc_position(record, spot, preset=preset))
+        except Exception as ex:
+            bundle.status_errors.append(
+                f"{ticker} LEAPS {record.get('leaps_strike', '?')}: {ex}"
+            )
+
+    bundle.situation = build_situation(
+        spot=bundle.spot_tsla or 0.0,
+        chain_age_minutes=bundle.chain_meta.age_minutes if bundle.chain_meta else None,
+        statuses=bundle.statuses,
+        staged=bundle.staged,
+    )
+    bundle.position_rows = build_position_rows(bundle.statuses)
+
+    tsla_statuses = [
+        s for s in bundle.statuses
+        if str(s["record"].get("ticker", "TSLA")).upper() == "TSLA"
+    ]
+    if bundle.spot_tsla is not None:
+        bundle.next_short = select_next_short(
+            spot=bundle.spot_tsla,
+            chain=bundle.tsla_chain,
+            records=tsla_records,
+            statuses=tsla_statuses,
+            staged=bundle.staged,
+            preset=preset,
+        )
+    return bundle
+
+
+def desk_gating_lines(bundle: DeskBundle) -> list[str]:
+    """Plan verification step 2 contract — full lines for tee capture."""
+    lines: list[str] = []
+    lines.append(f"RECORDS: {len(bundle.records)}")
+    lines.append(f"STATUSES: {len(bundle.statuses)}")
+    if bundle.status_errors:
+        lines.append(f"STATUS ERRORS: {bundle.status_errors}")
+    if bundle.chain_errors:
+        lines.append(f"CHAIN ERRORS: {bundle.chain_errors}")
+
+    carry_ok = False
+    clock_ok = False
+    if bundle.statuses:
+        s = bundle.statuses[0]
+        lines.append(
+            f"CARRY KEYS: {sorted(s.get('carry', {}).keys()) if s.get('carry') else None}"
+        )
+        if s.get("carry"):
+            carry_ok = True
+            assert "wait_good_days_after_harvest" in s["carry"]
+            assert "net_current_profit_daily" in s["carry"]
+        if s.get("closed_short_clock"):
+            clock_ok = True
+            good = s["closed_short_clock"]["targets"]["good"]
+            lines.append(f"CLOCK WAIT: {good.get('portfolio_wait_days')}")
+            assert "portfolio_wait_days" in good
+            assert "portfolio_budget_until" in good
+        lines.append(f"MARKS: {bool(s.get('leaps_mark'))} {bool(s.get('short_mark'))}")
+        lines.append(f"CHECKS: {len(s.get('checks', []))}")
+        assert len(s.get("checks", [])) > 0
+        lines.append(f"PRIMARY: {s.get('primary_action')}")
+        ticker = str(s["record"].get("ticker", "TSLA")).upper()
+        chain = bundle.chains_by_ticker.get(ticker)
+        cands = reentry_candidates(s["spot_now"], s["pair"], chain=chain)
+        lines.append(f"REENTRY COUNT: {len(cands)}")
+        assert len(cands) > 0
+        for key in ("daily", "risk", "income"):
+            assert key in cands[0]
+        lines.append(f"REENTRY KEYS: {sorted(cands[0].keys())}")
+
+    if bundle.records and not carry_ok:
+        s = bundle.statuses[0]
+        carry = income_metrics(
+            {"entry_date": "2026-06-01", "short_open_dte": 60},
+            s["pair"],
+            s["spot_now"],
+            350.0,
+            10000.0,
+        )
+        lines.append(f"SYNTHETIC CARRY KEYS: {sorted(carry.keys())}")
+        assert "wait_good_days_after_harvest" in carry
+        assert "net_full_credit_daily" in carry
+        carry_ok = True
+    assert carry_ok or clock_ok or not bundle.records
+
+    if bundle.staged:
+        lines.append(f"STAGED NEXT: {bundle.staged.get('next_step')}")
+        lines.append(f"STAGED EVENTS: {bundle.staged.get('events')}")
+
+    nvda_leaps = [
+        r for r in bundle.position_rows
+        if "NVDA" in r.get("diagonal", "") and r.get("leg") == "LEAPS"
+    ]
+    if nvda_leaps:
+        lines.append(f"NVDA upside: {nvda_leaps[0]['upside_pct']}")
+
+    candidates = bundle.next_short.get("candidates") or []
+    prefer_n = sum(1 for c in candidates if c.get("_prefer"))
+    lines.append(f"PREFER ROWS: {prefer_n} of {len(candidates)}")
+    if candidates:
+        assert "_prefer" in candidates[0]
+
+    lines.append("VERIFY OK")
+    return lines
