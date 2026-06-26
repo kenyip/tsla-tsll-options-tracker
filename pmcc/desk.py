@@ -174,16 +174,22 @@ def build_situation(
     }
 
 
-def build_position_rows(statuses: list[dict], spot: float) -> list[dict]:
+def candidate_is_preferred(c: dict) -> bool:
+    return c.get("income") in {"carry", "good", "strong"} and c.get("risk") in {"balanced", "wide"}
+
+
+def build_position_rows(statuses: list[dict]) -> list[dict]:
     """Flatten check_pmcc_position results into rich per-leg table rows."""
     rows: list[dict] = []
     for s in statuses:
         p: PmccPair = s["pair"]
         rec = s["record"]
         contracts = s.get("contracts", 1)
+        spot = float(s.get("spot_now") or rec.get("spot_at_entry") or p.spot_entry or 0.0)
+        ticker = str(rec.get("ticker", "TSLA")).upper()
         short_label = "" if s.get("no_open_short") else f"/{int(p.short_strike)}"
         diag = (
-            f"{int(p.leaps_strike)}{short_label} "
+            f"{ticker} {int(p.leaps_strike)}{short_label} "
             f"x{contracts} ${float(rec.get('leaps_debit', p.leaps_debit)):,.0f}"
         )
 
@@ -298,6 +304,7 @@ def _pick_reentry(
 
 def _format_candidate_row(c: dict, *, pick: bool = False) -> dict:
     credit = c.get("bid_credit") or c.get("credit") or 0
+    preferred = candidate_is_preferred(c)
     return {
         "strike": f"${c['strike']:.0f}",
         "exp": str(c.get("expiration", ""))[:10] or f"{c.get('dte', 60)}d",
@@ -307,9 +314,25 @@ def _format_candidate_row(c: dict, *, pick: bool = False) -> dict:
         "upside %": f"{c.get('upside_pct', 0):.1f}%",
         "income": c.get("income", "—"),
         "risk": c.get("risk", "—"),
+        "prefer": "✓" if preferred else "",
         "pick": "◀" if pick else "",
+        "_prefer": preferred,
         "_raw": c,
     }
+
+
+def candidate_table_styler(df: pd.DataFrame):
+    """Highlight prefer-tier rows (carry/good/strong + balanced/wide)."""
+    prefer = df["_prefer"] if "_prefer" in df.columns else pd.Series([False] * len(df))
+    show_cols = [c for c in df.columns if not c.startswith("_")]
+    show = df[show_cols]
+
+    def _highlight(row):
+        if prefer.iloc[row.name]:
+            return ["background-color: #1e4620"] * len(row)
+        return [""] * len(row)
+
+    return show.style.apply(_highlight, axis=1)
 
 
 def select_next_short(

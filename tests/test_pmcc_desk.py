@@ -8,6 +8,8 @@ import pandas as pd
 from pmcc.desk import (
     build_position_rows,
     build_situation,
+    candidate_is_preferred,
+    candidate_table_styler,
     compute_patience_expires,
     next_earnings_date,
     position_record_key,
@@ -161,11 +163,75 @@ class PmccDeskTest(unittest.TestCase):
         self.assertIn("portfolio_wait_days", good)
         self.assertIn("portfolio_budget_until", good)
 
+    def test_build_position_rows_uses_per_status_spot_not_global(self) -> None:
+        nvda_pair = PmccPair(
+            spot_entry=195.0,
+            leaps_strike=210.0,
+            leaps_exp="2028-06-16",
+            leaps_dte=700,
+            leaps_iv=0.55,
+            leaps_debit=5250.0,
+            short_strike=250.0,
+            short_exp="2026-08-21",
+            short_dte=57,
+            short_iv=0.50,
+            short_credit=0.0,
+            leaps_delta_target=0.65,
+            short_delta_target=0.30,
+        )
+        tsla_status = {
+            "pair": self.pair,
+            "record": {"ticker": "TSLA", "leaps_debit": 13000, "contracts": 2},
+            "contracts": 2,
+            "spot_now": 375.0,
+            "no_open_short": True,
+            "leaps_mark": {"price": 130.0, "delta": 0.65},
+            "leaps_leg_pnl": 500.0,
+            "net_pnl": 500.0,
+            "net_pnl_total": 1000.0,
+            "realized_short_total": 0.0,
+            "primary_action": "LEAPS ONLY",
+            "checks": [],
+        }
+        nvda_status = {
+            "pair": nvda_pair,
+            "record": {"ticker": "NVDA", "leaps_debit": 5250, "contracts": 1},
+            "contracts": 1,
+            "spot_now": 195.74,
+            "no_open_short": True,
+            "leaps_mark": {"price": 48.0, "delta": 0.60},
+            "leaps_leg_pnl": -385.0,
+            "net_pnl": -385.0,
+            "net_pnl_total": -385.0,
+            "realized_short_total": 0.0,
+            "primary_action": "LEAPS ONLY",
+            "checks": [],
+        }
+        rows = build_position_rows([tsla_status, nvda_status])
+        tsla_upside = float(rows[0]["upside_pct"].rstrip("%"))
+        nvda_upside = float(rows[2]["upside_pct"].rstrip("%"))
+        self.assertAlmostEqual(tsla_upside, (410 / 375.0 - 1) * 100, places=1)
+        self.assertAlmostEqual(nvda_upside, (210 / 195.74 - 1) * 100, places=1)
+        self.assertIn("NVDA", rows[2]["diagonal"])
+
+    def test_candidate_is_preferred_and_styler_marks_rows(self) -> None:
+        good_balanced = {"income": "good", "risk": "balanced"}
+        low_wide = {"income": "low", "risk": "wide"}
+        self.assertTrue(candidate_is_preferred(good_balanced))
+        self.assertFalse(candidate_is_preferred(low_wide))
+        df = pd.DataFrame([
+            {"strike": "$500", "income": "good", "risk": "balanced", "_prefer": True},
+            {"strike": "$430", "income": "low", "risk": "too tight", "_prefer": False},
+        ])
+        styled = candidate_table_styler(df)
+        self.assertIn("background-color", styled.to_html())
+
     def test_build_position_rows_leaps_only(self) -> None:
         status = {
             "pair": self.pair,
             "record": self.records[0],
             "contracts": 2,
+            "spot_now": 375.0,
             "no_open_short": True,
             "leaps_mark": {"price": 130.0, "delta": 0.65},
             "leaps_leg_pnl": 500.0,
@@ -176,7 +242,7 @@ class PmccDeskTest(unittest.TestCase):
             "primary_level": "info",
             "checks": [{"level": "info", "rule": "LEAPS ONLY", "detail": "no short"}],
         }
-        rows = build_position_rows([status], 375.0)
+        rows = build_position_rows([status])
         self.assertEqual(len(rows), 2)
         self.assertEqual(rows[0]["leg"], "LEAPS")
         self.assertEqual(rows[1]["leg"], "Closed shorts")

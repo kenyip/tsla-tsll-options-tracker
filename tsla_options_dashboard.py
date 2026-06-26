@@ -231,6 +231,7 @@ with tab_today:
     from pmcc.desk import (
         build_position_rows,
         build_situation,
+        candidate_table_styler,
         position_record_key,
         position_remove_match,
         select_next_short,
@@ -249,18 +250,27 @@ with tab_today:
     )
     pmcc_refresh = c_pmcc_refresh.checkbox("Refresh PMCC chain", value=False, key="today_pmcc_refresh")
 
-    spot_pmcc = None
-    plan_chain = pd.DataFrame()
+    pmcc_records = load_pmcc_positions()
+    tickers = sorted({str(r.get("ticker", "TSLA")).upper() for r in pmcc_records} or {"TSLA"})
+    spots_by_ticker: dict[str, float] = {}
+    chains_by_ticker: dict[str, pd.DataFrame] = {}
     chain_meta = None
-    try:
-        spot_pmcc, plan_chain = load_call_chain("TSLA", pmcc_refresh)
-        chain_meta = chain_fetch_meta()
+    for ticker in tickers:
+        try:
+            spots_by_ticker[ticker], chains_by_ticker[ticker] = load_call_chain(ticker, pmcc_refresh)
+            if ticker == "TSLA":
+                chain_meta = chain_fetch_meta()
+        except Exception as ex:
+            st.warning(f"Chain load failed for {ticker}: {ex}")
+
+    spot_pmcc = spots_by_ticker.get("TSLA")
+    plan_chain = chains_by_ticker.get("TSLA", pd.DataFrame())
+    if chain_meta is not None:
         _pmcc_market_banner(chain_meta)
         st.caption(format_chain_source(chain_meta))
-    except Exception as ex:
-        st.error(f"PMCC chain load failed: {ex}")
+    elif spots_by_ticker:
+        st.caption(", ".join(f"{t} ${v:,.2f}" for t, v in sorted(spots_by_ticker.items())))
 
-    pmcc_records = load_pmcc_positions()
     pmcc_statuses: list[dict] = []
     staged = None
 
@@ -269,13 +279,22 @@ with tab_today:
             staged = build_tsla_staged_entry_plan(pmcc_records, plan_chain, spot=spot_pmcc)
         except Exception as ex:
             st.warning(f"Staged plan unavailable: {ex}")
-        for r in pmcc_records:
-            try:
-                pmcc_statuses.append(check_pmcc_position(r, spot_pmcc, preset=pmcc_preset))
-            except Exception as ex:
-                st.warning(
-                    f"Position check failed for LEAPS {r.get('leaps_strike', '?')}: {ex}"
-                )
+
+    for r in pmcc_records:
+        ticker = str(r.get("ticker", "TSLA")).upper()
+        spot = spots_by_ticker.get(ticker)
+        if spot is None:
+            st.warning(
+                f"Position check skipped — no spot for {ticker} "
+                f"LEAPS {r.get('leaps_strike', '?')}"
+            )
+            continue
+        try:
+            pmcc_statuses.append(check_pmcc_position(r, spot, preset=pmcc_preset))
+        except Exception as ex:
+            st.warning(
+                f"Position check failed for {ticker} LEAPS {r.get('leaps_strike', '?')}: {ex}"
+            )
 
     situation = build_situation(
         spot=spot_pmcc or 0.0,
@@ -306,10 +325,10 @@ with tab_today:
 
     if not pmcc_records:
         st.caption(f"No diagonals in `{PMCC_POSITIONS_PATH.name}`.")
-    elif spot_pmcc is None:
-        st.warning("Chain unavailable — cannot mark positions.")
+    elif not pmcc_statuses:
+        st.warning("No positions marked — check chain loads per ticker above.")
     else:
-        pos_rows = build_position_rows(pmcc_statuses, spot_pmcc)
+        pos_rows = build_position_rows(pmcc_statuses)
         display_cols = [
             "diagonal", "leg", "strike_exp_dte", "entry_cost", "mark",
             "leg_pnl", "net_pnl", "delta", "per_day", "upside_pct", "status",
@@ -325,8 +344,9 @@ with tab_today:
             rec = s["record"]
             contracts = s.get("contracts", 1)
             icon = _PMCC_LEVEL_ICON.get(s["primary_level"], "•")
+            ticker = str(rec.get("ticker", "TSLA")).upper()
             label = (
-                f"{icon} {int(p.leaps_strike)}"
+                f"{icon} {ticker} {int(p.leaps_strike)}"
                 f"{'' if s.get('no_open_short') else f'/{int(p.short_strike)}'}"
                 f" x{contracts} ${float(rec.get('leaps_debit', p.leaps_debit)):,.0f}"
                 f" — playbook"
@@ -406,8 +426,8 @@ with tab_today:
         st.caption(f"Source: {next_short.get('source', '—')}")
         cand_df = pd.DataFrame(next_short.get("candidates") or [])
         if not cand_df.empty:
-            show_cols = [c for c in ["pick", "strike", "exp", "bid", "$/day", "delta", "upside %", "income", "risk"] if c in cand_df.columns]
-            st.dataframe(cand_df[show_cols], hide_index=True, width="stretch")
+            st.dataframe(candidate_table_styler(cand_df), hide_index=True, width="stretch")
+            st.caption("Green rows: carry/good/strong income with balanced/wide risk.")
         if staged:
             with st.expander("Rip management levels & staged packages"):
                 st.dataframe(pd.DataFrame(staged.get("management") or []), hide_index=True, width="stretch")
