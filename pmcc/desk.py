@@ -289,6 +289,16 @@ def _days_to_catalyst(staged: dict | None, *, today: date | None = None) -> int:
     return min(days) if days else 999
 
 
+def _staged_package_strike_set(pkg: dict) -> set[int]:
+    return {int(s) for s in pkg.get("leg_strikes") or []}
+
+
+def _roll_pick_strike(candidates: list[dict], roll_k: float) -> float | None:
+    if not candidates or not roll_k:
+        return None
+    return min(candidates, key=lambda c: abs(float(c["strike"]) - float(roll_k)))["strike"]
+
+
 def _pick_reentry(
     candidates: list[dict],
     *,
@@ -420,10 +430,14 @@ def select_next_short(
                 f"Roll short ${p.short_strike:.0f} → ~${roll_k:.0f} "
                 f"({p.short_dte}d left) — spot ${spot:,.0f} near strike"
             )
+            roll_pick = _roll_pick_strike(candidates, roll_k)
             return {
                 "source": "roll",
                 "hero": hero,
-                "candidates": [_format_candidate_row(c, pick=i == 0) for i, c in enumerate(candidates)],
+                "candidates": [
+                    _format_candidate_row(c, pick=float(c["strike"]) == float(roll_pick))
+                    for c in candidates
+                ],
             }
         if carry and carry.get("current_short_profit", 0) >= carry.get("harvest_profit", 0):
             hero = (
@@ -456,10 +470,14 @@ def select_next_short(
         hero = ns.get("action", "Build staged short stack")
         if pkg.get("order_limit_text"):
             hero += f" — `{pkg['order_limit_text']}`"
+        pkg_strikes = _staged_package_strike_set(pkg)
         return {
             "source": "staged",
             "hero": hero,
-            "candidates": [_format_candidate_row(c, pick=i == 0) for i, c in enumerate(candidates)],
+            "candidates": [
+                _format_candidate_row(c, pick=int(c["strike"]) in pkg_strikes)
+                for c in candidates
+            ],
             "staged_package": pkg,
         }
 

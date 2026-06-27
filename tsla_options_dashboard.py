@@ -494,7 +494,13 @@ with tab_today:
         cand_df = pd.DataFrame(next_short.get("candidates") or [])
         if not cand_df.empty:
             st.dataframe(candidate_table_styler(cand_df), hide_index=True, width="stretch")
-            st.caption("Green rows: carry/good/strong income with balanced/wide risk.")
+            pick_hint = {
+                "staged": "◀ marks strikes in the staged package above (not highest $/day).",
+                "reentry": "◀ marks the single-strike reload pick driving the hero line.",
+                "harvest": "◀ marks the preview reload strike mentioned after harvest.",
+                "roll": "◀ marks the candidate nearest the roll target in the hero.",
+            }.get(next_short.get("source", ""), "◀ marks the row tied to the hero recommendation.")
+            st.caption(f"Green rows: carry/good/strong income with balanced/wide risk. {pick_hint}")
         if staged:
             with st.expander("Rip management levels & staged packages"):
                 st.dataframe(pd.DataFrame(staged.get("management") or []), hide_index=True, width="stretch")

@@ -48,6 +48,16 @@ class AssemblePmccDeskIntegrationTest(unittest.TestCase):
         candidates = bundle.next_short.get("candidates") or []
         self.assertGreater(len(candidates), 0)
         self.assertIn("_prefer", candidates[0])
+        if bundle.next_short.get("source") == "staged":
+            pkg = (bundle.staged or {}).get("packages", {}).get("initial", {})
+            pkg_strikes = {int(s) for s in pkg.get("leg_strikes") or []}
+            picked = [c for c in candidates if c.get("pick")]
+            for row in picked:
+                strike = int(str(row["strike"]).lstrip("$"))
+                self.assertIn(strike, pkg_strikes)
+            top = candidates[0]
+            if pkg_strikes and int(str(top["strike"]).lstrip("$")) not in pkg_strikes:
+                self.assertFalse(top.get("pick"))
 
         tsla_status = next(
             s for s in bundle.statuses

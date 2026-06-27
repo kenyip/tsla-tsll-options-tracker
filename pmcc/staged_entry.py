@@ -103,6 +103,7 @@ def _package_quote(
         "expiration": expiration,
         "dte": dte,
         "legs": _fmt_legs(legs),
+        "leg_strikes": [int(x) for x in legs],
         "short_count": len(legs),
         "nearest_short": nearest,
         "nearest_upside_pct": round((nearest / spot - 1) * 100, 1),
