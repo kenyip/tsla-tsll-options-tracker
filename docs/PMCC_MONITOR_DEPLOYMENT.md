@@ -87,7 +87,7 @@ just pmcc-manage --monitor --quiet-ok --spot 506
 
 That should emit a challenged-short alert for the current 410/500 structure.
 
-## 4. Install and configure Hermes on the 24/7 box
+## 4. Install and configure Hermes + the Trader profile on the 24/7 box
 
 Install Hermes if needed:
 
@@ -105,33 +105,35 @@ Use your preferred provider/model. Do not commit API keys. Hermes secrets live i
 ~/.hermes/config.yaml
 ```
 
-If you want to migrate the current Hermes profile privately, use one of:
+Create or repair the dedicated trading profile from the repo root:
 
 ```bash
-hermes profile export default -o hermes-default-profile.tar.gz
-scp hermes-default-profile.tar.gz USER@HOST:~/
+cd ~/dev/tsla-tsll-options-tracker
+scripts/bootstrap_trader_profile.sh
+trader config check
+trader skills list | grep -E 'trading-partner|pmcc-strategy'
+```
+
+For a faithful private copy of the current local trading agent, use profile export/import instead of git:
+
+```bash
+hermes profile export trader -o ~/trader-profile.tar.gz
+scp ~/trader-profile.tar.gz USER@HOST:~/
 # on target:
-hermes profile import ~/hermes-default-profile.tar.gz
+hermes profile import ~/trader-profile.tar.gz
 ```
 
-or manually copy only selected non-secret assets:
-
-```bash
-rsync -av ~/.hermes/skills/trading/pmcc-strategy USER@HOST:~/.hermes/skills/trading/
-rsync -av ~/.hermes/scripts/pmcc_monitor.sh USER@HOST:~/.hermes/scripts/
-```
-
-Avoid blindly committing or publishing `~/.hermes/.env`, `auth.json`, or config files containing tokens.
+The profile archive may contain config, `.env`, memory, and private state. Keep it private. Avoid blindly committing or publishing `~/.hermes/.env`, `auth.json`, OAuth files, provider keys, broker credentials, Telegram tokens, or config files containing secrets.
 
 ## 5. Configure Telegram gateway
 
-On the 24/7 machine:
+On the 24/7 machine, use the dedicated trading profile:
 
 ```bash
-hermes gateway setup telegram
-hermes gateway install
-hermes gateway start
-hermes gateway status
+trader gateway setup telegram
+trader gateway install
+trader gateway start
+trader gateway status
 ```
 
 During Telegram setup you will need a Telegram bot token from BotFather. Store it in Hermes config/env when prompted, not in this repo.
@@ -144,17 +146,16 @@ After the bot is reachable from your Telegram chat, set/approve the chat as a de
 /platforms
 ```
 
-If gateway setup differs on the installed Hermes version, use:
+If gateway setup differs on the installed Hermes version, stay inside the `trader` profile and use:
 
 ```bash
-hermes gateway setup
-hermes gateway list
-hermes gateway status
+trader gateway setup
+trader gateway status
 ```
 
-## 6. Schedule the monitor on the 24/7 Hermes host
+## 6. Schedule the monitor on the 24/7 Trader profile
 
-Create the scheduler job from a Hermes session on the 24/7 box, or with the CLI if available. The desired job is:
+Create the scheduler job from a `trader` Hermes session on the 24/7 box, or with the profile CLI if available. The desired job is:
 
 ```text
 Name: TSLA PMCC action monitor
@@ -166,6 +167,16 @@ Workdir: ~/dev/tsla-tsll-options-tracker
 ```
 
 The existing job on this laptop is local to this Hermes install and does not automatically move with the repo. Re-create it on the always-on host.
+
+Profile CLI shape:
+
+```bash
+trader cron create '*/30 7-13 * * 1-5' \
+  --name 'TSLA PMCC action monitor' \
+  --script pmcc_monitor.sh \
+  --no-agent \
+  --workdir ~/dev/tsla-tsll-options-tracker
+```
 
 If using the Hermes in-chat cron tool, create it as a script-only watchdog:
 

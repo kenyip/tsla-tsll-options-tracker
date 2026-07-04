@@ -486,7 +486,7 @@ def check_leaps_only_position(
     checks = [{
         "level": "info",
         "rule": "LEAPS ONLY — no open short",
-        "detail": "Short leg is closed. Monitor for a quality reload; do not stay naked by default unless TSLA is in an extreme rip.",
+        "detail": f"Short leg is closed. Monitor for a quality reload; do not stay naked by default unless {ticker} is in an extreme rip.",
     }]
 
     moneyness = spot_now / leaps_strike

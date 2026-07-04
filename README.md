@@ -32,6 +32,7 @@ These three files are kept current. Everything else in the repo is either code o
 | [**ENGINE.md**](ENGINE.md) | The backtest harness — modules, data flow, pricing assumptions, event loop semantics, known limitations, roadmap |
 | [**STRATEGY.md**](STRATEGY.md) | The trading rules — entry logic, exit ladder (incl. daily profit capture formula), `StrategyConfig` defaults, latest baseline results, next tuning targets |
 | [**docs/PMCC_MONITOR_DEPLOYMENT.md**](docs/PMCC_MONITOR_DEPLOYMENT.md) | PMCC always-on monitor deployment, live position file transfer, Hermes cron, and Telegram gateway setup |
+| [**docs/TRADER_AGENT_PROFILE.md**](docs/TRADER_AGENT_PROFILE.md) | Dedicated Hermes `trader` profile: trade-analysis operating principles, local bootstrap, Mac Mini migration path, and privacy boundaries |
 
 Both follow the same convention: **current state at the top, dated history at the bottom.**
 
