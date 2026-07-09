@@ -214,6 +214,17 @@ Rolling end date moves with data; headline metrics below are the **freeze re-run
 | 2026-07-09 | learn_tick:hyp_research_amd_short_strangle_candidate | research_rank=4 | **NEEDS_MORE_DATA** | status=candidate→candidate; comp=63.6; cap=oversized | learn_audit.jsonl |
 | 2026-07-09 | learn_tick:hyp_research_mu_short_strangle_candidate | research_rank=5 | **NEEDS_MORE_DATA** | status=candidate→candidate; comp=61.61; cap=oversized | learn_audit.jsonl |
 
+| 2026-07-09 | learn_tick:hyp_dna_pltr_regime_short_premium_e0c0319b | research_rank=8 | **NEEDS_MORE_DATA** | status=candidate→testing; comp=59.16; cap=fit_15k | learn_audit.jsonl |
+| 2026-07-09 | learn_tick:hyp_dna_nflx_short_put_credit_5070a402 | learn_tick outcomes | **NEEDS_MORE_DATA** | status=candidate→candidate; comp=None; cap= | learn_audit.jsonl |
+| 2026-07-09 | learn_tick:hyp_dna_nflx_wheel_assignment_3783763c | learn_tick outcomes | **NEEDS_MORE_DATA** | status=candidate→candidate; comp=None; cap= | learn_audit.jsonl |
+| 2026-07-09 | learn_tick:hyp_dna_nflx_wheel_assignment_23f07585 | learn_tick outcomes | **NEEDS_MORE_DATA** | status=candidate→candidate; comp=None; cap= | learn_audit.jsonl |
+| 2026-07-09 | learn_tick:hyp_dna_smci_short_dte_aggressive_85932789 | research_rank=1 | **NEEDS_MORE_DATA** | status=candidate→testing; comp=81.85; cap=fit_3k | learn_audit.jsonl |
+| 2026-07-09 | learn_tick:hyp_dna_tsll_wheel_assignment_cf2928dd | research_rank=3 | **NEEDS_MORE_DATA** | status=candidate→testing; comp=64.03; cap=fit_3k | learn_audit.jsonl |
+| 2026-07-09 | learn_tick:hyp_dna_tsll_short_dte_aggressive_df7d51e0 | research_rank=3 | **NEEDS_MORE_DATA** | status=candidate→testing; comp=64.03; cap=fit_3k | learn_audit.jsonl |
+| 2026-07-09 | learn_tick:hyp_dna_tsll_wheel_assignment_42870691 | research_rank=3 | **NEEDS_MORE_DATA** | status=candidate→testing; comp=64.03; cap=fit_3k | learn_audit.jsonl |
+| 2026-07-09 | learn_tick:hyp_dna_tsll_short_put_credit_361f7bca | research_rank=3 | **NEEDS_MORE_DATA** | status=candidate→testing; comp=64.03; cap=fit_3k | learn_audit.jsonl |
+| 2026-07-09 | learn_tick:hyp_dna_tsll_roll_defend_969b22ab | research_rank=3 | **NEEDS_MORE_DATA** | status=candidate→testing; comp=64.03; cap=fit_3k | learn_audit.jsonl |
+
 ## 5. Lab operating notes
 
 - Proposals may come from human intuition, `just analyze`, LLM critic, or model shadow — **trust is the validation gate**, not the proposer.

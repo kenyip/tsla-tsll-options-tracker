@@ -73,6 +73,30 @@ just learn-tick -- --apply --append-scoreboard
 
 **Cron OK** on `trader` (weekly or daily after research). Never auto-live.
 
+### L3b — Evolve tick (FREE strategy search, v0)
+
+**This is the freedom loop.** A strategy is **not a symbol**. DNA = structure + symbols + entry plan (legs/side/DTE/delta/credit) + exit/management plan + sim evidence.
+
+```text
+research top symbols (where)
+  × structure catalog + mutations (what to trade + how to manage)
+  → engine backtest with StrategyConfig overrides
+  → SHIP|NULL|REJECT|NEEDS_MORE_DATA
+  → candidate hyps carrying full DNA (never live)
+  → evolve_audit.jsonl + evolve_sim.sqlite
+```
+
+```bash
+just evolve-tick
+just evolve-tick -- --apply --top-symbols 4 --mutants 2
+just bootstrap-ticks    # research → evolve → learn → paper scout
+```
+
+**What evolve may mutate:** DNA YAML in hyp registry, sim DB, audit logs, candidate status graph.  
+**What evolve must NOT do:** auto-edit `strategies.py` / `live.py`, place live orders, arm agentic.
+
+Catalog seeds (expandable): `regime_short_premium`, `short_put_credit`, `short_dte_aggressive`, `long_dte_conservative`, `wheel_assignment`, `roll_defend`.
+
 ### L4 — Critic / lab week (heavy)
 
 ```text
@@ -149,7 +173,11 @@ Hermes **trader** profile has inventory jobs `5b1b3e7803cf` / `d471a8e1d8e0`, bu
 
 | Job | Label | When (America/Los_Angeles) |
 |-----|--------|----------------------------|
-| Research tick | `com.jarvis.trader.research-tick-paper` | Mon–Fri 16:30 |
-| Learn tick | `com.jarvis.trader.learn-tick` | Sun 17:00 |
+| Research tick | `com.jarvis.trader.research-tick-paper` | Mon–Fri 10:00, 13:00, 16:30 (bootstrap dense) |
+| Evolve tick | `com.jarvis.trader.evolve-tick` | Mon–Fri 10:30, 13:30, 17:00 + Sat 11:00 |
+| Paper scout | `com.jarvis.trader.paper-scout-tick` | Mon–Fri 11:00, 14:00 |
+| Learn tick | `com.jarvis.trader.learn-tick` | Daily 18:00 |
 
 Logs: `~/.local/state/jarvis/trader-cron/` and repo `.cache/platform/*_cron.log`.
+
+**Honesty (2026-07-09 evening):** L1 alone was symbol-ranking with a fixed short-premium engine. L3b + Strategy DNA make entry/exit/management first-class and searchable. Engine still single-leg short-premium (`pick_entry`/`check_exits`); multi-leg structures beyond that are DNA + sim notes until the engine grows — not fake freedom.

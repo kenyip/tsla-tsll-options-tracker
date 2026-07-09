@@ -47,8 +47,12 @@ def run_symbol_backtest(
     period: str = "2y",
     use_cache: bool = True,
     dump_dir: Optional[Path | str] = None,
+    config_overrides: Optional[dict[str, Any]] = None,
 ) -> BacktestHookResult:
-    """Run engine backtest for one symbol (research/paper evidence only)."""
+    """Run engine backtest for one symbol (research/paper evidence only).
+
+    config_overrides: StrategyConfig kwargs from Strategy DNA (free search).
+    """
     sym = symbol.upper()
     ok, detail = engine_available()
     if not ok:
@@ -69,7 +73,12 @@ def run_symbol_backtest(
                 period=period,
             )
 
-        cfg = get_config(sym)
+        overrides = dict(config_overrides or {})
+        # adaptive/exit rule names must be tuples if present
+        for rk in ("adaptive_rules", "exit_rules"):
+            if rk in overrides and overrides[rk] is not None and not isinstance(overrides[rk], tuple):
+                overrides[rk] = tuple(overrides[rk])
+        cfg = get_config(sym, **overrides)
         bt = Backtester(
             df=df,
             config=cfg,
@@ -141,6 +150,7 @@ def run_backtest_hooks(
     use_cache: bool = True,
     dump_dir: Optional[Path | str] = None,
     max_symbols: int = 5,
+    config_overrides: Optional[dict[str, Any]] = None,
 ) -> list[BacktestHookResult]:
     """Run hooks for up to max_symbols (keep research ticks bounded)."""
     results: list[BacktestHookResult] = []
@@ -151,6 +161,7 @@ def run_backtest_hooks(
                 period=period,
                 use_cache=use_cache,
                 dump_dir=dump_dir,
+                config_overrides=config_overrides,
             )
         )
     return results

@@ -55,6 +55,8 @@ class Hypothesis:
     created: str = ""
     updated: str = ""
     notes: str = ""
+    # Full free strategy genome (structure + entry/exit/management + sim). Optional.
+    dna: Optional[dict[str, Any]] = None
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -69,6 +71,7 @@ class Hypothesis:
         data.setdefault("exit_logic_ref", "")
         data.setdefault("notes", "")
         data.setdefault("status", "candidate")
+        data.setdefault("dna", None)
         return cls(**{k: data[k] for k in cls.__dataclass_fields__ if k in data})
 
 
@@ -126,6 +129,7 @@ class HypothesisRegistry:
         null_results: Iterable[str] | None = None,
         notes: str = "",
         hypothesis_id: str | None = None,
+        dna: Optional[dict[str, Any]] = None,
     ) -> Hypothesis:
         if sleeve not in SLEEVES:
             raise ValueError(f"sleeve must be one of {SLEEVES}")
@@ -146,6 +150,7 @@ class HypothesisRegistry:
             created=now,
             updated=now,
             notes=notes,
+            dna=dna,
         )
         store = self.load()
         if any(x.get("id") == h.id for x in store["hypotheses"]):

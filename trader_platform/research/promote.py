@@ -291,10 +291,23 @@ def promote_top_n(
             sleeve = "premium"
             if "stand_aside" in fam or fam == "unknown":
                 sleeve = "tactical"
+            # Attach free Strategy DNA (entry+exit+management), not symbol-only.
+            dna_dict = None
+            try:
+                from trader_platform.strategy_dna import dna_from_structure, family_to_structure
+
+                st = family_to_structure(fam)
+                dna_dict = dna_from_structure(st, [s.symbol]).to_dict()
+            except Exception:  # noqa: BLE001
+                dna_dict = None
             h = reg.add(
                 hypothesis_id=hid,
                 name=f"Research: {s.symbol} {fam}",
-                thesis=thesis,
+                thesis=thesis if not dna_dict else (
+                    thesis + " DNA attached: structure="
+                    + str((dna_dict or {}).get("structure"))
+                    + " (entry/exit/management genes; paper only)."
+                ),
                 sleeve=sleeve,
                 instruments=[s.symbol],
                 entry_logic_ref="strategies.pick_entry",
@@ -305,6 +318,7 @@ def promote_top_n(
                     f"source=research_promote_top; capital_fit={cap_fit}; "
                     f"never_auto_live=true; research_run={rid}"
                 ),
+                dna=dna_dict,
             )
             item.action = "created"
             item.status = h.status

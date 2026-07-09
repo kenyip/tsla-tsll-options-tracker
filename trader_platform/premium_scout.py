@@ -116,6 +116,40 @@ def default_rec_provider(ticker: str) -> dict[str, Any]:
     return make_recommendation(ticker)
 
 
+def rec_provider_for_hyp(hyp: Hypothesis) -> RecProvider:
+    """If hypothesis carries Strategy DNA, use its entry/exit config for recs."""
+    dna_raw = getattr(hyp, "dna", None) or None
+    if not dna_raw:
+        return default_rec_provider
+    try:
+        from live import make_recommendation
+        from strategies import get_config
+        from trader_platform.strategy_dna import StrategyDNA
+
+        dna = StrategyDNA.from_dict(dna_raw)
+        if dna is None:
+            return default_rec_provider
+        overrides = dna.config_overrides()
+
+        def _prov(ticker: str) -> dict[str, Any]:
+            cfg = get_config(ticker.upper(), **overrides)
+            rec = dict(make_recommendation(ticker.upper(), cfg=cfg))
+            rec["dna_id"] = dna.ensure_id()
+            rec["dna_structure"] = dna.structure
+            rec["strategy_dna"] = {
+                "dna_id": dna.ensure_id(),
+                "structure": dna.structure,
+                "entry_plan": dna.entry_plan,
+                "exit_plan": dna.exit_plan,
+                "config": overrides,
+            }
+            return rec
+
+        return _prov
+    except Exception:  # noqa: BLE001 — fall back to default engine
+        return default_rec_provider
+
+
 def _regime_from_rec(symbol: str, rec: dict[str, Any]) -> RegimeSnapshot:
     feats = rec.get("features") or {}
     date = rec.get("date")
@@ -223,17 +257,21 @@ def scout_symbol(
     hyp: Hypothesis,
     symbol: str,
     *,
-    rec_provider: RecProvider = default_rec_provider,
+    rec_provider: Optional[RecProvider] = None,
     qty: float = 1.0,
     event: str = "premium_scout",
 ) -> ScoutCandidate:
-    """Stages 1+4 for one (hypothesis, symbol)."""
+    """Stages 1+4 for one (hypothesis, symbol). Uses hyp DNA when present."""
+    provider = rec_provider or rec_provider_for_hyp(hyp)
     trace = [
         f"strategy:{hyp.id}:{hyp.sleeve}:{hyp.status}",
         f"symbol:{symbol.upper()}",
     ]
+    if getattr(hyp, "dna", None):
+        d = hyp.dna or {}
+        trace.append(f"dna:{d.get('structure')}:{d.get('dna_id')}")
     try:
-        rec = rec_provider(symbol.upper())
+        rec = provider(symbol.upper())
     except Exception as exc:  # noqa: BLE001 — scout must not crash the tick
         audit_scout(
             "scout_error",
@@ -310,7 +348,7 @@ def run_premium_scout(
     *,
     registry: Optional[HypothesisRegistry] = None,
     symbols: Optional[Sequence[str]] = None,
-    rec_provider: RecProvider = default_rec_provider,
+    rec_provider: Optional[RecProvider] = None,
     qty: float = 1.0,
     event: str = "premium_scout",
     max_intents: int = 3,
@@ -319,6 +357,7 @@ def run_premium_scout(
     """Full pipeline: regime → strategy → symbol → premium → intent list.
 
     max_intents caps paper proposals per tick (risk + ops hygiene).
+    When rec_provider is None, each hypothesis uses its own DNA-aware provider.
     """
     reg = registry or HypothesisRegistry()
     strategies = select_strategies(reg)

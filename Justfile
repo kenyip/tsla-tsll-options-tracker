@@ -318,3 +318,18 @@ research-universe *ARGS:
 #   just learn-tick -- --json
 learn-tick *ARGS:
     {{py}} -m trader_platform.learn_tick --once {{ARGS}}
+
+# --- Evolve tick (FREE strategy DNA search + sim; never live; no strategies.py edits) ---
+#   just evolve-tick
+#   just evolve-tick -- --apply --top-symbols 4 --mutants 2
+#   just evolve-tick -- --apply --structures short_put_credit wheel_assignment
+#   just evolve-tick -- --json
+evolve-tick *ARGS:
+    {{py}} -m trader_platform.evolve_tick --once {{ARGS}}
+
+# Bootstrap burst: research → evolve → learn → paper scout (paper only)
+bootstrap-ticks:
+    {{py}} -m trader_platform.research tick --write-report --notes bootstrap --sleeve-usd 5000 --promote --promote-top 5
+    {{py}} -m trader_platform.evolve_tick --once --apply --top-symbols 4 --mutants 2 --max-population 24 --max-create 6
+    {{py}} -m trader_platform.learn_tick --once --apply
+    {{py}} -m trader_platform.autonomy_loop --mode paper --once
