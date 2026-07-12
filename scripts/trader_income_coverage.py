@@ -63,6 +63,7 @@ def main() -> int:
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--write", action="store_true", default=True)
     ap.add_argument("--no-write", action="store_true")
+    ap.add_argument("--stamp", help="override report stamp for deterministic run regeneration")
     args = ap.parse_args()
     write = args.write and not args.no_write
 
@@ -101,11 +102,11 @@ def main() -> int:
         "debit_vertical — bull-call and bear-put BS defined-debit scaffold + evolve/B3/B4 built; observed option surfaces, dividends, and assignment missing",
         "collared_covered_call — capital-honest scaffold plus 1,152-row DTE/delta/management grid built; 258 rows were positive on both proxy cost axes but zero met the $75 window-DD gate, so the family is rejected this cycle; dividends/assignment unmodeled and no proxy SHIP registered",
         "time-bucket scoreboard — multi-hyp DTE/profit-target/DTE-stop + entry-weekday/cost grid, lagged completed-bar close-shock filters, and chronological selection/holdout falsification built; session-time slices missing",
-        "direction-bias lab — shared-window scoreboard + no-lookahead shared-position PCS/CCS/IC router built; asymmetric capped-jade IC and lagged close-shock PCS families both failed complete proxy gates (the latter on chronological holdout), so they remain rejected pending a genuinely new edge or observed-data density",
+        "direction-bias lab — shared-window scoreboard + no-lookahead shared-position PCS/CCS/IC router built; asymmetric capped-jade IC, lagged close-shock PCS, and lagged bullish-momentum PCS walk-forward families failed complete proxy gates, so they remain rejected pending a genuinely new edge or observed-data density",
         "cost realism — exact PCS/CCS/IC leg/time join + reject gate, Friday abstraction, archive-backed date-aware expiry/strike-grid provider, and all-expiration atomic append capture built; density gate fails closed below three market dates, and the current archive still covers only one, so provider-backed historical simulation and observed-cost calibration remain blocked",
     ]
 
-    stamp = datetime.now().strftime("%Y-%m-%dT%H%M")
+    stamp = args.stamp or datetime.now().strftime("%Y-%m-%dT%H%M")
     out = {
         "stamp": stamp,
         "n_catalog": len(STRUCTURE_CATALOG),
