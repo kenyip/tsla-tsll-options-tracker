@@ -1,0 +1,45 @@
+{
+  "closed_families": [
+    "pcs-mild-pullback-daily-bar",
+    "pcs-bullish-momentum-daily-bar",
+    "pcs-close-shock-daily-bar",
+    "collared-covered-call-proxy",
+    "asymmetric-iron-condor-proxy",
+    "bac-friday-7dte-management"
+  ],
+  "critic_findings": [
+    {
+      "finding": "Window dense-negative and integrity rejection lacked an explicit boundary test.",
+      "rationale": "Finalizer added a fail-closed test covering both window density and integrity.",
+      "repair_artifacts": [
+        "scripts/pcs_pullback_rolling_origin_lab.py"
+      ],
+      "status": "repaired",
+      "test_artifacts": [
+        "tests/test_pcs_pullback_rolling_origin_lab.py"
+      ]
+    }
+  ],
+  "data_dependencies": [
+    "A distinct New York RTH market date is required to advance observed option archive density from 1/3 to 2/3.",
+    "Provider-backed historical simulation and observed-cost calibration remain blocked until at least 3/3 distinct market dates."
+  ],
+  "loop_signature": "pcs/direction/mild-pullback/rolling-origin/proxy-cost",
+  "next": "On the next distinct New York RTH market date, append one all-expiration TSLL observation snapshot and verify archive density advances from 1/3 to 2/3 without duplicate identical rows; no provider-backed historical simulation before 3/3.",
+  "outcome": "FALSIFIED",
+  "schema_version": 1,
+  "stamp": "2026-07-12T1437",
+  "useful_deltas": [
+    {
+      "artifacts": [
+        "scripts/pcs_pullback_rolling_origin_lab.py",
+        "tests/test_pcs_pullback_rolling_origin_lab.py",
+        "docs/INCOME_STRATEGY_COVERAGE.md",
+        "reports/trader-wakes/2026-07-12T1437-moa-merge.md"
+      ],
+      "kind": "falsification",
+      "novelty_key": "pcs-mild-pullback-rolling-origin-8x3-reject",
+      "summary": "Predeclared lagged mild-pullback PCS failed all expanding rolling-origin folds across eight symbols under dual proxy costs and hard path-risk gates."
+    }
+  ]
+}

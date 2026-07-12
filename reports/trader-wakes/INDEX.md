@@ -1,5 +1,6 @@
 # Trader wake index (newest first)
 
+- `2026-07-12T1553` — cumulative BUILD infrastructure: structured integrated deltas/closed families, anti-echo role validation, no-delta redirect, safe interruption recovery. See `2026-07-12T1553-trader-compounding-infrastructure.md`.
 - 2026-07-12T1437-moa-merge — finalizer accepted Grok PASS 8/8, reproduced mild-pullback rolling-origin REJECT (8/8 symbols, 0 all-fold passes; 3/24 train-only then holdout fail), repaired stale readiness NEXT, added dense-negative/integrity fail-close coverage, passed focused 22/22 + full 104/104, regenerated derived readiness/coverage surfaces, and promoted learning; MOA_FINALIZE_READY pending deterministic integration; no live
 - 2026-07-12T1437-moa-exec — predeclared lagged mild-pullback PCS rolling-origin falsification: 8 symbols × 3 folds, 0 all-fold passes, only 3/24 train passes and all failed holdout; integrity 286/286, focused 21/21, full 103/103; family closed/no leader L0; NEXT distinct-RTH TSLL archive 1→2/3; no live
 - 2026-07-12T1431-manual-closeout-audit — real manual/direct-main completion gap: preflight receipt invalidated; deterministic tracked-report postflight + atomic receipt path added without weakening wrapper artifacts; focused 20/20, full 99/99; final postflight pending commit/push; no strategy/live/schedule changes

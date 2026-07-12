@@ -19,6 +19,7 @@ A changed-repository wake is `RUN COMPLETE` only when all are true:
 1. Scoped implementation/artifacts are complete or the claim is explicitly falsified/narrowed.
 2. Claim-relevant behavioral, boundary, negative-control, regression, and full-suite verification is green.
 3. The wake report records exact evidence, failures, outcome, durable lessons, unresolved risks, and exactly one NEXT seed or `DIMINISHING_RETURNS`.
+   The v3 BUILD handoff also records machine-readable useful deltas, critic dispositions, closed families, data dependencies, and a stable loop signature in `compounding.json`; role-ready prose is never evidence by itself.
 4. Learning is promoted deliberately: repo docs/reports for project truth/history; Trader skills for reusable procedures/pitfalls; compact profile memory only for stable stance/preferences. Superseded guidance is rewritten, not stacked.
 5. Intended paths are reviewed for secrets/private positions and committed coherently. Raw session logs, auth, `.env`, caches, provider dumps, and live position files stay untracked.
 6. The run branch is pushed normally, integrated into `main`, `main` is pushed, the run commit is an ancestor of remote `main`, and the canonical checkout is clean.

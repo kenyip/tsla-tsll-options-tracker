@@ -30,11 +30,14 @@ MAX_EXEC="${MOA_MAX_TURNS_EXEC:-60}"
 MAX_CHALL="${MOA_MAX_TURNS_CHALL:-35}"
 MAX_FINAL="${MOA_MAX_TURNS_FINAL:-45}"
 GATE="$REPO/scripts/trader_run_completion_gate.py"
+COMPOUNDING="$REPO/scripts/trader_build_compounding.py"
 GOAL_FILE="$REPO/configs/build_lab_free_goal.txt"
 
 GOAL=""
 MODE="both"
 STAMP=""
+STAMP_EXPLICIT=0
+AUTO_RECOVERY=0
 SLOT=""
 SLOT_SOURCE="auto"
 GOAL_SOURCE="canonical"
@@ -53,7 +56,7 @@ while [[ $# -gt 0 ]]; do
     --challenger-only) MODE="challenger-only"; shift ;;
     --finalizer-only) MODE="finalizer-only"; shift ;;
     --resume) MODE="resume"; shift ;;
-    --stamp) STAMP="$2"; shift 2 ;;
+    --stamp) STAMP="$2"; STAMP_EXPLICIT=1; shift 2 ;;
     --slot) SLOT="$2"; SLOT_SOURCE="override"; SLOT_EXPLICIT=1; shift 2 ;;
     --structures) STRUCTURES="$2"; shift 2 ;;
     --top-symbols) TOP_SYMBOLS="$2"; shift 2 ;;
@@ -70,6 +73,16 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
+# A zero-input launch on an interrupted run branch resumes that exact stamp.
+# This is recovery, not caller strategy judgment. Explicit modes/stamps retain
+# their diagnostic meaning and never get silently rewritten.
+CURRENT_BRANCH="$(git branch --show-current 2>/dev/null || true)"
+if [[ "$MODE" == "both" && "$STAMP_EXPLICIT" == "0" && "$CURRENT_BRANCH" == trader/run-* ]]; then
+  STAMP="${CURRENT_BRANCH#trader/run-}"
+  MODE="resume"
+  AUTO_RECOVERY=1
+  echo "AUTO-RECOVERY: resuming interrupted BUILD stamp $STAMP from $CURRENT_BRANCH" >&2
+fi
 if [[ -z "$STAMP" ]]; then
   STAMP="$(date +%Y-%m-%dT%H%M)"
 fi
@@ -103,8 +116,8 @@ fi
 # Debug/test hook: assembles the exact no-input launch context without starting
 # a branch, lock, model session, or market action.
 if [[ "${TRADER_BUILD_CONTEXT_ONLY:-0}" == "1" ]]; then
-  printf 'goal_source=%s\ncontext=%s\ncontext_source=%s\ngoal_file=%s\n--- CANONICAL GOAL ---\n%s\n--- END GOAL ---\n' \
-    "$GOAL_SOURCE" "$SLOT" "$SLOT_SOURCE" "$GOAL_FILE" "$GOAL"
+  printf 'goal_source=%s\ncontext=%s\ncontext_source=%s\nmode=%s\nstamp=%s\ngoal_file=%s\n--- CANONICAL GOAL ---\n%s\n--- END GOAL ---\n' \
+    "$GOAL_SOURCE" "$SLOT" "$SLOT_SOURCE" "$MODE" "$STAMP" "$GOAL_FILE" "$GOAL"
   exit 0
 fi
 
@@ -173,7 +186,7 @@ fi
 MOA_DIR="reports/trader-wakes/moa/${STAMP}"
 mkdir -p "$MOA_DIR/prompts" reports/trader-wakes reports/readiness
 
-if [[ "$MODE" == "challenger-only" || "$MODE" == "finalizer-only" || "$MODE" == "resume" ]]; then
+if [[ "$MODE" == "challenger-only" || "$MODE" == "finalizer-only" || "$MODE" == "resume" || "$MODE" == "integrate-only" ]]; then
   if [[ ! -f "$MOA_DIR/meta.json" ]]; then
     echo "ERROR: recovery mode requires existing $MOA_DIR/meta.json" >&2
     exit 1
@@ -198,7 +211,18 @@ if [[ "$MODE" == "challenger-only" || "$MODE" == "finalizer-only" || "$MODE" == 
     echo "ERROR: recovery must run from $RUN_BRANCH (current: $(git branch --show-current))" >&2
     exit 1
   fi
+  if [[ "$AUTO_RECOVERY" == "1" && "$(git rev-parse HEAD)" != "$BASE_HEAD" ]]; then
+    if [[ -n "$(git status --porcelain)" ]]; then
+      echo "ERROR: interrupted committed run branch is dirty; preserve it and use explicit recovery" >&2
+      exit 1
+    fi
+    MODE="integrate-only"
+    echo "AUTO-RECOVERY: committed run detected; validating and continuing integration only" >&2
+  fi
 fi
+
+# A committed recovery must remain byte-clean until deterministic integration.
+if [[ "$MODE" != "integrate-only" ]]; then
 
 # Preflight coverage (non-fatal)
 set +e
@@ -212,7 +236,7 @@ from pathlib import Path
 meta = {
   "stamp": "$STAMP",
   "lab": "income_build_lab",
-  "completion_contract_version": 2,
+  "completion_contract_version": 3,
   "context": "$SLOT",
   "context_source": "$SLOT_SOURCE",
   "goal_source": "$GOAL_SOURCE",
@@ -234,6 +258,11 @@ Path("$MOA_DIR/meta.json").write_text(json.dumps(meta, indent=2) + "\n")
 PY
 fi
 
+# Machine-readable cumulative orientation is generated from prior integrated
+# handoffs. It informs Trader without selecting a symbol, structure, or loop.
+python3 "$COMPOUNDING" context \
+  --repo "$REPO" --stamp "$STAMP" --out "$MOA_DIR/orientation.json" >/dev/null
+
 # --- Executor prompt ---
 cat > "$MOA_DIR/prompts/01-executor.txt" <<EOF
 MOA BUILD LAB — PHASE 1 EXECUTOR (ONLY writer) — GPT 5.6 Sol.
@@ -244,6 +273,7 @@ Before choosing, orient from the canonical goal above plus:
 - docs/BUILD_LAB_ENVIRONMENT.md, docs/INCOME_STRATEGY_COVERAGE.md
 - reports/readiness/income-coverage-LATEST.md (if present)
 - reports/trader-wakes/LATEST.md, reports/readiness/LATEST.md
+- reports/trader-wakes/moa/${STAMP}/orientation.json (closed families, prior novelty, redirect signal)
 - hypothesis registry, learn/evolve audits, coverage, current local time,
   market/session state, and relevant current data.
 The caller supplied no loop judgment unless meta explicitly says override.
@@ -269,7 +299,7 @@ OPERATING CONTRACT (goal-driven, not a checklist):
    - .venv/bin/python scripts/pcs_cost_stress.py --hyps "<ids>" --out .cache/platform/stress_cost_lab_${STAMP}.json
 4) Promotion claims require relevant B3/B4, non-vacuous after-cost evidence, and explicit risk. Proxy-only experiments are allowed for discovery when labeled, but cannot earn L1 without evidence appropriate to the claim. Tests must exercise behavior and failure boundaries relevant to the claim; avoid self-fulfilling fixtures or assertions that merely restate implementation output.
 5) Compare against the CURRENT living leader from readiness. If none exists, use explicit absolute risk/evidence gates and say there is no leader; historical candidates are context, not seats.
-6) A null result, rejected family, discovered flaw, or novel capability is valid progress when it changes what should be tried next. Include a one-line freedom audit: did any prompt rule or tool constraint block a higher-information valid experiment?
+6) A null result, rejected family, discovered flaw, or novel capability is valid progress when it changes what should be tried next. Honor orientation.json: closed families require a genuinely new evidence class to reopen, and redirect_required forbids an unchanged repeat. It is context, never an allowlist. Include a one-line freedom audit.
 7) Durable executor residue (this is a PARTIAL phase, not a completed run):
    - reports/trader-wakes/moa/${STAMP}/executor-closeout.md
    - reports/trader-wakes/${STAMP}-moa-exec.md
@@ -346,6 +376,7 @@ READ FIRST:
 - reports/trader-wakes/moa/${STAMP}/executor-closeout.md
 - reports/trader-wakes/moa/${STAMP}/challenger-critique.md
 - reports/trader-wakes/moa/${STAMP}/merged-next-seed.md
+- reports/trader-wakes/moa/${STAMP}/orientation.json
 - reports/trader-wakes/${STAMP}-moa-exec.md
 - reports/trader-wakes/${STAMP}-moa-merge.md
 - reports/trader-wakes/LATEST.md
@@ -368,13 +399,16 @@ FINALIZATION CONTRACT:
    - ## LESSON — what future Trader now knows/can do
    - ## NEXT — exactly one seed or DIMINISHING_RETURNS
    Include accepted/rejected critique findings and state that integration is pending the deterministic wrapper gate.
-7) Regenerate every touched derived report and ensure executor/challenger/merge/LATEST/INDEX/readiness surfaces agree.
-8) Do NOT commit, push, merge, switch branches, edit .gitignore merely to hide residue, or claim RUN COMPLETE. The deterministic wrapper performs integration only after your green handoff.
+7) Write reports/trader-wakes/moa/${STAMP}/compounding.json using the stable schema in docs/BUILD_LAB_ENVIRONMENT.md. Every useful delta needs a unique novelty_key and changed artifact paths; repaired critic findings need machinery + test paths, while rejected findings need evidence-backed rationale. Use DIMINISHING_RETURNS when no measurable delta exists.
+8) Regenerate every touched derived report and ensure executor/challenger/merge/LATEST/INDEX/readiness surfaces agree.
+9) Do NOT commit, push, merge, switch branches, edit .gitignore merely to hide residue, or claim RUN COMPLETE. The deterministic wrapper performs integration only after your green handoff.
 
 If anything cannot be closed safely, state RUN INCOMPLETE with the exact blocker and recovery step, and exit non-successfully rather than printing readiness.
 
 Close only when ready for deterministic integration with: MOA_FINALIZE_READY and the verification + learning paths.
 EOF
+
+fi  # generation is skipped for clean committed integrate-only recovery
 
 run_exec() {
   PHASE="executor"
@@ -432,6 +466,10 @@ run_finalize() {
 
   PHASE="finalizer"
   echo "=== BUILD LAB FINALIZER: $EXEC_PROVIDER / $EXEC_MODEL ==="
+  baseline="$LOCK_DIR/completion/${STAMP}-finalizer-baseline.json"
+  mkdir -p "$LOCK_DIR/completion"
+  python3 "$COMPOUNDING" snapshot \
+    --repo "$REPO" --stamp "$STAMP" --out "$baseline" >/dev/null
   set +e
   hermes -p trader chat \
     -q "$(cat "$MOA_DIR/prompts/03-finalizer.txt")" \
@@ -441,13 +479,12 @@ run_finalize() {
     2>&1 | tee "$MOA_DIR/finalizer-session.log"
   ec=${PIPESTATUS[0]}
   set -e
-  mkdir -p "$LOCK_DIR/completion"
   echo "$ec" > "$LOCK_DIR/completion/${STAMP}-finalizer-exit.txt"
-  if [[ $ec -eq 0 ]] && ! grep -q "MOA_FINALIZE_READY" "$MOA_DIR/finalizer-session.log"; then
-    echo "ERROR: finalizer exited 0 without MOA_FINALIZE_READY; run remains incomplete" >&2
-    return 1
-  fi
-  return "$ec"
+  [[ $ec -eq 0 ]] || return "$ec"
+  # Session prose is deliberately ignored: role readiness requires changed,
+  # schema-valid learning and measurable handoff artifacts.
+  python3 "$COMPOUNDING" validate-handoff \
+    --repo "$REPO" --stamp "$STAMP" --base-head "$BASE_HEAD" --baseline "$baseline"
 }
 
 integrate_run() {
@@ -460,25 +497,39 @@ integrate_run() {
 
   .venv/bin/python -m unittest discover -s tests
   git diff --check
-  git add -A
-  python3 "$GATE" prepare \
-    --repo "$REPO" \
-    --stamp "$STAMP" \
-    --base-head "$BASE_HEAD" \
-    --run-branch "$RUN_BRANCH"
-
-  git commit -m "trader: complete BUILD lab ${STAMP}"
+  if [[ "$(git rev-parse HEAD)" == "$BASE_HEAD" ]]; then
+    git add -A
+    python3 "$GATE" prepare \
+      --repo "$REPO" \
+      --stamp "$STAMP" \
+      --base-head "$BASE_HEAD" \
+      --run-branch "$RUN_BRANCH"
+    git commit -m "trader: complete BUILD lab ${STAMP}"
+  else
+    git merge-base --is-ancestor "$BASE_HEAD" HEAD || {
+      echo "ERROR: recovered run HEAD does not descend from base; preserving branch" >&2
+      return 1
+    }
+    [[ -z "$(git status --porcelain)" ]] || {
+      echo "ERROR: recovered committed run branch is dirty; preserving branch" >&2
+      return 1
+    }
+    python3 "$COMPOUNDING" validate-handoff \
+      --repo "$REPO" --stamp "$STAMP" --base-head "$BASE_HEAD"
+    echo "AUTO-RECOVERY: reusing existing verified run commit $(git rev-parse HEAD)" >&2
+  fi
   RUN_HEAD="$(git rev-parse HEAD)"
   git push -u origin "$RUN_BRANCH"
 
   git switch main
-  [[ "$(git rev-parse HEAD)" == "$BASE_HEAD" ]] || {
+  [[ "$(git rev-parse HEAD)" == "$BASE_HEAD" || "$(git rev-parse HEAD)" == "$RUN_HEAD" ]] || {
     echo "ERROR: local main changed during run; preserving $RUN_BRANCH for review" >&2
     return 1
   }
-  python3 "$GATE" preflight --repo "$REPO" >/dev/null
-
-  git merge --ff-only "$RUN_BRANCH"
+  if [[ "$(git rev-parse HEAD)" == "$BASE_HEAD" ]]; then
+    python3 "$GATE" preflight --repo "$REPO" >/dev/null
+    git merge --ff-only "$RUN_BRANCH"
+  fi
   git push origin main
   mkdir -p "$LOCK_DIR/completion"
   python3 "$GATE" postflight \
@@ -515,6 +566,9 @@ case "$MODE" in
     ;;
   finalizer-only)
     run_finalize
+    integrate_run
+    ;;
+  integrate-only)
     integrate_run
     ;;
 esac

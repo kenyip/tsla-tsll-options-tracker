@@ -15,6 +15,11 @@ import sys
 import tempfile
 from pathlib import Path
 
+try:
+    from scripts.trader_build_compounding import CompoundingError, validate as validate_compounding
+except ModuleNotFoundError:  # direct executable: scripts/ is sys.path[0]
+    from trader_build_compounding import CompoundingError, validate as validate_compounding
+
 SENSITIVE_BASENAMES = {
     "positions.yaml",
     "pmcc_positions.yaml",
@@ -25,6 +30,8 @@ SENSITIVE_BASENAMES = {
 SENSITIVE_PREFIXES = (".cache/", ".hermes/", ".worktrees/")
 REQUIRED_RUN_FILES = (
     "meta.json",
+    "orientation.json",
+    "compounding.json",
     "executor-closeout.md",
     "challenger-critique.md",
     "merged-next-seed.md",
@@ -257,6 +264,10 @@ def prepare(repo: Path, stamp: str, base_head: str, run_branch: str) -> dict[str
         raise GateError("nothing staged for the run commit")
     reject_sensitive_paths(staged)
     reject_raw_secrets(repo, staged)
+    try:
+        validate_compounding(repo, stamp, base_head, baseline=None)
+    except CompoundingError as exc:
+        raise GateError(f"compounding handoff validation failed: {exc}") from exc
     diff_check = subprocess.run(
         ["git", "diff", "--cached", "--check"], cwd=repo, text=True, capture_output=True
     )

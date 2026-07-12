@@ -52,11 +52,14 @@ class TraderRunCompletionGateTest(unittest.TestCase):
         run_dir.mkdir(parents=True)
         for name in (
             "meta.json",
+            "orientation.json",
             "executor-closeout.md",
             "challenger-critique.md",
             "merged-next-seed.md",
         ):
-            (run_dir / name).write_text(f"{name}\n", encoding="utf-8")
+            (run_dir / name).write_text(
+                "{}\n" if name.endswith(".json") else f"{name}\n", encoding="utf-8"
+            )
         (run_dir / "learning-promotion.md").write_text(
             "## VERIFICATION\nall green\n\n"
             "## DURABLE\ndocs\n\n"
@@ -67,6 +70,29 @@ class TraderRunCompletionGateTest(unittest.TestCase):
         wakes = self.repo / "reports" / "trader-wakes"
         for name in (f"{stamp}-moa-exec.md", f"{stamp}-moa-merge.md", "LATEST.md", "INDEX.md"):
             (wakes / name).write_text(f"{name}\n", encoding="utf-8")
+        (run_dir / "compounding.json").write_text(
+            json.dumps(
+                {
+                    "schema_version": 1,
+                    "stamp": stamp,
+                    "loop_signature": "test-loop",
+                    "outcome": "FALSIFIED",
+                    "useful_deltas": [
+                        {
+                            "kind": "evidence",
+                            "summary": "test evidence",
+                            "novelty_key": f"test-{stamp}",
+                            "artifacts": [f"reports/trader-wakes/{stamp}-moa-exec.md"],
+                        }
+                    ],
+                    "critic_findings": [],
+                    "closed_families": [],
+                    "data_dependencies": [],
+                    "next": "one seed",
+                }
+            ) + "\n",
+            encoding="utf-8",
+        )
 
     def test_preflight_requires_clean_main_synced_to_origin(self) -> None:
         result = preflight(self.repo)

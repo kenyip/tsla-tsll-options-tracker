@@ -73,15 +73,46 @@ def score_stamp(d: Path) -> dict:
         and (d / "challenger-critique.md").exists()
         and (d / "merged-next-seed.md").exists()
     )
-    if int(meta.get("completion_contract_version", 1) or 1) >= 2:
+    contract_version = int(meta.get("completion_contract_version", 1) or 1)
+    if contract_version >= 2:
         learning = d / "learning-promotion.md"
         complete = complete and learning.exists() and _tracked_on_origin_main(learning)
+    compounding = {}
+    compounding_path = d / "compounding.json"
+    if compounding_path.exists():
+        try:
+            compounding = json.loads(compounding_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            compounding = {}
+    if contract_version >= 3:
+        complete = (
+            complete
+            and compounding.get("schema_version") == 1
+            and _tracked_on_origin_main(compounding_path)
+        )
 
     types: list[str] = []
     score = 0
     if not complete:
         score = 0
         types = ["failed_or_incomplete"]
+    elif compounding:
+        outcome = str(compounding.get("outcome", ""))
+        delta_kinds = sorted(
+            {
+                str(delta.get("kind"))
+                for delta in compounding.get("useful_deltas", [])
+                if isinstance(delta, dict) and delta.get("kind")
+            }
+        )
+        types = [f"delta_{kind}" for kind in delta_kinds] or ["no_useful_delta"]
+        score = {
+            "CANDIDATE": 5,
+            "CAPABILITY": 4,
+            "REPAIRED": 4,
+            "FALSIFIED": 3,
+            "DIMINISHING_RETURNS": 1,
+        }.get(outcome, 0)
     else:
         explicit_scores = [
             int(value)
@@ -171,6 +202,13 @@ def score_stamp(d: Path) -> dict:
         "challenger": meta.get("challenger"),
         "progress_types": types,
         "progress_score_0_5": score,
+        "compounding_outcome": compounding.get("outcome"),
+        "useful_delta_count": len(compounding.get("useful_deltas", [])) if compounding else None,
+        "novelty_keys": [
+            delta.get("novelty_key")
+            for delta in compounding.get("useful_deltas", [])
+            if isinstance(delta, dict)
+        ],
         "readiness_blockers_mentioned": readiness_blockers,
         "has_merged_seed": (d / "merged-next-seed.md").exists(),
     }

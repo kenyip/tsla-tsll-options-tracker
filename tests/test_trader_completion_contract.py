@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import os
 import shutil
 import subprocess
@@ -27,6 +28,8 @@ class TraderCompletionContractSurfaceTest(unittest.TestCase):
         self.assertNotIn("run_chall || true", stress)
         self.assertIn("run_finalize", build)
         self.assertIn("integrate_run", build)
+        self.assertIn("validate-handoff", build)
+        self.assertNotIn('grep -q "MOA_FINALIZE_READY"', build)
         self.assertIn("exec \"$BUILD_WRAPPER\"", stress)
         self.assertIn("args=()", stress)
         self.assertNotIn("args=(--slot", stress)
@@ -159,6 +162,95 @@ class TraderCompletionContractSurfaceTest(unittest.TestCase):
             "market/session state",
         ):
             self.assertIn(surface, wrapper)
+
+
+    def test_zero_input_interrupted_branch_auto_resumes_without_strategy_input(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "scripts").mkdir()
+            (root / "configs").mkdir()
+            shutil.copy2(
+                REPO / "scripts" / "trader_build_lab_moa.sh",
+                root / "scripts" / "trader_build_lab_moa.sh",
+            )
+            shutil.copy2(
+                REPO / "configs" / "build_lab_free_goal.txt",
+                root / "configs" / "build_lab_free_goal.txt",
+            )
+            subprocess.run(["git", "init", "-b", "main"], cwd=root, check=True, capture_output=True)
+            subprocess.run(
+                ["git", "switch", "-c", "trader/run-2026-01-02T0304"],
+                cwd=root,
+                check=True,
+                capture_output=True,
+            )
+            env = os.environ.copy()
+            env["TRADER_BUILD_CONTEXT_ONLY"] = "1"
+            proc = subprocess.run(
+                ["bash", str(root / "scripts" / "trader_build_lab_moa.sh")],
+                cwd=root,
+                env=env,
+                check=True,
+                text=True,
+                capture_output=True,
+            )
+            self.assertIn("mode=resume", proc.stdout)
+            self.assertIn("stamp=2026-01-02T0304", proc.stdout)
+            self.assertIn("AUTO-RECOVERY", proc.stderr)
+
+    def test_committed_interrupted_run_recovers_without_regenerating_workspace(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp) / "repo"
+            remote = Path(tmp) / "remote.git"
+            (root / "scripts").mkdir(parents=True)
+            (root / "configs").mkdir()
+            (root / ".venv" / "bin").mkdir(parents=True)
+            shutil.copy2(REPO / "scripts" / "trader_build_lab_moa.sh", root / "scripts" / "trader_build_lab_moa.sh")
+            shutil.copy2(REPO / "configs" / "build_lab_free_goal.txt", root / "configs" / "build_lab_free_goal.txt")
+            for name in ("trader_run_completion_gate.py", "trader_build_compounding.py"):
+                fake = root / "scripts" / name
+                fake.write_text("#!/usr/bin/env python3\nprint('{\"ok\": true}')\n")
+                fake.chmod(0o755)
+            (root / ".gitignore").write_text(".cache/\n")
+            fake_python = root / ".venv" / "bin" / "python"
+            fake_python.write_text("#!/bin/sh\nexit 0\n")
+            fake_python.chmod(0o755)
+            subprocess.run(["git", "init", "-b", "main"], cwd=root, check=True, capture_output=True)
+            subprocess.run(["git", "config", "user.name", "Test"], cwd=root, check=True)
+            subprocess.run(["git", "config", "user.email", "test@example.test"], cwd=root, check=True)
+            subprocess.run(["git", "add", "-A"], cwd=root, check=True)
+            subprocess.run(["git", "commit", "-m", "base"], cwd=root, check=True, capture_output=True)
+            base = subprocess.run(["git", "rev-parse", "HEAD"], cwd=root, check=True, text=True, capture_output=True).stdout.strip()
+            subprocess.run(["git", "init", "--bare", str(remote)], check=True, capture_output=True)
+            subprocess.run(["git", "remote", "add", "origin", str(remote)], cwd=root, check=True)
+            subprocess.run(["git", "push", "-u", "origin", "main"], cwd=root, check=True, capture_output=True)
+            stamp = "2026-01-02T0405"
+            branch = f"trader/run-{stamp}"
+            subprocess.run(["git", "switch", "-c", branch], cwd=root, check=True, capture_output=True)
+            run = root / "reports" / "trader-wakes" / "moa" / stamp
+            run.mkdir(parents=True)
+            (run / "meta.json").write_text(json.dumps({"base_head": base, "run_branch": branch, "goal": "goal", "goal_source": "canonical", "context": "weekend", "context_source": "auto"}) + "\n")
+            (run / "compounding.json").write_text("{}\n")
+            subprocess.run(["git", "add", "-A"], cwd=root, check=True)
+            subprocess.run(["git", "commit", "-m", "completed run commit"], cwd=root, check=True, capture_output=True)
+            proc = subprocess.run(
+                ["bash", str(root / "scripts" / "trader_build_lab_moa.sh")],
+                cwd=root,
+                check=False,
+                text=True,
+                capture_output=True,
+            )
+            self.assertEqual(proc.returncode, 0, proc.stdout + "\n" + proc.stderr)
+            self.assertIn("committed run detected", proc.stderr)
+            self.assertIn("RUN COMPLETE", proc.stdout)
+            self.assertEqual(
+                subprocess.run(["git", "branch", "--show-current"], cwd=root, check=True, text=True, capture_output=True).stdout.strip(),
+                "main",
+            )
+            self.assertEqual(
+                subprocess.run(["git", "status", "--porcelain"], cwd=root, check=True, text=True, capture_output=True).stdout,
+                "",
+            )
 
     def test_goal_and_slot_overrides_remain_debuggable(self) -> None:
         env = os.environ.copy()

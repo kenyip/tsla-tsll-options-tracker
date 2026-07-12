@@ -1,0 +1,76 @@
+{
+  "closed_families": [],
+  "critic_findings": [
+    {
+      "finding": "Integrate-only recovery regenerated reports/prompts and dirtied a committed run branch.",
+      "rationale": "Generation is skipped in integrate-only mode and an end-to-end temporary-repository test proves clean commit reuse through main integration.",
+      "repair_artifacts": [
+        "scripts/trader_build_lab_moa.sh"
+      ],
+      "status": "repaired",
+      "test_artifacts": [
+        "tests/test_trader_completion_contract.py"
+      ]
+    },
+    {
+      "finding": "Capability/repair deltas did not require both changed machinery and changed tests.",
+      "rationale": "Validator now checks both changed path classes; one-sided, missing-test, and positive dual-change controls lock the boundary.",
+      "repair_artifacts": [
+        "scripts/trader_build_compounding.py"
+      ],
+      "status": "repaired",
+      "test_artifacts": [
+        "tests/test_trader_build_compounding.py"
+      ]
+    },
+    {
+      "finding": "Repaired critic findings accepted missing or one-sided repair/test artifacts.",
+      "rationale": "Validator requires existing typed machinery and test artifacts with changes on both sides; negative and positive controls cover each boundary.",
+      "repair_artifacts": [
+        "scripts/trader_build_compounding.py"
+      ],
+      "status": "repaired",
+      "test_artifacts": [
+        "tests/test_trader_build_compounding.py"
+      ]
+    },
+    {
+      "finding": "Unintegrated local compounding records could pollute future orientation.",
+      "rationale": "Prior records must have a path commit ancestral to origin/main; uncommitted and committed-unpushed side-branch controls are excluded while pushed records are included.",
+      "repair_artifacts": [
+        "scripts/trader_build_compounding.py"
+      ],
+      "status": "repaired",
+      "test_artifacts": [
+        "tests/test_trader_build_compounding.py"
+      ]
+    }
+  ],
+  "data_dependencies": [
+    "Observed option archive density can advance only on a distinct New York RTH market date.",
+    "Any strategy edge or fill-calibration claim still requires new market/quote evidence; infrastructure cannot manufacture it."
+  ],
+  "loop_signature": "platform/self-evolution/cumulative-build-handoffs",
+  "next": "On the next distinct New York RTH market date, append one all-expiration TSLL observation snapshot and verify archive density advances from 1/3 to 2/3 without duplicate identical rows; no provider-backed historical simulation before 3/3.",
+  "outcome": "REPAIRED",
+  "schema_version": 1,
+  "stamp": "2026-07-12T1553",
+  "useful_deltas": [
+    {
+      "artifacts": [
+        "scripts/trader_build_compounding.py",
+        "scripts/trader_build_lab_moa.sh",
+        "scripts/trader_run_completion_gate.py",
+        "scripts/trader_build_progress.py",
+        "tests/test_trader_build_compounding.py",
+        "tests/test_trader_completion_contract.py",
+        "tests/test_trader_run_completion_gate.py",
+        "docs/BUILD_LAB_ENVIRONMENT.md",
+        "configs/build_lab_free_goal.txt"
+      ],
+      "kind": "repair",
+      "novelty_key": "build-compounding-v1-structured-handoff-recovery-role-validation",
+      "summary": "Zero-input BUILD wakes now carry integrated closed-family/novelty/critic state forward, measure changed useful deltas, stop no-delta loops, validate finalizer role artifacts, and safely resume interrupted run branches."
+    }
+  ]
+}

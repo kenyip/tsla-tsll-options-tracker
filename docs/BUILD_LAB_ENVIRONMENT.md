@@ -245,6 +245,47 @@ Added transient put/call-specific delta and width controls plus a regime gate fo
 
 Added fail-closed current-row entry bounds and an explicit completed-bar signal lag to the defined-risk credit simulator. A 64-DNA, eight-symbol downside-close-shock grid found one full-sample SMCI proxy pass after both cost axes, but chronological 60/40 train selection produced PLTR/TSLL candidates and both failed untouched holdout gates (PLTR drawdown; TSLL PnL and drawdown). Family rejected this cycle; no hypothesis registration, leader, or readiness advance.
 
+## Cumulative improvement contract
+
+The zero-input wrapper generates `orientation.json` from prior integrated `compounding.json` records before the executor chooses a loop. This is decision context, not a strategy recipe or allowlist: it carries closed families, prior novelty keys, recent loop signatures/outcomes, and a redirect signal. A closed family may be reopened only when Trader names a genuinely new evidence class or repaired capability. A prior NEXT remains advisory.
+
+Each finalizer writes one structured `compounding.json`:
+
+```json
+{
+  "schema_version": 1,
+  "stamp": "YYYY-MM-DDTHHMM",
+  "loop_signature": "stable family/axis/evidence-class identifier",
+  "outcome": "CANDIDATE|FALSIFIED|CAPABILITY|REPAIRED|DIMINISHING_RETURNS",
+  "useful_deltas": [
+    {
+      "kind": "candidate|falsification|capability|repair|evidence|stop_rule",
+      "summary": "decision-relevant change",
+      "novelty_key": "stable unique capability/evidence key",
+      "artifacts": ["repo/relative/path"]
+    }
+  ],
+  "critic_findings": [
+    {
+      "finding": "material finding",
+      "status": "repaired|rejected",
+      "rationale": "evidence-backed disposition",
+      "repair_artifacts": ["required when repaired"],
+      "test_artifacts": ["required when repaired"]
+    }
+  ],
+  "closed_families": ["stable-family-id"],
+  "data_dependencies": ["what genuinely needs new market data"],
+  "next": "exactly one seed or DIMINISHING_RETURNS"
+}
+```
+
+The validator requires every non-diminishing wake to cite at least one changed artifact and a new novelty key. Capability/repair claims require changed machinery and tests. Repaired critic findings require repair and test artifacts; rejected findings require rationale. A no-delta wake must say `DIMINISHING_RETURNS`. Two repeated loop signatures or the prior diminishing-return outcome set `redirect_required` for the next orientation; this redirects an unchanged loop but never restricts symbol or strategy freedom.
+
+Finalizer role readiness is not a phrase in model output. Before the role starts, the wrapper snapshots hashes of `learning-promotion.md` and `compounding.json`; after a zero exit it validates that both materially changed and that the structured handoff passes the delta/finding rules. Session logs and prompt echoes are ignored. The deterministic prepare gate validates the handoff again.
+
+Zero-input interruption recovery is fail-closed. A launch from a matching `trader/run-<stamp>` branch automatically resumes that stamp. Integration is idempotent across an already-created run commit and an already-fast-forwarded local main; divergence, dirty committed recovery state, mismatched metadata, or non-descendant history remains a blocker. No cleanup, reset, force push, or strategy choice is automated.
+
 ### 2026-07-12 — End-to-end completion and self-evolution gate
 
 A run audit found useful research and honest falsification but also a large uncommitted working tree, duplicate monitor semantics, and completion markers that did not prove durable integration. Trader now uses an executor → challenger → finalizer workflow followed by a deterministic branch/commit/push/fast-forward-main/remote-clean gate. Each run must promote lessons to the smallest durable surface and write `learning-promotion.md`; partial phases, red tests, dirty residue, unpushed commits, or unmerged branches are explicitly `RUN INCOMPLETE`. The full test baseline was restored by making live-PMCC integration assertions validate current selected package/date semantics instead of stale hard-coded state.
