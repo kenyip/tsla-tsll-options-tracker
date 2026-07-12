@@ -1,0 +1,9 @@
+{
+  "stamp": "2026-07-10T0115",
+  "goal": "Regime+cost stress and honest capital judgment on fit_3k defined-risk SHIP set: hyp_dna_tsll_put_credit_spread_b195f5fe,hyp_dna_amd_iron_condor_b3056133,hyp_dna_xom_call_credit_spread_77766a47. No live. No new vanity evolve spam.",
+  "mode": "both",
+  "executor": {"provider": "xai-oauth", "model": "grok-4.5"},
+  "challenger": {"provider": "openai-codex", "model": "gpt-5.5"},
+  "hyp_ids": ["hyp_dna_tsll_put_credit_spread_b195f5fe", "hyp_dna_amd_iron_condor_b3056133", "hyp_dna_xom_call_credit_spread_77766a47"],
+  "repo": "/Users/jarvis/dev/tsla-tsll-options-tracker"
+}

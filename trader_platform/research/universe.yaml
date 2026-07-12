@@ -39,9 +39,20 @@ symbols:
   - XOM
   - BAC
 
+  # Sub-$30 liquid optionables — collared covered-call capital_fit (spot*100 ≤ 3000)
+  # Non-levered only; TSLL remains research-only for other structures, not collar share-hold default.
+  - F
+  - SOFI
+  - AAL
+  - PFE
+  - SNAP
+  - NIO
+  - CCL
+
 # Optional groups (informational; scorer does not require groups)
 groups:
   indexes: [SPY, QQQ, IWM, DIA]
   mega_cap: [AAPL, MSFT, NVDA, AMZN, META, GOOGL, AMD, NFLX]
   high_beta: [TSLA, TSLL, COIN, PLTR, ARM, SMCI, AVGO, MU]
   financials_energy: [JPM, XOM, BAC]
+  collar_sub_30: [F, SOFI, AAL, PFE, SNAP, NIO, CCL, SMCI]

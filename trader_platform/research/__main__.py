@@ -2,7 +2,7 @@
 
 Examples:
   python -m trader_platform.research tick
-  python -m trader_platform.research tick --top 15 --sleeve-usd 5000 --write-report
+  python -m trader_platform.research tick --top 15 --sleeve-usd 3000 --write-report
   python -m trader_platform.research promote-top --top 5 --sleeve-usd 3000
   python -m trader_platform.research promote-top --run-backtests --dry-run
   python -m trader_platform.research report

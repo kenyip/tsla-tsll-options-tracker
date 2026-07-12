@@ -7,7 +7,7 @@ mkdir -p .cache/platform
   echo "=== research_tick_paper $(date -u +%Y-%m-%dT%H:%M:%SZ) ==="
   .venv/bin/python -m trader_platform.research tick \
     --write-report \
-    --sleeve-usd 5000 \
+    --sleeve-usd 3000 \
     --notes research_cron_paper \
     --promote --promote-top 5
   echo "=== done ==="

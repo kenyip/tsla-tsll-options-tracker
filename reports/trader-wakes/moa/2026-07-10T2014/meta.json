@@ -1,0 +1,20 @@
+{
+  "stamp": "2026-07-10T2014",
+  "lab": "income_build_lab",
+  "slot": "evening",
+  "goal": "ROLE SWAP LAB: GPT 5.6 Sol executor; Grok 4.5 challenger. Steady-income discovery on $3000. Thin axes after 1938: time-bias grid and/or CCS/IC direction coverage. Real research+evolve+B3/B4. Falsify vanity SHIP vs b195f5fe. One NEXT seed. Paper only. No live.",
+  "mode": "both",
+  "executor": {
+    "provider": "openai-codex",
+    "model": "gpt-5.6-sol"
+  },
+  "challenger": {
+    "provider": "xai-oauth",
+    "model": "grok-4.5"
+  },
+  "structures": "",
+  "top_symbols": 8,
+  "mutants": 2,
+  "sleeve_usd": 3000.0,
+  "repo": "/Users/jarvis/dev/tsla-tsll-options-tracker"
+}

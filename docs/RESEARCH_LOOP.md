@@ -1,8 +1,9 @@
 # Multi-Symbol Research Loop
 
-**Status:** paper-only capital-aware research scout (2026-07-09)  
-**Package:** `trader_platform/research/`  
+**Status:** paper-only capital-aware research scout (2026-07-09)
+**Package:** `trader_platform/research/`
 **Pin:** **Research universe ≠ live risk allowlist.** Multi-symbol ranking is mandatory.
+**Pin (Ken 2026-07-10):** Rank multi-name multi-structure DNA by capital/regime/cost/falsify — **not** by paper-path plumbing readiness. Incomplete OPEN paths are parallel build debt.
 
 ---
 
@@ -57,12 +58,12 @@ just research-universe
 just research-tick
 .venv/bin/python -m trader_platform.research tick --top 10
 
-# Pilot sleeve filter + dated report
-just research-tick-paper -- --sleeve-usd 5000 --top 12
+# Pilot sleeve filter + dated report (doctrine default $3000 Agentic pilot)
+just research-tick-paper -- --sleeve-usd 3000 --top 12
 just research-tick -- --sleeve-usd 3000 --write-report --promote --promote-top 5
 
 # Wire last run top-N → paper candidates (never live)
-just research-promote-top -- --top 5 --sleeve-usd 5000
+just research-promote-top -- --top 5 --sleeve-usd 3000
 just research-promote-top -- --run-backtests --dry-run
 
 # Re-print last run tables (incl. capital)
@@ -70,8 +71,8 @@ just research-report
 .venv/bin/python -m trader_platform.research report
 ```
 
-SQLite DB (default): `.cache/platform/research.db`  
-Dated reports: `.cache/platform/research_reports/YYYY-MM-DD_run{N}.md`  
+SQLite DB (default): `.cache/platform/research.db`
+Dated reports: `.cache/platform/research_reports/YYYY-MM-DD_run{N}.md`
 Recurring paper-only schedule: **`docs/RESEARCH_CRON.md`** (no trading cron).
 
 ---
@@ -83,7 +84,7 @@ Recurring paper-only schedule: **`docs/RESEARCH_CRON.md`** (no trading cron).
 | `trader_platform/research/` | **Which symbols** look best (broad universe ranking + capital fit) |
 | `trader_platform/premium_scout.py` | **Given** eligible hypotheses/instruments → sell-put/call intents for paper |
 
-Research scout can inform which symbols to study next; it does **not** place orders.  
+Research scout can inform which symbols to study next; it does **not** place orders.
 `premium_scout` still never places live; autonomy loop paper path remains the only mutator of the paper ledger.
 
 Promote path writes **candidate** hypotheses only (`hyp_research_*`). No auto-promote to live.
@@ -92,11 +93,11 @@ Promote path writes **candidate** hypotheses only (`hyp_research_*`). No auto-pr
 
 ## Forbidden
 
-- Limiting the research universe to TSLA/TSLL only  
-- Using `instrument_allowlist` to cap research ranking  
-- `place_*`, funding, or `agentic.enabled=true` from this loop  
-- Treating composite scores as guaranteed edge  
-- Trading cron / agentic_live schedule  
+- Limiting the research universe to TSLA/TSLL only
+- Using `instrument_allowlist` to cap research ranking
+- `place_*`, funding, or `agentic.enabled=true` from this loop
+- Treating composite scores as guaranteed edge
+- Trading cron / agentic_live schedule
 
 ---
 
@@ -121,9 +122,9 @@ docs/RESEARCH_CRON.md
 
 ## Related
 
-- `docs/RESEARCH_CRON.md` — paper-only recurring tick (no trading cron)  
-- `docs/RESEARCH_LOOP_FOUNDATION.md` — regime→strategy→symbol→premium intents  
-- `docs/STAGE2_RH_READONLY_AND_CAPITAL.md` — funding tiers  
-- `docs/TRADER_PLATFORM_GOAL.md`  
-- `docs/AGENTIC_AUTONOMY_POLICY.md`  
-- `trader_platform/risk_limits.yaml` — live gate only  
+- `docs/RESEARCH_CRON.md` — paper-only recurring tick (no trading cron)
+- `docs/RESEARCH_LOOP_FOUNDATION.md` — regime→strategy→symbol→premium intents
+- `docs/STAGE2_RH_READONLY_AND_CAPITAL.md` — funding tiers
+- `docs/TRADER_PLATFORM_GOAL.md`
+- `docs/AGENTIC_AUTONOMY_POLICY.md`
+- `trader_platform/risk_limits.yaml` — live gate only

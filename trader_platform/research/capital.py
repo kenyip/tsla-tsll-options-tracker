@@ -180,6 +180,26 @@ def filter_by_sleeve(
     return out
 
 
+def compute_pcs_capital(
+    *,
+    width: float,
+    net_credit: float,
+    sleeve_usd: float = SLEEVE_3K,
+    open_risk_budget_usd: float = 750.0,
+    max_loss_budget_usd: float = 300.0,
+) -> dict[str, Any]:
+    """Defined-risk put credit spread capital: BP ≈ max_loss = (width − credit)×100."""
+    from trader_platform.research.pcs_sim import capital_fit_pcs, defined_max_loss_usd
+
+    ml = defined_max_loss_usd(width, net_credit)
+    return capital_fit_pcs(
+        max_loss_usd=ml,
+        sleeve_usd=sleeve_usd,
+        open_risk_budget_usd=open_risk_budget_usd,
+        max_loss_budget_usd=max_loss_budget_usd,
+    )
+
+
 def format_capital_table(scores: Sequence[Any], *, top_n: int = 15) -> str:
     """CLI table: capital columns for ranked symbols."""
     rows: list[Any] = []

@@ -47,6 +47,22 @@ class WorkingOrder:
     created: str = ""
     updated: str = ""
     tag: str = ""
+    structure: str = ""
+    legs: Optional[list[dict[str, Any]]] = None
+    max_loss_usd: Optional[float] = None
+    width: Optional[float] = None
+    net_credit: Optional[float] = None
+    short_strike: Optional[float] = None
+    long_strike: Optional[float] = None
+    expiration: Optional[str] = None
+    dte: Optional[int] = None
+
+
+def _working_order_from_raw(raw: dict[str, Any]) -> WorkingOrder:
+    """Load WorkingOrder, ignoring unknown legacy keys."""
+    fields = set(WorkingOrder.__dataclass_fields__.keys())
+    cleaned = {k: v for k, v in raw.items() if k in fields}
+    return WorkingOrder(**cleaned)
 
 
 @dataclass
@@ -153,9 +169,48 @@ class PaperBroker(BrokerAdapter):
             created=now,
             updated=now,
             tag=intent.tag,
+            structure=str(getattr(intent, "structure", "") or ""),
+            legs=list(intent.legs) if getattr(intent, "legs", None) else None,
+            max_loss_usd=(
+                float(intent.max_loss_usd)
+                if getattr(intent, "max_loss_usd", None) is not None
+                else None
+            ),
+            width=float(intent.width) if getattr(intent, "width", None) is not None else None,
+            net_credit=(
+                float(intent.net_credit)
+                if getattr(intent, "net_credit", None) is not None
+                else None
+            ),
+            short_strike=(
+                float(intent.short_strike)
+                if getattr(intent, "short_strike", None) is not None
+                else None
+            ),
+            long_strike=(
+                float(intent.long_strike)
+                if getattr(intent, "long_strike", None) is not None
+                else None
+            ),
+            expiration=(
+                str(intent.expiration)
+                if getattr(intent, "expiration", None) is not None
+                else None
+            ),
+            dte=int(intent.dte) if getattr(intent, "dte", None) is not None else None,
         )
         data["orders"][oid] = asdict(order)
-        self._event(data, "place", {"order_id": oid, "symbol": order.symbol})
+        self._event(
+            data,
+            "place",
+            {
+                "order_id": oid,
+                "symbol": order.symbol,
+                "structure": order.structure or None,
+                "max_loss_usd": order.max_loss_usd,
+                "tag": order.tag,
+            },
+        )
         self._write(data)
         return OrderResult(ok=True, order=order, message="placed")
 
@@ -177,7 +232,7 @@ class PaperBroker(BrokerAdapter):
         data["orders"][order_id] = raw
         self._event(data, "replace", {"order_id": order_id})
         self._write(data)
-        return OrderResult(ok=True, order=WorkingOrder(**raw), message="replaced")
+        return OrderResult(ok=True, order=_working_order_from_raw(raw), message="replaced")
 
     def cancel(self, order_id: str) -> OrderResult:
         data = self._ensure()
@@ -189,15 +244,40 @@ class PaperBroker(BrokerAdapter):
         data["orders"][order_id] = raw
         self._event(data, "cancel", {"order_id": order_id})
         self._write(data)
-        return OrderResult(ok=True, order=WorkingOrder(**raw), message="canceled")
+        return OrderResult(ok=True, order=_working_order_from_raw(raw), message="canceled")
 
     def list_open_orders(self) -> list[WorkingOrder]:
         data = self._ensure()
         out = []
         for raw in data.get("orders", {}).values():
             if raw.get("status") == "working":
-                out.append(WorkingOrder(**raw))
+                out.append(_working_order_from_raw(raw))
         return out
+
+    def portfolio_snapshot(self) -> PortfolioSnapshot:
+        """Open risk from real paper orders only; smoke stubs are not sleeve risk."""
+        from trader_platform.paper_filters import is_smoke_stub_tag, risk_contribution_usd
+
+        open_orders = self.list_open_orders()
+        risk = 0.0
+        real_count = 0
+        for o in open_orders:
+            if is_smoke_stub_tag(o.tag):
+                continue
+            real_count += 1
+            premium = 0.0
+            if o.limit_price is not None:
+                premium = abs(float(o.qty) * float(o.limit_price) * 100.0)
+            risk += risk_contribution_usd(
+                max_loss_usd=o.max_loss_usd,
+                notional=premium,
+                qty=o.qty,
+            )
+        return PortfolioSnapshot(
+            open_risk=round(risk, 2),
+            open_order_count=real_count,
+            daily_pnl=0.0,
+        )
 
     def simulate_fill(self, order_id: str) -> OrderResult:
         """Test helper: mark working order filled."""
@@ -210,7 +290,7 @@ class PaperBroker(BrokerAdapter):
         data["orders"][order_id] = raw
         self._event(data, "fill", {"order_id": order_id})
         self._write(data)
-        return OrderResult(ok=True, order=WorkingOrder(**raw), message="filled")
+        return OrderResult(ok=True, order=_working_order_from_raw(raw), message="filled")
 
 
 @dataclass
@@ -552,12 +632,15 @@ class PaperRhBridge(BrokerAdapter):
         return self.paper.list_open_orders()
 
     def portfolio_snapshot(self) -> PortfolioSnapshot:
+        paper_port = self.paper.portfolio_snapshot()
         snap = self.get_rh_snapshot()
         if snap:
             port = snap.portfolio_for_risk(prefer_agentic=True)
-            port.open_order_count = max(port.open_order_count, len(self.list_open_orders()))
+            port.open_order_count = max(port.open_order_count, paper_port.open_order_count)
+            # Paper defined-risk max_loss is real sleeve open risk until live funded path.
+            port.open_risk = float(port.open_risk or 0.0) + float(paper_port.open_risk or 0.0)
             return port
-        return PortfolioSnapshot(open_order_count=len(self.list_open_orders()))
+        return paper_port
 
     def review_equity_order(self, intent: OrderIntent) -> dict[str, Any]:
         return self.rh.review_equity_order(intent)

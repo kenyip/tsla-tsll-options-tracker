@@ -37,21 +37,45 @@ _TSLA_EARNINGS_DATES = [
 ]
 
 
+def _cache_last_date(index: pd.Index) -> pd.Timestamp | None:
+    if index is None or len(index) == 0:
+        return None
+    return pd.Timestamp(pd.to_datetime(index).max()).normalize()
+
+
+def _should_refresh_cache(last: pd.Timestamp | None) -> bool:
+    """Refresh when cache ends before the current US equity session day.
+
+    Weekends/holidays: last Friday stays valid until next session day advances.
+    Intraday RTH: partial today bar from yfinance is preferred over multi-day stale.
+    """
+    if last is None or pd.isna(last):
+        return True
+    # Compare on calendar date in America/New_York (equity session anchor).
+    try:
+        today = pd.Timestamp.now(tz="America/New_York").tz_localize(None).normalize()
+    except Exception:
+        today = pd.Timestamp.now().normalize()
+    return pd.Timestamp(last).normalize() < today
+
+
 def load_history(ticker: str, period: str = "10y", use_cache: bool = True) -> pd.DataFrame:
-    """Download daily OHLCV. Cached on disk to avoid hammering yfinance during dev."""
+    """Download daily OHLCV. Cached on disk; refreshes when last bar is before today (ET)."""
     CACHE_DIR.mkdir(exist_ok=True)
     cache_path = CACHE_DIR / f"{ticker}_{period}.csv"
     if use_cache and cache_path.exists():
-        df = pd.read_csv(cache_path, index_col=0, parse_dates=True)
-    else:
-        df = yf.download(ticker, period=period, auto_adjust=False, progress=False)
-        if isinstance(df.columns, pd.MultiIndex):
-            df.columns = df.columns.get_level_values(0)
-        df = df[['Open', 'High', 'Low', 'Close', 'Volume']].copy()
-        df.columns = ['open', 'high', 'low', 'close', 'volume']
-        df.to_csv(cache_path)
-    df.index = pd.to_datetime(df.index)
-    return df.sort_index()
+        cached = pd.read_csv(cache_path, index_col=0, parse_dates=True)
+        cached.index = pd.to_datetime(cached.index)
+        if not _should_refresh_cache(_cache_last_date(cached.index)):
+            return cached.sort_index()
+    fresh = yf.download(ticker, period=period, auto_adjust=False, progress=False)
+    if isinstance(fresh.columns, pd.MultiIndex):
+        fresh.columns = fresh.columns.get_level_values(0)
+    fresh = fresh[['Open', 'High', 'Low', 'Close', 'Volume']].copy()
+    fresh.columns = ['open', 'high', 'low', 'close', 'volume']
+    fresh.to_csv(cache_path)
+    fresh.index = pd.to_datetime(fresh.index)
+    return fresh.sort_index()
 
 
 def load_vix(period: str = "10y", use_cache: bool = True) -> pd.Series:
@@ -62,7 +86,8 @@ def load_vix(period: str = "10y", use_cache: bool = True) -> pd.Series:
     if use_cache and cache_path.exists():
         s = pd.read_csv(cache_path, index_col=0, parse_dates=True).iloc[:, 0]
         s.name = 'vix'
-        return s
+        if not _should_refresh_cache(_cache_last_date(s.index)):
+            return s
     try:
         df = yf.download('^VIX', period=period, auto_adjust=False, progress=False)
         if isinstance(df.columns, pd.MultiIndex):

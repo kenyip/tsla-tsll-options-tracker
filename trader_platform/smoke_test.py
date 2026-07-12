@@ -270,6 +270,288 @@ def main() -> int:
     blocked = run_tick(mode="agentic_live", event="smoke_test", rh_connected=False)
     assert blocked.get("ok") is False
 
+
+    # Multi-leg PCS: risk uses max_loss; paper ledger stores legs + tag
+    pcs_intent = OrderIntent(
+        symbol="TSLL",
+        side="sell",
+        qty=1,
+        order_type="limit",
+        limit_price=0.25,
+        strategy_id="hyp_dna_tsll_put_credit_spread_b195f5fe",
+        multiplier=100.0,
+        tag="scout:smoke|pcs|w=1.0|Ks=18.0|Kl=17.0|dte=21|ml=75.0",
+        structure="put_credit_spread",
+        legs=[
+            {"action": "sell", "right": "put", "strike": 18.0, "qty": 1, "position_effect": "open"},
+            {"action": "buy", "right": "put", "strike": 17.0, "qty": 1, "position_effect": "open"},
+        ],
+        max_loss_usd=75.0,
+        width=1.0,
+        net_credit=0.25,
+        short_strike=18.0,
+        long_strike=17.0,
+        expiration="2026-07-30",
+        dte=21,
+    )
+    assert abs(pcs_intent.risk_amount() - 75.0) < 1e-6
+    assert abs(pcs_intent.estimated_notional() - 25.0) < 1e-6  # 0.25 * 100
+    d_pcs = RiskGovernor().check(pcs_intent, portfolio=PortfolioSnapshot(open_risk=0.0))
+    assert d_pcs.allowed, d_pcs.reasons
+    assert any("defined_risk" in r for r in d_pcs.reasons)
+    # open_risk + max_loss > 750 denies
+    d_pcs2 = RiskGovernor().check(
+        pcs_intent, portfolio=PortfolioSnapshot(open_risk=700.0)
+    )
+    assert not d_pcs2.allowed and any("open_risk" in r for r in d_pcs2.reasons)
+
+    with tempfile.TemporaryDirectory() as td:
+        ledger = Path(td) / "pcs_ledger.json"
+        br = PaperBroker(ledger)
+        place = br.place_limit(pcs_intent)
+        assert place.ok and place.order
+        assert place.order.structure == "put_credit_spread"
+        assert place.order.max_loss_usd == 75.0
+        assert place.order.legs and len(place.order.legs) == 2
+        assert "pcs" in (place.order.tag or "")
+        port = br.portfolio_snapshot()
+        assert abs(port.open_risk - 75.0) < 1e-6
+        assert port.open_order_count == 1
+
+    # Offline PCS rec → OPEN_PCS intent via rec_to_intent
+    from trader_platform.premium_scout import rec_to_intent
+
+    pcs_rec = {
+        "ticker": "TSLL",
+        "action": "OPEN_PCS",
+        "estimated_credit": 0.28,
+        "max_loss_usd": 72.0,
+        "width": 1.0,
+        "short_strike": 18.5,
+        "long_strike": 17.5,
+        "expiration": "2026-07-30",
+        "dte": 21,
+        "legs": [
+            {"action": "sell", "right": "put", "strike": 18.5, "qty": 1},
+            {"action": "buy", "right": "put", "strike": 17.5, "qty": 1},
+        ],
+        "structure": "put_credit_spread",
+        "features": {"regime": "bullish", "iv_rank": 80.0},
+    }
+    act, reason, intent, meta = rec_to_intent(
+        pcs_rec, hypothesis_id="hyp_dna_tsll_put_credit_spread_b195f5fe", event="smoke_pcs"
+    )
+    assert act == "OPEN_PCS" and intent is not None
+    assert intent.max_loss_usd == 72.0
+    assert intent.structure == "put_credit_spread"
+    assert intent.legs and len(intent.legs) == 2
+    assert intent.risk_amount() == 72.0
+
+    # Evolve ship bar (offline) — thin perfect / inf PF must not rank or SHIP
+    from trader_platform.evolve_tick import assert_ship_bar
+
+    assert_ship_bar()
+
+    # Calendar scaffold: real event loop on synthetic daily bars, defined debit risk.
+    import numpy as np
+    import pandas as pd
+
+    from trader_platform.research.calendar_sim import run_calendar_backtest
+
+    calendar_df = pd.DataFrame(
+        {
+            "close": np.linspace(20.0, 21.5, 45),
+            "iv_proxy": np.full(45, 0.65),
+            "iv_rank": np.full(45, 70.0),
+            "regime": ["neutral"] * 45,
+        },
+        index=pd.bdate_range("2026-01-02", periods=45),
+    )
+    calendar = run_calendar_backtest(
+        "TEST",
+        period="smoke",
+        df=calendar_df,
+        config={
+            "short_dte": 7,
+            "long_dte": 21,
+            "long_target_delta": 0.30,
+            "profit_target": 0.30,
+            "defined_loss_exit_frac": 0.65,
+            "max_loss_budget_usd": 300.0,
+            "front_iv_multiplier": 1.05,
+            "back_iv_multiplier": 0.95,
+            "put_skew_per_moneyness": 0.25,
+        },
+    )
+    assert calendar.ok and calendar.n_trades > 0, calendar.reason
+    assert calendar.capital["structure"] == "calendar_spread"
+    assert 0 < calendar.capital["max_loss_usd"] <= 300.0
+    assert calendar.trades[0].front_iv_at_entry > calendar.trades[0].back_iv_at_entry
+
+    from trader_platform.research.diagonal_sim import run_diagonal_backtest
+
+    diagonal_df = calendar_df.copy()
+    diagonal_df["regime"] = "neutral"
+    diagonal = run_diagonal_backtest(
+        "TEST",
+        period="smoke",
+        df=diagonal_df,
+        config={
+            "diagonal_short_dte": 7,
+            "diagonal_long_dte": 45,
+            "diagonal_short_delta": 0.25,
+            "diagonal_long_delta": 0.70,
+            "profit_target": 0.30,
+            "defined_loss_exit_frac": 0.65,
+            "dte_stop": 0,
+            "max_loss_budget_usd": 300.0,
+            "front_iv_multiplier": 1.05,
+            "back_iv_multiplier": 0.95,
+        },
+    )
+    assert diagonal.ok and diagonal.n_trades > 0, diagonal.reason
+    assert diagonal.capital["structure"] == "diagonal_spread"
+    assert 0 < diagonal.capital["max_loss_usd"] <= 300.0
+    assert diagonal.trades[0].long_strike < diagonal.trades[0].short_strike
+
+    from trader_platform.research.butterfly_sim import run_butterfly_backtest
+
+    butterfly = run_butterfly_backtest(
+        "TEST",
+        period="smoke",
+        df=calendar_df,
+        config={
+            "long_dte": 14,
+            "long_target_delta": 0.35,
+            "spread_width": 1.0,
+            "profit_target": 0.40,
+            "defined_loss_exit_frac": 0.70,
+            "dte_stop": 3,
+            "max_loss_budget_usd": 300.0,
+        },
+    )
+    assert butterfly.ok and butterfly.n_trades > 0, butterfly.reason
+    assert butterfly.capital["structure"] == "butterfly_spread"
+    assert 0 < butterfly.capital["max_loss_usd"] <= 300.0
+    first_bfly = butterfly.trades[0]
+    assert first_bfly.lower_strike < first_bfly.middle_strike < first_bfly.upper_strike
+
+    from trader_platform.research.iron_butterfly_sim import run_iron_butterfly_backtest
+
+    iron_butterfly = run_iron_butterfly_backtest(
+        "TEST",
+        period="smoke",
+        df=calendar_df,
+        config={
+            "long_dte": 21,
+            "spread_width": 2.0,
+            "min_credit_pct": 0.25,
+            "iv_rank_min": 20.0,
+            "profit_target": 0.40,
+            "defined_loss_exit_frac": 0.70,
+            "dte_stop": 3,
+            "max_loss_budget_usd": 300.0,
+        },
+    )
+    assert iron_butterfly.ok and iron_butterfly.n_trades > 0, iron_butterfly.reason
+    assert iron_butterfly.capital["structure"] == "iron_butterfly"
+    assert 0 < iron_butterfly.capital["max_loss_usd"] <= 300.0
+    first_iron_bfly = iron_butterfly.trades[0]
+    assert first_iron_bfly.lower_strike < first_iron_bfly.middle_strike < first_iron_bfly.upper_strike
+    assert first_iron_bfly.entry_credit > 0
+
+    from trader_platform.research.debit_vertical_sim import run_debit_vertical_backtest
+
+    debit_vertical = run_debit_vertical_backtest(
+        "TEST",
+        structure="bull_call_debit_spread",
+        period="smoke",
+        df=calendar_df.assign(regime="bullish"),
+        config={
+            "long_dte": 21,
+            "debit_long_delta": 0.55,
+            "spread_width": 2.0,
+            "max_loss_budget_usd": 300.0,
+        },
+    )
+    assert debit_vertical.ok and debit_vertical.n_trades > 0, debit_vertical.reason
+    assert debit_vertical.capital["structure"] == "bull_call_debit_spread"
+    assert 0 < debit_vertical.capital["max_loss_usd"] <= 300.0
+    assert debit_vertical.trades[0].long_strike < debit_vertical.trades[0].short_strike
+
+    # --- P0 capital-fit + smoke-stub filters ---
+    from trader_platform.learn_tick import _paper_stats_for_hyp
+    from trader_platform.paper_filters import is_smoke_stub_order, is_smoke_stub_tag
+
+    assert is_smoke_stub_tag("m0_stub:smoke_test")
+    assert is_smoke_stub_order({"tag": "m0_stub:smoke_test", "strategy_id": "hyp_x"})
+    assert not is_smoke_stub_tag("scout:rth|call|K=12.5")
+
+    smoke_ledger = {
+        "orders": {
+            "a": {
+                "order_id": "a",
+                "strategy_id": "hyp_short_premium_tsla",
+                "status": "working",
+                "tag": "m0_stub:smoke_test",
+            },
+            "b": {
+                "order_id": "b",
+                "strategy_id": "hyp_short_premium_tsla",
+                "status": "working",
+                "tag": "m0_stub:smoke_test",
+            },
+            "c": {
+                "order_id": "c",
+                "strategy_id": "hyp_short_premium_tsla",
+                "status": "working",
+                "tag": "scout:real|put|K=200",
+            },
+        }
+    }
+    stats = _paper_stats_for_hyp(smoke_ledger, "hyp_short_premium_tsla")
+    assert stats["orders"] == 1 and stats["working"] == 1, stats
+
+    # Naked TSLL short call: notional-allowed size must still capital_reject
+    naked_tsll = OrderIntent(
+        symbol="TSLL",
+        side="sell",
+        qty=1,
+        order_type="limit",
+        limit_price=0.49,
+        strategy_id="hyp_dna_tsll_short",
+        structure="naked_short_call",
+        option_right="call",
+        max_loss_usd=None,
+        tag="scout:test|call|K=12.5",
+    )
+    cap_deny = gov.check(naked_tsll, mode="paper")
+    assert not cap_deny.allowed, cap_deny.reasons
+    assert any("capital_reject" in r for r in cap_deny.reasons), cap_deny.reasons
+
+    # Defined-risk TSLL with max_loss_usd clears capital-fit (subject to open_risk caps)
+    pcs_tsll = OrderIntent(
+        symbol="TSLL",
+        side="sell",
+        qty=1,
+        order_type="limit",
+        limit_price=0.25,
+        strategy_id="hyp_dna_tsll_pcs",
+        structure="put_credit_spread",
+        defined_risk=True,
+        option_right="put",
+        max_loss_usd=76.0,
+        tag="scout:test|pcs|width=1",
+    )
+    cap_ok = gov.check(pcs_tsll, mode="paper")
+    assert cap_ok.allowed, cap_ok.reasons
+    assert pcs_tsll.risk_amount() == 76.0
+    # open_risk accounting prefers max_loss over tiny premium notional
+    tight = PortfolioSnapshot(open_risk=700.0)
+    over = gov.check(pcs_tsll, portfolio=tight, mode="paper")
+    assert not over.allowed
+    assert any("open_risk" in r for r in over.reasons), over.reasons
+
     if errors:
         print("FAIL:", errors)
         return 1
@@ -279,8 +561,14 @@ def main() -> int:
     print(f"  shadow rh_review: {bool((shadow.get('results') or [{}])[0].get('rh_review'))}")
     print(f"  dry_review action: {(dry.get('results') or [{}])[0].get('action')}")
     print(f"  premium_scout intents: {len(scout.intents)} stand_asides={len(scout.stand_asides)}")
+    print(f"  PCS multi-leg risk/ledger/intent path OK (max_loss open_risk)")
     print(f"  agentic_live blocked: {blocked.get('error')}")
     print(f"  stage2 bridge + readiness checks OK")
+    print("  evolve ship bar asserts OK")
+    print("  calendar sim synthetic smoke OK (defined debit risk)")
+    print("  diagonal sim synthetic smoke OK (defined debit risk)")
+    print("  capital-fit: naked TSLL short denied; PCS max_loss_usd open_risk OK")
+    print("  learn_tick: smoke stubs excluded from paper_orders")
     return 0
 
 

@@ -71,7 +71,7 @@ class ScoutCandidate:
     sleeve: str
     symbol: str
     regime: RegimeSnapshot
-    action: str  # STAND_ASIDE | SELL_PUT | SELL_CALL | SKIP
+    action: str  # STAND_ASIDE | SELL_PUT | SELL_CALL | OPEN_PCS | OPEN_CCS | OPEN_IC | SKIP
     reason: str
     intent: Optional[OrderIntent] = None
     strike: Optional[float] = None
@@ -79,6 +79,13 @@ class ScoutCandidate:
     dte: Optional[int] = None
     estimated_credit: Optional[float] = None
     stage_trace: list[str] = field(default_factory=list)
+    # Multi-leg PCS extras (optional)
+    structure: Optional[str] = None
+    short_strike: Optional[float] = None
+    long_strike: Optional[float] = None
+    width: Optional[float] = None
+    max_loss_usd: Optional[float] = None
+    legs: Optional[list[dict[str, Any]]] = None
 
     def to_dict(self) -> dict[str, Any]:
         d = {
@@ -94,6 +101,12 @@ class ScoutCandidate:
             "dte": self.dte,
             "estimated_credit": self.estimated_credit,
             "stage_trace": list(self.stage_trace),
+            "structure": self.structure,
+            "short_strike": self.short_strike,
+            "long_strike": self.long_strike,
+            "width": self.width,
+            "max_loss_usd": self.max_loss_usd,
+            "legs": self.legs,
         }
         if self.intent is not None:
             d["intent"] = {
@@ -105,6 +118,16 @@ class ScoutCandidate:
                 "strategy_id": self.intent.strategy_id,
                 "tag": self.intent.tag,
                 "notional": self.intent.estimated_notional(),
+                "risk_amount": self.intent.risk_amount(),
+                "structure": self.intent.structure,
+                "max_loss_usd": self.intent.max_loss_usd,
+                "width": self.intent.width,
+                "net_credit": self.intent.net_credit,
+                "short_strike": self.intent.short_strike,
+                "long_strike": self.intent.long_strike,
+                "legs": self.intent.legs,
+                "expiration": self.intent.expiration,
+                "dte": self.intent.dte,
             }
         return d
 
@@ -116,8 +139,253 @@ def default_rec_provider(ticker: str) -> dict[str, Any]:
     return make_recommendation(ticker)
 
 
+_OPEN_ACTIONS = frozenset({"OPEN_PCS", "OPEN_CCS", "OPEN_IC"})
+
+_STRUCTURE_OPEN = {
+    "put_credit_spread": ("OPEN_PCS", "pcs", "put"),
+    "call_credit_spread": ("OPEN_CCS", "ccs", "call"),
+    "iron_condor": ("OPEN_IC", "ic", "iron_condor"),
+}
+
+
+def _structure_open_meta(structure: str) -> tuple[str, str, str]:
+    """(action, tag_slug, primary_right_label) for defined-risk DNA structure."""
+    s = (structure or "put_credit_spread").strip().lower()
+    return _STRUCTURE_OPEN.get(s, ("OPEN_PCS", "pcs", "put"))
+
+
+def _legs_for_trade(trade: Any) -> list[dict[str, Any]]:
+    """Build multi-leg open legs from a PcsTrade (PCS / CCS / IC)."""
+    right = str(getattr(trade, "right", "put") or "put")
+    if right == "iron_condor":
+        return [
+            {
+                "action": "sell",
+                "right": "put",
+                "strike": float(trade.short_strike),
+                "qty": 1,
+                "position_effect": "open",
+            },
+            {
+                "action": "buy",
+                "right": "put",
+                "strike": float(trade.long_strike),
+                "qty": 1,
+                "position_effect": "open",
+            },
+            {
+                "action": "sell",
+                "right": "call",
+                "strike": float(trade.call_short_strike),
+                "qty": 1,
+                "position_effect": "open",
+            },
+            {
+                "action": "buy",
+                "right": "call",
+                "strike": float(trade.call_long_strike),
+                "qty": 1,
+                "position_effect": "open",
+            },
+        ]
+    leg_right = "call" if right == "call" else "put"
+    return [
+        {
+            "action": "sell",
+            "right": leg_right,
+            "strike": float(trade.short_strike),
+            "qty": 1,
+            "position_effect": "open",
+        },
+        {
+            "action": "buy",
+            "right": leg_right,
+            "strike": float(trade.long_strike),
+            "qty": 1,
+            "position_effect": "open",
+        },
+    ]
+
+
+def make_pcs_recommendation(
+    ticker: str,
+    dna: Any,
+    *,
+    df: Any = None,
+    sleeve_usd: float = 3000.0,
+    open_risk_budget_usd: float = 750.0,
+) -> dict[str, Any]:
+    """Live-clock defined-risk multi-leg entry (paper path).
+
+    Uses pcs_sim.pick_structure_entry for put_credit_spread / call_credit_spread /
+    iron_condor. Returns OPEN_PCS | OPEN_CCS | OPEN_IC with legs + max_loss_usd,
+    or STAND_ASIDE with an explicit reason.
+
+    Name kept for call-site compatibility; structure comes from DNA (not PCS-only).
+    """
+    from data import build
+    from trader_platform.research.pcs_sim import capital_fit_pcs, pick_structure_entry
+    from trader_platform.strategy_dna import StrategyDNA
+
+    if isinstance(dna, dict):
+        dna = StrategyDNA.from_dict(dna)
+    if dna is None:
+        raise ValueError("make_pcs_recommendation requires StrategyDNA")
+
+    t = ticker.upper()
+    structure = str(dna.structure or "put_credit_spread")
+    open_action, tag_slug, right_label = _structure_open_meta(structure)
+    if df is None:
+        df = build(t, period="2y")
+    today_row = df.iloc[-1]
+    today_date = df.index[-1]
+    spot = float(today_row["close"])
+    cfg = dna.pcs_config()
+
+    features = {
+        "iv_rank": float(today_row.get("iv_rank") or 0.0),
+        "iv_proxy": float(today_row.get("iv_proxy") or 0.0),
+        "ret_14d_pct": float(today_row.get("ret_14d") or 0.0) * 100,
+        "rsi_14": float(today_row.get("rsi_14") or 0.0),
+        "macd_hist": float(today_row.get("macd_hist") or 0.0),
+        "volume_surge": float(today_row.get("volume_surge") or 0.0),
+        "intraday_ret_pct": float(today_row.get("intraday_return") or 0.0),
+        "regime": str(today_row.get("regime") or "unknown"),
+        "reversal": bool(today_row.get("reversal")),
+        "high_iv": bool(today_row.get("high_iv")),
+    }
+    base: dict[str, Any] = {
+        "ticker": t,
+        "date": today_date,
+        "spot": spot,
+        "features": features,
+        "regime_at_entry": features["regime"],
+        "dna_id": dna.ensure_id(),
+        "dna_structure": structure,
+        "structure": structure,
+        "strategy_dna": {
+            "dna_id": dna.ensure_id(),
+            "structure": structure,
+            "entry_plan": dna.entry_plan,
+            "exit_plan": dna.exit_plan,
+            "config": cfg,
+        },
+    }
+
+    trade = pick_structure_entry(today_row, spot, today_date, cfg, structure=structure)
+    if trade is None:
+        base["action"] = "STAND_ASIDE"
+        base["reason"] = _why_no_defined_risk(today_row, cfg, structure=structure)
+        return base
+
+    max_loss_usd = float(trade.max_loss_per_share) * 100.0
+    budget = float(cfg.get("max_loss_budget_usd") or 300.0)
+    cap = capital_fit_pcs(
+        max_loss_usd=max_loss_usd,
+        sleeve_usd=sleeve_usd,
+        open_risk_budget_usd=open_risk_budget_usd,
+        max_loss_budget_usd=budget,
+    )
+    if not cap.get("fits_open_risk_budget") or int(cap.get("max_lots") or 0) < 1:
+        base["action"] = "STAND_ASIDE"
+        base["reason"] = (
+            f"{tag_slug.upper()} capital envelope fail: max_loss_usd≈${max_loss_usd:.0f} "
+            f"fit={cap.get('capital_fit')} open_risk_budget={open_risk_budget_usd}"
+        )
+        base["max_loss_usd"] = round(max_loss_usd, 2)
+        base["capital_fit"] = cap
+        return base
+
+    exp = trade.expiration
+    exp_s = str(exp.date()) if hasattr(exp, "date") else str(exp)
+    credit = float(trade.net_credit)
+    legs = _legs_for_trade(trade)
+    wing_note = ""
+    if right_label == "iron_condor":
+        wing_note = (
+            f" put_wing Ks={trade.short_strike}/{trade.long_strike} "
+            f"call_wing Ks={trade.call_short_strike}/{trade.call_long_strike}"
+        )
+    else:
+        wing_note = f" short_{right_label} K={trade.short_strike} long_{right_label} K={trade.long_strike}"
+    base.update(
+        {
+            "action": open_action,
+            "reason": (
+                f"{open_action} {t}{wing_note} "
+                f"w={trade.width} dte={trade.dte_at_entry} credit≈${credit:.2f} "
+                f"max_loss≈${max_loss_usd:.0f} regime={trade.regime_at_entry}"
+            ),
+            "strike": float(trade.short_strike),
+            "short_strike": float(trade.short_strike),
+            "long_strike": float(trade.long_strike),
+            "width": float(trade.width),
+            "expiration": exp_s,
+            "dte": int(trade.dte_at_entry),
+            "estimated_credit": credit,
+            "net_credit": credit,
+            "max_loss_usd": round(max_loss_usd, 2),
+            "capital_fit": cap,
+            "capital_fit_usd": cap.get("capital_fit_usd"),
+            "max_lots": cap.get("max_lots"),
+            "legs": legs,
+            "iv_used": float(trade.iv_at_entry),
+            "short_delta_entry": float(trade.short_delta_entry),
+            "regime_at_entry": trade.regime_at_entry,
+            "tag_slug": tag_slug,
+        }
+    )
+    if right_label == "iron_condor":
+        base["call_short_strike"] = float(trade.call_short_strike)
+        base["call_long_strike"] = float(trade.call_long_strike)
+        base["call_width"] = float(getattr(trade, "call_width", 0.0) or 0.0)
+    return base
+
+
+def _why_no_pcs(row: Any, cfg: dict[str, Any]) -> str:
+    """Backward-compatible alias for put-credit stand-aside reasons."""
+    return _why_no_defined_risk(row, cfg, structure="put_credit_spread")
+
+
+def _why_no_defined_risk(
+    row: Any, cfg: dict[str, Any], *, structure: str = "put_credit_spread"
+) -> str:
+    """Human reason when pick_structure_entry returns None."""
+    label = _structure_open_meta(structure)[1].upper()
+    try:
+        iv = float(row.get("iv_proxy") or 0.0)
+        if iv <= 0:
+            return f"{label}: no valid IV"
+        iv_rank_min = float(cfg.get("iv_rank_min") or 0.0)
+        ivr = float(row.get("iv_rank") or 0.0)
+        if ivr < iv_rank_min:
+            return f"{label}: iv_rank {ivr:.1f} below floor {iv_rank_min}"
+        regime = str(row.get("regime") or "")
+        s = (structure or "").strip().lower()
+        if (
+            s == "put_credit_spread"
+            and regime == "bearish"
+            and int(cfg.get("bear_dte") or 0) <= 0
+        ):
+            return (
+                f"{label}: bearish regime — stand aside "
+                "(bear_dte=0; capital-fit put credit not probed)"
+            )
+        return (
+            f"{label}: filters blocked entry (credit/width/max_loss_budget or strike construction) "
+            f"— structure={s or 'put_credit_spread'} regime={regime} ivr={ivr:.1f}"
+        )
+    except Exception:  # noqa: BLE001
+        return f"{label}: stand aside (entry filter)"
+
+
 def rec_provider_for_hyp(hyp: Hypothesis) -> RecProvider:
-    """If hypothesis carries Strategy DNA, use its entry/exit config for recs."""
+    """If hypothesis carries Strategy DNA, use its entry/exit config for recs.
+
+    Defined-risk multi-leg DNA (PCS/CCS/IC) uses pcs_sim paper path
+    (OPEN_PCS | OPEN_CCS | OPEN_IC), never single-leg pick_entry
+    (which would emit a false SELL_PUT / SELL_CALL).
+    """
     dna_raw = getattr(hyp, "dna", None) or None
     if not dna_raw:
         return default_rec_provider
@@ -129,6 +397,14 @@ def rec_provider_for_hyp(hyp: Hypothesis) -> RecProvider:
         dna = StrategyDNA.from_dict(dna_raw)
         if dna is None:
             return default_rec_provider
+
+        if dna.uses_pcs_sim():
+
+            def _pcs_prov(ticker: str) -> dict[str, Any]:
+                return make_pcs_recommendation(ticker.upper(), dna)
+
+            return _pcs_prov
+
         overrides = dna.config_overrides()
 
         def _prov(ticker: str) -> dict[str, Any]:
@@ -199,6 +475,11 @@ def select_symbols(hyp: Hypothesis, *, only: Optional[Sequence[str]] = None) -> 
     return symbols
 
 
+def _is_tradable_action(action: str) -> bool:
+    a = (action or "").upper()
+    return a.startswith("SELL_") or a in _OPEN_ACTIONS
+
+
 def rec_to_intent(
     rec: dict[str, Any],
     *,
@@ -216,10 +497,80 @@ def rec_to_intent(
         "estimated_credit": rec.get("estimated_credit"),
         "regime_at_entry": rec.get("regime_at_entry")
         or (rec.get("features") or {}).get("regime"),
+        "structure": rec.get("structure") or rec.get("dna_structure"),
+        "short_strike": rec.get("short_strike"),
+        "long_strike": rec.get("long_strike"),
+        "width": rec.get("width"),
+        "max_loss_usd": rec.get("max_loss_usd"),
+        "legs": rec.get("legs"),
+        "net_credit": rec.get("net_credit", rec.get("estimated_credit")),
+        "capital_fit": rec.get("capital_fit"),
+        "call_short_strike": rec.get("call_short_strike"),
+        "call_long_strike": rec.get("call_long_strike"),
     }
 
     if action == "STAND_ASIDE":
         return action, str(rec.get("reason") or "stand_aside"), None, meta
+
+    # --- Multi-leg defined-risk PCS / CCS / IC ---
+    if action in _OPEN_ACTIONS:
+        credit = rec.get("estimated_credit")
+        max_loss = rec.get("max_loss_usd")
+        legs = rec.get("legs")
+        structure = str(
+            rec.get("structure")
+            or rec.get("dna_structure")
+            or {
+                "OPEN_PCS": "put_credit_spread",
+                "OPEN_CCS": "call_credit_spread",
+                "OPEN_IC": "iron_condor",
+            }.get(action, "put_credit_spread")
+        )
+        tag_slug = str(rec.get("tag_slug") or _structure_open_meta(structure)[1])
+        min_legs = 4 if action == "OPEN_IC" else 2
+        if credit is None or float(credit) <= 0:
+            return "SKIP", f"{tag_slug.upper()} missing or non-positive estimated_credit", None, meta
+        if max_loss is None or float(max_loss) <= 0:
+            return "SKIP", f"{tag_slug.upper()} missing max_loss_usd", None, meta
+        if not legs or len(legs) < min_legs:
+            return "SKIP", f"{tag_slug.upper()} missing multi-leg legs", None, meta
+        limit_price = round(float(credit), 2)
+        ml = round(float(max_loss), 2)
+        width = rec.get("width")
+        short_k = rec.get("short_strike")
+        long_k = rec.get("long_strike")
+        tag = (
+            f"scout:{event}|{tag_slug}|w={width}|Ks={short_k}|Kl={long_k}"
+            f"|dte={meta.get('dte')}|exp={meta.get('expiration')}|ml={ml}"
+        )
+        intent = OrderIntent(
+            symbol=symbol,
+            side="sell",
+            qty=qty,
+            order_type="limit",
+            limit_price=limit_price,
+            strategy_id=hypothesis_id,
+            multiplier=100.0,
+            tag=tag,
+            structure=structure,
+            defined_risk=True,
+            legs=list(legs),
+            max_loss_usd=ml,
+            width=float(width) if width is not None else None,
+            net_credit=float(credit),
+            short_strike=float(short_k) if short_k is not None else None,
+            long_strike=float(long_k) if long_k is not None else None,
+            expiration=str(meta["expiration"]) if meta.get("expiration") is not None else None,
+            dte=int(meta["dte"]) if meta.get("dte") is not None else None,
+        )
+        reason = str(
+            rec.get("reason")
+            or (
+                f"{action} {symbol} Ks={short_k} Kl={long_k} "
+                f"credit≈${limit_price:.2f} max_loss≈${ml:.0f}"
+            )
+        )
+        return action, reason, intent, meta
 
     if not action.startswith("SELL_"):
         return "SKIP", f"unsupported action {action}", None, meta
@@ -228,7 +579,6 @@ def rec_to_intent(
     if credit is None or float(credit) <= 0:
         return "SKIP", "missing or non-positive estimated_credit", None, meta
 
-    # Limit at model credit (paper-first). Real fill would improve/worsen vs live chain.
     limit_price = round(float(credit), 2)
     option_side = "put" if action == "SELL_PUT" else "call"
     tag = (
@@ -244,6 +594,11 @@ def rec_to_intent(
         strategy_id=hypothesis_id,
         multiplier=100.0,
         tag=tag,
+        structure=str(meta.get("structure") or "single_leg"),
+        short_strike=float(meta["strike"]) if meta.get("strike") is not None else None,
+        expiration=str(meta["expiration"]) if meta.get("expiration") is not None else None,
+        dte=int(meta["dte"]) if meta.get("dte") is not None else None,
+        net_credit=float(credit),
     )
     reason = (
         f"{action} {symbol} K={meta.get('strike')} "
@@ -320,6 +675,12 @@ def scout_symbol(
         if meta.get("estimated_credit") is not None
         else None,
         stage_trace=trace,
+        structure=str(meta["structure"]) if meta.get("structure") is not None else None,
+        short_strike=float(meta["short_strike"]) if meta.get("short_strike") is not None else None,
+        long_strike=float(meta["long_strike"]) if meta.get("long_strike") is not None else None,
+        width=float(meta["width"]) if meta.get("width") is not None else None,
+        max_loss_usd=float(meta["max_loss_usd"]) if meta.get("max_loss_usd") is not None else None,
+        legs=list(meta["legs"]) if meta.get("legs") else None,
     )
 
 
@@ -373,10 +734,22 @@ def run_premium_scout(
     intents: list[OrderIntent] = []
     stand_asides: list[ScoutCandidate] = []
     skipped: list[ScoutCandidate] = []
-    for c in candidates:
-        if c.intent is not None and c.action.startswith("SELL_"):
+    # Prefer any defined-risk multi-leg OPEN_* over naked single-leg when capping
+    # intents. This is ops hygiene (bounded risk first), not strategy rank order —
+    # Ken pin 2026-07-10: evidence ranks DNA; plumbing must not demote peers.
+    ranked = sorted(
+        candidates,
+        key=lambda c: (
+            0 if (c.action in _OPEN_ACTIONS and c.intent is not None) else 1,
+            0 if (c.max_loss_usd is not None) else 1,
+        ),
+    )
+    selected_ids: set[int] = set()
+    for c in ranked:
+        if c.intent is not None and _is_tradable_action(c.action):
             if len(intents) < max_intents:
                 intents.append(c.intent)
+                selected_ids.add(id(c))
             else:
                 c.action = "SKIP"
                 c.reason = f"max_intents={max_intents} reached; {c.reason}"
@@ -386,7 +759,8 @@ def run_premium_scout(
         elif c.action == "STAND_ASIDE":
             stand_asides.append(c)
         else:
-            skipped.append(c)
+            if id(c) not in selected_ids and c not in skipped and c not in stand_asides:
+                skipped.append(c)
 
     report = ScoutReport(
         event=event,
@@ -409,6 +783,7 @@ def run_premium_scout(
             },
         )
     return report
+
 
 
 def main(argv: Optional[list[str]] = None) -> int:

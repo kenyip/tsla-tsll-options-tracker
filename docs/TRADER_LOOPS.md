@@ -2,8 +2,8 @@
 
 **Pinned 2026-07-09.** This is the shared map so **jarvis-coordinator**, **trader**, Kanban workers, and CLI sessions build toward the **same goal** without overstepping.
 
-North star: [TRADER_PLATFORM_GOAL.md](TRADER_PLATFORM_GOAL.md)  
-Autonomy: [AGENTIC_AUTONOMY_POLICY.md](AGENTIC_AUTONOMY_POLICY.md)  
+North star: [TRADER_PLATFORM_GOAL.md](TRADER_PLATFORM_GOAL.md)
+Autonomy: [AGENTIC_AUTONOMY_POLICY.md](AGENTIC_AUTONOMY_POLICY.md)
 Research cron (paper only): [RESEARCH_CRON.md](RESEARCH_CRON.md)
 
 ---
@@ -34,10 +34,10 @@ optional: promote-top → hypothesis status=candidate only
 ```
 
 ```bash
-just research-tick-paper -- --sleeve-usd 5000
-just research-promote-top -- --top 5 --sleeve-usd 5000   # optional
+just research-tick-paper -- --sleeve-usd 3000
+just research-promote-top -- --top 5 --sleeve-usd 3000   # optional
 # or one shot:
-just research-tick -- --sleeve-usd 5000 --write-report --promote --promote-top 5
+just research-tick -- --sleeve-usd 3000 --write-report --promote --promote-top 5
 ```
 
 **Cron OK** on `trader` profile (see RESEARCH_CRON.md). **Not** a trading cron.
@@ -77,10 +77,12 @@ just learn-tick -- --apply --append-scoreboard
 
 **This is the freedom loop.** A strategy is **not a symbol**. DNA = structure + symbols + entry plan (legs/side/DTE/delta/credit) + exit/management plan + sim evidence.
 
+Ken pin (2026-07-09): free **any symbol** from the research universe; free **any strategy** class (catalog + new sims); spend time on research→sim→entry/exit learning — do not tunnel TSLA/TSLL or wheel-only.
+
 ```text
 research top symbols (where)
   × structure catalog + mutations (what to trade + how to manage)
-  → engine backtest with StrategyConfig overrides
+  → engine backtest / structure sim with StrategyConfig or multi-leg overrides
   → SHIP|NULL|REJECT|NEEDS_MORE_DATA
   → candidate hyps carrying full DNA (never live)
   → evolve_audit.jsonl + evolve_sim.sqlite
@@ -88,14 +90,14 @@ research top symbols (where)
 
 ```bash
 just evolve-tick
-just evolve-tick -- --apply --top-symbols 4 --mutants 2
+just evolve-tick -- --apply --top-symbols 8 --mutants 2
 just bootstrap-ticks    # research → evolve → learn → paper scout
 ```
 
-**What evolve may mutate:** DNA YAML in hyp registry, sim DB, audit logs, candidate status graph.  
+**What evolve may mutate:** DNA YAML in hyp registry, sim DB, audit logs, candidate status graph, entry/exit knobs.
 **What evolve must NOT do:** auto-edit `strategies.py` / `live.py`, place live orders, arm agentic.
 
-Catalog seeds (expandable): `regime_short_premium`, `short_put_credit`, `short_dte_aggressive`, `long_dte_conservative`, `wheel_assignment`, `roll_defend`.
+Catalog seeds (expandable): single-leg `regime_short_premium`, `short_put_credit`, `short_call_credit`, `cash_secured_put`, `short_dte_aggressive`, `long_dte_conservative`, `wheel_assignment`, `roll_defend`; defined-risk `put_credit_spread`, `call_credit_spread`, `iron_condor` (pcs_sim). Missing classes → build a sim then add to catalog. Not wheel/PMCC-limited.
 
 ### L4 — Critic / lab week (heavy)
 
@@ -151,11 +153,11 @@ When starting a build: **read this file + BUILD_COORDINATION.md**, comment the K
 
 ## Hard forbidden (all agents)
 
-- CoS owning broker MCP or trading skills allowlist for domain work  
-- Auto-promote to **live** or **shadow** from learn/research ticks  
-- Research universe collapsed to TSLA/TSLL only  
-- Scheduling `autonomy_loop --mode agentic_live` before arming  
-- Committing `pmcc_positions.yaml`, MCP tokens, raw secrets  
+- CoS owning broker MCP or trading skills allowlist for domain work
+- Auto-promote to **live** or **shadow** from learn/research ticks
+- Research universe collapsed to TSLA/TSLL only
+- Scheduling `autonomy_loop --mode agentic_live` before arming
+- Committing `pmcc_positions.yaml`, MCP tokens, raw secrets
 
 ---
 
@@ -165,19 +167,37 @@ When starting a build: **read this file + BUILD_COORDINATION.md**, comment the K
 
 Ken: fit Loopy/Learnables into trader; ticks that evaluate, learn, change hypotheses; do not overstep CoS; communicate shared goal. CoS last step `deleg_5c03b11e` capital-aware promote. Added `trader_platform/learn_tick.py`, this doc, BUILD_COORDINATION, `just learn-tick`.
 
-## Schedule (paper only)
+## Schedule: agent wakes (not program ticks)
 
-Hermes **trader** profile has inventory jobs `5b1b3e7803cf` / `d471a8e1d8e0`, but CoS is sole live Hermes gateway — those jobs do not fire unless a trader gateway is running.
+**Doctrine (2026-07-09 night):** A “tick” is **Trader waking with a goal + continuation**, free to research, build, invent strategies, and leave durable residue.
+`just research-tick-paper|evolve-tick|learn-tick|platform-scout|desk-brief` are **optional tools**, not the evolution loop.
 
-**Primary schedule (Mac Mini LaunchAgents):**
+Program LaunchAgents (`com.jarvis.trader.*-tick`) are **disabled** (renamed `*.plist.disabled-agent-wake-20260709`). Do not re-enable them as the primary loop.
 
-| Job | Label | When (America/Los_Angeles) |
-|-----|--------|----------------------------|
-| Research tick | `com.jarvis.trader.research-tick-paper` | Mon–Fri 10:00, 13:00, 16:30 (bootstrap dense) |
-| Evolve tick | `com.jarvis.trader.evolve-tick` | Mon–Fri 10:30, 13:30, 17:00 + Sat 11:00 |
-| Paper scout | `com.jarvis.trader.paper-scout-tick` | Mon–Fri 11:00, 14:00 |
-| Learn tick | `com.jarvis.trader.learn-tick` | Daily 18:00 |
+**Primary schedule — Hermes profile `trader`** (needs `ai.hermes.gateway-trader` running; cron-only, no Telegram — CoS stays sole Ken-facing GW):
 
-Logs: `~/.local/state/jarvis/trader-cron/` and repo `.cache/platform/*_cron.log`.
+| Job | When (America/Los_Angeles) | Mode |
+|-----|----------------------------|------|
+| **BUILD lab premarket** | Mon–Fri 05:15 | Dual MoA script (Grok→Sol) — income discovery |
+| **RTH condition eval** | Mon–Fri `30 6-12` (06:30–12:30) | **Agent** condition only — wait/apply paper open-close |
+| **BUILD lab postclose** | Mon–Fri 14:15 | Dual MoA script — free multi-structure sims |
+| **BUILD lab daily** | Mon–Fri 16:45 | Dual MoA script — primary income lab (replaces single-agent daily writer) |
+| **BUILD lab evening** | Mon–Fri 20:00 | Dual MoA script — gap / time-direction focus |
+| **BUILD lab weekend** | Sat 10:00 | Dual MoA script — broader coverage |
+| **Weekly critic** | Sun 17:00 | Dual MoA script — systems + coverage critique |
 
-**Honesty (2026-07-09 evening):** L1 alone was symbol-ranking with a fixed short-premium engine. L3b + Strategy DNA make entry/exit/management first-class and searchable. Engine still single-leg short-premium (`pick_entry`/`check_exits`); multi-leg structures beyond that are DNA + sim notes until the engine grows — not fake freedom.
+Doctrine: [BUILD_LAB_ENVIRONMENT.md](BUILD_LAB_ENVIRONMENT.md) · [INCOME_STRATEGY_COVERAGE.md](INCOME_STRATEGY_COVERAGE.md)
+
+```bash
+hermes -p trader gateway status
+hermes -p trader cron list
+just trader-income-coverage
+just trader-build-lab --slot evening
+just trader-wake-moa --hyps id1,id2   # judgment/stress peak
+# residue: reports/trader-wakes/moa/<stamp>/
+
+```
+
+Wake residue: Hermes cron output under `~/.hermes/profiles/trader/cron/output/` (deliver=local by default).
+
+**Honesty:** L1 alone was symbol-ranking with a fixed short-premium engine. L3b DNA + free agent wakes make strategy search open-ended. Engine still mostly single-leg short-premium for mechanical sims; multi-leg and new structures may require the agent to **build** capability — that is intentional freedom, not a boxed pipeline.

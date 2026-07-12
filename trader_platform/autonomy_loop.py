@@ -302,7 +302,17 @@ def run_tick(
                 "limit_price": intent.limit_price,
                 "strategy_id": intent.strategy_id,
                 "notional": intent.estimated_notional(),
+                "risk_amount": intent.risk_amount(),
                 "tag": intent.tag,
+                "structure": intent.structure or None,
+                "max_loss_usd": intent.max_loss_usd,
+                "width": intent.width,
+                "net_credit": intent.net_credit,
+                "short_strike": intent.short_strike,
+                "long_strike": intent.long_strike,
+                "legs": intent.legs,
+                "expiration": intent.expiration,
+                "dte": intent.dte,
             },
             "risk": {"allowed": decision.allowed, "reasons": decision.reasons},
             "scout": prop.scout_meta,
@@ -494,9 +504,15 @@ def main(argv: Optional[list[str]] = None) -> int:
         for r in summary.get("results") or []:
             intent = r.get("intent") or {}
             risk = r.get("risk") or {}
+            struct = intent.get("structure") or ""
+            ml = intent.get("max_loss_usd")
+            extra = f" struct={struct}" if struct else ""
+            if ml is not None:
+                extra += f" max_loss={ml}"
             print(
                 f"  {r.get('action')}: {intent.get('symbol')} "
-                f"{intent.get('side')} {intent.get('qty')} @ {intent.get('limit_price')} "
+                f"{intent.get('side')} {intent.get('qty')} @ {intent.get('limit_price')}"
+                f"{extra} "
                 f"risk_ok={risk.get('allowed')} {risk.get('reasons')}"
             )
             if r.get("broker"):

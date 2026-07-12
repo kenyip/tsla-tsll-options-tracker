@@ -279,13 +279,14 @@ platform-scout *ARGS:
 
 # --- Multi-symbol research scout (universe ranking; paper-only; NOT live allowlist) ---
 # Rank full research universe by vol / premium / alpha + capital-by-price
+# Doctrine: Agentic pilot sleeve is $3000 (pass --sleeve-usd 3000 for capital-fit tops).
 #   just research-tick
 #   just research-tick -- --top 15 --json
-#   just research-tick -- --sleeve-usd 5000 --write-report
+#   just research-tick -- --sleeve-usd 3000 --write-report
 #   just research-tick -- --promote --promote-top 5 --sleeve-usd 3000
 # Paper recurring wrapper (dated report; optional promote). See docs/RESEARCH_CRON.md
 #   just research-tick-paper
-#   just research-tick-paper -- --sleeve-usd 5000 --promote
+#   just research-tick-paper -- --sleeve-usd 3000 --promote
 research-tick *ARGS:
     {{py}} -m trader_platform.research tick {{ARGS}}
 
@@ -296,7 +297,7 @@ research-tick-paper *ARGS:
 
 # Wire last-run top-N → hypothesis *candidates* (never live). Optional engine backtest hooks.
 #   just research-promote-top
-#   just research-promote-top -- --top 5 --sleeve-usd 5000
+#   just research-promote-top -- --top 5 --sleeve-usd 3000
 #   just research-promote-top -- --run-backtests --dry-run
 research-promote-top *ARGS:
     {{py}} -m trader_platform.research promote-top {{ARGS}}
@@ -321,15 +322,74 @@ learn-tick *ARGS:
 
 # --- Evolve tick (FREE strategy DNA search + sim; never live; no strategies.py edits) ---
 #   just evolve-tick
-#   just evolve-tick -- --apply --top-symbols 4 --mutants 2
-#   just evolve-tick -- --apply --structures short_put_credit wheel_assignment
+#   just evolve-tick -- --apply --top-symbols 8 --mutants 2
+#   just evolve-tick -- --apply --structures short_put_credit wheel_assignment put_credit_spread
 #   just evolve-tick -- --json
 evolve-tick *ARGS:
     {{py}} -m trader_platform.evolve_tick --once {{ARGS}}
 
 # Bootstrap burst: research → evolve → learn → paper scout (paper only)
 bootstrap-ticks:
-    {{py}} -m trader_platform.research tick --write-report --notes bootstrap --sleeve-usd 5000 --promote --promote-top 5
-    {{py}} -m trader_platform.evolve_tick --once --apply --top-symbols 4 --mutants 2 --max-population 24 --max-create 6
+    {{py}} -m trader_platform.research tick --write-report --notes bootstrap --sleeve-usd 3000 --promote --promote-top 5
+    {{py}} -m trader_platform.evolve_tick --once --apply --top-symbols 8 --mutants 2 --max-population 48 --max-create 8 --sleeve-usd 3000
     {{py}} -m trader_platform.learn_tick --once --apply
     {{py}} -m trader_platform.autonomy_loop --mode paper --once
+
+# PCS regime stress (yearly / 6m / TSLL canon) for registered defined-risk hyps
+#   just pcs-regime-stress
+#   just pcs-regime-stress -- --write-hyps
+pcs-regime-stress *ARGS:
+    {{py}} scripts/pcs_regime_stress.py {{ARGS}}
+
+# PCS B4 cost/slip sensitivity (1-lot) for registered defined-risk hyps
+#   just pcs-cost-stress
+#   just pcs-cost-stress -- --write-hyps --slips 0,0.02,0.05,0.10
+pcs-cost-stress *ARGS:
+    {{py}} scripts/pcs_cost_stress.py {{ARGS}}
+
+# Human front door for agent wakes (not program ticks)
+#   just trader-wakes
+#   just trader-wakes --all
+trader-wakes *ARGS:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    dir="reports/trader-wakes"
+    if [[ ! -d "$dir" ]]; then
+      echo "No wake reports yet under $dir"
+      exit 0
+    fi
+    if [[ "${1:-}" == "--all" ]]; then
+      ls -1t "$dir"/*.md 2>/dev/null | grep -v README.md | head -50 || true
+      exit 0
+    fi
+    echo "=== reports/trader-wakes/INDEX.md (head) ==="
+    if [[ -f "$dir/INDEX.md" ]]; then head -40 "$dir/INDEX.md"; else echo "(no INDEX yet)"; fi
+    echo
+    echo "=== reports/trader-wakes/LATEST.md ==="
+    if [[ -f "$dir/LATEST.md" ]]; then cat "$dir/LATEST.md"; else echo "(no LATEST yet — run a trader wake)"; fi
+
+# Dual-pass MoA wake: GPT 5.6 Sol executor (writer) → Grok 4.5 challenger (read-only)
+#   just trader-wake-moa
+#   just trader-wake-moa --goal "stress only TSLL PCS"
+#   just trader-wake-moa --executor-only
+#   just trader-wake-moa --challenger-only --stamp 2026-07-09T2345
+#   just trader-wake-moa --hyps id1,id2,id3
+trader-wake-moa *ARGS:
+    bash scripts/trader_wake_moa.sh {{ARGS}}
+
+# Dual-model income BUILD lab (GPT 5.6 Sol → Grok 4.5). More discovery time.
+#   just trader-build-lab
+#   just trader-build-lab --slot evening
+#   just trader-build-lab --goal "time-bias PCS DTE grid"
+#   just trader-build-lab --structures put_credit_spread,call_credit_spread,iron_condor
+trader-build-lab *ARGS:
+    bash scripts/trader_build_lab_moa.sh {{ARGS}}
+
+# Fail-closed clean/main/origin completion check (BUILD wrapper runs this automatically).
+trader-run-gate mode="preflight" *ARGS:
+    {{py}} scripts/trader_run_completion_gate.py {{mode}} --repo . {{ARGS}}
+
+# Catalog × hyp × sim coverage scoreboard (income lab)
+#   just trader-income-coverage
+trader-income-coverage *ARGS:
+    {{py}} scripts/trader_income_coverage.py {{ARGS}}

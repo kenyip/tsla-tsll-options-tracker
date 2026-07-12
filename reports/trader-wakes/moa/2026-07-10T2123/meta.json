@@ -1,0 +1,20 @@
+{
+  "stamp": "2026-07-10T2123",
+  "lab": "income_build_lab",
+  "slot": "evening",
+  "goal": "FREEDOM-FIRST BUILD LAB (monitor mode). Codex auth: openai-codex on the Ken-aligned account (same as default profile). You are GPT 5.6 Sol executor.\n\nYou have full freedom to explore and test strategies. Prior wakes are context, not a mandatory menu. Prefer one coherent discovery loop.\n\nNorth star: keep discovering/stress-testing until YOU are honestly happy simulations support readiness to try a real account later (Ken still gates real money). Do not rush that claim.\n\nHard stops only: paper/research only; no live/broker/agentic arm/shadow auto-promote; no capital-path promote without B3+B4 + competitive ml/dd + non-vacuous after-cost evidence.\n\nIf calendar scaffold is the best next move, take it. If free discovery finds something better, take that and say why. Close with honest readiness state + ONE next seed.",
+  "mode": "both",
+  "executor": {
+    "provider": "openai-codex",
+    "model": "gpt-5.6-sol"
+  },
+  "challenger": {
+    "provider": "xai-oauth",
+    "model": "grok-4.5"
+  },
+  "structures": "",
+  "top_symbols": 8,
+  "mutants": 2,
+  "sleeve_usd": 3000.0,
+  "repo": "/Users/jarvis/dev/tsla-tsll-options-tracker"
+}

@@ -1,0 +1,20 @@
+{
+  "stamp": "2026-07-10T2011",
+  "lab": "income_build_lab",
+  "slot": "evening",
+  "goal": "INCOME BUILD LAB (evening). Steady-income search on $3000 sleeve. Evening BUILD: close a structure/time/direction gap or implement one missing sim class scaffold if justified. Axes: multi-structure options income, time bias (DTE/hold/entry timing), direction/regime bias (bull put / bear call / neutral / stand-aside). catalog free search (prefer defined-risk PCS/CCS/IC; may touch single-leg only as research toys). Run real sims; falsify with B3/B4 + ml/dd quality bar vs leader b195f5fe. Paper/research only. No live/agentic/shadow promote. Leave ONE closed-loop NEXT seed (RTH apply OR next BUILD gap).",
+  "mode": "both",
+  "executor": {
+    "provider": "openai-codex",
+    "model": "gpt-5.6-sol"
+  },
+  "challenger": {
+    "provider": "xai-oauth",
+    "model": "grok-4.5"
+  },
+  "structures": "",
+  "top_symbols": 8,
+  "mutants": 2,
+  "sleeve_usd": 3000.0,
+  "repo": "/Users/jarvis/dev/tsla-tsll-options-tracker"
+}

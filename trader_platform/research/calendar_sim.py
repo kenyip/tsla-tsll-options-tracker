@@ -1,0 +1,317 @@
+"""Paper-only Black-Scholes daily-bar simulator for long put calendars."""
+
+from __future__ import annotations
+
+from dataclasses import asdict, dataclass, field
+from typing import Any, Optional
+
+import numpy as np
+import pandas as pd
+
+import pricing
+from trader_platform.research.pcs_sim import capital_fit_pcs, strike_increment_for
+
+
+def _num(cfg: dict[str, Any], key: str, default: float) -> float:
+    try:
+        return float(cfg.get(key, default))
+    except (TypeError, ValueError):
+        return float(default)
+
+
+@dataclass
+class CalendarTrade:
+    entry_date: pd.Timestamp
+    front_expiration: pd.Timestamp
+    back_expiration: pd.Timestamp
+    strike: float
+    entry_debit: float
+    front_dte_at_entry: int
+    back_dte_at_entry: int
+    iv_at_entry: float
+    front_iv_at_entry: float
+    back_iv_at_entry: float
+    front_iv_multiplier: float
+    back_iv_multiplier: float
+    put_skew_per_moneyness: float
+    regime_at_entry: str
+    closed: bool = False
+    exit_date: Optional[pd.Timestamp] = None
+    exit_credit: Optional[float] = None
+    exit_reason: Optional[str] = None
+
+    def mark_credit(
+        self,
+        spot: float,
+        iv_proxy: float,
+        today: pd.Timestamp,
+        r: float = 0.04,
+        half_spread_per_leg: float = 0.0,
+    ) -> float:
+        front_days = max((self.front_expiration - today).days, 0)
+        back_days = max((self.back_expiration - today).days, 0)
+        front_sigma, back_sigma = _leg_sigmas(
+            iv_proxy,
+            spot,
+            self.strike,
+            self.front_iv_multiplier,
+            self.back_iv_multiplier,
+            self.put_skew_per_moneyness,
+        )
+        front = (
+            max(self.strike - spot, 0.0)
+            if front_days == 0
+            else pricing.price(spot, self.strike, front_days / 365.0, front_sigma, "put", r=r)
+        )
+        back = (
+            max(self.strike - spot, 0.0)
+            if back_days == 0
+            else pricing.price(spot, self.strike, back_days / 365.0, back_sigma, "put", r=r)
+        )
+        half_spread = max(float(half_spread_per_leg), 0.0)
+        return max(float(back - front - 2.0 * half_spread), 0.0)
+
+
+def _leg_sigmas(
+    iv_proxy: float,
+    spot: float,
+    strike: float,
+    front_multiplier: float,
+    back_multiplier: float,
+    put_skew_per_moneyness: float,
+) -> tuple[float, float]:
+    """Map the underlying IV proxy to explicit expiry and put-skew assumptions."""
+    otm_put_moneyness = max((spot - strike) / max(spot, 1e-9), 0.0)
+    skew_add = max(put_skew_per_moneyness, 0.0) * otm_put_moneyness
+    front = max(iv_proxy * max(front_multiplier, 0.01) + skew_add, 1e-6)
+    back = max(iv_proxy * max(back_multiplier, 0.01) + skew_add, 1e-6)
+    return float(front), float(back)
+
+
+@dataclass
+class CalendarSimResult:
+    symbol: str
+    ok: bool
+    skipped: bool = False
+    reason: str = ""
+    period: str = ""
+    n_trades: int = 0
+    metrics: dict[str, Any] = field(default_factory=dict)
+    trades: list[CalendarTrade] = field(default_factory=list)
+    capital: dict[str, Any] = field(default_factory=dict)
+    config: dict[str, Any] = field(default_factory=dict)
+
+    def to_dict(self) -> dict[str, Any]:
+        data = asdict(self)
+        data["trades"] = [
+            {
+                "entry": str(t.entry_date.date()),
+                "exit": str(t.exit_date.date()) if t.exit_date is not None else None,
+                "strike": t.strike,
+                "front_dte": t.front_dte_at_entry,
+                "back_dte": t.back_dte_at_entry,
+                "front_iv": round(t.front_iv_at_entry, 4),
+                "back_iv": round(t.back_iv_at_entry, 4),
+                "debit": round(t.entry_debit, 4),
+                "exit_credit": None if t.exit_credit is None else round(t.exit_credit, 4),
+                "pnl_share": None if t.exit_credit is None else round(t.exit_credit - t.entry_debit, 4),
+                "reason": t.exit_reason,
+            }
+            for t in self.trades
+        ]
+        return data
+
+
+def pick_calendar_entry(
+    row: pd.Series, spot: float, today: pd.Timestamp, cfg: dict[str, Any]
+) -> Optional[CalendarTrade]:
+    sigma = float(row.get("iv_proxy") or 0.0)
+    if not np.isfinite(sigma) or sigma <= 0:
+        return None
+    if float(row.get("iv_rank") or 0.0) < _num(cfg, "iv_rank_min", 0.0):
+        return None
+    front_dte = max(int(round(_num(cfg, "short_dte", 14))), 2)
+    back_dte = max(int(round(_num(cfg, "long_dte", 35))), front_dte + 7)
+    target_delta = min(max(_num(cfg, "long_target_delta", 0.30), 0.08), 0.45)
+    r = _num(cfg, "risk_free_rate", 0.04)
+    front_iv_multiplier = _num(cfg, "front_iv_multiplier", 1.0)
+    back_iv_multiplier = _num(cfg, "back_iv_multiplier", 1.0)
+    put_skew_per_moneyness = _num(cfg, "put_skew_per_moneyness", 0.0)
+    front_base_sigma = max(sigma * front_iv_multiplier, 1e-6)
+    try:
+        exact = pricing.strike_from_delta(
+            spot, front_dte / 365.0, front_base_sigma, target_delta, "put", r=r
+        )
+    except ValueError:
+        return None
+    strike = pricing.round_strike(exact, strike_increment_for(spot))
+    front_sigma, back_sigma = _leg_sigmas(
+        sigma,
+        spot,
+        strike,
+        front_iv_multiplier,
+        back_iv_multiplier,
+        put_skew_per_moneyness,
+    )
+    slip = max(_num(cfg, "slippage_pct", 0.0), 0.0)
+    half_spread = max(_num(cfg, "half_spread_per_leg", 0.0), 0.0)
+    front = max(
+        pricing.price(spot, strike, front_dte / 365.0, front_sigma, "put", r=r)
+        * (1.0 - slip)
+        - half_spread,
+        0.0,
+    )
+    back = (
+        pricing.price(spot, strike, back_dte / 365.0, back_sigma, "put", r=r)
+        * (1.0 + slip)
+        + half_spread
+    )
+    debit = float(back - front)
+    if debit <= 0.01 or debit * 100.0 > _num(cfg, "max_loss_budget_usd", 300.0):
+        return None
+    return CalendarTrade(
+        entry_date=today,
+        front_expiration=pd.Timestamp(today + pd.Timedelta(days=front_dte)),
+        back_expiration=pd.Timestamp(today + pd.Timedelta(days=back_dte)),
+        strike=float(strike),
+        entry_debit=debit,
+        front_dte_at_entry=front_dte,
+        back_dte_at_entry=back_dte,
+        iv_at_entry=sigma,
+        front_iv_at_entry=front_sigma,
+        back_iv_at_entry=back_sigma,
+        front_iv_multiplier=front_iv_multiplier,
+        back_iv_multiplier=back_iv_multiplier,
+        put_skew_per_moneyness=put_skew_per_moneyness,
+        regime_at_entry=str(row.get("regime") or ""),
+    )
+
+
+def _metrics(trades: list[CalendarTrade]) -> dict[str, Any]:
+    if not trades:
+        return {"n_trades": 0, "structure": "calendar_spread"}
+    pnl = np.array(
+        [((t.exit_credit or 0.0) - t.entry_debit) * 100.0 for t in trades], dtype=float
+    )
+    equity = np.cumsum(pnl)
+    dd = np.maximum.accumulate(equity) - equity
+    wins = pnl[pnl > 0]
+    losses = pnl[pnl <= 0]
+    gross_loss = float(abs(losses.sum())) if len(losses) else 0.0
+    reasons: dict[str, int] = {}
+    for trade in trades:
+        reasons[trade.exit_reason or "unknown"] = reasons.get(trade.exit_reason or "unknown", 0) + 1
+    max_losses = np.array([t.entry_debit * 100.0 for t in trades], dtype=float)
+    return {
+        "n_trades": len(trades),
+        "win_rate_pct": float(len(wins) / len(trades) * 100.0),
+        "total_pnl_per_contract": float(pnl.sum()),
+        "avg_pnl_per_contract": float(pnl.mean()),
+        "profit_factor": float(wins.sum() / gross_loss) if gross_loss > 0 else float("inf"),
+        "max_dd_per_contract": float(dd.max()) if len(dd) else 0.0,
+        "avg_days_held": float(
+            np.mean([(t.exit_date - t.entry_date).days for t in trades if t.exit_date is not None])
+        ),
+        "exit_reasons": reasons,
+        "avg_max_loss_usd": float(max_losses.mean()),
+        "p95_max_loss_usd": float(np.percentile(max_losses, 95)),
+        "worst_max_loss_usd": float(max_losses.max()),
+        "structure": "calendar_spread",
+    }
+
+
+def run_calendar_backtest(
+    symbol: str,
+    *,
+    period: str = "2y",
+    use_cache: bool = True,
+    config: Optional[dict[str, Any]] = None,
+    sleeve_usd: float = 3000.0,
+    open_risk_budget_usd: float = 750.0,
+    df: Optional[pd.DataFrame] = None,
+    min_bars: int = 15,
+) -> CalendarSimResult:
+    """Run one-position-at-a-time long-calendar research simulation."""
+    cfg = dict(config or {})
+    sym = symbol.upper()
+    if df is None:
+        try:
+            from data import build
+
+            df = build(sym, period=period, use_cache=use_cache)
+        except Exception as exc:  # noqa: BLE001
+            return CalendarSimResult(sym, False, True, f"build failed: {exc}", period, config=cfg)
+    if df is None or len(df) < min_bars:
+        return CalendarSimResult(sym, False, True, "insufficient history", period, config=cfg)
+
+    trades: list[CalendarTrade] = []
+    open_trade: Optional[CalendarTrade] = None
+    r = _num(cfg, "risk_free_rate", 0.04)
+    slip = max(_num(cfg, "slippage_pct", 0.0), 0.0)
+    half_spread = max(_num(cfg, "half_spread_per_leg", 0.0), 0.0)
+    for index_value, row in df.iterrows():
+        today = pd.Timestamp(index_value)
+        spot = float(row["close"])
+        sigma = float(row["iv_proxy"])
+        if not np.isfinite(sigma) or sigma <= 0:
+            continue
+        if open_trade is not None:
+            credit = (
+                open_trade.mark_credit(
+                    spot, sigma, today, r=r, half_spread_per_leg=half_spread
+                )
+                * (1.0 - slip)
+            )
+            pnl = credit - open_trade.entry_debit
+            front_days = (open_trade.front_expiration - today).days
+            reason = None
+            if pnl >= _num(cfg, "profit_target", 0.30) * open_trade.entry_debit:
+                reason = "profit_target"
+            elif pnl <= -_num(cfg, "defined_loss_exit_frac", 0.65) * open_trade.entry_debit:
+                reason = "defined_loss"
+            elif front_days <= int(round(_num(cfg, "dte_stop", 0))):
+                reason = "front_expiry"
+            if reason is not None:
+                open_trade.exit_date = today
+                open_trade.exit_credit = max(credit, 0.0)
+                open_trade.exit_reason = reason
+                open_trade.closed = True
+                trades.append(open_trade)
+                open_trade = None
+        if open_trade is None and (not trades or trades[-1].exit_date != today):
+            open_trade = pick_calendar_entry(row, spot, today, cfg)
+
+    if open_trade is not None:
+        today = pd.Timestamp(df.index[-1])
+        row = df.iloc[-1]
+        credit = open_trade.mark_credit(
+            float(row["close"]),
+            max(float(row["iv_proxy"]), 1e-6),
+            today,
+            r=r,
+            half_spread_per_leg=half_spread,
+        ) * (1.0 - slip)
+        open_trade.exit_date = today
+        open_trade.exit_credit = max(credit, 0.0)
+        open_trade.exit_reason = "end_of_data"
+        open_trade.closed = True
+        trades.append(open_trade)
+
+    metrics = _metrics(trades)
+    representative_loss = (
+        float(np.percentile([t.entry_debit * 100.0 for t in trades], 95))
+        if trades
+        else _num(cfg, "max_loss_budget_usd", 300.0)
+    )
+    capital = capital_fit_pcs(
+        max_loss_usd=representative_loss,
+        sleeve_usd=sleeve_usd,
+        open_risk_budget_usd=open_risk_budget_usd,
+        max_loss_budget_usd=_num(cfg, "max_loss_budget_usd", 300.0),
+        structure="calendar_spread",
+    )
+    capital["note"] = (
+        "defined_debit_risk=max_entry_debit_usd; paper BS proxy with explicit "
+        "front/back IV multipliers and put-skew assumption"
+    )
+    return CalendarSimResult(sym, True, False, "ok", period, len(trades), metrics, trades, capital, cfg)

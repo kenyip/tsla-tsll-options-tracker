@@ -1,164 +1,116 @@
 # Trader Hermes Profile
 
-This document describes the dedicated `trader` Hermes profile for trade analysis, PMCC management, and eventual always-on Mac Mini deployment.
+Dedicated **self-evolving** Hermes profile for Ken's research → paper → shadow → (armed) agentic_live income engine.
 
-The goal is to build a disciplined trading partner that is excellent at finding current data, understanding fundamentals and technicals, optimizing options strategies, monitoring risk, and producing concrete trade playbooks. It is not an execution bot until Ken explicitly grants brokerage access and an execution mandate.
+## Core reframe
+
+| Wrong framing | Right framing |
+|---|---|
+| Cron runs a Python tick program | Cron **wakes Trader** with a goal + continuation |
+| Evolution = `just evolve-tick` finished | Evolution = agent orients, chooses, builds, validates, leaves residue |
+| Fixed strategy box (PMCC/short-premium only) | Seed sleeves are hypotheses; free search across DNA/structures |
+| LaunchAgents as primary loop | Hermes **trader** gateway + agent crons |
+
+Optional instruments (agent may choose):
+
+```bash
+just research-tick-paper
+just evolve-tick
+just learn-tick -- --apply
+just platform-scout
+just desk-brief
+```
 
 ## Current local profile
 
 ```text
 Profile: trader
-Command: trader
+Command: trader  (or hermes -p trader)
 Path: /Users/jarvis/.hermes/profiles/trader
 Default repo/cwd: /Users/jarvis/dev/tsla-tsll-options-tracker
-Primary repo: /Users/jarvis/dev/tsla-tsll-options-tracker
-Primary skills: trading-partner, pmcc-strategy
+SOUL: free self-evolving system operator
+Skills: trader-self-evolution, trading-partner, pmcc-strategy
+Gateway: ai.hermes.gateway-trader (cron-only; no Telegram — CoS sole Ken-facing GW)
 ```
 
 Useful commands:
 
 ```bash
 trader chat
-trader chat -Q -t terminal -q "Use the terminal tool exactly once to execute: pwd. Then answer 'STDOUT: <the stdout>'."
-trader chat -q "Load trading-partner and pmcc-strategy, then run just pmcc-manage and summarize current PMCC risk."
-trader status --all
-trader skills list | grep -E 'trading-partner|pmcc-strategy'
+trader chat -q "Load trader-self-evolution. Run one free self-evolution wake now."
+trader chat -q "Load trading-partner and pmcc-strategy, then desk-brief status."
+hermes -p trader gateway status
+hermes -p trader cron list
+hermes -p trader cron run efe58ee280c8
 ```
 
 ## Agent operating principles
 
-The profile's `SOUL.md`, curated memory, and `trading-partner` skill encode these rules:
+1. Protect capital first; asymmetric opportunity second.
+2. Prefer verifiable data, files, sims, audits over memory.
+3. Closed loops beat digests — every wake changes something durable or records a falsification.
+4. Build missing capability (code/skills) instead of pretending a fixed catalog is complete.
+5. Never live-trade, broker-login, or auto-promote to shadow/live without explicit Ken mandate.
+6. Never commit positions YAML, caches, Hermes secrets, broker creds, Telegram tokens.
+7. Think in dollars, contracts, DTE, deltas, credits/debits when trade-shaped.
+8. A wake is incomplete until scope is closed, checks are green, learning is promoted, and intended repo changes are committed, integrated to `main`, pushed, remote-verified, and clean.
+9. Executor/challenger phases are evidence inputs. Only the finalizer plus deterministic completion gate may declare `RUN COMPLETE`.
 
-1. Protect capital first; find asymmetric trades second.
-2. Prefer current verifiable market data over memory.
-3. Label stale, cached, weekend, or after-hours data clearly.
-4. Blend fundamentals, technicals, option-chain structure, volatility/regime, portfolio exposure, buying-power/collateral effects, and scenario stress tests.
-5. Think in dollars, contract counts, DTE, deltas, credits/debits, breakevens, and max adverse paths.
-6. For PMCCs, load `pmcc-strategy` and respect Ken's core-vs-income sleeve framing.
-7. Never submit orders or access brokerage accounts without explicit authorization.
-8. Never commit live positions, market caches, Hermes secrets, broker credentials, or Telegram tokens.
+## Wake protocol
+
+Skill: `trader-self-evolution`
+
+1. Orient (goals, hyps, audits, market regime)
+2. Choose **one** closed loop
+3. Act freely (research / build / sim / paper promote)
+4. Durable residue + next-wake seed
+5. Gate packet only for red-lane needs
+
+Schedule (America/Los_Angeles):
+
+| Job | When | Mode |
+|---|---|---|
+| `trader-self-evolution-daily` | Mon–Fri 16:45 | Agent |
+| `trader-self-evolution-weekly` | Sun 17:00 | Agent (deeper critic) |
+
+See [TRADER_LOOPS.md](TRADER_LOOPS.md) for shared loop map.
 
 ## Knowledge placement
 
-The profile intentionally avoids bloated memory. Use:
+- Compact profile memory only for routing/high-level stance
+- `trader-self-evolution` for wake procedure
+- `trading-partner` for trade analysis / desk brief
+- `pmcc-strategy` for PMCC sleeve rules
+- Repo docs/audits/scoreboard for dated evidence
+- Per-run `learning-promotion.md` for verification, promoted lessons, and one NEXT
+- `.cache/platform/completion/<stamp>.json` for machine-verified commit/merge/push/clean receipt
+- Live fills only in private `pmcc_positions.yaml` (gitignored)
 
-- `~/.hermes/profiles/trader/memories/MEMORY.md` for compact routing/high-level stance only.
-- `trading-partner` for general trade-analysis workflow and memory-vs-skill routing.
-- `pmcc-strategy` for durable PMCC strategy rules and detailed dated references.
-- `docs/TRADER_KNOWLEDGE_MAP.md` for the index of past-weeks learnings and where each one lives.
-- `session_search` only when a detail was not promoted into memory, skills, or repo docs.
-
-Live fills and actual open positions belong only in `pmcc_positions.yaml`, which is private and gitignored.
-
-## Trade-analysis output standard
-
-For every meaningful recommendation, the agent should provide:
-
-- data timestamp and source
-- current exposure and position context
-- thesis: fundamental, technical, volatility, event calendar, and regime framing
-- exact legs: ticker, expiry, strike, contracts, target limit, debit/credit
-- scenario table in dollars: flat/chop, drop-recovery, slow bull, fast rip, thesis failure
-- management plan: harvest, roll, stop/invalidation, force-close, reload, and do-nothing triggers
-- shares-vs-options comparison when relevant
-- final stance: do now / wait for price / avoid / needs more data
-
-## Local bootstrap / repair
-
-From the repo root:
+## Bootstrap / repair
 
 ```bash
 scripts/bootstrap_trader_profile.sh
+# then ensure agent crons + gateway:
+hermes -p trader gateway install && hermes -p trader gateway start
+hermes -p trader cron list
 ```
 
-The script is safe to re-run. It creates the `trader` profile if missing, sets its working directory to the repo, writes the trading SOUL/memory/skill, and does not copy positions, auth files, provider keys, or Telegram tokens into git.
+Bootstrap must not reintroduce program LaunchAgents as the primary tick path.
 
-## Income Engine desk brief (daily)
+## Safety / migration
 
-Single operating surface for PMCC + short-premium status. Full playbook: `docs/DESK_BRIEF.md`.
+CoS remains sole Ken-facing Telegram gateway. Trader gateway is for **cron wakes** (and future non-CoS channels only if Ken approves).
 
-```bash
-cd ~/dev/tsla-tsll-options-tracker
-just desk-brief                 # raw gather: data-quality banner + PMCC monitor + live.py (+ positions if present)
-just desk-brief --full          # full pmcc-manage instead of --monitor
-trader chat -q "Run the Income Engine desk brief playbook (docs/DESK_BRIEF.md). Load trading-partner and pmcc-strategy. Gather with just desk-brief, then synthesize the standard output shape. Do not place trades."
-```
+24/7 path: prove local agent wakes → Mac Mini trader gateway + crons → optional Telegram for Trader only with explicit isolation → read-only broker → armed agentic live on isolated account only.
 
-## PMCC commands
+## Validation
 
 ```bash
-cd ~/dev/tsla-tsll-options-tracker
-just pmcc-manage
-just pmcc-manage --monitor
-just pmcc-manage --what-if 500
-just pmcc-monitor
-just pmcc-scan --preset managed --refresh
-just pmcc-playbook-gen
-```
-
-Run long refresh scans in the background from Hermes with completion notification. During market hours, prefer strict live-chain scans. After-hours/weekends, warn that yfinance chain data can be corrupt; use cached/model-cleaned scans only for strategic ranking.
-
-## Private files and migration boundaries
-
-Tracked in git:
-
-- repo code and tests
-- docs such as this file and `docs/PMCC_MONITOR_DEPLOYMENT.md`
-- safe examples like `pmcc_positions.example.yaml`
-- bootstrap scripts like `scripts/bootstrap_trader_profile.sh` and `scripts/bootstrap_pmcc_monitor.sh`
-
-Never commit:
-
-- `pmcc_positions.yaml`
-- `positions.yaml`
-- `.cache/`
-- Hermes `.env`, `auth.json`, OAuth files, provider keys, Telegram tokens
-- brokerage credentials, session cookies, account exports, or statements unless explicitly sanitized
-
-## Mac Mini always-on migration path
-
-Use this order when moving off the laptop:
-
-1. Clone this repo on the Mac Mini.
-2. Run `scripts/bootstrap_trader_profile.sh` from the repo root.
-3. Run `trader setup` or import a private profile archive if approved.
-4. Transfer `pmcc_positions.yaml` privately, not through git.
-5. Run `scripts/bootstrap_pmcc_monitor.sh` on the Mac Mini.
-6. Configure Telegram gateway for the `trader` profile: `trader gateway setup telegram`.
-7. Install/start the profile gateway: `trader gateway install && trader gateway start`.
-8. Recreate cron on the Mac Mini; cron jobs and gateway pairings are machine-local.
-9. Smoke-test: `trader chat -q "Load trading-partner and pmcc-strategy. Use terminal to run just pmcc-manage --monitor, then summarize whether action is needed."`
-10. Only after read-only monitoring is reliable should broker/data integrations be added. Execution access is a separate explicit authorization step with hard risk limits.
-
-## Profile export option
-
-For a faithful private copy of the local agent, use Hermes profile export/import instead of git:
-
-```bash
-hermes profile export trader -o ~/trader-profile.tar.gz
-scp ~/trader-profile.tar.gz USER@MAC_MINI:~/
-# on Mac Mini
-hermes profile import ~/trader-profile.tar.gz
-```
-
-Before sharing or archiving the tarball, remember it may contain config, `.env`, memories, skills, and other private profile state. Keep it private.
-
-## Validation before declaring migration done
-
-```bash
-trader profile show trader
-trader config check
-trader skills list | grep -E 'trading-partner|pmcc-strategy'
+hermes profile show trader
+hermes -p trader config check
+hermes -p trader skills list | grep -E 'trader-self-evolution|trading-partner|pmcc-strategy'
+hermes -p trader gateway status
+hermes -p trader cron list
 trader chat -Q -t terminal -q "Use the terminal tool exactly once to execute: pwd. Then answer 'STDOUT: <the stdout>'."
-cd /Users/jarvis/dev/tsla-tsll-options-tracker
-just pmcc-manage --monitor
-just pmcc-monitor
+trader chat -q "Reply with: (1) one sentence identity as free self-evolving trader (2) hard stops you never cross (3) confirm program ticks are optional tools."
 ```
-
-Expected:
-
-- `trader` exists and points at the repo as `terminal.cwd`.
-- Terminal tool smoke test prints `STDOUT: /Users/jarvis/dev/tsla-tsll-options-tracker`.
-- `trading-partner` and `pmcc-strategy` are available.
-- PMCC monitor is quiet when no action is needed.
-- Alert-path test can be triggered with a simulated spot without editing positions.

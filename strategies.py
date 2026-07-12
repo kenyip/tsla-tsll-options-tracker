@@ -299,9 +299,16 @@ def recommend_management_advisor(row: pd.Series, position_dict: dict, cfg: Strat
 
 
 def get_config(ticker: str, **overrides) -> StrategyConfig:
-    """Return the per-ticker default config, optionally with field overrides."""
+    """Return the per-ticker default config, optionally with field overrides.
+
+    Unknown kwargs (e.g. PCS DNA knobs) are dropped so DNA→live scouts never crash.
+    """
+    from dataclasses import fields as _dc_fields
+
     base = DEFAULT_CONFIG_BY_TICKER.get(ticker, {})
+    valid = {f.name for f in _dc_fields(StrategyConfig)}
     merged = {'ticker': ticker, **base, **overrides}
+    merged = {k: v for k, v in merged.items() if k in valid}
     return StrategyConfig(**merged)
 
 

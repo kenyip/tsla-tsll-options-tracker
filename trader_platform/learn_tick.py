@@ -35,6 +35,7 @@ from pathlib import Path
 from typing import Any, Optional
 
 from trader_platform.hypothesis_registry import Hypothesis, HypothesisRegistry, TRANSITIONS
+from trader_platform.paper_filters import is_smoke_stub_order, is_smoke_stub_tag
 
 _REPO = Path(__file__).resolve().parents[1]
 _CACHE = _REPO / ".cache" / "platform"
@@ -183,10 +184,13 @@ def load_latest_research_by_symbol(db_path: Path | None = None) -> dict[str, dic
 
 
 def _paper_stats_for_hyp(ledger: dict[str, Any], hyp_id: str) -> dict[str, int]:
+    """Count real paper activity only — ignore m0_stub / smoke_test ledger noise."""
     orders = (ledger.get("orders") or {}).values()
     n = w = f = c = 0
     for o in orders:
         if str(o.get("strategy_id") or "") != hyp_id:
+            continue
+        if is_smoke_stub_order(o):
             continue
         n += 1
         st = str(o.get("status") or "").lower()
@@ -200,13 +204,18 @@ def _paper_stats_for_hyp(ledger: dict[str, Any], hyp_id: str) -> dict[str, int]:
 
 
 def _audit_stats_for_hyp(events: list[dict[str, Any]], hyp_id: str) -> dict[str, int]:
+    """Count audit intents for hyp; exclude smoke/stub events and stub-tagged intents."""
     intents = stand = blocks = 0
     for e in events:
         intent = e.get("intent") or {}
         sid = str(intent.get("strategy_id") or e.get("strategy_id") or "")
         ev = str(e.get("event") or "")
+        tag = str(intent.get("tag") or e.get("tag") or "")
+        # Platform smoke ticks must not pollute paper-outcome evidence.
+        if ev in ("smoke_test",) or is_smoke_stub_tag(tag) or is_smoke_stub_order(e):
+            continue
         if sid == hyp_id:
-            if ev in ("paper_place", "shadow_propose", "risk_check", "smoke_test") or intent:
+            if ev in ("paper_place", "shadow_propose", "risk_check", "research_propose") or intent:
                 intents += 1
             risk = e.get("risk") or {}
             if risk.get("allowed") is False:

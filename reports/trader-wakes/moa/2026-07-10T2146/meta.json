@@ -1,0 +1,20 @@
+{
+  "stamp": "2026-07-10T2146",
+  "lab": "income_build_lab",
+  "slot": "evening",
+  "goal": "FREEDOM-FIRST BUILD LAB (monitor mode). Sol=executor on openai-codex; Grok=challenger.\n\nYou choose the research path. Prior wakes are context, not a forced menu.\nNorth star: discover/stress until YOU would honestly claim sim readiness for later real-account testing (Ken still arms real money). Do not rush.\n\nPrefer one coherent closed loop. High-value progress types:\n- new sim realism / class, OR\n- time/direction axis scoreboard, OR\n- quality falsify with a real promote/reject, OR\n- defined-risk DNA that survives non-vacuous after-cost vs quality bar\nAvoid thrashing free single-leg-only pop36 if calendar IV term-structure or a defined-risk edge lab is higher leverage.\n\nHard stops: paper/research only; no live/broker/arm/shadow auto-promote; no capital path without B3+B4 + competitive ml/dd + non-vacuous after-cost.\nClose with: progress type, honest L0\u2013L4 readiness (see docs/BUILD_PROGRESS_AND_CONFIDENCE.md if present), ONE next seed.",
+  "mode": "both",
+  "executor": {
+    "provider": "openai-codex",
+    "model": "gpt-5.6-sol"
+  },
+  "challenger": {
+    "provider": "xai-oauth",
+    "model": "grok-4.5"
+  },
+  "structures": "",
+  "top_symbols": 8,
+  "mutants": 2,
+  "sleeve_usd": 3000.0,
+  "repo": "/Users/jarvis/dev/tsla-tsll-options-tracker"
+}

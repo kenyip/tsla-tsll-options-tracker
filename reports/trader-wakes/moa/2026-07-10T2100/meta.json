@@ -1,0 +1,20 @@
+{
+  "stamp": "2026-07-10T2100",
+  "lab": "income_build_lab",
+  "slot": "evening",
+  "goal": "FREEDOM-FIRST BUILD LAB (monitor mode for Ken/Jarvis).\n\nYou (Trader) have full freedom to explore and test strategies. You choose the axis, symbols, structures, sims, and falsify path. Prior wakes are context, not a mandatory recipe.\n\nNorth star: keep discovering and stress-testing until YOU are honestly happy that simulations support readiness to try with a real account (paper-first still; Ken arms real later). Do not rush to that claim.\n\nSupport contract:\n- Jarvis/Ken monitor and support; they do not dictate tonight's research menu.\n- Prefer one coherent closed discovery loop this wake (depth over thrash).\n- Use real tools/sims; cite paths; no invented metrics.\n- If prior NEXT seed is useful, you may take it OR supersede with a better free choice \u2014 say why.\n\nHard stops (only these):\n- Paper/research only. No live, no broker login, no agentic arm, no shadow auto-promote, no \"ready for real account\" claim without B3+B4 + competitive ml/dd vs quality bar + non-vacuous after-cost evidence.\n- Quality leader remains relative until beaten on evidence.\n\nClose with honest state: what improved, what still blocks real-account readiness from YOUR view, and ONE next seed (or STAND_ASIDE / continue-explore).",
+  "mode": "both",
+  "executor": {
+    "provider": "openai-codex",
+    "model": "gpt-5.6-sol"
+  },
+  "challenger": {
+    "provider": "xai-oauth",
+    "model": "grok-4.5"
+  },
+  "structures": "",
+  "top_symbols": 8,
+  "mutants": 2,
+  "sleeve_usd": 3000.0,
+  "repo": "/Users/jarvis/dev/tsla-tsll-options-tracker"
+}

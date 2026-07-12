@@ -4,6 +4,13 @@ __pycache__/
 .cache/
 .DS_Store
 .grok/
+.worktrees/
+
+# MoA transport/debug residue; durable summaries and evidence stay tracked
+reports/trader-wakes/moa/*/prompts/
+reports/trader-wakes/moa/*/*-session.log
+reports/trader-wakes/moa/*/coverage-preflight.err
+reports/trader-wakes/moa/*/finalizer-exit.txt
 
 # active live positions — user-specific, never committed
 positions.yaml

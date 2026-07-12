@@ -159,7 +159,7 @@ def _persist_sim(v: SimVerdict, ts: str, path: Path = _EVOLVE_DB) -> None:
             sym,
             int(v.dna.generation or 0),
             v.verdict,
-            float(v.score),
+            _finite(v.score, default=-1e9),
             int(v.n_trades),
             json.dumps(v.metrics, default=str),
             json.dumps(v.dna.config, default=str),
@@ -173,7 +173,7 @@ def _persist_sim(v: SimVerdict, ts: str, path: Path = _EVOLVE_DB) -> None:
 def top_research_symbols(
     *,
     top_n: int = 5,
-    sleeve_usd: Optional[float] = 5000.0,
+    sleeve_usd: Optional[float] = 3000.0,
     prefer_fit: bool = True,
     db_path: Optional[Path | str] = None,
 ) -> list[dict[str, Any]]:
@@ -203,6 +203,158 @@ def top_research_symbols(
     return rows[:top_n]
 
 
+# Ship bar (v0.1, 2026-07-09 wake): thin perfect samples must not outrank real edges.
+# Historical bug: zero-loss PF → inf score → NFLX n=7 @ 100% WR ranked above multi-trade edges.
+MIN_TRADES_SHIP = 15
+MIN_TRADES_SIGNAL = 8
+PF_CAP = 10.0
+MAX_ABS_SCORE = 1e6
+# Higher first when sorting. Score alone is not enough: thin-perfect samples can
+# still print large raw scores from lucky small n.
+VERDICT_RANK: dict[str, int] = {
+    "SHIP": 4,
+    "NULL": 2,
+    "NEEDS_MORE_DATA": 1,
+    "REJECT": 0,
+}
+
+
+def _finite(x: float, default: float = 0.0) -> float:
+    try:
+        v = float(x)
+    except (TypeError, ValueError):
+        return default
+    return v if math.isfinite(v) else default
+
+
+def score_sim_metrics(
+    *,
+    n_trades: int,
+    pnl: float,
+    win_rate: float,
+    max_dd: float,
+    profit_factor: float,
+    skipped: bool = False,
+    ok: bool = True,
+    skip_reason: str = "",
+) -> tuple[str, float, str, float]:
+    """Map sim metrics → (verdict, finite_score, reason, capped_pf).
+
+    Pure / network-free so wake + smoke can assert the ship bar without yfinance.
+    """
+    n = int(n_trades or 0)
+    pnl = _finite(pnl)
+    wr = _finite(win_rate)
+    if wr > 1.0:  # allow 0–100 inputs
+        wr = wr / 100.0
+    wr = min(max(wr, 0.0), 1.0)
+    dd = abs(_finite(max_dd))
+    try:
+        raw_pf = float(profit_factor) if profit_factor is not None else 0.0
+    except (TypeError, ValueError):
+        raw_pf = 0.0
+    # non-finite raw PF (all wins / zero losses) → optimistic cap, never inf score
+    pf = PF_CAP if not math.isfinite(raw_pf) else min(max(raw_pf, 0.0), PF_CAP)
+
+    # Cost-function-aligned core (GOAL.md): pnl − dd, with modest WR/PF bonuses.
+    core = pnl - dd * 1.0 + wr * 50.0 + max(pf - 1.0, 0.0) * 20.0
+    core = _finite(core, default=-1e9)
+    core = max(min(core, MAX_ABS_SCORE), -MAX_ABS_SCORE)
+
+    if skipped or not ok:
+        verdict = "NEEDS_MORE_DATA" if "unavailable" in (skip_reason or "") else "NULL"
+        return verdict, -1.0, (skip_reason or "sim_skipped"), pf
+    if n <= 0:
+        return "NULL", 0.0, "zero_trades", pf
+    if pnl < -500 or dd > 800:
+        return "REJECT", _finite(pnl - dd * 0.5, default=-1e9), "poor_risk_or_pnl", pf
+    if n < MIN_TRADES_SIGNAL:
+        # Cap so sparse luck cannot dominate denser SHIP scores in mixed lists.
+        return "NEEDS_MORE_DATA", min(_finite(core * 0.05), 25.0), "few_trades", pf
+    # Perfect thin sample (0 DD, ~100% WR) is sampling luck until denser — not SHIP.
+    if n < MIN_TRADES_SHIP and wr >= 0.95 and dd < 1e-6:
+        return (
+            "NEEDS_MORE_DATA",
+            min(_finite(core * 0.05), 40.0),
+            "thin_perfect_sample",
+            pf,
+        )
+    if n >= MIN_TRADES_SHIP and pnl > 0 and wr >= 0.50 and pf >= 1.05:
+        return "SHIP", core, "positive_sim", pf
+    if n >= MIN_TRADES_SIGNAL and pnl > 0 and wr >= 0.45:
+        return "NULL", core, "borderline_not_ship_bar", pf
+    return "NULL", core, "weak_edge", pf
+
+
+def assert_ship_bar() -> None:
+    """Offline regression for the ship bar. No network / no engine.
+
+    Historical failure mode: NFLX n=7 @ 100% WR with PF=inf produced score=inf
+    and outranked denser multi-trade edges. This must never ship on thin samples,
+    and scores/PF must always be finite.
+    """
+    # Thin perfect + inf PF → NEEDS_MORE_DATA, finite score, PF capped
+    for n, want_reason in (
+        (7, "few_trades"),  # below MIN_TRADES_SIGNAL
+        (8, "thin_perfect_sample"),
+        (10, "thin_perfect_sample"),
+        (14, "thin_perfect_sample"),
+    ):
+        v, s, r, pf = score_sim_metrics(
+            n_trades=n,
+            pnl=400.0 + n * 10,
+            win_rate=1.0,
+            max_dd=0.0,
+            profit_factor=float("inf"),
+        )
+        assert v == "NEEDS_MORE_DATA", (n, v, r)
+        assert r == want_reason, (n, r, want_reason)
+        assert math.isfinite(s) and abs(s) <= MAX_ABS_SCORE, s
+        assert pf == PF_CAP, pf
+
+    # n=12 positive but under MIN_TRADES_SHIP → not SHIP
+    v, s, r, pf = score_sim_metrics(
+        n_trades=12, pnl=150.0, win_rate=0.66, max_dd=80.0, profit_factor=1.4
+    )
+    assert v == "NULL" and r == "borderline_not_ship_bar", (v, r)
+    assert math.isfinite(s)
+
+    # Dense positive edge → SHIP and outranks thin-perfect score
+    thin_s = score_sim_metrics(
+        n_trades=10, pnl=623.0, win_rate=1.0, max_dd=0.0, profit_factor=float("inf")
+    )[1]
+    v, dense_s, r, pf = score_sim_metrics(
+        n_trades=30, pnl=480.0, win_rate=0.70, max_dd=130.0, profit_factor=1.68
+    )
+    assert v == "SHIP" and r == "positive_sim", (v, r)
+    assert dense_s > thin_s, (dense_s, thin_s)
+
+    # Non-finite PF inputs never leak into score/pf
+    for pf_in in (float("nan"), float("inf"), float("-inf"), 1e300):
+        v, s, r, pf = score_sim_metrics(
+            n_trades=20, pnl=100.0, win_rate=0.55, max_dd=40.0, profit_factor=pf_in
+        )
+        assert math.isfinite(s) and math.isfinite(pf), (pf_in, s, pf)
+        assert pf <= PF_CAP
+        assert abs(s) <= MAX_ABS_SCORE
+
+    # WR as 0–100 percent
+    v, s, r, pf = score_sim_metrics(
+        n_trades=10, pnl=100.0, win_rate=100.0, max_dd=0.0, profit_factor=float("inf")
+    )
+    assert v == "NEEDS_MORE_DATA" and r == "thin_perfect_sample", (v, r)
+
+    # Zero trades / reject risk
+    v, s, r, _ = score_sim_metrics(
+        n_trades=0, pnl=0.0, win_rate=0.0, max_dd=0.0, profit_factor=0.0
+    )
+    assert v == "NULL" and r == "zero_trades" and s == 0.0, (v, s, r)
+    v, s, r, _ = score_sim_metrics(
+        n_trades=40, pnl=-600.0, win_rate=0.6, max_dd=900.0, profit_factor=0.5
+    )
+    assert v == "REJECT" and r == "poor_risk_or_pnl" and math.isfinite(s)
+
+
 def sim_dna(
     dna: StrategyDNA,
     *,
@@ -210,7 +362,7 @@ def sim_dna(
     use_cache: bool = True,
     dump_dir: Optional[Path] = None,
 ) -> SimVerdict:
-    """Run engine backtest with DNA config overrides (paper evidence only)."""
+    """Run engine/PCS backtest with DNA config (paper evidence only)."""
     from trader_platform.research.backtest_hooks import run_symbol_backtest
 
     sym = (dna.symbols or [""])[0].upper()
@@ -226,16 +378,215 @@ def sim_dna(
             verdict="REJECT",
         )
 
-    res = run_symbol_backtest(
-        sym,
-        period=period,
-        use_cache=use_cache,
-        dump_dir=dump_dir or _BT_DUMP,
-        config_overrides=dna.config_overrides(),
-    )
-    metrics = dict(res.metrics or {})
-    n = int(res.n_trades or metrics.get("n_trades") or 0)
-    # Engine keys: total_pnl_per_contract, win_rate_pct (0–100), max_dd_per_contract ($).
+    capital_meta: dict = {}
+    if dna.uses_collar_sim():
+        from trader_platform.research.collar_sim import run_collar_backtest
+
+        collar = run_collar_backtest(
+            sym,
+            period=period,
+            use_cache=use_cache,
+            config=dna.sim_config(),
+            sleeve_usd=3000.0,
+            open_risk_budget_usd=750.0,
+        )
+        metrics = dict(collar.metrics or {})
+        n = int(collar.n_trades or metrics.get("n_trades") or 0)
+        skipped = bool(collar.skipped)
+        ok = bool(collar.ok)
+        skip_reason = collar.reason or ""
+        capital_meta = dict(collar.capital or {})
+        evidence_path = ""
+        if dump_dir and collar.trades:
+            path = Path(dump_dir) / f"{sym}_collar_trades.json"
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(json.dumps(collar.to_dict(), default=str, indent=2))
+            evidence_path = str(path)
+    elif dna.uses_put_ratio_backspread_sim():
+        from trader_platform.research.put_ratio_backspread_sim import run_put_ratio_backspread_backtest
+
+        ratio = run_put_ratio_backspread_backtest(
+            sym,
+            period=period,
+            use_cache=use_cache,
+            config=dna.sim_config(),
+            sleeve_usd=3000.0,
+            open_risk_budget_usd=750.0,
+        )
+        metrics = dict(ratio.metrics or {})
+        n = int(ratio.n_trades or metrics.get("n_trades") or 0)
+        skipped = bool(ratio.skipped)
+        ok = bool(ratio.ok)
+        skip_reason = ratio.reason or ""
+        capital_meta = dict(ratio.capital or {})
+        evidence_path = ""
+        if dump_dir and ratio.trades:
+            path = Path(dump_dir) / f"{sym}_put_ratio_backspread_trades.json"
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(json.dumps(ratio.to_dict(), default=str, indent=2))
+            evidence_path = str(path)
+    elif dna.uses_iron_butterfly_sim():
+        from trader_platform.research.iron_butterfly_sim import run_iron_butterfly_backtest
+
+        iron_butterfly = run_iron_butterfly_backtest(
+            sym,
+            period=period,
+            use_cache=use_cache,
+            config={**dna.sim_config(), "structure": dna.structure},
+            sleeve_usd=3000.0,
+            open_risk_budget_usd=750.0,
+        )
+        metrics = dict(iron_butterfly.metrics or {})
+        n = int(iron_butterfly.n_trades or metrics.get("n_trades") or 0)
+        skipped = bool(iron_butterfly.skipped)
+        ok = bool(iron_butterfly.ok)
+        skip_reason = iron_butterfly.reason or ""
+        capital_meta = dict(iron_butterfly.capital or {})
+        evidence_path = ""
+        if dump_dir and iron_butterfly.trades:
+            path = Path(dump_dir) / f"{sym}_iron_butterfly_trades.json"
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(json.dumps(iron_butterfly.to_dict(), default=str, indent=2))
+            evidence_path = str(path)
+    elif dna.uses_debit_vertical_sim():
+        from trader_platform.research.debit_vertical_sim import run_debit_vertical_backtest
+
+        debit_vertical = run_debit_vertical_backtest(
+            sym,
+            structure=dna.structure,
+            period=period,
+            use_cache=use_cache,
+            config=dna.sim_config(),
+            sleeve_usd=3000.0,
+            open_risk_budget_usd=750.0,
+        )
+        metrics = dict(debit_vertical.metrics or {})
+        n = int(debit_vertical.n_trades or metrics.get("n_trades") or 0)
+        skipped = bool(debit_vertical.skipped)
+        ok = bool(debit_vertical.ok)
+        skip_reason = debit_vertical.reason or ""
+        capital_meta = dict(debit_vertical.capital or {})
+        evidence_path = ""
+        if dump_dir and debit_vertical.trades:
+            path = Path(dump_dir) / f"{sym}_debit_vertical_trades.json"
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(json.dumps(debit_vertical.to_dict(), default=str, indent=2))
+            evidence_path = str(path)
+    elif dna.uses_butterfly_sim():
+        from trader_platform.research.butterfly_sim import run_butterfly_backtest
+
+        butterfly = run_butterfly_backtest(
+            sym,
+            period=period,
+            use_cache=use_cache,
+            config=dna.sim_config(),
+            sleeve_usd=3000.0,
+            open_risk_budget_usd=750.0,
+        )
+        metrics = dict(butterfly.metrics or {})
+        n = int(butterfly.n_trades or metrics.get("n_trades") or 0)
+        skipped = bool(butterfly.skipped)
+        ok = bool(butterfly.ok)
+        skip_reason = butterfly.reason or ""
+        capital_meta = dict(butterfly.capital or {})
+        evidence_path = ""
+        if dump_dir and butterfly.trades:
+            path = Path(dump_dir) / f"{sym}_butterfly_trades.json"
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(json.dumps(butterfly.to_dict(), default=str, indent=2))
+            evidence_path = str(path)
+    elif dna.uses_diagonal_sim():
+        from trader_platform.research.diagonal_sim import run_diagonal_backtest
+
+        diagonal = run_diagonal_backtest(
+            sym,
+            period=period,
+            use_cache=use_cache,
+            config=dna.sim_config(),
+            sleeve_usd=3000.0,
+            open_risk_budget_usd=750.0,
+        )
+        metrics = dict(diagonal.metrics or {})
+        n = int(diagonal.n_trades or metrics.get("n_trades") or 0)
+        skipped = bool(diagonal.skipped)
+        ok = bool(diagonal.ok)
+        skip_reason = diagonal.reason or ""
+        capital_meta = dict(diagonal.capital or {})
+        evidence_path = ""
+        if dump_dir and diagonal.trades:
+            path = Path(dump_dir) / f"{sym}_diagonal_trades.json"
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(json.dumps(diagonal.to_dict(), default=str, indent=2))
+            evidence_path = str(path)
+    elif dna.uses_calendar_sim():
+        from trader_platform.research.calendar_sim import run_calendar_backtest
+
+        cal = run_calendar_backtest(
+            sym,
+            period=period,
+            use_cache=use_cache,
+            config=dna.sim_config(),
+            sleeve_usd=3000.0,
+            open_risk_budget_usd=750.0,
+        )
+        metrics = dict(cal.metrics or {})
+        n = int(cal.n_trades or metrics.get("n_trades") or 0)
+        skipped = bool(cal.skipped)
+        ok = bool(cal.ok)
+        skip_reason = cal.reason or ""
+        capital_meta = dict(cal.capital or {})
+        evidence_path = ""
+        if dump_dir and cal.trades:
+            path = Path(dump_dir) / f"{sym}_calendar_trades.json"
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(json.dumps(cal.to_dict(), default=str, indent=2))
+            evidence_path = str(path)
+    elif dna.uses_pcs_sim():
+        from trader_platform.research.pcs_sim import run_pcs_backtest
+
+        pcs_cfg = dna.pcs_config()
+        pcs_cfg.setdefault("structure", dna.structure)
+        pcs = run_pcs_backtest(
+            sym,
+            period=period,
+            use_cache=use_cache,
+            config=pcs_cfg,
+            sleeve_usd=3000.0,
+            open_risk_budget_usd=750.0,
+            structure=dna.structure,
+        )
+        metrics = dict(pcs.metrics or {})
+        n = int(pcs.n_trades or metrics.get("n_trades") or 0)
+        skipped = bool(pcs.skipped)
+        ok = bool(pcs.ok)
+        skip_reason = pcs.reason or ""
+        capital_meta = dict(pcs.capital or {})
+        evidence_path = ""
+        if dump_dir and pcs.trades:
+            out_dir = Path(dump_dir)
+            out_dir.mkdir(parents=True, exist_ok=True)
+            path = out_dir / f"{sym}_pcs_trades.json"
+            try:
+                path.write_text(json.dumps(pcs.to_dict(), default=str, indent=2))
+                evidence_path = str(path)
+            except Exception:  # noqa: BLE001
+                evidence_path = ""
+    else:
+        res = run_symbol_backtest(
+            sym,
+            period=period,
+            use_cache=use_cache,
+            dump_dir=dump_dir or _BT_DUMP,
+            config_overrides=dna.config_overrides(),
+        )
+        metrics = dict(res.metrics or {})
+        n = int(res.n_trades or metrics.get("n_trades") or 0)
+        skipped = bool(res.skipped)
+        ok = bool(res.ok)
+        skip_reason = res.reason or ""
+        evidence_path = res.evidence_path or ""
+
+    # Engine/PCS keys: total_pnl_per_contract, win_rate_pct (0–100), max_dd_per_contract ($).
     pnl = float(
         metrics.get("total_pnl_per_contract")
         if metrics.get("total_pnl_per_contract") is not None
@@ -249,41 +600,26 @@ def sim_dna(
     dd = float(metrics.get("max_dd_per_contract") or metrics.get("max_drawdown") or 0.0)
     pf_raw = metrics.get("profit_factor")
     try:
-        pf = float(pf_raw) if pf_raw is not None else 0.0
+        pf_in = float(pf_raw) if pf_raw is not None else 0.0
     except (TypeError, ValueError):
-        pf = 0.0
-    if not math.isfinite(pf):
-        pf = 10.0  # cap infinite PF (zero losses) so scores stay comparable
-    # score: pnl + win-rate + profit-factor, penalize deep absolute DD
-    if res.skipped or not res.ok:
-        verdict = "NEEDS_MORE_DATA" if "unavailable" in (res.reason or "") else "NULL"
-        score = -1.0
-        reason = res.reason or "sim_skipped"
-    elif n <= 0:
-        verdict = "NULL"
-        score = 0.0
-        reason = "zero_trades"
-    elif pnl < -500 or (dd and dd > 800):
-        verdict = "REJECT"
-        score = pnl - abs(dd) * 0.5
-        reason = "poor_risk_or_pnl"
-    elif n < 5:
-        verdict = "NEEDS_MORE_DATA"
-        score = pnl / 10.0 + wr * 50.0
-        reason = "few_trades"
-    elif pnl > 0 and wr >= 0.45 and (pf >= 1.0 or pf == 0.0):
-        verdict = "SHIP"
-        score = pnl + wr * 200.0 + max(pf, 0.0) * 50.0 - abs(dd) * 0.15
-        reason = "positive_sim"
-    else:
-        verdict = "NULL"
-        score = pnl + wr * 40.0 + max(pf, 0.0) * 10.0 - abs(dd) * 0.1
-        reason = "weak_edge"
+        pf_in = float("nan")
+
+    verdict, score, reason, pf = score_sim_metrics(
+        n_trades=n,
+        pnl=pnl,
+        win_rate=wr,
+        max_dd=dd,
+        profit_factor=pf_in,
+        skipped=skipped,
+        ok=ok,
+        skip_reason=skip_reason,
+    )
+    score = _finite(score, default=-1e9)
 
     dna.last_sim = {
-        "ok": res.ok,
-        "skipped": res.skipped,
-        "reason": res.reason,
+        "ok": ok,
+        "skipped": skipped,
+        "reason": reason if ok and not skipped else skip_reason or reason,
         "n_trades": n,
         "metrics": metrics,
         "verdict": verdict,
@@ -293,17 +629,52 @@ def sim_dna(
         "win_rate": wr,
         "max_dd_per_contract": dd,
         "profit_factor": pf,
+        "ship_bar": {
+            "min_trades_ship": MIN_TRADES_SHIP,
+            "min_trades_signal": MIN_TRADES_SIGNAL,
+            "pf_cap": PF_CAP,
+        },
+        "sim_engine": (
+            f"collar_sim:{dna.structure}"
+            if dna.uses_collar_sim()
+            else (
+                f"put_ratio_backspread_sim:{dna.structure}"
+                if dna.uses_put_ratio_backspread_sim()
+                else (
+                    f"iron_butterfly_sim:{dna.structure}"
+                    if dna.uses_iron_butterfly_sim()
+                    else (
+                        f"debit_vertical_sim:{dna.structure}"
+                        if dna.uses_debit_vertical_sim()
+                        else (
+                            f"butterfly_sim:{dna.structure}"
+                            if dna.uses_butterfly_sim()
+                            else (
+                                f"diagonal_sim:{dna.structure}"
+                                if dna.uses_diagonal_sim()
+                                else (
+                                    f"calendar_sim:{dna.structure}"
+                                    if dna.uses_calendar_sim()
+                                    else (f"pcs_sim:{dna.structure}" if dna.uses_pcs_sim() else "single_leg")
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        ),
+        "capital": capital_meta,
     }
     return SimVerdict(
         dna=dna,
-        ok=res.ok,
-        skipped=res.skipped,
+        ok=ok,
+        skipped=skipped,
         reason=str(reason),
         n_trades=n,
         metrics=metrics,
         score=float(score),
         verdict=verdict,
-        evidence_path=res.evidence_path or "",
+        evidence_path=evidence_path,
     )
 
 
@@ -350,7 +721,11 @@ def build_population(
     uniq: dict[str, StrategyDNA] = {}
     for d in pop:
         uniq[d.ensure_id()] = d
-    return list(uniq.values())
+    population = list(uniq.values())
+    if structures:
+        allowed = set(structures)
+        population = [dna for dna in population if dna.structure in allowed]
+    return population
 
 
 def hyp_id_for_dna(dna: StrategyDNA) -> str:
@@ -373,22 +748,37 @@ def apply_results(
     store = reg.load()
     by_id = {h.get("id"): h for h in store.get("hypotheses") or []}
 
+    def _rank_key(r: SimVerdict) -> tuple[int, float]:
+        # SHIP before NEEDS_MORE_DATA/NULL even if raw score is lower.
+        return (VERDICT_RANK.get(r.verdict, 0), _finite(r.score, default=-1e9))
+
     ranked = sorted(
-        [r for r in results if r.verdict in {"SHIP", "NEEDS_MORE_DATA"} or (not ship_only and r.verdict == "NULL" and r.n_trades >= 5 and r.score > 0)],
-        key=lambda r: r.score,
+        [
+            r
+            for r in results
+            if r.verdict in {"SHIP", "NEEDS_MORE_DATA"}
+            or (
+                not ship_only
+                and r.verdict == "NULL"
+                and r.n_trades >= MIN_TRADES_SIGNAL
+                and _finite(r.score) > 0
+            )
+        ],
+        key=_rank_key,
         reverse=True,
     )
     if ship_only:
         ranked = [r for r in results if r.verdict == "SHIP"]
-        ranked.sort(key=lambda r: r.score, reverse=True)
+        ranked.sort(key=_rank_key, reverse=True)
 
     for r in ranked[:max_create]:
         if r.verdict == "REJECT":
             continue
         dna = r.dna
         hid = hyp_id_for_dna(dna)
+        score_s = f"{_finite(r.score):.2f}"
         evidence = [
-            f"evolve_sim:{dna.ensure_id()}:verdict={r.verdict}:score={r.score:.2f}:trades={r.n_trades}",
+            f"evolve_sim:{dna.ensure_id()}:verdict={r.verdict}:score={score_s}:trades={r.n_trades}",
         ]
         if r.evidence_path:
             evidence.append(r.evidence_path)
@@ -457,14 +847,14 @@ def apply_results(
 def run_evolve_tick(
     *,
     apply: bool = False,
-    top_symbols: int = 4,
-    mutants_per_seed: int = 1,
+    top_symbols: int = 8,
+    mutants_per_seed: int = 2,
     structures: Optional[Sequence[str]] = None,
     seed: Optional[int] = None,
     period: str = "2y",
-    sleeve_usd: float = 5000.0,
-    max_population: int = 24,
-    max_create: int = 5,
+    sleeve_usd: float = 3000.0,
+    max_population: int = 48,
+    max_create: int = 8,
     ship_only: bool = False,
     research_db: Optional[Path | str] = None,
     registry_path: Optional[Path | str] = None,
@@ -485,13 +875,35 @@ def run_evolve_tick(
         db_path=research_db,
     )
     if not rows:
-        # fallback free search on liquid names if research empty
-        rows = [
-            {"symbol": "SMCI", "strategy_family": "short_put_cautious", "composite": 0},
-            {"symbol": "TSLL", "strategy_family": "short_strangle_candidate", "composite": 0},
-            {"symbol": "TSLA", "strategy_family": "short_strangle_candidate", "composite": 0},
+        # Fallback free search: sample multi-name universe — never TSLA/TSLL-only.
+        try:
+            from trader_platform.research.universe import load_universe
+
+            uni = load_universe()
+        except Exception:  # noqa: BLE001
+            uni = ["SPY", "QQQ", "IWM", "AAPL", "MSFT", "NVDA", "AMZN", "META", "AMD", "SMCI", "PLTR", "COIN", "TSLA", "TSLL"]
+        rng = random.Random(seed)
+        pick_n = max(top_symbols, 6)
+        if len(uni) > pick_n:
+            # Prefer diversified sample; always keep a couple indexes if present.
+            anchors = [s for s in ("SPY", "QQQ", "IWM") if s in uni]
+            rest = [s for s in uni if s not in anchors]
+            rng.shuffle(rest)
+            chosen = (anchors + rest)[:pick_n]
+        else:
+            chosen = list(uni)
+        families = [
+            "short_put_cautious",
+            "short_strangle_candidate",
+            "defined_risk_put_spread",
+            "premium_rich_short_dte",
+            "wheel_assignment",
         ]
-        report.errors.append("no research.db scores; using fallback symbols")
+        rows = [
+            {"symbol": sym, "strategy_family": families[i % len(families)], "composite": 0}
+            for i, sym in enumerate(chosen)
+        ]
+        report.errors.append("no research.db scores; using multi-symbol universe fallback")
 
     report.symbols = [str(r["symbol"]) for r in rows]
     pop = build_population(
@@ -513,7 +925,10 @@ def run_evolve_tick(
         except Exception as exc:  # noqa: BLE001
             report.errors.append(f"{dna.ensure_id()}: {exc}")
 
-    report.results.sort(key=lambda r: r.score, reverse=True)
+    report.results.sort(
+        key=lambda r: (VERDICT_RANK.get(r.verdict, 0), _finite(r.score, default=-1e9)),
+        reverse=True,
+    )
 
     if apply and report.results:
         reg = HypothesisRegistry(registry_path)
@@ -545,8 +960,9 @@ def format_report(report: EvolveReport) -> str:
     ]
     for r in report.results[:20]:
         sym = (r.dna.symbols or ["?"])[0]
+        sc = _finite(r.score, default=-1e9)
         lines.append(
-            f"{r.verdict:<16} {r.score:10.2f} {r.n_trades:6d}  "
+            f"{r.verdict:<16} {sc:10.2f} {r.n_trades:6d}  "
             f"{r.dna.structure}/{sym}  {r.reason[:40]}"
         )
     if report.created_hyps:
@@ -568,11 +984,12 @@ def main(argv: Optional[list[str]] = None) -> int:
     p = argparse.ArgumentParser(description="Evolve tick: free DNA search + sim (paper only)")
     p.add_argument("--once", action="store_true", help="run one evolve pass (default)")
     p.add_argument("--apply", action="store_true", help="write SHIP/strong DNA hyps as candidates")
-    p.add_argument("--top-symbols", type=int, default=4)
-    p.add_argument("--mutants", type=int, default=1, help="mutants per structure seed")
-    p.add_argument("--max-population", type=int, default=24)
-    p.add_argument("--max-create", type=int, default=5)
-    p.add_argument("--sleeve-usd", type=float, default=5000.0)
+    p.add_argument("--top-symbols", type=int, default=8)
+    p.add_argument("--mutants", type=int, default=2, help="mutants per structure seed")
+    p.add_argument("--max-population", type=int, default=48)
+    p.add_argument("--max-create", type=int, default=8)
+    p.add_argument("--sleeve-usd", type=float, default=3000.0,
+                   help="Agentic sleeve capital for capital-fit ranking (default 3000)")
     p.add_argument("--period", default="2y")
     p.add_argument("--seed", type=int, default=None)
     p.add_argument("--ship-only", action="store_true")

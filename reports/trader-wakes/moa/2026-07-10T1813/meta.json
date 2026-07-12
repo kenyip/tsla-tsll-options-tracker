@@ -1,0 +1,9 @@
+{
+  "stamp": "2026-07-10T1813",
+  "goal": "Post-1648 better-trades discovery challenge. Orient LATEST/readiness 1648: research run5 + MU PCS 55c7323a/efca45f7 + BAC CCS e6728888 vs quality leader TSLL PCS b195f5fe. Executor: reconfirm or surgically re-run B3/B4 only if JSON missing; no free-evolve spam; no capital-path promote without beating quality bar ml/dd + regime+cost. Honest table with cited stress JSON. One closed-loop NEXT SEED only: prefer non-bear RTH B6 paper OPEN_PCS 1-lot b195f5fe or honest STAND_ASIDE; optional BUILD only if tighter defined-risk hunt is evidence-backed. Challenger GPT 5.6 Sol: attack vanity SHIP, diversify-for-fear, overclaim B6/B7, rewrite NEXT if multi-item menu. Paper/research only. No live, no agentic arm, no shadow promotion.",
+  "mode": "both",
+  "executor": {"provider": "xai-oauth", "model": "grok-4.5"},
+  "challenger": {"provider": "openai-codex", "model": "gpt-5.6-sol"},
+  "hyp_ids": ["hyp_dna_tsll_put_credit_spread_b195f5fe", "hyp_dna_mu_put_credit_spread_55c7323a", "hyp_dna_mu_put_credit_spread_efca45f7", "hyp_dna_bac_call_credit_spread_e6728888"],
+  "repo": "/Users/jarvis/dev/tsla-tsll-options-tracker"
+}

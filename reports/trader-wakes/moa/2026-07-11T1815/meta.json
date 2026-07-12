@@ -1,0 +1,20 @@
+{
+  "stamp": "2026-07-11T1815",
+  "lab": "income_build_lab",
+  "slot": "evening",
+  "goal": "FAST-TRACK BUILD LAB (monitor mode for Ken/Jarvis).\n\nRoles: YOU (Trader) explore freely. Ken/Jarvis only monitor drift and program goal.\nProgram goal: widen strategy/sim coverage, then earn HIGH CONFIDENCE in at least one strategy (L1: non-vacuous after-cost + dense B3 + competitive ml/dd vs quality bar). Do not claim real-account readiness; Ken arms later.\n\nYou choose the axis. Prefer high-leverage progress types this wake (ONE closed loop):\n- P1 new sim class / sim realism for a coverage gap, OR\n- P2 time or direction scoreboard, OR\n- P3 quality falsify with clear promote/reject, OR\n- P4 defined-risk DNA that survives non-vacuous after-cost vs b195f5fe quality bar\n\nAvoid drift: do not thrash free single-leg-only pop36 if a coverage gap or L1 edge lab is higher leverage. Prior NEXT seed is context \u2014 take it or supersede with reason.\n\nHard stops: paper/research only; no live/broker/agentic arm/shadow auto-promote; no capital path without B3+B4 + competitive ml/dd + non-vacuous after-cost.\n\nClose with: progress type + score 0\u20135, L0\u2013L4 honesty, ONE next seed.",
+  "mode": "both",
+  "executor": {
+    "provider": "openai-codex",
+    "model": "gpt-5.6-sol"
+  },
+  "challenger": {
+    "provider": "xai-oauth",
+    "model": "grok-4.5"
+  },
+  "structures": "",
+  "top_symbols": 8,
+  "mutants": 2,
+  "sleeve_usd": 3000.0,
+  "repo": "/Users/jarvis/dev/tsla-tsll-options-tracker"
+}

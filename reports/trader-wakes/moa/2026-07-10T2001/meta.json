@@ -1,0 +1,20 @@
+{
+  "stamp": "2026-07-10T2001",
+  "lab": "income_build_lab",
+  "slot": "evening",
+  "goal": "ROLE SWAP LAB: GPT 5.6 Sol is sole writer/executor; Grok 4.5 is read-only challenger. Steady-income discovery on $3000 sleeve. Prefer axes still thin after 1938: time-bias grid on defined-risk leaders or high-rank names; direction coverage for CCS/IC that went mostly NULL; scaffold plan only if a missing sim class is the binding blocker. Run real research+evolve+B3/B4. Falsify vanity SHIP vs b195f5fe quality bar. One closed NEXT seed. Paper only. No live/agentic/shadow promote.",
+  "mode": "both",
+  "executor": {
+    "provider": "openai-codex",
+    "model": "gpt-5.6-sol"
+  },
+  "challenger": {
+    "provider": "xai-oauth",
+    "model": "grok-4.5"
+  },
+  "structures": "",
+  "top_symbols": 8,
+  "mutants": 2,
+  "sleeve_usd": 3000.0,
+  "repo": "/Users/jarvis/dev/tsla-tsll-options-tracker"
+}
