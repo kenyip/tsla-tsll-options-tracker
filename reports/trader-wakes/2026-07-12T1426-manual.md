@@ -46,7 +46,7 @@ Future callers provide only `just trader-build-lab`. Trader loads one canonical 
 
 ## INTEGRATION
 
-Pending coherent commit, push to `main`, origin/main equality check, clean-tree verification, and deterministic postflight receipt. Until those pass this report is RUN INCOMPLETE.
+Implementation commit `46f5017cabdce5caa56b9edde8158cbe725d6484` was committed directly on `main`, pushed normally, fetched, and verified equal to `origin/main`. This completion-receipt update is the only follow-up delta; final remote equality, clean tree, and deterministic post-push preflight are verified after its commit/push. No branch or untracked residue remains.
 
 ## LESSON
 
