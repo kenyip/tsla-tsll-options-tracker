@@ -24,7 +24,9 @@ just positions example                # write a sample positions.yaml
 
 For CLI help on any underlying script: `.venv/bin/python <script>.py --help` (`live.py`, `run_backtest.py`, `optimize.py`, `run_scenarios.py`, `sweep.py`, `analyze.py`, `manage_positions.py`).
 
-There is **no unit-test suite**. The behavioural regression gate is `just scenarios` (the canonical 12-regime windows in `scenarios.py`). A single regime can be inspected with `just scenarios -- --regime huge_up` (see `run_scenarios.py --help`).
+Read `AGENTS.md` first for the repository-wide completion, integration, learning-promotion, and safety contract.
+
+The full unit suite is `.venv/bin/python -m unittest discover -s tests`; it is mandatory for changed-repository completion. The behavioral scenario gate `just scenarios` remains required for strategy-engine changes (the canonical 12-regime windows in `scenarios.py`). A single regime can be inspected with `just scenarios -- --regime huge_up` (see `run_scenarios.py --help`).
 
 ## Architecture at a glance
 

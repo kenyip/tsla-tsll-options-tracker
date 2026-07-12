@@ -1,40 +1,34 @@
-# MOA BUILD merge — 2026-07-12T1000
+# Trader completion-contract audit — 2026-07-12T1238
 
-WAKE: 2026-07-12T1000 PDT (weekly dual lab; market closed)
+WAKE: 2026-07-12 12:38 PDT
 PHASE: BUILD
 SLEEVE: 3000
 PAPER_ONLY: true
-ROLES: GPT 5.6 Sol executor + Grok 4.5 challenger (read-only)
 
 ## CHOSE
-
-P2+P3 lagged high-volume downside-close PCS (mean-reversion after completed shock) with dual cost axes, controls, integrity, and chronological train→holdout. Superseded RTH-only archive seed while market closed.
+Independently falsify and close the proposed all-entrypoint completion contract rather than accept draft wording.
 
 ## DID
-
-- Executor: lag-1 entry filters in `pcs_sim`; close-shock lab + walkforward runners; 64 DNA / 80 controls / 8 names; REJECT family.
-- Challenger: verified JSON metrics + 432/432 integrity + re-ran targeted tests 21/21; PASS 8/8; kept REJECT and archive NEXT.
+- Repaired bootstrap preservation, stress-entrypoint delegation, fail-closed recovery output, run ancestry proof, secret markers, and exact NEXT enforcement.
+- Added fake-Hermes/fake-wrapper behavior tests and local-bare gate negatives.
+- Verified the live Trader profile/config/skills and active cron routing without gateway restart.
 
 ## EVIDENCE
+- `reports/trader-wakes/moa/2026-07-12T1238/`
+- Focused: 13/13 tests OK; full suite: 86/86 tests OK.
+- Dirty-preflight negative emitted RUN INCOMPLETE with exact recovery.
 
-- `.cache/platform/pcs_close_shock_lab_2026-07-12T1000.json` — 1 full-sample absolute proxy pass (SMCI; selection-biased context only)
-- `.cache/platform/pcs_close_shock_walkforward_2026-07-12T1000.json` — PLTR/TSLL train-selected; **0/2 holdout pass** (PLTR DD $155.05/$122.80; TSLL PnL −$7.70/−$14.88)
-- Decision: `REJECT_CLOSE_SHOCK_PCS_WALKFORWARD`
-- Tests: 21/21 OK
-- MoA: `reports/trader-wakes/moa/2026-07-12T1000/`
+## DURABLE
+`AGENTS.md`, `CLAUDE.md`, completion gate/wrappers/bootstrap, and regression tests. Existing live SOUL/skill/workspace/memory doctrine was verified and preserved.
 
-## DECISION
+## LESSON
+Completion requires semantic doctrine plus deterministic Git/remote/clean proofs and behavior tests; either layer alone is bypassable.
 
-Family REJECT. No registration, promotion, living leader, capital seat, or B-check change. L0 BUILD.
-
-## SCORE / HONESTY
-
-Progress: P2+P3 — **4/5**. Honesty: **L0**. No living quality leader.
+## INTEGRATION
+Pending deterministic prepare/normal branch push/fast-forward main push/postflight at report-write time. Final machine receipt: `.cache/platform/completion/2026-07-12T1238.json`.
 
 ## ONE NEXT SEED
+Add a deterministic test that interrupts integration after the run-branch push and proves the preserved branch can be resumed without force, stash, or evidence loss.
 
-On the next distinct New York RTH market date, append all-expiration TSLL quote archive **1→2/3** and verify append/dedup density; no provider-backed historical simulation before 3/3. Leave close-shock PCS, asymmetric IC, collar, and BAC Fri7 management closed this cycle. No live/agentic/shadow.
-
-GATES: none
-
-MOA_MERGE_DONE
+## GATES
+None. No live/broker/paper order or gateway action.

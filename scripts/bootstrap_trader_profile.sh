@@ -53,7 +53,8 @@ if isinstance(cli, list) and "messaging" in cli:
     p.write_text(yaml.safe_dump(d, sort_keys=False), encoding="utf-8")
 PY
 
-# Prefer live free SOUL if already upgraded; rewrite to free self-evolution template.
+# Preserve evolved live doctrine. Seed the compact template only on first install.
+if [[ ! -f "${PROFILE_DIR}/SOUL.md" ]]; then
 cat > "${PROFILE_DIR}/SOUL.md" <<'EOF'
 # SOUL.md — Trader
 
@@ -94,8 +95,10 @@ A wake is complete only when scoped work is closed, relevant/full-suite verifica
 
 Orient → choose one closed loop → act → critique/repair → promote learning → verify → clean commit/integrate/push gate → next-wake seed. Load `trader-self-evolution` on cron wakes.
 EOF
+fi
 
 mkdir -p "${PROFILE_DIR}/skills/trading/trader-self-evolution" "${PROFILE_DIR}/workspace"
+if [[ ! -f "${PROFILE_DIR}/skills/trading/trader-self-evolution/SKILL.md" ]]; then
 cat > "${PROFILE_DIR}/skills/trading/trader-self-evolution/SKILL.md" <<'EOF'
 ---
 name: trader-self-evolution
@@ -111,11 +114,12 @@ A tick is orientation + judgment + action + durable learning. CLI loops are opti
 3. Act freely (research/build/sim/paper)
 4. Hard stops: no live, no auto shadow/live, no secrets in git
 5. Critique and repair claim-invalidating flaws; run focused + full-suite verification
-6. Promote dated truth to repo docs/reports, reusable procedures/pitfalls to skills, and compact stable stance to memory
-7. Closeout only after meaningful commit, integration to main, push/remote verification, and clean tree; otherwise RUN INCOMPLETE
-8. Receipt: WAKE/CHOSE/DID/EVIDENCE/DURABLE/VERIFICATION/INTEGRATION/LESSON/NEXT SEED/GATES
+6. Promote dated truth to repo docs/reports, reusable methods to skills, and compact stable stance to memory
+7. Closeout: WAKE/CHOSE/DID/EVIDENCE/DURABLE/VERIFICATION/INTEGRATION/LESSON/NEXT SEED/GATES; incomplete unless clean committed main is pushed and remote-verified
 EOF
+fi
 
+if [[ ! -f "${PROFILE_DIR}/workspace/AGENTS.md" ]]; then
 cat > "${PROFILE_DIR}/workspace/AGENTS.md" <<EOF
 # Trader workspace
 Repo: ${REPO_DIR}
@@ -123,7 +127,9 @@ Ticks = agent wakes. Optional tools: just research-tick-paper|evolve-tick|learn-
 Doctrine: docs/TRADER_PLATFORM_GOAL.md, docs/TRADER_LOOPS.md, docs/AGENTIC_AUTONOMY_POLICY.md
 Completion: scope closed + checks green + learning promoted + committed/integrated/pushed/remote-verified clean repo, or RUN INCOMPLETE.
 EOF
+fi
 
+if [[ ! -f "${PROFILE_DIR}/memories/MEMORY.md" ]]; then
 cat > "${PROFILE_DIR}/memories/MEMORY.md" <<EOF
 Trader = free self-evolving profile. Alias \`trader\`; path \`${PROFILE_DIR}\`; cwd \`${REPO_DIR}\`.
 §
@@ -135,7 +141,9 @@ Green: research/build/sim/paper candidates. Red: live orders, auto shadow/live, 
 §
 Ken requires completed Trader wakes to have closed scope, green verification, promoted learning, and intended repo changes committed, integrated to main, pushed, remote-verified, and clean. Partial phases are RUN INCOMPLETE.
 EOF
+fi
 
+if [[ ! -f "${PROFILE_DIR}/memories/USER.md" ]]; then
 cat > "${PROFILE_DIR}/memories/USER.md" <<'EOF'
 Ken wants Trader free to self-evolve via agent wakes — not boxed into fixed program ticks.
 §
@@ -145,7 +153,9 @@ Capital-first, evidence-backed, dollars/contracts concrete. No live trading with
 §
 PMCC/TSLA is one sleeve; product is a general self-learning platform.
 EOF
+fi
 
+if [[ ! -f "${PROFILE_DIR}/skills/trading/trading-partner/SKILL.md" ]]; then
 cat > "${PROFILE_DIR}/skills/trading/trading-partner/SKILL.md" <<'EOF'
 ---
 name: trading-partner
@@ -255,12 +265,12 @@ Build in stages:
 6. Recreate cron there; cron jobs and gateway pairings do not move with git.
 7. Add read-only brokerage/data access first; execution access only later with explicit authorization and hard limits.
 EOF
-
 python3 - <<PY
 from pathlib import Path
 p = Path("${PROFILE_DIR}/skills/trading/trading-partner/SKILL.md")
 p.write_text(p.read_text(encoding="utf-8").replace("__TRADER_REPO_DIR__", "${REPO_DIR}"), encoding="utf-8")
 PY
+fi
 
 echo
 hermes profile show "${PROFILE}"

@@ -71,6 +71,7 @@ fi
 
 BASE_HEAD=""
 RUN_BRANCH=""
+PHASE="startup"
 
 # Single-flight: refuse overlapping duals on this repo (stale lock >90m may be stolen)
 LOCK_DIR="$REPO/.cache/platform"
@@ -86,13 +87,27 @@ if [[ -f "$LOCK_FILE" ]]; then
 fi
 echo "pid=$$ ts=$(date -Iseconds) slot=${SLOT:-?} mode=${MODE:-?}" >"$LOCK_FILE"
 cleanup_lock() { rm -f "$LOCK_FILE" 2>/dev/null || true; }
-trap cleanup_lock EXIT
+on_exit() {
+  ec=$?
+  cleanup_lock
+  if [[ $ec -ne 0 ]]; then
+    current="$(git branch --show-current 2>/dev/null || true)"
+    echo "RUN INCOMPLETE: stamp=$STAMP phase=$PHASE exit=$ec branch=${current:-unknown}" >&2
+    if [[ -n "$RUN_BRANCH" && "$current" == "$RUN_BRANCH" && -f "reports/trader-wakes/moa/$STAMP/meta.json" ]]; then
+      echo "RECOVERY: scripts/trader_build_lab_moa.sh --stamp $STAMP --resume" >&2
+    else
+      echo "RECOVERY: resolve the reported preflight/startup blocker, return to clean synchronized main, and rerun" >&2
+    fi
+  fi
+}
+trap on_exit EXIT
 
 if [[ "$MODE" == "both" || "$MODE" == "executor-only" ]]; then
   if [[ ! -x "$GATE" ]]; then
     echo "ERROR: completion gate is missing or not executable: $GATE" >&2
     exit 1
   fi
+  PHASE="preflight"
   python3 "$GATE" preflight --repo "$REPO"
   BASE_HEAD="$(git rev-parse HEAD)"
   RUN_BRANCH="trader/run-${STAMP}"
@@ -101,6 +116,7 @@ if [[ "$MODE" == "both" || "$MODE" == "executor-only" ]]; then
     exit 1
   fi
   git switch -c "$RUN_BRANCH"
+  PHASE="executor"
 fi
 
 case "$SLOT" in
@@ -328,6 +344,7 @@ Close only when ready for deterministic integration with: MOA_FINALIZE_READY and
 EOF
 
 run_exec() {
+  PHASE="executor"
   echo "=== BUILD LAB EXECUTOR: $EXEC_PROVIDER / $EXEC_MODEL (slot=$SLOT) ==="
   set +e
   hermes -p trader chat \
@@ -349,6 +366,7 @@ run_chall() {
     echo "ERROR: no executor closeout under $MOA_DIR or ${STAMP}-moa-exec.md" >&2
     exit 1
   fi
+  PHASE="challenger"
   echo "=== BUILD LAB CHALLENGER: $CHALL_PROVIDER / $CHALL_MODEL ==="
   set +e
   hermes -p trader chat \
@@ -379,6 +397,7 @@ run_finalize() {
     }
   done
 
+  PHASE="finalizer"
   echo "=== BUILD LAB FINALIZER: $EXEC_PROVIDER / $EXEC_MODEL ==="
   set +e
   hermes -p trader chat \
@@ -399,6 +418,7 @@ run_finalize() {
 }
 
 integrate_run() {
+  PHASE="integration"
   echo "=== BUILD LAB DETERMINISTIC VERIFICATION + INTEGRATION ==="
   [[ "$(git branch --show-current)" == "$RUN_BRANCH" ]] || {
     echo "ERROR: expected $RUN_BRANCH before integration" >&2
@@ -432,6 +452,7 @@ integrate_run() {
     --repo "$REPO" \
     --stamp "$STAMP" \
     --base-head "$BASE_HEAD" \
+    --run-head "$RUN_HEAD" \
     | tee "$LOCK_DIR/completion/${STAMP}.json"
 
   git branch -d "$RUN_BRANCH"

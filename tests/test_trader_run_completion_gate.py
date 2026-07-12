@@ -93,10 +93,36 @@ class TraderRunCompletionGateTest(unittest.TestCase):
         self._git("add", "-A")
         self._git("commit", "-m", "complete run")
         self._git("push", "origin", "main")
-        result = postflight(self.repo, stamp, self.base)
+        run_head = self._git("rev-parse", "HEAD")
+        result = postflight(self.repo, stamp, self.base, run_head)
         self.assertTrue(result["integrated"])
         self.assertTrue(result["clean"])
         self.assertEqual(result["head"], result["origin_main"])
+        with self.assertRaisesRegex(GateError, "not an ancestor"):
+            postflight(self.repo, stamp, self.base, "0" * 40)
+
+    def test_prepare_rejects_private_key_marker(self) -> None:
+        stamp = "2026-07-12T1204"
+        branch = f"trader/run-{stamp}"
+        self._git("switch", "-c", branch)
+        self._write_required_artifacts(stamp)
+        (self.repo / "unsafe.txt").write_text(
+            "-----BEGIN " + "PRIVATE KEY-----\nnot-a-real-key\n", encoding="utf-8"
+        )
+        self._git("add", "-A")
+        with self.assertRaisesRegex(GateError, "raw secret"):
+            prepare(self.repo, stamp, self.base, branch)
+
+    def test_prepare_requires_exactly_one_next_heading(self) -> None:
+        stamp = "2026-07-12T1205"
+        branch = f"trader/run-{stamp}"
+        self._git("switch", "-c", branch)
+        self._write_required_artifacts(stamp)
+        learning = self.repo / "reports" / "trader-wakes" / "moa" / stamp / "learning-promotion.md"
+        learning.write_text(learning.read_text() + "\n## NEXT\nsecond seed\n")
+        self._git("add", "-A")
+        with self.assertRaisesRegex(GateError, "exactly one"):
+            prepare(self.repo, stamp, self.base, branch)
 
     def test_v2_monitor_completion_requires_learning_integrated_to_origin_main(self) -> None:
         stamp = "2026-07-12T1203"

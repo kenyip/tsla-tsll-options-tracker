@@ -1,0 +1,9 @@
+{
+  "stamp": "2026-07-12T1238",
+  "lab": "completion_contract_audit",
+  "completion_contract_version": 2,
+  "mode": "manual-independent-finalization",
+  "base_head": "6a7e331a406a70dcd7139bbdf0f857edf5432901",
+  "run_branch": "trader/completion-contract-all-entrypoints",
+  "paper_only": true
+}

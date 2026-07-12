@@ -35,6 +35,14 @@ REQUIRED_LEARNING_HEADINGS = (
     "## LESSON",
     "## NEXT",
 )
+SECRET_MARKERS = (
+    re.compile(r"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----"),
+    re.compile(
+        r"(?:ghp_[A-Za-z0-9]{16,}|github_pat_[A-Za-z0-9_]{16,}|"
+        r"sk-(?:proj-)?[A-Za-z0-9_-]{16,}|xox[baprs]-[A-Za-z0-9-]{16,})"
+    ),
+    re.compile(r"AKIA[0-9A-Z]{16}"),
+)
 SECRET_ASSIGNMENT = re.compile(
     r"(?i)(?:api[_-]?key|access[_-]?token|refresh[_-]?token|password|secret)"
     r"\s*[:=]\s*[\"']([^\"'\n]{8,})[\"']"
@@ -118,6 +126,9 @@ def reject_raw_secrets(repo: Path, paths: list[str]) -> None:
         if proc.returncode or b"\x00" in proc.stdout:
             continue
         text = proc.stdout.decode("utf-8", errors="replace")
+        if any(pattern.search(text) for pattern in SECRET_MARKERS):
+            findings.append(rel)
+            continue
         for match in SECRET_ASSIGNMENT.finditer(text):
             value = match.group(1).strip().lower()
             if value.startswith(SAFE_SECRET_VALUES):
@@ -148,6 +159,14 @@ def require_run_artifacts(repo: Path, stamp: str, *, tracked: bool) -> None:
     absent = [h for h in REQUIRED_LEARNING_HEADINGS if h not in learning]
     if absent:
         raise GateError("learning-promotion.md missing headings: " + ", ".join(absent))
+    next_headings = list(re.finditer(r"(?m)^## NEXT\s*$", learning))
+    if len(next_headings) != 1:
+        raise GateError("learning-promotion.md must contain exactly one ## NEXT heading")
+    next_start = next_headings[0].end()
+    following_heading = re.search(r"(?m)^## ", learning[next_start:])
+    next_end = next_start + following_heading.start() if following_heading else len(learning)
+    if not learning[next_start:next_end].strip():
+        raise GateError("learning-promotion.md has an empty ## NEXT")
 
     if tracked:
         required = [run_dir / name for name in REQUIRED_RUN_FILES] + top_level
@@ -197,12 +216,19 @@ def prepare(repo: Path, stamp: str, base_head: str, run_branch: str) -> dict[str
     }
 
 
-def postflight(repo: Path, stamp: str, base_head: str) -> dict[str, object]:
+def postflight(repo: Path, stamp: str, base_head: str, run_head: str) -> dict[str, object]:
     require_clean(repo)
     require_main_remote_sync(repo)
     head = local_head(repo)
     if head == base_head:
         raise GateError("main HEAD did not advance from the run base")
+    ancestor = subprocess.run(
+        ["git", "merge-base", "--is-ancestor", run_head, "refs/heads/main"],
+        cwd=repo,
+        capture_output=True,
+    )
+    if ancestor.returncode:
+        raise GateError(f"run commit {run_head} is not an ancestor of main")
     require_run_artifacts(repo, stamp, tracked=True)
     return {
         "ok": True,
@@ -210,6 +236,7 @@ def postflight(repo: Path, stamp: str, base_head: str) -> dict[str, object]:
         "stamp": stamp,
         "base_head": base_head,
         "head": head,
+        "run_head": run_head,
         "branch": "main",
         "origin_main": remote_main(repo),
         "clean": True,
@@ -225,6 +252,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--stamp")
     parser.add_argument("--base-head")
     parser.add_argument("--run-branch")
+    parser.add_argument("--run-head")
     return parser.parse_args()
 
 
@@ -239,9 +267,9 @@ def main() -> int:
                 raise GateError("prepare requires --stamp, --base-head, and --run-branch")
             result = prepare(repo, args.stamp, args.base_head, args.run_branch)
         else:
-            if not (args.stamp and args.base_head):
-                raise GateError("postflight requires --stamp and --base-head")
-            result = postflight(repo, args.stamp, args.base_head)
+            if not (args.stamp and args.base_head and args.run_head):
+                raise GateError("postflight requires --stamp, --base-head, and --run-head")
+            result = postflight(repo, args.stamp, args.base_head, args.run_head)
     except GateError as exc:
         print(json.dumps({"ok": False, "mode": args.mode, "error": str(exc)}, indent=2))
         return 1
