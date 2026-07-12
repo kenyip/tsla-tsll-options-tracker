@@ -1,0 +1,34 @@
+# MOA BUILD learning promotion — 2026-07-12T1616
+
+## VERIFICATION
+
+- Exact lab rerun: `.venv/bin/python scripts/pcs_vol_compression_rolling_origin_lab.py --out .cache/platform/pcs_vol_compression_rolling_origin_lab_2026-07-12T1616.json` → `REJECT_VOL_COMPRESSION_PCS_ROLLING_ORIGIN`; 8 completed symbols, 24 folds, 0 train-gate passes, 0 complete-fold passes, 0 errors.
+- Independent artifact reduction after the rerun: 286/286 persisted candidate/control/window summaries had `integrity=true`; aggregate `signal_violations=0` and `same_bar_reentries=0`; minimum strategy-axis trade counts were BAC6/F6/SOFI4/PLTR5/TSLL2/SMCI6/AMD6/AAPL7; worst fold DD ranged from $119.350065803409 (BAC) to $425.5263570052657 (AMD); worst one-lot max loss ranged from $91.24786386051782 (TSLL) to $227.8043484664954 (AMD).
+- Focused behavioral/boundary/negative-control suite: `.venv/bin/python -m unittest tests.test_pcs_vol_compression_rolling_origin_lab tests.test_pcs_pullback_rolling_origin_lab tests.test_pcs_momentum_walkforward_lab tests.test_pcs_expiry_grid` → 26 tests, OK. Finalizer strengthened the new file from three to four tests with an explicit passing-holdout/failing-train fold-gate negative control and extended invalid-HV coverage to nonnumeric numerator/denominator values.
+- Full regression: `.venv/bin/python -m unittest discover -s tests` → 123 tests, OK.
+- Compile: `.venv/bin/python -m py_compile trader_platform/research/pcs_sim.py scripts/pcs_vol_compression_rolling_origin_lab.py tests/test_pcs_vol_compression_rolling_origin_lab.py scripts/trader_income_coverage.py` → exit 0.
+- Derived coverage regeneration: `.venv/bin/python scripts/trader_income_coverage.py --write --stamp 2026-07-12T1616` → 20 structures, 245 hypotheses, 67 evolve artifacts, no living quality leader; dated and LATEST coverage files agree.
+- Structured handoff: `.venv/bin/python scripts/trader_build_compounding.py validate-handoff --repo . --stamp 2026-07-12T1616 --base-head b7b92ee9fc6f7e9ea7214cdf84cba02a6e3f96b2` → `ok=true`, `role_ready=true`, outcome `FALSIFIED`, 2 useful deltas, 2 closed critic findings, and 2 unique novelty keys.
+- Consistency/whitespace: `git diff --check b7b92ee9fc6f7e9ea7214cdf84cba02a6e3f96b2` → exit 0; `cmp` proved dated merge equals wake LATEST and dated income coverage equals coverage LATEST; `python -m json.tool` accepted `compounding.json`.
+- Complete base-diff audit: tracked changes plus `git ls-files --others --exclude-standard` contain 21 intended text paths. The completion-gate path/secret patterns found zero sensitive paths, zero private-position/auth/cache paths, zero raw-secret markers or assignments, and zero binary files. Wrapper runtime prompts, preflight stderr, and `*-session.log` files remain excluded by the repository's existing ignore policy; no `.gitignore` edit or debris-hiding change was made.
+- Run-artifact contract check: the first auxiliary import from the isolated `execute_code` sandbox failed with `ModuleNotFoundError: scripts.trader_run_completion_gate` because that sandbox did not inherit the repo import path. It was rerun from the repository with `PYTHONPATH=.` and passed: all required files present, each required learning heading occurs exactly once, and the merge report ends in `MOA_FINALIZE_READY`.
+- Accepted challenger findings: the rejection decision and cited stress aggregates match the rerun; the family remains unregistered and closed; option marks/costs remain proxy/synthetic while underlying realized volatility is observed; BUILD/L0, no leader, no capital seat, and the Sunday supersession of the archive seed remain correct.
+- Repaired challenger finding: the thin three-test new suite now has an explicit train∧holdout negative control. During that repair the finalizer found that nonnumeric HV inputs could raise instead of fail closed; `pcs_sim` now catches invalid conversion and the test locks both numerator and denominator behavior.
+- Rejected as a blocker, accepted as routing guidance: the fourth PCS daily-bar signal sequence is not thrash for this wake because `hv_20/hv_60` is a new observed-underlying evidence class absent from prior novelty keys and it closed a predeclared family without tuning. The family is not reopened; if an off-hours wake occurs before new archive data, prefer a non-PCS-signal novelty class or stop.
+- Integration remains pending the deterministic wrapper gate. This finalizer did not commit, push, merge, switch branches, or claim RUN COMPLETE.
+
+## DURABLE
+
+- Project truth and dated evidence: `docs/INCOME_STRATEGY_COVERAGE.md`, `reports/trader-wakes/2026-07-12T1616-moa-exec.md`, `reports/trader-wakes/2026-07-12T1616-moa-merge.md`, `reports/trader-wakes/LATEST.md`, `reports/trader-wakes/INDEX.md`, and `reports/readiness/LATEST.md` agree that `pcs-vol-compression-daily-bar` is closed, the capital path is empty, archive density remains 1/3, and readiness remains BUILD/L0.
+- Reusable machinery and tests: `trader_platform/research/pcs_sim.py`, `scripts/pcs_vol_compression_rolling_origin_lab.py`, and `tests/test_pcs_vol_compression_rolling_origin_lab.py` preserve lagged fail-closed realized-volatility state filtering, dual-cost rolling-origin falsification, disjoint controls, and train-before-holdout gating.
+- Generated truth: `reports/readiness/income-coverage-2026-07-12T1616.md` and `reports/readiness/income-coverage-LATEST.md` were regenerated from `scripts/trader_income_coverage.py` and agree at 20 structures / 245 hypotheses / no living leader.
+- Skill promotion: active Trader skill `trader-self-evolution` now records the reusable pitfall that realized-volatility ratios must parse defensively, fail closed on invalid/non-positive denominators, use a prior completed bar, and carry boundary/disjoint-control/train∧holdout negative tests.
+- No profile-memory update: this is dated strategy evidence and a reusable procedure, not a new stable Ken preference or routing fact.
+
+## LESSON
+
+Future Trader can use `hv_20/hv_60` as a prior-bar research state without allowing missing, nonnumeric, nonfinite, zero-denominator, or negative-denominator inputs to fail open or abort a population. The predeclared compression threshold did not create a durable after-cost PCS edge: every train gate failed and every symbol exceeded the $75 drawdown bar despite one-lot max loss fitting the sleeve. A valid new evidence class can justify one additional daily-bar falsification, but closure—not threshold tuning—is the durable result.
+
+## NEXT
+
+On the next distinct New York RTH market date, append one all-expiration TSLL observation snapshot and verify archive density advances from 1/3 to 2/3 without duplicate identical rows. Do not run provider-backed historical simulation, observed-cost calibration, or L1 claims before 3/3 dates (`provider_backtest_eligible=true`).

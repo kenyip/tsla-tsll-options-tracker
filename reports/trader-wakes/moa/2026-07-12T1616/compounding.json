@@ -1,0 +1,57 @@
+{
+  "closed_families": [
+    "pcs-vol-compression-daily-bar"
+  ],
+  "critic_findings": [
+    {
+      "finding": "The new volatility-compression unit suite was thin and lacked an explicit passing-holdout/failing-train fold-gate negative control.",
+      "rationale": "Finalizer added the train-before-holdout negative control and hardened the same fail-closed machinery against nonnumeric realized-volatility inputs.",
+      "repair_artifacts": [
+        "trader_platform/research/pcs_sim.py"
+      ],
+      "status": "repaired",
+      "test_artifacts": [
+        "tests/test_pcs_vol_compression_rolling_origin_lab.py"
+      ]
+    },
+    {
+      "finding": "A fourth consecutive PCS daily-bar signal family on the same eight symbols may indicate loop familiarity rather than useful novelty.",
+      "rationale": "Not a blocker for this wake: lagged realized-volatility state is a new observed-underlying evidence class absent from prior novelty keys, the DNA was predeclared without a grid, and the run closed rather than tuned the family. Future pre-archive off-hours routing now prefers a non-PCS-signal novelty class or DIMINISHING_RETURNS.",
+      "repair_artifacts": [],
+      "status": "rejected",
+      "test_artifacts": []
+    }
+  ],
+  "data_dependencies": [
+    "A distinct New York RTH market date is required to advance observed TSLL option archive density from 1/3 to 2/3.",
+    "Provider-backed historical simulation, observed-cost calibration, and L1 claims remain blocked until at least 3/3 distinct market dates."
+  ],
+  "loop_signature": "pcs/volatility/compression/rolling-origin/proxy-cost",
+  "next": "On the next distinct New York RTH market date, append one all-expiration TSLL observation snapshot and verify archive density advances from 1/3 to 2/3 without duplicate identical rows; no provider-backed historical simulation, observed-cost calibration, or L1 claim before 3/3.",
+  "outcome": "FALSIFIED",
+  "schema_version": 1,
+  "stamp": "2026-07-12T1616",
+  "useful_deltas": [
+    {
+      "artifacts": [
+        "trader_platform/research/pcs_sim.py",
+        "scripts/pcs_vol_compression_rolling_origin_lab.py",
+        "tests/test_pcs_vol_compression_rolling_origin_lab.py",
+        "docs/INCOME_STRATEGY_COVERAGE.md",
+        "reports/trader-wakes/2026-07-12T1616-moa-merge.md"
+      ],
+      "kind": "falsification",
+      "novelty_key": "pcs-realized-vol-compression-rolling-origin-8x3-reject",
+      "summary": "A predeclared lagged hv_20/hv_60<=0.80 PCS state failed all 24 expanding-origin train gates across eight symbols under dual proxy costs and hard path-risk gates; the family is closed without tuning or registration."
+    },
+    {
+      "artifacts": [
+        "trader_platform/research/pcs_sim.py",
+        "tests/test_pcs_vol_compression_rolling_origin_lab.py"
+      ],
+      "kind": "repair",
+      "novelty_key": "pcs-hv-ratio-nonnumeric-fail-closed-train-holdout-negative-control",
+      "summary": "Realized-volatility state parsing now fails closed on nonnumeric inputs and the new suite proves a passing holdout cannot rescue a failed train cost axis."
+    }
+  ]
+}

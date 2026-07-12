@@ -274,11 +274,26 @@ def entry_filters_pass(row: pd.Series, cfg: dict[str, Any]) -> bool:
         ("volume_surge", "entry_volume_surge_min", "entry_volume_surge_max"),
         ("ret_1d", "entry_ret_1d_min", "entry_ret_1d_max"),
         ("rsi_14", "entry_rsi_min", "entry_rsi_max"),
+        ("hv_ratio_20_60", "entry_hv_ratio_min", "entry_hv_ratio_max"),
     )
     for column, minimum_key, maximum_key in bounds:
         if minimum_key not in cfg and maximum_key not in cfg:
             continue
-        value = row.get(column)
+        if column == "hv_ratio_20_60":
+            hv_20 = row.get("hv_20")
+            hv_60 = row.get("hv_60")
+            if hv_20 is None or hv_60 is None:
+                return False
+            try:
+                hv_20_value = float(hv_20)
+                hv_60_value = float(hv_60)
+            except (TypeError, ValueError):
+                return False
+            if not np.isfinite(hv_20_value) or not np.isfinite(hv_60_value) or hv_60_value <= 0.0:
+                return False
+            value = hv_20_value / hv_60_value
+        else:
+            value = row.get(column)
         if value is None or not np.isfinite(float(value)):
             return False
         if minimum_key in cfg and float(value) < _cfg_float(cfg, minimum_key, float("-inf")):
