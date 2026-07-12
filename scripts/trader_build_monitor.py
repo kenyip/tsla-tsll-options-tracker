@@ -138,7 +138,7 @@ def main() -> int:
         "```",
         "",
     ]
-    text = "\n".join(lines) + "\n"
+    text = "\n".join(lines).rstrip() + "\n"
     print(text)
     if args.write:
         OUT.mkdir(parents=True, exist_ok=True)

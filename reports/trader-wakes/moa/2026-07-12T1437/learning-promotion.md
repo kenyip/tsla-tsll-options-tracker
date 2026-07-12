@@ -1,0 +1,30 @@
+# MOA BUILD learning promotion — 2026-07-12T1437
+
+## VERIFICATION
+
+- Exact lab rerun: `.venv/bin/python scripts/pcs_pullback_rolling_origin_lab.py --out .cache/platform/pcs_pullback_rolling_origin_lab_2026-07-12T1437.json` → `REJECT_MILD_PULLBACK_PCS_ROLLING_ORIGIN`; 8 completed symbols, 0 all-fold passes, 0 errors. The same three train survivors remained PLTR fold 2, SMCI fold 1, and AMD fold 0; every fold failed its untouched holdout gate.
+- Focused behavioral/boundary/negative-control suite: `.venv/bin/python -m unittest tests.test_pcs_pullback_rolling_origin_lab tests.test_pcs_momentum_walkforward_lab tests.test_pcs_expiry_grid` → 22 tests, OK. This includes prior-bar mirror disjointness, expanding/non-overlapping fold chronology, train∧holdout gating, unrounded DD fail-close, and the finalizer-added dense-negative/integrity window fail-close.
+- Full regression suite: `.venv/bin/python -m unittest discover -s tests` → 104 tests, OK.
+- Compile and whitespace checks: `.venv/bin/python -m py_compile scripts/pcs_pullback_rolling_origin_lab.py tests/test_pcs_pullback_rolling_origin_lab.py scripts/trader_income_coverage.py scripts/trader_build_progress.py scripts/trader_build_monitor.py` and `git diff --check 2fc3b17243b91bd84fff91e0bf03040b72a8c87e` → exit 0 after the derived-writer newline repair.
+- Derived coverage regeneration: `.venv/bin/python scripts/trader_income_coverage.py --write --stamp 2026-07-12T1437` → 20 structures, 245 hypotheses, 67 evolve artifacts, no living quality leader; dated and LATEST coverage files agree.
+- Derived monitor regeneration: after removing the empty `2099-01-01T0000` unittest fixture directory, `.venv/bin/python scripts/trader_build_progress.py --write` and `.venv/bin/python scripts/trader_build_monitor.py --write` regenerated the touched progress/monitor surfaces without fixture contamination. Their shared trailing-blank-line generator defect was repaired after `git diff --check` caught it, then both surfaces were regenerated cleanly. They report BUILD/L0, the archive-density NEXT, and this contract-v2 run as pending integration rather than complete.
+- Challenger findings reconciled: accepted the family rejection, proxy/L0 labels, empty capital path, and single RTH archive NEXT; repaired the stale machine-readable readiness NEXT; accepted the optional gate-test nit and added explicit dense-negative/integrity fail-close coverage. The suggested separate all-fold aggregation test was not added because aggregation is the direct `all(row["fold_gate_pass"] for row in folds)` expression, the exact rerun persisted three folds per symbol with `n_all_folds_pass=0`, and no separate transformation exists to test without mirroring Python itself.
+- Rejected interpretations: PLTR fixed-cost positive holdout PnL is not a near-miss because DD is $131.80; no proxy result is L1/provider-backed evidence; no closed signal family is reopened; no hypothesis registration, status promotion, paper order, shadow, arm, broker, or live action occurred.
+- Integration is pending the deterministic wrapper gate; this finalizer did not commit, push, merge, switch branches, or claim RUN COMPLETE.
+
+## DURABLE
+
+- Project truth and dated evidence: `docs/INCOME_STRATEGY_COVERAGE.md`, `reports/trader-wakes/2026-07-12T1437-moa-exec.md`, `reports/trader-wakes/2026-07-12T1437-moa-merge.md`, `reports/trader-wakes/LATEST.md`, `reports/trader-wakes/INDEX.md`, and `reports/readiness/LATEST.md` now agree that the mild-pullback rolling-origin family is rejected, L0 remains, the capital path is empty, and archive density is 1/3.
+- Reusable capability: `scripts/pcs_pullback_rolling_origin_lab.py` plus `tests/test_pcs_pullback_rolling_origin_lab.py` preserve predeclared expanding-origin train→untouched-holdout falsification with dual costs, exact integrity, hard risk/DD/density gates, and fail-closed window checks.
+- Generated truth: `reports/readiness/income-coverage-2026-07-12T1437.md` and `reports/readiness/income-coverage-LATEST.md` were regenerated from `scripts/trader_income_coverage.py` and agree at 20 structures / 245 hypotheses / no living leader.
+- Touched derived monitors: `scripts/trader_build_progress.py` and `scripts/trader_build_monitor.py` now emit exactly one terminal newline; `reports/readiness/build-progress-LATEST.md`, `reports/readiness/build-monitor-LATEST.md`, and their dated 2026-07-12T1550 copies were regenerated after fixture cleanup. Their current `1437=failed_or_incomplete` label is intentional until the deterministic wrapper tracks `learning-promotion.md` on `origin/main`.
+- No skill patch: `trader-self-evolution` already contains the reusable train∧holdout, unrounded hard-limit, proxy-vs-observed, three-date provider-density, and closed-family anti-thrash lessons; adding a duplicate dated rule would stack guidance rather than improve it.
+- No profile-memory update: this run produced dated project evidence and a reusable repo harness, not a new stable Ken preference or routing fact.
+
+## LESSON
+
+Future Trader can falsify one predeclared direction DNA across expanding rolling-origin folds without holdout selection leakage and can prove that train, both holdout cost axes, unrounded full/chunk DD, dense-negative count, and integrity all fail closed. Three consecutive daily-bar direction labs were useful because they closed distinct hypotheses, but another signal grid without observed-cost density or a genuinely new evidence class would now be low-information. Isolated positive PnL on one proxy axis never offsets a failed absolute path-risk gate. Derived-report writers must strip their assembled line list before adding the single terminal newline, or regenerated files fail the repository whitespace gate.
+
+## NEXT
+
+On the next distinct New York RTH market date, append one all-expiration TSLL observation snapshot via the existing capture path and verify archive density advances from 1/3 to 2/3 market dates without duplicate identical rows. Do not run provider-backed historical simulation, observed-cost calibration, or L1 claims before 3/3 dates (`provider_backtest_eligible=true`).

@@ -224,7 +224,7 @@ def main() -> int:
         "Tonight’s pattern: high coverage/plumbing scores, **L0 for live money** until after-cost edge + B6.",
         "",
     ]
-    text = "\n".join(lines) + "\n"
+    text = "\n".join(lines).rstrip() + "\n"
     print(text)
     if args.write:
         OUT_DIR.mkdir(parents=True, exist_ok=True)

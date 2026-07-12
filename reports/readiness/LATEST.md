@@ -1,6 +1,8 @@
-# Go-live readiness scoreboard — 2026-07-12T1323 (MOA merge: bullish-momentum PCS walk-forward REJECT)
+# Go-live readiness scoreboard — 2026-07-12T1437 (MOA finalizer: mild-pullback rolling-origin REJECT)
 
 Source: `docs/GO_LIVE_READINESS.md`. Honest pass/fail. Not an arm.
+
+**2026-07-12T1437 MoA finalizer (Grok PASS 8/8; Sol green):** Exact rerun reproduced `.cache/platform/pcs_pullback_rolling_origin_lab_2026-07-12T1437.json` decision `REJECT_MILD_PULLBACK_PCS_ROLLING_ORIGIN` (8/8 symbols, 24 folds, 0 all-fold passes, 0 errors; only PLTR fold2 / SMCI fold1 / AMD fold0 train both-cost pass then holdout fail — PLTR slip −$32.69 DD $170.64 vs fixed +$41.92 DD $131.80; SMCI −$52.67/−$13.76; AMD −$245.67/−$138.86) + integrity 286/286 (signal0/reentry0). Added explicit dense-negative/integrity window fail-close coverage; focused 22/22 and full 104/104. Proxy/synthetic claim scope remains L0; archive still 1/3 dates; no hyp/L1/leader/B-check change; P2+P3 score 4/5. Mild-pullback family leave stands. **ONE NEXT:** next distinct NY RTH date append all-expiration TSLL archive 1→2/3 without duplicates; no provider history/observed calibration/L1 before 3/3; leave closed families closed; no live/agentic/shadow. MOA_FINALIZE_READY; deterministic integration pending.
 
 **2026-07-12T1431 completion-gate audit:** No strategy/readiness change; L0 BUILD and no living leader remain. The 1426 zero-input implementation is intact, but its preflight-shaped completion receipt was invalid. Added a fail-closed manual/direct-main postflight with tracked-report evidence and atomic receipts while preserving wrapper MoA artifact checks. Focused 20/20 and full 99/99; deterministic integration pending.
 
@@ -175,7 +177,7 @@ BLOCKERS:
   - Agentic RH account ~$0 / no options level
   - No DNA reaches L1 and the prior b195f5fe relative leader is removed from capital path after listed-expiry DD deterioration plus negative 5% PnL
   - Exact observed PCS/CCS/IC leg/time join, archive-backed date-aware contract-grid provider, and all-expiration atomic append capture exist, but the archive covers only 1/3 required market dates and matched 0/248 historical requirements
-NEXT: BUILD — run one predeclared rolling-origin mild bearish-pullback PCS walk-forward on BAC/F/SOFI/PLTR/TSLL/SMCI/AMD/AAPL using exact 7-DTE `ret_1d_max=-0.005` / RSI 35–50 mirror DNA, train-gate before every fold holdout, unchanged two cost axes, and reject-unless fold/window DD ≤$75 throughout. Do not grid-expand or reverse-engineer current controls. If a distinct NY RTH date exists during that run, append TSLL all-expiration archive 1→2/3; no provider-backed history before 3/3. Bullish-momentum, close-shock, asymmetric IC, collar, and BAC Fri7 management remain closed; no shadow/live.
+NEXT: BUILD/RTH — on the next distinct New York RTH market date, append one all-expiration TSLL observation snapshot and verify archive density advances from 1/3 to 2/3 market dates without duplicate identical rows. Do not run provider-backed historical simulation, observed-cost calibration, or L1 claims before 3/3 dates (`provider_backtest_eligible=true`). Leave mild-pullback, bullish-momentum, close-shock, asymmetric IC, collar, and BAC Fri7 management closed unless a genuinely new evidence class appears; no shadow/live.
 ```
 
 Last RTH 2026-07-10T1230: STAND_ASIDE (b195f5fe bear_dte=0); only non-fit TSLA put denied.
@@ -233,4 +235,4 @@ Trader free on symbol/strategy for **discovery**. Capital path is **earned by tr
 
 ## Phase decision
 
-Stay **BUILD / L0**. The 2026-07-12T1323 bullish-momentum PCS walk-forward rejected the family at 0/8 complete holdout passes; BAC was the only train pass and then failed fixed-cost holdout PnL plus both $75 DD gates. Close-shock, collar, asymmetric IC, BAC Fri7 management, and router families remain closed. Observed archive remains 1/3 dates; exact historical coverage remains 0/248. No living quality leader, no capital path, no auto-promote, and no live packet. Finalizer is green; deterministic integration remains pending.
+Stay **BUILD / L0**. The 2026-07-12T1437 predeclared mild-pullback rolling-origin PCS experiment rejected the family at 0/8 all-fold passes; the only three train survivors all failed untouched holdout PnL and/or the $75 DD gate. Mild-pullback, bullish-momentum, close-shock, collar, asymmetric IC, BAC Fri7 management, and router families remain closed. Observed archive remains 1/3 dates; exact historical coverage remains 0/248. No living quality leader, no capital path, no auto-promote, and no live packet. Finalizer is green; deterministic integration remains pending.
