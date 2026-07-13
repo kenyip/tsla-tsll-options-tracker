@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "stamp": "2026-07-12T1835",
+  "loop_signature": "simulator/corporate-action/nasdaq-announcement-archive-provider",
+  "outcome": "CAPABILITY",
+  "useful_deltas": [
+    {
+      "kind": "capability",
+      "summary": "Added a fail-closed immutable Nasdaq cash-dividend archive and as-of provider that preserves declarationDate as known_at for supported eventful listings without converting empty or unsupported history into coverage.",
+      "novelty_key": "nasdaq-declaration-dividend-archive-provider-v1",
+      "artifacts": [
+        "trader_platform/research/dividend_event_archive.py",
+        "scripts/dividend_event_observations.py",
+        "tests/test_dividend_event_archive.py",
+        "docs/DIVIDEND_EVENT_DATA_BOUNDARY.md"
+      ]
+    },
+    {
+      "kind": "repair",
+      "summary": "Moved archive coverage to the earliest retained announcement time so the first announced pre-ex event is servable, while rejecting loaded announcements later than snapshot observation time.",
+      "novelty_key": "dividend-archive-known-at-coverage-boundary-v1",
+      "artifacts": [
+        "trader_platform/research/dividend_event_archive.py",
+        "tests/test_dividend_event_archive.py",
+        "docs/DIVIDEND_EVENT_DATA_BOUNDARY.md"
+      ]
+    }
+  ],
+  "critic_findings": [
+    {
+      "finding": "coverage_start based on the earliest ex-date orphaned the first event between its known_at and ex-date.",
+      "status": "repaired",
+      "rationale": "Construction and loader validation now use min(known_at); a boundary test proves the first event is returned after announcement and before ex-date, and loader timing rejects known_at later than observed_at.",
+      "repair_artifacts": [
+        "trader_platform/research/dividend_event_archive.py"
+      ],
+      "test_artifacts": [
+        "tests/test_dividend_event_archive.py"
+      ]
+    },
+    {
+      "finding": "Split-unadjusted Nasdaq amounts can distort deep-history assignment thresholds against split-adjusted underlyings.",
+      "status": "rejected",
+      "rationale": "Rejected as an unaddressed calibrated-result defect because this wake makes no historical assignment-count or edge claim. The accepted limitation is explicit in docs/DIVIDEND_EVENT_DATA_BOUNDARY.md and remains a qualification gate before any such claim."
+    },
+    {
+      "finding": "MU and AAL inventory counts were not backed by normalized on-disk archives.",
+      "status": "rejected",
+      "rationale": "The boundary document labels these as live source inventory, not provider eligibility. Only AAPL is archived/cited as a supported example, and NEXT permits MU only after normalized capture."
+    },
+    {
+      "finding": "Nasdaq aggregation may include preferred or wrong security-class rows and lacks a positive identity proof.",
+      "status": "rejected",
+      "rationale": "Rejected as permission to broaden the source: the provider remains exact-symbol archived L0/single-source plumbing, while independent completeness and security-class identity are explicit prerequisites in NEXT and project truth."
+    },
+    {
+      "finding": "Readiness LATEST still represented the prior 1806 inventory seed and needed a full 1835 finalizer outcome.",
+      "status": "rejected",
+      "rationale": "Rejected as a remaining defect after finalization: reports/readiness/LATEST.md is superseded with the repaired 1835 outcome, BUILD/L0 judgment, final verification, and one current NEXT."
+    },
+    {
+      "finding": "A Nasdaq-specific contiguous-declaration and empty-history pitfall should be promoted for reuse.",
+      "status": "rejected",
+      "rationale": "Rejected as missing durable residue after finalization: the trader-self-evolution profile skill now records contiguous cash/USD retention, first-N/A truncation, empty/unsupported None semantics, earliest-known_at coverage, and amount/security-class claim limits."
+    }
+  ],
+  "closed_families": [],
+  "data_dependencies": [
+    "An independent issuer or filing announcement source is required to qualify AAPL event completeness and security-class identity; MU requires a normalized archive before comparison.",
+    "Split-adjusted amount/spot qualification is required before deep-history assignment counts can be treated as calibrated evidence.",
+    "Observed historical option surfaces remain required for evidence above L0.",
+    "Forward TSLL option archive remains one of three required distinct New York market dates for replay plumbing."
+  ],
+  "next": "Cross-check archived Nasdaq cash-dividend events for AAPL (and MU only if a normalized archive is captured first) against one independent issuer/filing announcement source; qualify per-symbol provenance only if completeness and security-class identity are proved, otherwise keep the provider L0/single-source and redirect to another open historical-underlying or simulator-capability route."
+}
