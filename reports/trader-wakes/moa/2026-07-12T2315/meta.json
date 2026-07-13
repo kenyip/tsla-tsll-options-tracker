@@ -1,0 +1,30 @@
+{
+  "stamp": "2026-07-12T2315",
+  "lab": "income_build_lab",
+  "completion_contract_version": 3,
+  "context": "manual",
+  "context_source": "override",
+  "goal_source": "override",
+  "goal_file": "/Users/jarvis/dev/tsla-tsll-options-tracker/configs/build_lab_free_goal.txt",
+  "goal": "Continue the autonomous compounding BUILD program toward an L1 paper-testable decision rule. Use the latest merged NEXT and structured history as context, but choose the highest-information valid loop independently. Close the narrow AAPL dividend-provenance route quickly if an independent explicitly labeled ex-date source does not survive a bounded fail-closed inventory; do not let that dependency tunnel the program. A useful run must yield a candidate advance, decisive falsification, structural/evidence repair, reusable capability/test, or a materially higher-information seed. Preserve broad symbol/strategy freedom, closed-family stop rules, claim-scoped evidence boundaries, L0 labeling for proxy/synthetic work, and all paper/live/arm gates. Complete the full executor\u2192challenger\u2192finalizer\u2192deterministic integration/postflight contract or leave exact resumable residue.",
+  "mode": "both",
+  "executor": {
+    "provider": "openai-codex",
+    "model": "gpt-5.6-sol"
+  },
+  "challenger": {
+    "provider": "xai-oauth",
+    "model": "grok-4.5"
+  },
+  "finalizer": {
+    "provider": "openai-codex",
+    "model": "gpt-5.6-sol"
+  },
+  "base_head": "3472686188858dc75364b7b1e81b945b62936d04",
+  "run_branch": "trader/run-2026-07-12T2315",
+  "structures": "",
+  "top_symbols": 8,
+  "mutants": 2,
+  "sleeve_usd": 3000.0,
+  "repo": "/Users/jarvis/dev/tsla-tsll-options-tracker"
+}

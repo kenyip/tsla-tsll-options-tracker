@@ -20,6 +20,7 @@ from trader_platform.research.dividend_event_archive import DividendEventArchive
 
 _APPLE_HOST = "www.apple.com"
 _APPLE_SITEMAP = "https://www.apple.com/newsroom/sitemap.xml"
+_STOCKANALYSIS_AAPL_DIVIDEND_URL = "https://stockanalysis.com/stocks/aapl/dividend/"
 _APPLE_RESULTS_PATH = re.compile(
     r"^/newsroom/\d{4}/\d{2}/apple-reports-[a-z0-9-]*results/$"
 )
@@ -47,6 +48,42 @@ class _TextExtractor(HTMLParser):
         return " ".join(" ".join(self.parts).split())
 
 
+class _DividendHistoryTableParser(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__()
+        self.in_table = False
+        self.in_cell = False
+        self.cell_parts: list[str] = []
+        self.row: list[str] = []
+        self.tables: list[list[list[str]]] = []
+        self.table: list[list[str]] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, Optional[str]]]) -> None:
+        del attrs
+        if tag == "table":
+            self.in_table = True
+            self.table = []
+        elif self.in_table and tag == "tr":
+            self.row = []
+        elif self.in_table and tag in {"th", "td"}:
+            self.in_cell = True
+            self.cell_parts = []
+
+    def handle_data(self, data: str) -> None:
+        if self.in_cell:
+            self.cell_parts.append(data)
+
+    def handle_endtag(self, tag: str) -> None:
+        if self.in_table and tag in {"th", "td"} and self.in_cell:
+            self.row.append(" ".join(" ".join(self.cell_parts).split()))
+            self.in_cell = False
+        elif self.in_table and tag == "tr" and self.row:
+            self.table.append(self.row)
+        elif self.in_table and tag == "table":
+            self.tables.append(self.table)
+            self.in_table = False
+
+
 @dataclass(frozen=True)
 class AppleDividendRelease:
     url: str
@@ -64,6 +101,67 @@ class AppleDividendRelease:
             "record_date": self.record_date.isoformat(),
             "payment_date": self.payment_date.isoformat(),
             "security_identity": self.security_identity,
+        }
+
+
+@dataclass(frozen=True)
+class IndependentExDateRow:
+    ex_date: pd.Timestamp
+    amount_per_share: float
+    record_date: pd.Timestamp
+    payment_date: pd.Timestamp
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "ex_date": self.ex_date.isoformat(),
+            "amount_per_share": self.amount_per_share,
+            "record_date": self.record_date.isoformat(),
+            "payment_date": self.payment_date.isoformat(),
+        }
+
+
+@dataclass(frozen=True)
+class ExDateCrosscheck:
+    symbol: str
+    archive_source: str
+    independent_page: str
+    independent_data_source: str
+    coverage_start: pd.Timestamp
+    coverage_end: pd.Timestamp
+    target_events: int
+    source_events_total: int
+    source_events_in_window: int
+    matched_events: int
+    missing_target_ex_dates: tuple[str, ...]
+    unexpected_source_ex_dates: tuple[str, ...]
+    provider_status: str
+    qualified_fields: tuple[str, ...]
+    unqualified_fields: tuple[str, ...]
+    rows: tuple[IndependentExDateRow, ...]
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "schema_version": 1,
+            "symbol": self.symbol,
+            "archive_source": self.archive_source,
+            "independent_page": self.independent_page,
+            "independent_data_source": self.independent_data_source,
+            "coverage_start": self.coverage_start.isoformat(),
+            "coverage_end": self.coverage_end.isoformat(),
+            "target_events": self.target_events,
+            "source_events_total": self.source_events_total,
+            "source_events_in_window": self.source_events_in_window,
+            "matched_events": self.matched_events,
+            "missing_target_ex_dates": list(self.missing_target_ex_dates),
+            "unexpected_source_ex_dates": list(self.unexpected_source_ex_dates),
+            "provider_status": self.provider_status,
+            "qualified_fields": list(self.qualified_fields),
+            "unqualified_fields": list(self.unqualified_fields),
+            "rows": [row.to_dict() for row in self.rows],
+            "claim_limit": (
+                "ex-date provenance inventory only; incomplete interval coverage does not "
+                "qualify ex_date, assignment calibration, strategy evidence, or L1"
+            ),
         }
 
 
@@ -202,6 +300,134 @@ def _fetch_text(url: str) -> str:
     request = Request(url, headers={"User-Agent": "TraderResearch/1.0"})
     with urlopen(request, timeout=20) as response:  # noqa: S310 - fixed HTTPS hosts
         return response.read().decode("utf-8")
+
+
+def _header_key(value: str) -> str:
+    return re.sub(r"[^a-z]", "", value.lower())
+
+
+def parse_stockanalysis_aapl_dividend_history(
+    page_html: str,
+) -> tuple[IndependentExDateRow, ...]:
+    """Parse explicitly labeled AAPL ex-dates from the named S&P-backed page."""
+    text_parser = _TextExtractor()
+    text_parser.feed(page_html)
+    page_text = text_parser.text()
+    if "Apple (AAPL) Dividend History" not in page_text:
+        raise ValueError("StockAnalysis page lacks canonical AAPL dividend identity")
+    if "S&P Global Market Intelligence" not in page_text or not re.search(
+        r"href=[\"']https://www\.spglobal\.com/market-intelligence/[^\"']*[\"']",
+        page_html,
+        flags=re.IGNORECASE,
+    ):
+        raise ValueError("StockAnalysis page lacks the named independent data source")
+
+    table_parser = _DividendHistoryTableParser()
+    table_parser.feed(page_html)
+    expected_header = ["exdividenddate", "cashamount", "recorddate", "paydate"]
+    selected: Optional[list[list[str]]] = None
+    for table in table_parser.tables:
+        if table and [_header_key(cell) for cell in table[0]] == expected_header:
+            selected = table
+            break
+    if selected is None:
+        raise ValueError("StockAnalysis page lacks an explicit ex-dividend-date table")
+    if len(selected) == 1:
+        raise ValueError("StockAnalysis ex-dividend-date table is empty")
+
+    rows: list[IndependentExDateRow] = []
+    for raw in selected[1:]:
+        if len(raw) != 4:
+            raise ValueError("StockAnalysis dividend row has an unexpected shape")
+        try:
+            amount = float(raw[1].replace("$", "").replace(",", ""))
+        except ValueError as exc:
+            raise ValueError("StockAnalysis dividend amount is invalid") from exc
+        if not math.isfinite(amount) or amount <= 0:
+            raise ValueError("StockAnalysis dividend amount must be positive and finite")
+        row = IndependentExDateRow(
+            ex_date=_timestamp(raw[0]),
+            amount_per_share=amount,
+            record_date=_timestamp(raw[2]),
+            payment_date=_timestamp(raw[3]),
+        )
+        if not row.ex_date <= row.record_date <= row.payment_date:
+            raise ValueError("StockAnalysis dividend dates are not chronologically valid")
+        rows.append(row)
+    ex_dates = [row.ex_date for row in rows]
+    if len(ex_dates) != len(set(ex_dates)):
+        raise ValueError("StockAnalysis dividend table has duplicate ex-dates")
+    return tuple(sorted(rows, key=lambda row: row.ex_date))
+
+
+def snapshot_stockanalysis_aapl_dividend_history(
+    *, fetch_text: Callable[[str], str] = _fetch_text
+) -> tuple[IndependentExDateRow, ...]:
+    return parse_stockanalysis_aapl_dividend_history(
+        fetch_text(_STOCKANALYSIS_AAPL_DIVIDEND_URL)
+    )
+
+
+def crosscheck_stockanalysis_ex_dates(
+    archive: DividendEventArchive,
+    rows: Sequence[IndependentExDateRow],
+    *,
+    coverage_start: pd.Timestamp,
+    coverage_end: pd.Timestamp,
+) -> ExDateCrosscheck:
+    """Qualify ex_date only when the independent source covers the exact target set."""
+    if archive.symbol != "AAPL" or archive.source != "nasdaq_dividend_history":
+        raise ValueError("ex-date cross-check requires the normalized AAPL Nasdaq archive")
+    start = _timestamp(coverage_start)
+    end = _timestamp(coverage_end)
+    if start > end:
+        raise ValueError("ex-date coverage starts after it ends")
+    target = tuple(event for event in archive.events if start <= event.known_at <= end)
+    if not target:
+        raise ValueError("ex-date cross-check target interval is empty")
+    target_dates = {event.ex_date for event in target}
+    first_ex_date = min(target_dates)
+    last_ex_date = max(target_dates)
+    source_window = tuple(
+        row for row in rows if first_ex_date <= row.ex_date <= last_ex_date
+    )
+    source_dates = {row.ex_date for row in source_window}
+    matched = target_dates & source_dates
+    missing = target_dates - source_dates
+    unexpected = source_dates - target_dates
+    complete = not missing and not unexpected and len(matched) == len(target)
+    if complete:
+        status = "bounded_ex_date_corroboration"
+    elif missing:
+        status = "insufficient_bounded_coverage"
+    else:
+        status = "ex_date_conflict"
+    qualified = ("ex_date",) if complete else ()
+    unqualified = ("known_at", "amount_per_share", "security_identity")
+    if not complete:
+        unqualified = ("ex_date", *unqualified)
+    return ExDateCrosscheck(
+        symbol=archive.symbol,
+        archive_source=archive.source,
+        independent_page=_STOCKANALYSIS_AAPL_DIVIDEND_URL,
+        independent_data_source="S&P Global Market Intelligence",
+        coverage_start=start,
+        coverage_end=end,
+        target_events=len(target),
+        source_events_total=len(rows),
+        source_events_in_window=len(source_window),
+        matched_events=len(matched),
+        missing_target_ex_dates=tuple(
+            sorted(ts.date().isoformat() for ts in missing)
+        ),
+        unexpected_source_ex_dates=tuple(
+            sorted(ts.date().isoformat() for ts in unexpected)
+        ),
+        provider_status=status,
+        qualified_fields=qualified,
+        unqualified_fields=unqualified,
+        rows=source_window,
+    )
 
 
 def snapshot_apple_dividend_releases(

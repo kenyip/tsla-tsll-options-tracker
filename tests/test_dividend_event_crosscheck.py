@@ -8,9 +8,12 @@ from trader_platform.research.corporate_action_risk import DividendEvent
 from trader_platform.research.dividend_event_archive import DividendEventArchive
 from trader_platform.research.dividend_event_crosscheck import (
     AppleDividendRelease,
+    IndependentExDateRow,
     apple_results_urls_from_sitemap,
     crosscheck_apple_dividends,
+    crosscheck_stockanalysis_ex_dates,
     parse_apple_dividend_release,
+    parse_stockanalysis_aapl_dividend_history,
 )
 
 
@@ -53,7 +56,197 @@ def _archive(events):
     )
 
 
+def _stockanalysis_html(rows):
+    body = "".join(
+        "<tr>" + "".join(f"<td>{cell}</td>" for cell in row) + "</tr>"
+        for row in rows
+    )
+    return f"""
+    <html><head><title>Apple (AAPL) Dividend History</title></head><body>
+      <table><thead><tr>
+        <th>Ex-Div<span>idend Date</span></th><th>Cash Amount</th>
+        <th>Record Date</th><th>Pay Date</th>
+      </tr></thead><tbody>{body}</tbody></table>
+      <span>Data Source:</span>
+      <a href="https://www.spglobal.com/market-intelligence/en?utm_source=test">
+        S&amp;P Global Market Intelligence
+      </a>
+    </body></html>
+    """
+
+
 class DividendEventCrosscheckTest(unittest.TestCase):
+    def test_stockanalysis_parser_requires_explicit_table_and_named_source(self):
+        page = _stockanalysis_html(
+            [["Nov 10, 2025", "$0.260", "Nov 10, 2025", "Nov 13, 2025"]]
+        )
+
+        rows = parse_stockanalysis_aapl_dividend_history(page)
+
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0].ex_date, pd.Timestamp("2025-11-10"))
+        self.assertEqual(rows[0].amount_per_share, 0.26)
+        with self.assertRaisesRegex(ValueError, "named independent data source"):
+            parse_stockanalysis_aapl_dividend_history(
+                page.replace("spglobal.com", "example.com")
+            )
+        with self.assertRaisesRegex(ValueError, "explicit ex-dividend-date table"):
+            parse_stockanalysis_aapl_dividend_history(
+                page.replace("Ex-Div<span>idend Date", "Event Date")
+            )
+
+        duplicate_page = _stockanalysis_html(
+            [
+                ["Nov 10, 2025", "$0.260", "Nov 10, 2025", "Nov 13, 2025"],
+                ["Nov 10, 2025", "$0.260", "Nov 10, 2025", "Nov 13, 2025"],
+            ]
+        )
+        with self.assertRaisesRegex(ValueError, "duplicate ex-dates"):
+            parse_stockanalysis_aapl_dividend_history(duplicate_page)
+
+    def test_stockanalysis_parser_rejects_bad_amount_and_chronology(self):
+        with self.assertRaisesRegex(ValueError, "amount must be positive and finite"):
+            parse_stockanalysis_aapl_dividend_history(
+                _stockanalysis_html(
+                    [["Nov 10, 2025", "$0", "Nov 10, 2025", "Nov 13, 2025"]]
+                )
+            )
+        with self.assertRaisesRegex(ValueError, "chronologically valid"):
+            parse_stockanalysis_aapl_dividend_history(
+                _stockanalysis_html(
+                    [["Nov 10, 2025", "$0.260", "Nov 7, 2025", "Nov 13, 2025"]]
+                )
+            )
+
+    def test_unexpected_independent_ex_date_is_a_conflict(self):
+        published_one = cast(pd.Timestamp, pd.Timestamp("2025-07-31"))
+        published_two = cast(pd.Timestamp, pd.Timestamp("2025-10-30"))
+        archive = _archive(
+            [
+                DividendEvent(
+                    "AAPL",
+                    cast(pd.Timestamp, pd.Timestamp("2025-08-11")),
+                    0.26,
+                    published_one,
+                ),
+                DividendEvent(
+                    "AAPL",
+                    cast(pd.Timestamp, pd.Timestamp("2025-11-10")),
+                    0.26,
+                    published_two,
+                ),
+            ]
+        )
+        rows = [
+            IndependentExDateRow(
+                ex_date=cast(pd.Timestamp, pd.Timestamp(ex_date)),
+                amount_per_share=0.26,
+                record_date=cast(pd.Timestamp, pd.Timestamp(ex_date)),
+                payment_date=cast(pd.Timestamp, pd.Timestamp(pay_date)),
+            )
+            for ex_date, pay_date in (
+                ("2025-08-11", "2025-08-14"),
+                ("2025-09-15", "2025-09-18"),
+                ("2025-11-10", "2025-11-13"),
+            )
+        ]
+
+        result = crosscheck_stockanalysis_ex_dates(
+            archive,
+            rows,
+            coverage_start=published_one,
+            coverage_end=published_two,
+        )
+
+        self.assertEqual(result.provider_status, "ex_date_conflict")
+        self.assertEqual(result.missing_target_ex_dates, ())
+        self.assertEqual(result.unexpected_source_ex_dates, ("2025-09-15",))
+        self.assertEqual(result.qualified_fields, ())
+        self.assertIn("ex_date", result.unqualified_fields)
+
+    def test_incomplete_independent_ex_dates_fail_closed(self):
+        published_one = cast(pd.Timestamp, pd.Timestamp("2025-07-31"))
+        published_two = cast(pd.Timestamp, pd.Timestamp("2025-10-30"))
+        archive = _archive(
+            [
+                DividendEvent(
+                    "AAPL",
+                    cast(pd.Timestamp, pd.Timestamp("2025-08-11")),
+                    0.26,
+                    published_one,
+                ),
+                DividendEvent(
+                    "AAPL",
+                    cast(pd.Timestamp, pd.Timestamp("2025-11-10")),
+                    0.26,
+                    published_two,
+                ),
+            ]
+        )
+        one_row = IndependentExDateRow(
+            ex_date=cast(pd.Timestamp, pd.Timestamp("2025-11-10")),
+            amount_per_share=0.26,
+            record_date=cast(pd.Timestamp, pd.Timestamp("2025-11-10")),
+            payment_date=cast(pd.Timestamp, pd.Timestamp("2025-11-13")),
+        )
+
+        result = crosscheck_stockanalysis_ex_dates(
+            archive,
+            [one_row],
+            coverage_start=published_one,
+            coverage_end=published_two,
+        )
+
+        self.assertEqual(result.provider_status, "insufficient_bounded_coverage")
+        self.assertEqual(result.matched_events, 1)
+        self.assertEqual(result.missing_target_ex_dates, ("2025-08-11",))
+        self.assertEqual(result.qualified_fields, ())
+        self.assertIn("ex_date", result.unqualified_fields)
+
+    def test_complete_independent_ex_dates_qualify_only_ex_date(self):
+        published_one = cast(pd.Timestamp, pd.Timestamp("2025-07-31"))
+        published_two = cast(pd.Timestamp, pd.Timestamp("2025-10-30"))
+        archive = _archive(
+            [
+                DividendEvent(
+                    "AAPL",
+                    cast(pd.Timestamp, pd.Timestamp("2025-08-11")),
+                    0.26,
+                    published_one,
+                ),
+                DividendEvent(
+                    "AAPL",
+                    cast(pd.Timestamp, pd.Timestamp("2025-11-10")),
+                    0.26,
+                    published_two,
+                ),
+            ]
+        )
+        rows = [
+            IndependentExDateRow(
+                ex_date=cast(pd.Timestamp, pd.Timestamp(ex_date)),
+                amount_per_share=999.0,
+                record_date=cast(pd.Timestamp, pd.Timestamp(ex_date)),
+                payment_date=cast(pd.Timestamp, pd.Timestamp(pay_date)),
+            )
+            for ex_date, pay_date in (
+                ("2025-08-11", "2025-08-14"),
+                ("2025-11-10", "2025-11-13"),
+            )
+        ]
+
+        result = crosscheck_stockanalysis_ex_dates(
+            archive,
+            rows,
+            coverage_start=published_one,
+            coverage_end=published_two,
+        )
+
+        self.assertEqual(result.provider_status, "bounded_ex_date_corroboration")
+        self.assertEqual(result.qualified_fields, ("ex_date",))
+        self.assertNotIn("ex_date", result.unqualified_fields)
+        self.assertIn("amount_per_share", result.unqualified_fields)
+
     def test_apple_release_parser_requires_explicit_common_stock_identity(self):
         release = parse_apple_dividend_release(_RELEASE_URL, _release_html())
 

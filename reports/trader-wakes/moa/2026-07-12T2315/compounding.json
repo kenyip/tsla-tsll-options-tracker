@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "stamp": "2026-07-12T2315",
+  "loop_signature": "simulator/corporate-action/aapl-independent-exdate-exact-set-route-close",
+  "outcome": "FALSIFIED",
+  "useful_deltas": [
+    {
+      "kind": "capability",
+      "summary": "Added a named-source StockAnalysis/S&P AAPL dividend parser and exact-set ex-date qualification gate with an atomic bounded cross-check CLI and fail-closed behavioral controls.",
+      "novelty_key": "stockanalysis-aapl-exdate-exact-set-gate-v1",
+      "artifacts": [
+        "trader_platform/research/dividend_event_crosscheck.py",
+        "scripts/dividend_exdate_crosscheck.py",
+        "tests/test_dividend_event_crosscheck.py",
+        "docs/DIVIDEND_EVENT_DATA_BOUNDARY.md"
+      ]
+    },
+    {
+      "kind": "falsification",
+      "summary": "Falsified full 40-event no-auth AAPL ex-date corroboration: the only reproducible explicitly labeled independent table supplied 20 exact matches but omitted 20 predeclared targets, so ex_date remains wholly unqualified and the equivalent aggregator route closes at partial L0.",
+      "novelty_key": "aapl-noauth-exdate-40event-route-close-v1",
+      "artifacts": [
+        "docs/DIVIDEND_EVENT_DATA_BOUNDARY.md",
+        "reports/trader-wakes/2026-07-12T2315-moa-merge.md",
+        "reports/trader-wakes/moa/2026-07-12T2315/executor-closeout.md",
+        "reports/trader-wakes/moa/2026-07-12T2315/learning-promotion.md"
+      ]
+    }
+  ],
+  "critic_findings": [
+    {
+      "finding": "A dedicated unexpected in-window ex-date negative control was missing from the exact-set gate.",
+      "status": "repaired",
+      "rationale": "The finalizer added a control with every target plus one non-target date inside the bounded ex-date range; it proves ex_date_conflict, exact unexpected-date reporting, empty qualification, and explicit ex_date non-qualification.",
+      "repair_artifacts": [
+        "trader_platform/research/dividend_event_crosscheck.py"
+      ],
+      "test_artifacts": [
+        "tests/test_dividend_event_crosscheck.py"
+      ]
+    },
+    {
+      "finding": "StockAnalysis chronology and malformed amount enforcement lacked direct unit boundaries.",
+      "status": "repaired",
+      "rationale": "The finalizer added direct parser controls proving zero amount and ex-date-after-record-date rows fail closed while retaining existing identity, source, schema, shape, and duplicate tests.",
+      "repair_artifacts": [
+        "trader_platform/research/dividend_event_crosscheck.py"
+      ],
+      "test_artifacts": [
+        "tests/test_dividend_event_crosscheck.py"
+      ]
+    },
+    {
+      "finding": "The rejected six-page source inventory was prose-only rather than a separate machine JSON note.",
+      "status": "rejected",
+      "rationale": "A separate JSON is not required for the bounded decision: the reproducible StockAnalysis/S&P 20/40 artifact is decisive, and the other endpoint probes are explicitly narrative, source-specific rejects rather than a universal exhaustion claim. Creating an after-the-fact JSON would not strengthen provenance or reproduce inaccessible/ambiguous payloads."
+    },
+    {
+      "finding": "The double-diagonal NEXT needed explicit anti-fragility constraints to avoid another proxy knob-polish loop.",
+      "status": "rejected",
+      "rationale": "Rejected as an outstanding defect because the merged seed already predeclares exact four-leg percentage and fixed-dollar costs, no-same-bar reentry, absolute max-loss/drawdown/dense-negative gates, chronological multi-symbol falsification, L0-only scope, no first-pass registration, and closed-family non-reopening. It is future work, not a claim in this run."
+    }
+  ],
+  "closed_families": [
+    "aapl-noauth-explicit-exdate-40event-aggregator-route"
+  ],
+  "data_dependencies": [
+    "Reopening AAPL ex_date qualification requires a genuinely new independent source class that explicitly labels and covers the missing 2016-08-04 through 2021-05-07 target dates; equivalent no-auth aggregator browsing is closed.",
+    "Split-adjusted dividend amount and spot qualification remain required before deep-history assignment counts can be calibrated.",
+    "Observed historical option surfaces remain required for evidence above L0.",
+    "Forward TSLL option archive remains one of three required distinct New York market dates for replay plumbing."
+  ],
+  "next": "Build one minimal paper-only double_diagonal_spread defined-debit BS/daily-bar scaffold with catalog, simulator, smoke, exact four-leg percentage and fixed-$0.01-per-leg costs, no-same-bar reentry, and one-lot max_loss_usd <= $300; run one predeclared multi-symbol chronological dual-cost falsification and reject unless both cost axes are non-vacuously positive with window max DD <= $75 and dense-negative windows <= 5. Keep L0, do not register proxy SHIP on first pass, reopen closed proxy families or the AAPL ex-date inventory, or paper/shadow/arm/live."
+}
