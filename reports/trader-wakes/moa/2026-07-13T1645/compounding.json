@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "stamp": "2026-07-13T1645",
+  "loop_signature": "historical-underlying/free-defined-risk/dry-evolve/pre-registration-absolute-gate",
+  "outcome": "CAPABILITY",
+  "useful_deltas": [
+    {
+      "kind": "capability",
+      "summary": "Added a dry-run-only, structure-pure pre-registration adapter that stress-tests every transient evolve SHIP through baseline, B3, percentage-cost, fixed-cost, max-loss, window-drawdown, and dense-negative gates while withholding registration without chronological holdout proof.",
+      "novelty_key": "dry-evolve-pre-registration-absolute-gate-v1",
+      "artifacts": [
+        "scripts/evolve_pre_registration_stress.py",
+        "tests/test_evolve_pre_registration_stress.py"
+      ]
+    },
+    {
+      "kind": "falsification",
+      "summary": "One fixed-seed 36-DNA dry search across eight symbols and four defined-risk structures produced three transient SHIPs, all rejected before registry mutation; complete proxy gates and registration eligibility were both zero.",
+      "novelty_key": "free-definedriskpop36-reject-2026-07-13-cycle",
+      "artifacts": [
+        "reports/trader-wakes/moa/2026-07-13T1645/evolve-discovery.json",
+        "reports/trader-wakes/moa/2026-07-13T1645/evolve-pre-registration-stress.json"
+      ]
+    },
+    {
+      "kind": "repair",
+      "summary": "Repaired capital semantics so capital_fit_usd is observed one-lot required capital rather than sleeve size, separated sleeve/open-risk fields, and added explicit unsupported-structure and multi-symbol fail-closed boundaries.",
+      "novelty_key": "pre-registration-capital-label-population-boundaries-v1",
+      "artifacts": [
+        "scripts/evolve_pre_registration_stress.py",
+        "tests/test_evolve_pre_registration_stress.py",
+        "reports/trader-wakes/moa/2026-07-13T1645/evolve-pre-registration-stress.json"
+      ]
+    }
+  ],
+  "critic_findings": [
+    {
+      "finding": "F1: capital_fit_usd was hard-coded to the $3,000 sleeve instead of derived from observed one-lot capital required.",
+      "status": "repaired",
+      "rationale": "The regenerated payload reports capital_fit_usd equal to one_lot_max_loss_usd for all three rows ($192.60/$195.78/$199.56), with sleeve_usd and open-risk budget separate; operating max_lots remains one.",
+      "repair_artifacts": [
+        "scripts/evolve_pre_registration_stress.py"
+      ],
+      "test_artifacts": [
+        "tests/test_evolve_pre_registration_stress.py"
+      ]
+    },
+    {
+      "finding": "F2: raw evolve SHIP rows can have negative composite scores.",
+      "status": "rejected",
+      "rationale": "Rejected as a code defect or reason to retune evolve: the source rows explicitly use reason=positive_sim while drawdown penalties drive score negative. The dry pre-registration gate treats SHIP only as a stress trigger, and the lesson is promoted to trader-self-evolution."
+    },
+    {
+      "finding": "F3: focused tests lacked explicit multi-symbol and unsupported-structure rejection boundaries.",
+      "status": "repaired",
+      "rationale": "Added both fail-closed cases; the focused suite now passes 8/8 before any market-data load or stress execution.",
+      "repair_artifacts": [
+        "scripts/evolve_pre_registration_stress.py"
+      ],
+      "test_artifacts": [
+        "tests/test_evolve_pre_registration_stress.py"
+      ]
+    },
+    {
+      "finding": "F4: SNAP baseline labeling might be imprecise because full-history PnL was positive while verdict was NULL.",
+      "status": "rejected",
+      "rationale": "The evidence artifact explicitly reports full_history pnl=31.09, verdict=NULL, failed baseline_positive_non_vacuous_ship, and failed regime_soft_hold. The reports describe failure of the SHIP/base gate, not negative PnL, so no contradictory claim remains."
+    }
+  ],
+  "closed_families": [
+    "free-definedriskfull-sample-dry-pop-seed-1645-cycle"
+  ],
+  "data_dependencies": [
+    "Chronological train-only evolve selection and untouched-holdout evaluation are required before any transient proxy SHIP can become registration-eligible.",
+    "Observed historical option replay remains independently blocked at two of three TSLL market dates; that limit applies to provider-backed replay/L1 claims, not this L0 historical-underlying capability."
+  ],
+  "next": "Build one chronological pre-registration adapter that performs fixed-seed train-only free defined-risk multi-structure evolve selection and evaluates every selected DNA once on an untouched chronological holdout with the existing absolute gates; require train AND holdout, register nothing on the first pass, keep proxy/L0 labels, and do not reopen closed families or paper/shadow/arm/live."
+}

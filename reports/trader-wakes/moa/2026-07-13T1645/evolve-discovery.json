@@ -1,0 +1,4741 @@
+{
+  "ts": "2026-07-13T23:47:49+00:00",
+  "applied": false,
+  "dry_run": true,
+  "symbols": [
+    "TSLL",
+    "SMCI",
+    "PLTR",
+    "SNAP",
+    "NFLX",
+    "BAC",
+    "COIN",
+    "SOFI"
+  ],
+  "n_population": 36,
+  "results": [
+    {
+      "dna": {
+        "structure": "call_credit_spread",
+        "symbols": [
+          "SNAP"
+        ],
+        "entry_plan": {
+          "side_policy": "prefer_call",
+          "legs": [
+            {
+              "action": "sell",
+              "right": "call",
+              "qty": 1,
+              "role": "short"
+            },
+            {
+              "action": "buy",
+              "right": "call",
+              "qty": 1,
+              "role": "long_protection"
+            }
+          ],
+          "filters": [
+            "iv_rank_min",
+            "min_credit_pct_of_width",
+            "max_loss_budget_usd"
+          ]
+        },
+        "exit_plan": {
+          "ladder": [
+            "profit_target",
+            "max_defined_loss",
+            "delta_breach",
+            "dte_stop",
+            "regime_flip"
+          ],
+          "management": []
+        },
+        "config": {
+          "long_dte": 9,
+          "long_target_delta": 0.18,
+          "min_credit_pct": 0.012,
+          "delta_breach": 0.4,
+          "profit_target": 0.4623173827967143,
+          "max_loss_mult": 1.2,
+          "bear_dte": 0,
+          "regime_flip_exit_enabled": true,
+          "wheel_enabled": false,
+          "roll_on_max_loss": false,
+          "spread_width": 2.0,
+          "defined_loss_exit_frac": 0.85,
+          "dte_stop": 3,
+          "iv_rank_min": 0.0,
+          "max_loss_budget_usd": 250.0,
+          "call_in_bull_ok": false
+        },
+        "parent_id": "dna_9030765f1306",
+        "generation": 1,
+        "dna_id": "dna_01f091495791",
+        "notes": "mutate from dna_9030765f1306 knobs=['max_loss_mult', 'profit_target', 'long_dte']",
+        "last_sim": {
+          "ok": true,
+          "skipped": false,
+          "reason": "positive_sim",
+          "n_trades": 65,
+          "metrics": {
+            "n_trades": 65,
+            "win_rate_pct": 84.61538461538461,
+            "total_pnl_per_contract": 32.038007731065775,
+            "avg_pnl_per_contract": 0.4928924266317812,
+            "avg_win_per_contract": 3.484528627088533,
+            "avg_loss_per_contract": -15.961106675880352,
+            "profit_factor": 1.2007254783872856,
+            "max_dd_per_contract": 43.502159339724585,
+            "avg_days_held": 3.4153846153846152,
+            "exit_reasons": {
+              "dte_stop": 2,
+              "profit_target": 51,
+              "delta_breach": 10,
+              "regime_flip": 2
+            },
+            "n_groups": 65,
+            "group_win_rate_pct": 84.61538461538461,
+            "avg_group_pnl_per_contract": 0.4928924266317812,
+            "worst_group_pnl_per_contract": -26.65447668068589,
+            "best_group_pnl_per_contract": 7.600188019344828,
+            "avg_positions_per_group": 1.0,
+            "max_positions_per_group": 1.0,
+            "avg_max_loss_usd": 194.20687779402942,
+            "p95_max_loss_usd": 197.33631913180824,
+            "worst_max_loss_usd": 197.44028150479147,
+            "avg_width": 2.0,
+            "avg_net_credit": 0.0579312220597057,
+            "structure": "call_credit_spread",
+            "contract_grid_mode": "synthetic"
+          },
+          "verdict": "SHIP",
+          "score": 34.85805026677921,
+          "period": "2y",
+          "pnl_per_contract": 32.038007731065775,
+          "win_rate": 0.8461538461538461,
+          "max_dd_per_contract": 43.502159339724585,
+          "profit_factor": 1.2007254783872856,
+          "ship_bar": {
+            "min_trades_ship": 15,
+            "min_trades_signal": 8,
+            "pf_cap": 10.0
+          },
+          "sim_engine": "pcs_sim:call_credit_spread",
+          "capital": {
+            "structure": "call_credit_spread",
+            "capital_fit_usd": 194.44,
+            "max_loss_usd": 194.44,
+            "max_lots": 3,
+            "capital_fit": "fit_3k",
+            "fits_open_risk_budget": true,
+            "fits_max_loss_budget": true,
+            "open_risk_budget_usd": 750.0,
+            "max_loss_budget_usd": 250.0,
+            "sleeve_usd": 3000.0,
+            "note": "defined_risk_bp_proxy=max_loss_usd (not cash CSP)",
+            "median_max_loss_usd": 194.44,
+            "p95_max_loss_usd": 197.34
+          }
+        }
+      },
+      "ok": true,
+      "skipped": false,
+      "reason": "positive_sim",
+      "n_trades": 65,
+      "metrics": {
+        "n_trades": 65,
+        "win_rate_pct": 84.61538461538461,
+        "total_pnl_per_contract": 32.038007731065775,
+        "avg_pnl_per_contract": 0.4928924266317812,
+        "avg_win_per_contract": 3.484528627088533,
+        "avg_loss_per_contract": -15.961106675880352,
+        "profit_factor": 1.2007254783872856,
+        "max_dd_per_contract": 43.502159339724585,
+        "avg_days_held": 3.4153846153846152,
+        "exit_reasons": {
+          "dte_stop": 2,
+          "profit_target": 51,
+          "delta_breach": 10,
+          "regime_flip": 2
+        },
+        "n_groups": 65,
+        "group_win_rate_pct": 84.61538461538461,
+        "avg_group_pnl_per_contract": 0.4928924266317812,
+        "worst_group_pnl_per_contract": -26.65447668068589,
+        "best_group_pnl_per_contract": 7.600188019344828,
+        "avg_positions_per_group": 1.0,
+        "max_positions_per_group": 1.0,
+        "avg_max_loss_usd": 194.20687779402942,
+        "p95_max_loss_usd": 197.33631913180824,
+        "worst_max_loss_usd": 197.44028150479147,
+        "avg_width": 2.0,
+        "avg_net_credit": 0.0579312220597057,
+        "structure": "call_credit_spread",
+        "contract_grid_mode": "synthetic"
+      },
+      "score": 34.85805026677921,
+      "verdict": "SHIP",
+      "evidence_path": "/Users/jarvis/dev/tsla-tsll-options-tracker/.cache/platform/evolve_backtests/SNAP_pcs_trades.json"
+    },
+    {
+      "dna": {
+        "structure": "put_credit_spread",
+        "symbols": [
+          "PLTR"
+        ],
+        "entry_plan": {
+          "side_policy": "prefer_put",
+          "legs": [
+            {
+              "action": "sell",
+              "right": "put",
+              "qty": 1,
+              "role": "short"
+            },
+            {
+              "action": "buy",
+              "right": "put",
+              "qty": 1,
+              "role": "long_protection"
+            }
+          ],
+          "filters": [
+            "iv_rank_min",
+            "min_credit_pct_of_width",
+            "max_loss_budget_usd"
+          ]
+        },
+        "exit_plan": {
+          "ladder": [
+            "profit_target",
+            "max_defined_loss",
+            "delta_breach",
+            "dte_stop",
+            "regime_flip"
+          ],
+          "management": []
+        },
+        "config": {
+          "long_dte": 14,
+          "long_target_delta": 0.2,
+          "spread_width": 2.0,
+          "min_credit_pct": 0.18,
+          "profit_target": 0.5,
+          "defined_loss_exit_frac": 0.85,
+          "max_loss_mult": 2.0,
+          "delta_breach": 0.45,
+          "dte_stop": 3,
+          "iv_rank_min": 0.0,
+          "max_loss_budget_usd": 250.0,
+          "bear_dte": 0,
+          "regime_flip_exit_enabled": true,
+          "wheel_enabled": false,
+          "roll_on_max_loss": false
+        },
+        "parent_id": "",
+        "generation": 0,
+        "dna_id": "dna_ba1a0d0e3ab5",
+        "notes": "Defined-risk bull put vertical: sell OTM put + buy further OTM put. max_loss_usd=(width-credit)*100; BP\u2248max_loss. Fits $3k open-risk when width small.",
+        "last_sim": {
+          "ok": true,
+          "skipped": false,
+          "reason": "positive_sim",
+          "n_trades": 28,
+          "metrics": {
+            "n_trades": 28,
+            "win_rate_pct": 67.85714285714286,
+            "total_pnl_per_contract": 137.10581133001858,
+            "avg_pnl_per_contract": 4.896636118929235,
+            "avg_win_per_contract": 33.4581271916003,
+            "avg_loss_per_contract": -55.39984503448747,
+            "profit_factor": 1.274982340242744,
+            "max_dd_per_contract": 249.26288928908934,
+            "avg_days_held": 4.25,
+            "exit_reasons": {
+              "regime_flip": 6,
+              "profit_target": 17,
+              "delta_breach": 5
+            },
+            "n_groups": 28,
+            "group_win_rate_pct": 67.85714285714286,
+            "avg_group_pnl_per_contract": 4.896636118929235,
+            "worst_group_pnl_per_contract": -93.28336214189328,
+            "best_group_pnl_per_contract": 50.74631271437604,
+            "avg_positions_per_group": 1.0,
+            "max_positions_per_group": 1.0,
+            "avg_max_loss_usd": 197.12319534873822,
+            "p95_max_loss_usd": 201.49406068061467,
+            "worst_max_loss_usd": 203.62138450366203,
+            "avg_width": 2.5,
+            "avg_net_credit": 0.5287680465126174,
+            "structure": "put_credit_spread",
+            "contract_grid_mode": "synthetic"
+          },
+          "verdict": "SHIP",
+          "score": -72.72885972564445,
+          "period": "2y",
+          "pnl_per_contract": 137.10581133001858,
+          "win_rate": 0.6785714285714286,
+          "max_dd_per_contract": 249.26288928908934,
+          "profit_factor": 1.274982340242744,
+          "ship_bar": {
+            "min_trades_ship": 15,
+            "min_trades_signal": 8,
+            "pf_cap": 10.0
+          },
+          "sim_engine": "pcs_sim:put_credit_spread",
+          "capital": {
+            "structure": "put_credit_spread",
+            "capital_fit_usd": 197.1,
+            "max_loss_usd": 197.1,
+            "max_lots": 3,
+            "capital_fit": "fit_3k",
+            "fits_open_risk_budget": true,
+            "fits_max_loss_budget": true,
+            "open_risk_budget_usd": 750.0,
+            "max_loss_budget_usd": 250.0,
+            "sleeve_usd": 3000.0,
+            "note": "defined_risk_bp_proxy=max_loss_usd (not cash CSP)",
+            "median_max_loss_usd": 197.1,
+            "p95_max_loss_usd": 201.49
+          }
+        }
+      },
+      "ok": true,
+      "skipped": false,
+      "reason": "positive_sim",
+      "n_trades": 28,
+      "metrics": {
+        "n_trades": 28,
+        "win_rate_pct": 67.85714285714286,
+        "total_pnl_per_contract": 137.10581133001858,
+        "avg_pnl_per_contract": 4.896636118929235,
+        "avg_win_per_contract": 33.4581271916003,
+        "avg_loss_per_contract": -55.39984503448747,
+        "profit_factor": 1.274982340242744,
+        "max_dd_per_contract": 249.26288928908934,
+        "avg_days_held": 4.25,
+        "exit_reasons": {
+          "regime_flip": 6,
+          "profit_target": 17,
+          "delta_breach": 5
+        },
+        "n_groups": 28,
+        "group_win_rate_pct": 67.85714285714286,
+        "avg_group_pnl_per_contract": 4.896636118929235,
+        "worst_group_pnl_per_contract": -93.28336214189328,
+        "best_group_pnl_per_contract": 50.74631271437604,
+        "avg_positions_per_group": 1.0,
+        "max_positions_per_group": 1.0,
+        "avg_max_loss_usd": 197.12319534873822,
+        "p95_max_loss_usd": 201.49406068061467,
+        "worst_max_loss_usd": 203.62138450366203,
+        "avg_width": 2.5,
+        "avg_net_credit": 0.5287680465126174,
+        "structure": "put_credit_spread",
+        "contract_grid_mode": "synthetic"
+      },
+      "score": -72.72885972564445,
+      "verdict": "SHIP",
+      "evidence_path": "/Users/jarvis/dev/tsla-tsll-options-tracker/.cache/platform/evolve_backtests/PLTR_pcs_trades.json"
+    },
+    {
+      "dna": {
+        "structure": "put_credit_spread",
+        "symbols": [
+          "PLTR"
+        ],
+        "entry_plan": {
+          "side_policy": "prefer_put",
+          "legs": [
+            {
+              "action": "sell",
+              "right": "put",
+              "qty": 1,
+              "role": "short"
+            },
+            {
+              "action": "buy",
+              "right": "put",
+              "qty": 1,
+              "role": "long_protection"
+            }
+          ],
+          "filters": [
+            "iv_rank_min",
+            "min_credit_pct_of_width",
+            "max_loss_budget_usd"
+          ]
+        },
+        "exit_plan": {
+          "ladder": [
+            "profit_target",
+            "max_defined_loss",
+            "delta_breach",
+            "dte_stop",
+            "regime_flip"
+          ],
+          "management": []
+        },
+        "config": {
+          "long_dte": 6,
+          "long_target_delta": 0.2,
+          "spread_width": 2.0,
+          "min_credit_pct": 0.18,
+          "profit_target": 0.5449105762453279,
+          "defined_loss_exit_frac": 0.7360671143868551,
+          "max_loss_mult": 2.0,
+          "delta_breach": 0.45,
+          "dte_stop": 3,
+          "iv_rank_min": 0.0,
+          "max_loss_budget_usd": 250.0,
+          "bear_dte": 0,
+          "regime_flip_exit_enabled": true,
+          "wheel_enabled": false,
+          "roll_on_max_loss": true
+        },
+        "parent_id": "dna_ba1a0d0e3ab5",
+        "generation": 1,
+        "dna_id": "dna_94875b5aa4cd",
+        "notes": "mutate from dna_ba1a0d0e3ab5 knobs=['profit_target', 'long_dte', 'defined_loss_exit_frac']",
+        "last_sim": {
+          "ok": true,
+          "skipped": false,
+          "reason": "positive_sim",
+          "n_trades": 33,
+          "metrics": {
+            "n_trades": 33,
+            "win_rate_pct": 66.66666666666666,
+            "total_pnl_per_contract": 98.88990353593564,
+            "avg_pnl_per_contract": 2.9966637435132015,
+            "avg_win_per_contract": 33.924962462953985,
+            "avg_loss_per_contract": -58.85993369536835,
+            "profit_factor": 1.1527353271763374,
+            "max_dd_per_contract": 339.57212522175354,
+            "avg_days_held": 3.0303030303030303,
+            "exit_reasons": {
+              "profit_target": 21,
+              "delta_breach": 7,
+              "dte_stop": 2,
+              "regime_flip": 3
+            },
+            "n_groups": 33,
+            "group_win_rate_pct": 66.66666666666666,
+            "avg_group_pnl_per_contract": 2.9966637435132015,
+            "worst_group_pnl_per_contract": -106.78437380722876,
+            "best_group_pnl_per_contract": 47.078712118212216,
+            "avg_positions_per_group": 1.0,
+            "max_positions_per_group": 1.0,
+            "avg_max_loss_usd": 199.98775313612768,
+            "p95_max_loss_usd": 203.7386242308503,
+            "worst_max_loss_usd": 204.65515614426977,
+            "avg_width": 2.5,
+            "avg_net_credit": 0.5001224686387232,
+            "structure": "put_credit_spread",
+            "contract_grid_mode": "synthetic"
+          },
+          "verdict": "SHIP",
+          "score": -204.2941818089578,
+          "period": "2y",
+          "pnl_per_contract": 98.88990353593564,
+          "win_rate": 0.6666666666666665,
+          "max_dd_per_contract": 339.57212522175354,
+          "profit_factor": 1.1527353271763374,
+          "ship_bar": {
+            "min_trades_ship": 15,
+            "min_trades_signal": 8,
+            "pf_cap": 10.0
+          },
+          "sim_engine": "pcs_sim:put_credit_spread",
+          "capital": {
+            "structure": "put_credit_spread",
+            "capital_fit_usd": 200.33,
+            "max_loss_usd": 200.33,
+            "max_lots": 3,
+            "capital_fit": "fit_3k",
+            "fits_open_risk_budget": true,
+            "fits_max_loss_budget": true,
+            "open_risk_budget_usd": 750.0,
+            "max_loss_budget_usd": 250.0,
+            "sleeve_usd": 3000.0,
+            "note": "defined_risk_bp_proxy=max_loss_usd (not cash CSP)",
+            "median_max_loss_usd": 200.33,
+            "p95_max_loss_usd": 203.74
+          }
+        }
+      },
+      "ok": true,
+      "skipped": false,
+      "reason": "positive_sim",
+      "n_trades": 33,
+      "metrics": {
+        "n_trades": 33,
+        "win_rate_pct": 66.66666666666666,
+        "total_pnl_per_contract": 98.88990353593564,
+        "avg_pnl_per_contract": 2.9966637435132015,
+        "avg_win_per_contract": 33.924962462953985,
+        "avg_loss_per_contract": -58.85993369536835,
+        "profit_factor": 1.1527353271763374,
+        "max_dd_per_contract": 339.57212522175354,
+        "avg_days_held": 3.0303030303030303,
+        "exit_reasons": {
+          "profit_target": 21,
+          "delta_breach": 7,
+          "dte_stop": 2,
+          "regime_flip": 3
+        },
+        "n_groups": 33,
+        "group_win_rate_pct": 66.66666666666666,
+        "avg_group_pnl_per_contract": 2.9966637435132015,
+        "worst_group_pnl_per_contract": -106.78437380722876,
+        "best_group_pnl_per_contract": 47.078712118212216,
+        "avg_positions_per_group": 1.0,
+        "max_positions_per_group": 1.0,
+        "avg_max_loss_usd": 199.98775313612768,
+        "p95_max_loss_usd": 203.7386242308503,
+        "worst_max_loss_usd": 204.65515614426977,
+        "avg_width": 2.5,
+        "avg_net_credit": 0.5001224686387232,
+        "structure": "put_credit_spread",
+        "contract_grid_mode": "synthetic"
+      },
+      "score": -204.2941818089578,
+      "verdict": "SHIP",
+      "evidence_path": "/Users/jarvis/dev/tsla-tsll-options-tracker/.cache/platform/evolve_backtests/PLTR_pcs_trades.json"
+    },
+    {
+      "dna": {
+        "structure": "butterfly_spread",
+        "symbols": [
+          "SNAP"
+        ],
+        "entry_plan": {
+          "side_policy": "neutral_to_bullish_pin",
+          "legs": [
+            {
+              "action": "buy",
+              "right": "call",
+              "qty": 1,
+              "role": "lower_wing"
+            },
+            {
+              "action": "sell",
+              "right": "call",
+              "qty": 2,
+              "role": "body"
+            },
+            {
+              "action": "buy",
+              "right": "call",
+              "qty": 1,
+              "role": "upper_wing"
+            }
+          ],
+          "filters": [
+            "not_bearish",
+            "iv_rank_min",
+            "max_loss_budget_usd"
+          ]
+        },
+        "exit_plan": {
+          "ladder": [
+            "profit_target",
+            "defined_loss",
+            "dte_stop"
+          ],
+          "management": []
+        },
+        "config": {
+          "long_dte": 21,
+          "long_target_delta": 0.35,
+          "spread_width": 1.0,
+          "iv_rank_min": 0.0,
+          "profit_target": 0.4,
+          "defined_loss_exit_frac": 0.7,
+          "dte_stop": 3,
+          "max_loss_budget_usd": 300.0,
+          "regime_flip_exit_enabled": false,
+          "wheel_enabled": false,
+          "roll_on_max_loss": false
+        },
+        "parent_id": "",
+        "generation": 0,
+        "dna_id": "dna_989423821d3d",
+        "notes": "Long symmetric call butterfly: buy lower call, sell two middle calls, buy upper call. Debit is defined 1-lot max loss; research-only BS same-expiry scaffold.",
+        "last_sim": {
+          "ok": true,
+          "skipped": false,
+          "reason": "borderline_not_ship_bar",
+          "n_trades": 11,
+          "metrics": {
+            "n_trades": 11,
+            "win_rate_pct": 90.9090909090909,
+            "total_pnl_per_contract": 134.63104783637993,
+            "avg_pnl_per_contract": 12.23918616694363,
+            "profit_factor": 236.62141301500182,
+            "max_dd_per_contract": 0.5713871507417139,
+            "avg_days_held": 14.272727272727273,
+            "exit_reasons": {
+              "profit_target": 6,
+              "dte_stop": 5
+            },
+            "avg_max_loss_usd": 35.066512397186706,
+            "p95_max_loss_usd": 51.693592233442615,
+            "worst_max_loss_usd": 53.13634927342914,
+            "structure": "butterfly_spread"
+          },
+          "verdict": "NULL",
+          "score": 359.51420614018366,
+          "period": "2y",
+          "pnl_per_contract": 134.63104783637993,
+          "win_rate": 0.9090909090909091,
+          "max_dd_per_contract": 0.5713871507417139,
+          "profit_factor": 10.0,
+          "ship_bar": {
+            "min_trades_ship": 15,
+            "min_trades_signal": 8,
+            "pf_cap": 10.0
+          },
+          "sim_engine": "butterfly_sim:butterfly_spread",
+          "capital": {
+            "structure": "butterfly_spread",
+            "capital_fit_usd": 51.69,
+            "max_loss_usd": 51.69,
+            "max_lots": 3,
+            "capital_fit": "fit_3k",
+            "fits_open_risk_budget": true,
+            "fits_max_loss_budget": true,
+            "open_risk_budget_usd": 750.0,
+            "max_loss_budget_usd": 300.0,
+            "sleeve_usd": 3000.0,
+            "note": "defined_debit_risk=max_entry_debit_usd; paper BS same-expiry symmetric call butterfly; pin/assignment and observed option surfaces not modeled"
+          }
+        }
+      },
+      "ok": true,
+      "skipped": false,
+      "reason": "borderline_not_ship_bar",
+      "n_trades": 11,
+      "metrics": {
+        "n_trades": 11,
+        "win_rate_pct": 90.9090909090909,
+        "total_pnl_per_contract": 134.63104783637993,
+        "avg_pnl_per_contract": 12.23918616694363,
+        "profit_factor": 236.62141301500182,
+        "max_dd_per_contract": 0.5713871507417139,
+        "avg_days_held": 14.272727272727273,
+        "exit_reasons": {
+          "profit_target": 6,
+          "dte_stop": 5
+        },
+        "avg_max_loss_usd": 35.066512397186706,
+        "p95_max_loss_usd": 51.693592233442615,
+        "worst_max_loss_usd": 53.13634927342914,
+        "structure": "butterfly_spread"
+      },
+      "score": 359.51420614018366,
+      "verdict": "NULL",
+      "evidence_path": "/Users/jarvis/dev/tsla-tsll-options-tracker/.cache/platform/evolve_backtests/SNAP_butterfly_trades.json"
+    },
+    {
+      "dna": {
+        "structure": "butterfly_spread",
+        "symbols": [
+          "COIN"
+        ],
+        "entry_plan": {
+          "side_policy": "neutral_to_bullish_pin",
+          "legs": [
+            {
+              "action": "buy",
+              "right": "call",
+              "qty": 1,
+              "role": "lower_wing"
+            },
+            {
+              "action": "sell",
+              "right": "call",
+              "qty": 2,
+              "role": "body"
+            },
+            {
+              "action": "buy",
+              "right": "call",
+              "qty": 1,
+              "role": "upper_wing"
+            }
+          ],
+          "filters": [
+            "not_bearish",
+            "iv_rank_min",
+            "max_loss_budget_usd"
+          ]
+        },
+        "exit_plan": {
+          "ladder": [
+            "profit_target",
+            "defined_loss",
+            "dte_stop"
+          ],
+          "management": []
+        },
+        "config": {
+          "long_dte": 21,
+          "long_target_delta": 0.35,
+          "spread_width": 1.0,
+          "iv_rank_min": 0.0,
+          "profit_target": 0.46257203471193764,
+          "defined_loss_exit_frac": 0.6432798091265003,
+          "dte_stop": 3,
+          "max_loss_budget_usd": 286.225203421632,
+          "regime_flip_exit_enabled": false,
+          "wheel_enabled": false,
+          "roll_on_max_loss": false
+        },
+        "parent_id": "dna_f80ce4160273",
+        "generation": 1,
+        "dna_id": "dna_508125f32453",
+        "notes": "mutate from dna_f80ce4160273 knobs=['max_loss_budget_usd', 'profit_target', 'defined_loss_exit_frac']",
+        "last_sim": {
+          "ok": true,
+          "skipped": false,
+          "reason": "borderline_not_ship_bar",
+          "n_trades": 11,
+          "metrics": {
+            "n_trades": 11,
+            "win_rate_pct": 63.63636363636363,
+            "total_pnl_per_contract": 36.16013222846516,
+            "avg_pnl_per_contract": 3.2872847480422873,
+            "profit_factor": 2.62772329370674,
+            "max_dd_per_contract": 16.702322878124154,
+            "avg_days_held": 11.363636363636363,
+            "exit_reasons": {
+              "profit_target": 7,
+              "defined_loss": 4
+            },
+            "avg_max_loss_usd": 11.443389286605568,
+            "p95_max_loss_usd": 22.619060761798693,
+            "worst_max_loss_usd": 24.149123608327727,
+            "structure": "butterfly_spread"
+          },
+          "verdict": "NULL",
+          "score": 83.83045704265763,
+          "period": "2y",
+          "pnl_per_contract": 36.16013222846516,
+          "win_rate": 0.6363636363636364,
+          "max_dd_per_contract": 16.702322878124154,
+          "profit_factor": 2.62772329370674,
+          "ship_bar": {
+            "min_trades_ship": 15,
+            "min_trades_signal": 8,
+            "pf_cap": 10.0
+          },
+          "sim_engine": "butterfly_sim:butterfly_spread",
+          "capital": {
+            "structure": "butterfly_spread",
+            "capital_fit_usd": 22.62,
+            "max_loss_usd": 22.62,
+            "max_lots": 3,
+            "capital_fit": "fit_3k",
+            "fits_open_risk_budget": true,
+            "fits_max_loss_budget": true,
+            "open_risk_budget_usd": 750.0,
+            "max_loss_budget_usd": 286.225203421632,
+            "sleeve_usd": 3000.0,
+            "note": "defined_debit_risk=max_entry_debit_usd; paper BS same-expiry symmetric call butterfly; pin/assignment and observed option surfaces not modeled"
+          }
+        }
+      },
+      "ok": true,
+      "skipped": false,
+      "reason": "borderline_not_ship_bar",
+      "n_trades": 11,
+      "metrics": {
+        "n_trades": 11,
+        "win_rate_pct": 63.63636363636363,
+        "total_pnl_per_contract": 36.16013222846516,
+        "avg_pnl_per_contract": 3.2872847480422873,
+        "profit_factor": 2.62772329370674,
+        "max_dd_per_contract": 16.702322878124154,
+        "avg_days_held": 11.363636363636363,
+        "exit_reasons": {
+          "profit_target": 7,
+          "defined_loss": 4
+        },
+        "avg_max_loss_usd": 11.443389286605568,
+        "p95_max_loss_usd": 22.619060761798693,
+        "worst_max_loss_usd": 24.149123608327727,
+        "structure": "butterfly_spread"
+      },
+      "score": 83.83045704265763,
+      "verdict": "NULL",
+      "evidence_path": "/Users/jarvis/dev/tsla-tsll-options-tracker/.cache/platform/evolve_backtests/COIN_butterfly_trades.json"
+    },
+    {
+      "dna": {
+        "structure": "butterfly_spread",
+        "symbols": [
+          "COIN"
+        ],
+        "entry_plan": {
+          "side_policy": "neutral_to_bullish_pin",
+          "legs": [
+            {
+              "action": "buy",
+              "right": "call",
+              "qty": 1,
+              "role": "lower_wing"
+            },
+            {
+              "action": "sell",
+              "right": "call",
+              "qty": 2,
+              "role": "body"
+            },
+            {
+              "action": "buy",
+              "right": "call",
+              "qty": 1,
+              "role": "upper_wing"
+            }
+          ],
+          "filters": [
+            "not_bearish",
+            "iv_rank_min",
+            "max_loss_budget_usd"
+          ]
+        },
+        "exit_plan": {
+          "ladder": [
+            "profit_target",
+            "defined_loss",
+            "dte_stop"
+          ],
+          "management": []
+        },
+        "config": {
+          "long_dte": 21,
+          "long_target_delta": 0.35,
+          "spread_width": 1.0,
+          "iv_rank_min": 0.0,
+          "profit_target": 0.4,
+          "defined_loss_exit_frac": 0.7,
+          "dte_stop": 3,
+          "max_loss_budget_usd": 300.0,
+          "regime_flip_exit_enabled": false,
+          "wheel_enabled": false,
+          "roll_on_max_loss": false
+        },
+        "parent_id": "",
+        "generation": 0,
+        "dna_id": "dna_f80ce4160273",
+        "notes": "Long symmetric call butterfly: buy lower call, sell two middle calls, buy upper call. Debit is defined 1-lot max loss; research-only BS same-expiry scaffold.",
+        "last_sim": {
+          "ok": true,
+          "skipped": false,
+          "reason": "borderline_not_ship_bar",
+          "n_trades": 11,
+          "metrics": {
+            "n_trades": 11,
+            "win_rate_pct": 63.63636363636363,
+            "total_pnl_per_contract": 24.778358466503015,
+            "avg_pnl_per_contract": 2.252578042409365,
+            "profit_factor": 2.0096359567129145,
+            "max_dd_per_contract": 19.02903763188314,
+            "avg_days_held": 11.363636363636363,
+            "exit_reasons": {
+              "profit_target": 7,
+              "defined_loss": 4
+            },
+            "avg_max_loss_usd": 11.419293102021623,
+            "p95_max_loss_usd": 22.46771834024912,
+            "worst_max_loss_usd": 24.149123608327727,
+            "structure": "butterfly_spread"
+          },
+          "verdict": "NULL",
+          "score": 57.76022178705998,
+          "period": "2y",
+          "pnl_per_contract": 24.778358466503015,
+          "win_rate": 0.6363636363636364,
+          "max_dd_per_contract": 19.02903763188314,
+          "profit_factor": 2.0096359567129145,
+          "ship_bar": {
+            "min_trades_ship": 15,
+            "min_trades_signal": 8,
+            "pf_cap": 10.0
+          },
+          "sim_engine": "butterfly_sim:butterfly_spread",
+          "capital": {
+            "structure": "butterfly_spread",
+            "capital_fit_usd": 22.47,
+            "max_loss_usd": 22.47,
+            "max_lots": 3,
+            "capital_fit": "fit_3k",
+            "fits_open_risk_budget": true,
+            "fits_max_loss_budget": true,
+            "open_risk_budget_usd": 750.0,
+            "max_loss_budget_usd": 300.0,
+            "sleeve_usd": 3000.0,
+            "note": "defined_debit_risk=max_entry_debit_usd; paper BS same-expiry symmetric call butterfly; pin/assignment and observed option surfaces not modeled"
+          }
+        }
+      },
+      "ok": true,
+      "skipped": false,
+      "reason": "borderline_not_ship_bar",
+      "n_trades": 11,
+      "metrics": {
+        "n_trades": 11,
+        "win_rate_pct": 63.63636363636363,
+        "total_pnl_per_contract": 24.778358466503015,
+        "avg_pnl_per_contract": 2.252578042409365,
+        "profit_factor": 2.0096359567129145,
+        "max_dd_per_contract": 19.02903763188314,
+        "avg_days_held": 11.363636363636363,
+        "exit_reasons": {
+          "profit_target": 7,
+          "defined_loss": 4
+        },
+        "avg_max_loss_usd": 11.419293102021623,
+        "p95_max_loss_usd": 22.46771834024912,
+        "worst_max_loss_usd": 24.149123608327727,
+        "structure": "butterfly_spread"
+      },
+      "score": 57.76022178705998,
+      "verdict": "NULL",
+      "evidence_path": "/Users/jarvis/dev/tsla-tsll-options-tracker/.cache/platform/evolve_backtests/COIN_butterfly_trades.json"
+    },
+    {
+      "dna": {
+        "structure": "iron_condor",
+        "symbols": [
+          "BAC"
+        ],
+        "entry_plan": {
+          "side_policy": "range_bound",
+          "legs": [
+            {
+              "action": "sell",
+              "right": "put",
+              "qty": 1,
+              "role": "short_put"
+            },
+            {
+              "action": "buy",
+              "right": "put",
+              "qty": 1,
+              "role": "long_put"
+            },
+            {
+              "action": "sell",
+              "right": "call",
+              "qty": 1,
+              "role": "short_call"
+            },
+            {
+              "action": "buy",
+              "right": "call",
+              "qty": 1,
+              "role": "long_call"
+            }
+          ],
+          "filters": [
+            "iv_rank_min",
+            "min_credit_pct_of_width",
+            "max_loss_budget_usd"
+          ]
+        },
+        "exit_plan": {
+          "ladder": [
+            "profit_target",
+            "max_defined_loss",
+            "delta_breach",
+            "dte_stop"
+          ],
+          "management": []
+        },
+        "config": {
+          "long_dte": 21,
+          "long_target_delta": 0.16,
+          "spread_width": 0.8588008313723101,
+          "min_credit_pct": 0.14,
+          "profit_target": 0.5,
+          "defined_loss_exit_frac": 0.8,
+          "max_loss_mult": 2.4598109780398008,
+          "delta_breach": 0.4,
+          "dte_stop": 5,
+          "iv_rank_min": 18.267120759719326,
+          "max_loss_budget_usd": 300.0,
+          "bear_dte": 1,
+          "call_in_bull_ok": true,
+          "regime_flip_exit_enabled": true,
+          "wheel_enabled": false,
+          "roll_on_max_loss": false
+        },
+        "parent_id": "dna_4628869d16c9",
+        "generation": 1,
+        "dna_id": "dna_af00d035512e",
+        "notes": "mutate from dna_4628869d16c9 knobs=['spread_width', 'max_loss_mult', 'iv_rank_min']",
+        "last_sim": {
+          "ok": true,
+          "skipped": false,
+          "reason": "borderline_not_ship_bar",
+          "n_trades": 8,
+          "metrics": {
+            "n_trades": 8,
+            "win_rate_pct": 62.5,
+            "total_pnl_per_contract": 21.275228185130402,
+            "avg_pnl_per_contract": 2.6594035231413002,
+            "avg_win_per_contract": 10.230205070184867,
+            "avg_loss_per_contract": -9.958599055264648,
+            "profit_factor": 1.7121225273777565,
+            "max_dd_per_contract": 27.740741377309092,
+            "avg_days_held": 11.875,
+            "exit_reasons": {
+              "profit_target": 2,
+              "dte_stop": 1,
+              "delta_breach": 3,
+              "regime_flip": 1,
+              "end_of_data": 1
+            },
+            "n_groups": 8,
+            "group_win_rate_pct": 62.5,
+            "avg_group_pnl_per_contract": 2.6594035231413002,
+            "worst_group_pnl_per_contract": -13.167133397746655,
+            "best_group_pnl_per_contract": 20.81792742205546,
+            "avg_positions_per_group": 1.0,
+            "max_positions_per_group": 1.0,
+            "avg_max_loss_usd": 69.67815864484271,
+            "p95_max_loss_usd": 71.04644683796396,
+            "worst_max_loss_usd": 71.24577878164749,
+            "avg_width": 1.0,
+            "avg_net_credit": 0.30321841355157286,
+            "structure": "iron_condor",
+            "contract_grid_mode": "synthetic"
+          },
+          "verdict": "NULL",
+          "score": 39.02693735537644,
+          "period": "2y",
+          "pnl_per_contract": 21.275228185130402,
+          "win_rate": 0.625,
+          "max_dd_per_contract": 27.740741377309092,
+          "profit_factor": 1.7121225273777565,
+          "ship_bar": {
+            "min_trades_ship": 15,
+            "min_trades_signal": 8,
+            "pf_cap": 10.0
+          },
+          "sim_engine": "pcs_sim:iron_condor",
+          "capital": {
+            "structure": "iron_condor",
+            "capital_fit_usd": 69.73,
+            "max_loss_usd": 69.73,
+            "max_lots": 3,
+            "capital_fit": "fit_3k",
+            "fits_open_risk_budget": true,
+            "fits_max_loss_budget": true,
+            "open_risk_budget_usd": 750.0,
+            "max_loss_budget_usd": 300.0,
+            "sleeve_usd": 3000.0,
+            "note": "defined_risk_bp_proxy=max_loss_usd (not cash CSP)",
+            "median_max_loss_usd": 69.73,
+            "p95_max_loss_usd": 71.05
+          }
+        }
+      },
+      "ok": true,
+      "skipped": false,
+      "reason": "borderline_not_ship_bar",
+      "n_trades": 8,
+      "metrics": {
+        "n_trades": 8,
+        "win_rate_pct": 62.5,
+        "total_pnl_per_contract": 21.275228185130402,
+        "avg_pnl_per_contract": 2.6594035231413002,
+        "avg_win_per_contract": 10.230205070184867,
+        "avg_loss_per_contract": -9.958599055264648,
+        "profit_factor": 1.7121225273777565,
+        "max_dd_per_contract": 27.740741377309092,
+        "avg_days_held": 11.875,
+        "exit_reasons": {
+          "profit_target": 2,
+          "dte_stop": 1,
+          "delta_breach": 3,
+          "regime_flip": 1,
+          "end_of_data": 1
+        },
+        "n_groups": 8,
+        "group_win_rate_pct": 62.5,
+        "avg_group_pnl_per_contract": 2.6594035231413002,
+        "worst_group_pnl_per_contract": -13.167133397746655,
+        "best_group_pnl_per_contract": 20.81792742205546,
+        "avg_positions_per_group": 1.0,
+        "max_positions_per_group": 1.0,
+        "avg_max_loss_usd": 69.67815864484271,
+        "p95_max_loss_usd": 71.04644683796396,
+        "worst_max_loss_usd": 71.24577878164749,
+        "avg_width": 1.0,
+        "avg_net_credit": 0.30321841355157286,
+        "structure": "iron_condor",
+        "contract_grid_mode": "synthetic"
+      },
+      "score": 39.02693735537644,
+      "verdict": "NULL",
+      "evidence_path": "/Users/jarvis/dev/tsla-tsll-options-tracker/.cache/platform/evolve_backtests/BAC_pcs_trades.json"
+    },
+    {
+      "dna": {
+        "structure": "butterfly_spread",
+        "symbols": [
+          "COIN"
+        ],
+        "entry_plan": {
+          "side_policy": "neutral_to_bullish_pin",
+          "legs": [
+            {
+              "action": "buy",
+              "right": "call",
+              "qty": 1,
+              "role": "lower_wing"
+            },
+            {
+              "action": "sell",
+              "right": "call",
+              "qty": 2,
+              "role": "body"
+            },
+            {
+              "action": "buy",
+              "right": "call",
+              "qty": 1,
+              "role": "upper_wing"
+            }
+          ],
+          "filters": [
+            "not_bearish",
+            "iv_rank_min",
+            "max_loss_budget_usd"
+          ]
+        },
+        "exit_plan": {
+          "ladder": [
+            "profit_target",
+            "defined_loss",
+            "dte_stop"
+          ],
+          "management": []
+        },
+        "config": {
+          "long_dte": 21,
+          "long_target_delta": 0.32534552656918864,
+          "spread_width": 1.0,
+          "iv_rank_min": 0.0,
+          "profit_target": 0.4,
+          "defined_loss_exit_frac": 0.7,
+          "dte_stop": 3,
+          "max_loss_budget_usd": 198.24664003997245,
+          "regime_flip_exit_enabled": false,
+          "wheel_enabled": false,
+          "roll_on_max_loss": false
+        },
+        "parent_id": "dna_f80ce4160273",
+        "generation": 1,
+        "dna_id": "dna_70a880f9e7d5",
+        "notes": "mutate from dna_f80ce4160273 knobs=['iv_rank_min', 'max_loss_budget_usd', 'long_target_delta']",
+        "last_sim": {
+          "ok": true,
+          "skipped": false,
+          "reason": "borderline_not_ship_bar",
+          "n_trades": 12,
+          "metrics": {
+            "n_trades": 12,
+            "win_rate_pct": 58.333333333333336,
+            "total_pnl_per_contract": 13.684175381627604,
+            "avg_pnl_per_contract": 1.140347948468967,
+            "profit_factor": 1.3887485386603482,
+            "max_dd_per_contract": 19.239941511516825,
+            "avg_days_held": 10.333333333333334,
+            "exit_reasons": {
+              "profit_target": 7,
+              "defined_loss": 5
+            },
+            "avg_max_loss_usd": 11.581385165184285,
+            "p95_max_loss_usd": 21.4913046181811,
+            "worst_max_loss_usd": 24.149123608327727,
+            "structure": "butterfly_spread"
+          },
+          "verdict": "NULL",
+          "score": 31.38587130998441,
+          "period": "2y",
+          "pnl_per_contract": 13.684175381627604,
+          "win_rate": 0.5833333333333334,
+          "max_dd_per_contract": 19.239941511516825,
+          "profit_factor": 1.3887485386603482,
+          "ship_bar": {
+            "min_trades_ship": 15,
+            "min_trades_signal": 8,
+            "pf_cap": 10.0
+          },
+          "sim_engine": "butterfly_sim:butterfly_spread",
+          "capital": {
+            "structure": "butterfly_spread",
+            "capital_fit_usd": 21.49,
+            "max_loss_usd": 21.49,
+            "max_lots": 3,
+            "capital_fit": "fit_3k",
+            "fits_open_risk_budget": true,
+            "fits_max_loss_budget": true,
+            "open_risk_budget_usd": 750.0,
+            "max_loss_budget_usd": 198.24664003997245,
+            "sleeve_usd": 3000.0,
+            "note": "defined_debit_risk=max_entry_debit_usd; paper BS same-expiry symmetric call butterfly; pin/assignment and observed option surfaces not modeled"
+          }
+        }
+      },
+      "ok": true,
+      "skipped": false,
+      "reason": "borderline_not_ship_bar",
+      "n_trades": 12,
+      "metrics": {
+        "n_trades": 12,
+        "win_rate_pct": 58.333333333333336,
+        "total_pnl_per_contract": 13.684175381627604,
+        "avg_pnl_per_contract": 1.140347948468967,
+        "profit_factor": 1.3887485386603482,
+        "max_dd_per_contract": 19.239941511516825,
+        "avg_days_held": 10.333333333333334,
+        "exit_reasons": {
+          "profit_target": 7,
+          "defined_loss": 5
+        },
+        "avg_max_loss_usd": 11.581385165184285,
+        "p95_max_loss_usd": 21.4913046181811,
+        "worst_max_loss_usd": 24.149123608327727,
+        "structure": "butterfly_spread"
+      },
+      "score": 31.38587130998441,
+      "verdict": "NULL",
+      "evidence_path": "/Users/jarvis/dev/tsla-tsll-options-tracker/.cache/platform/evolve_backtests/COIN_butterfly_trades.json"
+    },
+    {
+      "dna": {
+        "structure": "butterfly_spread",
+        "symbols": [
+          "SOFI"
+        ],
+        "entry_plan": {
+          "side_policy": "neutral_to_bullish_pin",
+          "legs": [
+            {
+              "action": "buy",
+              "right": "call",
+              "qty": 1,
+              "role": "lower_wing"
+            },
+            {
+              "action": "sell",
+              "right": "call",
+              "qty": 2,
+              "role": "body"
+            },
+            {
+              "action": "buy",
+              "right": "call",
+              "qty": 1,
+              "role": "upper_wing"
+            }
+          ],
+          "filters": [
+            "not_bearish",
+            "iv_rank_min",
+            "max_loss_budget_usd"
+          ]
+        },
+        "exit_plan": {
+          "ladder": [
+            "profit_target",
+            "defined_loss",
+            "dte_stop"
+          ],
+          "management": []
+        },
+        "config": {
+          "long_dte": 21,
+          "long_target_delta": 0.35,
+          "spread_width": 0.5,
+          "iv_rank_min": 0.0,
+          "profit_target": 0.5244696192738763,
+          "defined_loss_exit_frac": 0.5949175938922896,
+          "dte_stop": 3,
+          "max_loss_budget_usd": 300.0,
+          "regime_flip_exit_enabled": false,
+          "wheel_enabled": false,
+          "roll_on_max_loss": false
+        },
+        "parent_id": "dna_37272e7873d4",
+        "generation": 1,
+        "dna_id": "dna_71c635d163b7",
+        "notes": "mutate from dna_37272e7873d4 knobs=['defined_loss_exit_frac', 'spread_width', 'profit_target']",
+        "last_sim": {
+          "ok": true,
+          "skipped": false,
+          "reason": "borderline_not_ship_bar",
+          "n_trades": 14,
+          "metrics": {
+            "n_trades": 14,
+            "win_rate_pct": 57.14285714285714,
+            "total_pnl_per_contract": 4.38464464003242,
+            "avg_pnl_per_contract": 0.31318890285945855,
+            "profit_factor": 1.141064364711359,
+            "max_dd_per_contract": 14.80518977859786,
+            "avg_days_held": 12.714285714285714,
+            "exit_reasons": {
+              "profit_target": 7,
+              "defined_loss": 6,
+              "end_of_data": 1
+            },
+            "avg_max_loss_usd": 6.8097502055529775,
+            "p95_max_loss_usd": 11.301651368397291,
+            "worst_max_loss_usd": 12.441543388045506,
+            "structure": "butterfly_spread"
+          },
+          "verdict": "NULL",
+          "score": 20.972170727090308,
+          "period": "2y",
+          "pnl_per_contract": 4.38464464003242,
+          "win_rate": 0.5714285714285714,
+          "max_dd_per_contract": 14.80518977859786,
+          "profit_factor": 1.141064364711359,
+          "ship_bar": {
+            "min_trades_ship": 15,
+            "min_trades_signal": 8,
+            "pf_cap": 10.0
+          },
+          "sim_engine": "butterfly_sim:butterfly_spread",
+          "capital": {
+            "structure": "butterfly_spread",
+            "capital_fit_usd": 11.3,
+            "max_loss_usd": 11.3,
+            "max_lots": 3,
+            "capital_fit": "fit_3k",
+            "fits_open_risk_budget": true,
+            "fits_max_loss_budget": true,
+            "open_risk_budget_usd": 750.0,
+            "max_loss_budget_usd": 300.0,
+            "sleeve_usd": 3000.0,
+            "note": "defined_debit_risk=max_entry_debit_usd; paper BS same-expiry symmetric call butterfly; pin/assignment and observed option surfaces not modeled"
+          }
+        }
+      },
+      "ok": true,
+      "skipped": false,
+      "reason": "borderline_not_ship_bar",
+      "n_trades": 14,
+      "metrics": {
+        "n_trades": 14,
+        "win_rate_pct": 57.14285714285714,
+        "total_pnl_per_contract": 4.38464464003242,
+        "avg_pnl_per_contract": 0.31318890285945855,
+        "profit_factor": 1.141064364711359,
+        "max_dd_per_contract": 14.80518977859786,
+        "avg_days_held": 12.714285714285714,
+        "exit_reasons": {
+          "profit_target": 7,
+          "defined_loss": 6,
+          "end_of_data": 1
+        },
+        "avg_max_loss_usd": 6.8097502055529775,
+        "p95_max_loss_usd": 11.301651368397291,
+        "worst_max_loss_usd": 12.441543388045506,
+        "structure": "butterfly_spread"
+      },
+      "score": 20.972170727090308,
+      "verdict": "NULL",
+      "evidence_path": "/Users/jarvis/dev/tsla-tsll-options-tracker/.cache/platform/evolve_backtests/SOFI_butterfly_trades.json"
+    },
+    {
+      "dna": {
+        "structure": "iron_condor",
+        "symbols": [
+          "SOFI"
+        ],
+        "entry_plan": {
+          "side_policy": "range_bound",
+          "legs": [
+            {
+              "action": "sell",
+              "right": "put",
+              "qty": 1,
+              "role": "short_put"
+            },
+            {
+              "action": "buy",
+              "right": "put",
+              "qty": 1,
+              "role": "long_put"
+            },
+            {
+              "action": "sell",
+              "right": "call",
+              "qty": 1,
+              "role": "short_call"
+            },
+            {
+              "action": "buy",
+              "right": "call",
+              "qty": 1,
+              "role": "long_call"
+            }
+          ],
+          "filters": [
+            "iv_rank_min",
+            "min_credit_pct_of_width",
+            "max_loss_budget_usd"
+          ]
+        },
+        "exit_plan": {
+          "ladder": [
+            "profit_target",
+            "max_defined_loss",
+            "delta_breach",
+            "dte_stop"
+          ],
+          "management": []
+        },
+        "config": {
+          "long_dte": 21,
+          "long_target_delta": 0.16,
+          "spread_width": 2.0,
+          "min_credit_pct": 0.14,
+          "profit_target": 0.5,
+          "defined_loss_exit_frac": 0.8,
+          "max_loss_mult": 2.0,
+          "delta_breach": 0.4,
+          "dte_stop": 5,
+          "iv_rank_min": 15.0,
+          "max_loss_budget_usd": 300.0,
+          "bear_dte": 1,
+          "call_in_bull_ok": true,
+          "regime_flip_exit_enabled": false,
+          "wheel_enabled": false,
+          "roll_on_max_loss": false
+        },
+        "parent_id": "",
+        "generation": 0,
+        "dna_id": "dna_e8bee30a8ea4",
+        "notes": "Defined-risk short iron condor: OTM put credit wing + OTM call credit wing. Collect both sides; max_loss\u2248max(wing_width)-total_credit. Neutral/high-IV range structure.",
+        "last_sim": {
+          "ok": true,
+          "skipped": false,
+          "reason": "zero_trades",
+          "n_trades": 0,
+          "metrics": {
+            "n_trades": 0,
+            "contract_grid_mode": "synthetic",
+            "structure": "iron_condor"
+          },
+          "verdict": "NULL",
+          "score": 0.0,
+          "period": "2y",
+          "pnl_per_contract": 0.0,
+          "win_rate": 0.0,
+          "max_dd_per_contract": 0.0,
+          "profit_factor": 0.0,
+          "ship_bar": {
+            "min_trades_ship": 15,
+            "min_trades_signal": 8,
+            "pf_cap": 10.0
+          },
+          "sim_engine": "pcs_sim:iron_condor",
+          "capital": {
+            "structure": "iron_condor",
+            "capital_fit_usd": 150.0,
+            "max_loss_usd": 150.0,
+            "max_lots": 3,
+            "capital_fit": "fit_3k",
+            "fits_open_risk_budget": true,
+            "fits_max_loss_budget": true,
+            "open_risk_budget_usd": 750.0,
+            "max_loss_budget_usd": 300.0,
+            "sleeve_usd": 3000.0,
+            "note": "defined_risk_bp_proxy=max_loss_usd (not cash CSP)"
+          }
+        }
+      },
+      "ok": true,
+      "skipped": false,
+      "reason": "zero_trades",
+      "n_trades": 0,
+      "metrics": {
+        "n_trades": 0,
+        "contract_grid_mode": "synthetic",
+        "structure": "iron_condor"
+      },
+      "score": 0.0,
+      "verdict": "NULL",
+      "evidence_path": ""
+    },
+    {
+      "dna": {
+        "structure": "iron_condor",
+        "symbols": [
+          "BAC"
+        ],
+        "entry_plan": {
+          "side_policy": "range_bound",
+          "legs": [
+            {
+              "action": "sell",
+              "right": "put",
+              "qty": 1,
+              "role": "short_put"
+            },
+            {
+              "action": "buy",
+              "right": "put",
+              "qty": 1,
+              "role": "long_put"
+            },
+            {
+              "action": "sell",
+              "right": "call",
+              "qty": 1,
+              "role": "short_call"
+            },
+            {
+              "action": "buy",
+              "right": "call",
+              "qty": 1,
+              "role": "long_call"
+            }
+          ],
+          "filters": [
+            "iv_rank_min",
+            "min_credit_pct_of_width",
+            "max_loss_budget_usd"
+          ]
+        },
+        "exit_plan": {
+          "ladder": [
+            "profit_target",
+            "max_defined_loss",
+            "delta_breach",
+            "dte_stop"
+          ],
+          "management": []
+        },
+        "config": {
+          "long_dte": 21,
+          "long_target_delta": 0.16,
+          "spread_width": 2.0,
+          "min_credit_pct": 0.14,
+          "profit_target": 0.5,
+          "defined_loss_exit_frac": 0.8,
+          "max_loss_mult": 2.0,
+          "delta_breach": 0.4,
+          "dte_stop": 5,
+          "iv_rank_min": 15.0,
+          "max_loss_budget_usd": 300.0,
+          "bear_dte": 1,
+          "call_in_bull_ok": true,
+          "regime_flip_exit_enabled": false,
+          "wheel_enabled": false,
+          "roll_on_max_loss": false
+        },
+        "parent_id": "",
+        "generation": 0,
+        "dna_id": "dna_4628869d16c9",
+        "notes": "Defined-risk short iron condor: OTM put credit wing + OTM call credit wing. Collect both sides; max_loss\u2248max(wing_width)-total_credit. Neutral/high-IV range structure.",
+        "last_sim": {
+          "ok": true,
+          "skipped": false,
+          "reason": "zero_trades",
+          "n_trades": 0,
+          "metrics": {
+            "n_trades": 0,
+            "contract_grid_mode": "synthetic",
+            "structure": "iron_condor"
+          },
+          "verdict": "NULL",
+          "score": 0.0,
+          "period": "2y",
+          "pnl_per_contract": 0.0,
+          "win_rate": 0.0,
+          "max_dd_per_contract": 0.0,
+          "profit_factor": 0.0,
+          "ship_bar": {
+            "min_trades_ship": 15,
+            "min_trades_signal": 8,
+            "pf_cap": 10.0
+          },
+          "sim_engine": "pcs_sim:iron_condor",
+          "capital": {
+            "structure": "iron_condor",
+            "capital_fit_usd": 150.0,
+            "max_loss_usd": 150.0,
+            "max_lots": 3,
+            "capital_fit": "fit_3k",
+            "fits_open_risk_budget": true,
+            "fits_max_loss_budget": true,
+            "open_risk_budget_usd": 750.0,
+            "max_loss_budget_usd": 300.0,
+            "sleeve_usd": 3000.0,
+            "note": "defined_risk_bp_proxy=max_loss_usd (not cash CSP)"
+          }
+        }
+      },
+      "ok": true,
+      "skipped": false,
+      "reason": "zero_trades",
+      "n_trades": 0,
+      "metrics": {
+        "n_trades": 0,
+        "contract_grid_mode": "synthetic",
+        "structure": "iron_condor"
+      },
+      "score": 0.0,
+      "verdict": "NULL",
+      "evidence_path": ""
+    },
+    {
+      "dna": {
+        "structure": "iron_condor",
+        "symbols": [
+          "SNAP"
+        ],
+        "entry_plan": {
+          "side_policy": "range_bound",
+          "legs": [
+            {
+              "action": "sell",
+              "right": "put",
+              "qty": 1,
+              "role": "short_put"
+            },
+            {
+              "action": "buy",
+              "right": "put",
+              "qty": 1,
+              "role": "long_put"
+            },
+            {
+              "action": "sell",
+              "right": "call",
+              "qty": 1,
+              "role": "short_call"
+            },
+            {
+              "action": "buy",
+              "right": "call",
+              "qty": 1,
+              "role": "long_call"
+            }
+          ],
+          "filters": [
+            "iv_rank_min",
+            "min_credit_pct_of_width",
+            "max_loss_budget_usd"
+          ]
+        },
+        "exit_plan": {
+          "ladder": [
+            "profit_target",
+            "max_defined_loss",
+            "delta_breach",
+            "dte_stop"
+          ],
+          "management": []
+        },
+        "config": {
+          "long_dte": 21,
+          "long_target_delta": 0.16,
+          "spread_width": 2.0,
+          "min_credit_pct": 0.14,
+          "profit_target": 0.5,
+          "defined_loss_exit_frac": 0.8,
+          "max_loss_mult": 2.878827808547818,
+          "delta_breach": 0.4,
+          "dte_stop": 3,
+          "iv_rank_min": 17.617503119384725,
+          "max_loss_budget_usd": 300.0,
+          "bear_dte": 1,
+          "call_in_bull_ok": true,
+          "regime_flip_exit_enabled": false,
+          "wheel_enabled": false,
+          "roll_on_max_loss": false
+        },
+        "parent_id": "dna_5b7db22da7a8",
+        "generation": 1,
+        "dna_id": "dna_ad8f30b7e65f",
+        "notes": "mutate from dna_5b7db22da7a8 knobs=['dte_stop', 'iv_rank_min', 'max_loss_mult']",
+        "last_sim": {
+          "ok": true,
+          "skipped": false,
+          "reason": "zero_trades",
+          "n_trades": 0,
+          "metrics": {
+            "n_trades": 0,
+            "contract_grid_mode": "synthetic",
+            "structure": "iron_condor"
+          },
+          "verdict": "NULL",
+          "score": 0.0,
+          "period": "2y",
+          "pnl_per_contract": 0.0,
+          "win_rate": 0.0,
+          "max_dd_per_contract": 0.0,
+          "profit_factor": 0.0,
+          "ship_bar": {
+            "min_trades_ship": 15,
+            "min_trades_signal": 8,
+            "pf_cap": 10.0
+          },
+          "sim_engine": "pcs_sim:iron_condor",
+          "capital": {
+            "structure": "iron_condor",
+            "capital_fit_usd": 150.0,
+            "max_loss_usd": 150.0,
+            "max_lots": 3,
+            "capital_fit": "fit_3k",
+            "fits_open_risk_budget": true,
+            "fits_max_loss_budget": true,
+            "open_risk_budget_usd": 750.0,
+            "max_loss_budget_usd": 300.0,
+            "sleeve_usd": 3000.0,
+            "note": "defined_risk_bp_proxy=max_loss_usd (not cash CSP)"
+          }
+        }
+      },
+      "ok": true,
+      "skipped": false,
+      "reason": "zero_trades",
+      "n_trades": 0,
+      "metrics": {
+        "n_trades": 0,
+        "contract_grid_mode": "synthetic",
+        "structure": "iron_condor"
+      },
+      "score": 0.0,
+      "verdict": "NULL",
+      "evidence_path": ""
+    },
+    {
+      "dna": {
+        "structure": "put_credit_spread",
+        "symbols": [
+          "SNAP"
+        ],
+        "entry_plan": {
+          "side_policy": "prefer_put",
+          "legs": [
+            {
+              "action": "sell",
+              "right": "put",
+              "qty": 1,
+              "role": "short"
+            },
+            {
+              "action": "buy",
+              "right": "put",
+              "qty": 1,
+              "role": "long_protection"
+            }
+          ],
+          "filters": [
+            "iv_rank_min",
+            "min_credit_pct_of_width",
+            "max_loss_budget_usd"
+          ]
+        },
+        "exit_plan": {
+          "ladder": [
+            "profit_target",
+            "max_defined_loss",
+            "delta_breach",
+            "dte_stop",
+            "regime_flip"
+          ],
+          "management": []
+        },
+        "config": {
+          "long_dte": 9,
+          "long_target_delta": 0.2,
+          "spread_width": 1.5341891202359221,
+          "min_credit_pct": 0.18,
+          "profit_target": 0.5,
+          "defined_loss_exit_frac": 0.85,
+          "max_loss_mult": 1.2,
+          "delta_breach": 0.45,
+          "dte_stop": 3,
+          "iv_rank_min": 0.0,
+          "max_loss_budget_usd": 250.0,
+          "bear_dte": 0,
+          "regime_flip_exit_enabled": true,
+          "wheel_enabled": false,
+          "roll_on_max_loss": false
+        },
+        "parent_id": "dna_ce8dca6b2f73",
+        "generation": 1,
+        "dna_id": "dna_b0a263483204",
+        "notes": "mutate from dna_ce8dca6b2f73 knobs=['long_dte', 'max_loss_mult', 'spread_width']",
+        "last_sim": {
+          "ok": true,
+          "skipped": false,
+          "reason": "zero_trades",
+          "n_trades": 0,
+          "metrics": {
+            "n_trades": 0,
+            "contract_grid_mode": "synthetic",
+            "structure": "put_credit_spread"
+          },
+          "verdict": "NULL",
+          "score": 0.0,
+          "period": "2y",
+          "pnl_per_contract": 0.0,
+          "win_rate": 0.0,
+          "max_dd_per_contract": 0.0,
+          "profit_factor": 0.0,
+          "ship_bar": {
+            "min_trades_ship": 15,
+            "min_trades_signal": 8,
+            "pf_cap": 10.0
+          },
+          "sim_engine": "pcs_sim:put_credit_spread",
+          "capital": {
+            "structure": "put_credit_spread",
+            "capital_fit_usd": 115.06,
+            "max_loss_usd": 115.06,
+            "max_lots": 3,
+            "capital_fit": "fit_3k",
+            "fits_open_risk_budget": true,
+            "fits_max_loss_budget": true,
+            "open_risk_budget_usd": 750.0,
+            "max_loss_budget_usd": 250.0,
+            "sleeve_usd": 3000.0,
+            "note": "defined_risk_bp_proxy=max_loss_usd (not cash CSP)"
+          }
+        }
+      },
+      "ok": true,
+      "skipped": false,
+      "reason": "zero_trades",
+      "n_trades": 0,
+      "metrics": {
+        "n_trades": 0,
+        "contract_grid_mode": "synthetic",
+        "structure": "put_credit_spread"
+      },
+      "score": 0.0,
+      "verdict": "NULL",
+      "evidence_path": ""
+    },
+    {
+      "dna": {
+        "structure": "put_credit_spread",
+        "symbols": [
+          "SNAP"
+        ],
+        "entry_plan": {
+          "side_policy": "prefer_put",
+          "legs": [
+            {
+              "action": "sell",
+              "right": "put",
+              "qty": 1,
+              "role": "short"
+            },
+            {
+              "action": "buy",
+              "right": "put",
+              "qty": 1,
+              "role": "long_protection"
+            }
+          ],
+          "filters": [
+            "iv_rank_min",
+            "min_credit_pct_of_width",
+            "max_loss_budget_usd"
+          ]
+        },
+        "exit_plan": {
+          "ladder": [
+            "profit_target",
+            "max_defined_loss",
+            "delta_breach",
+            "dte_stop",
+            "regime_flip"
+          ],
+          "management": []
+        },
+        "config": {
+          "long_dte": 14,
+          "long_target_delta": 0.2,
+          "spread_width": 2.0,
+          "min_credit_pct": 0.18,
+          "profit_target": 0.5,
+          "defined_loss_exit_frac": 0.85,
+          "max_loss_mult": 2.0,
+          "delta_breach": 0.45,
+          "dte_stop": 3,
+          "iv_rank_min": 0.0,
+          "max_loss_budget_usd": 250.0,
+          "bear_dte": 0,
+          "regime_flip_exit_enabled": true,
+          "wheel_enabled": false,
+          "roll_on_max_loss": false
+        },
+        "parent_id": "",
+        "generation": 0,
+        "dna_id": "dna_ce8dca6b2f73",
+        "notes": "Defined-risk bull put vertical: sell OTM put + buy further OTM put. max_loss_usd=(width-credit)*100; BP\u2248max_loss. Fits $3k open-risk when width small.",
+        "last_sim": {
+          "ok": true,
+          "skipped": false,
+          "reason": "zero_trades",
+          "n_trades": 0,
+          "metrics": {
+            "n_trades": 0,
+            "contract_grid_mode": "synthetic",
+            "structure": "put_credit_spread"
+          },
+          "verdict": "NULL",
+          "score": 0.0,
+          "period": "2y",
+          "pnl_per_contract": 0.0,
+          "win_rate": 0.0,
+          "max_dd_per_contract": 0.0,
+          "profit_factor": 0.0,
+          "ship_bar": {
+            "min_trades_ship": 15,
+            "min_trades_signal": 8,
+            "pf_cap": 10.0
+          },
+          "sim_engine": "pcs_sim:put_credit_spread",
+          "capital": {
+            "structure": "put_credit_spread",
+            "capital_fit_usd": 150.0,
+            "max_loss_usd": 150.0,
+            "max_lots": 3,
+            "capital_fit": "fit_3k",
+            "fits_open_risk_budget": true,
+            "fits_max_loss_budget": true,
+            "open_risk_budget_usd": 750.0,
+            "max_loss_budget_usd": 250.0,
+            "sleeve_usd": 3000.0,
+            "note": "defined_risk_bp_proxy=max_loss_usd (not cash CSP)"
+          }
+        }
+      },
+      "ok": true,
+      "skipped": false,
+      "reason": "zero_trades",
+      "n_trades": 0,
+      "metrics": {
+        "n_trades": 0,
+        "contract_grid_mode": "synthetic",
+        "structure": "put_credit_spread"
+      },
+      "score": 0.0,
+      "verdict": "NULL",
+      "evidence_path": ""
+    },
+    {
+      "dna": {
+        "structure": "iron_condor",
+        "symbols": [
+          "PLTR"
+        ],
+        "entry_plan": {
+          "side_policy": "range_bound",
+          "legs": [
+            {
+              "action": "sell",
+              "right": "put",
+              "qty": 1,
+              "role": "short_put"
+            },
+            {
+              "action": "buy",
+              "right": "put",
+              "qty": 1,
+              "role": "long_put"
+            },
+            {
+              "action": "sell",
+              "right": "call",
+              "qty": 1,
+              "role": "short_call"
+            },
+            {
+              "action": "buy",
+              "right": "call",
+              "qty": 1,
+              "role": "long_call"
+            }
+          ],
+          "filters": [
+            "iv_rank_min",
+            "min_credit_pct_of_width",
+            "max_loss_budget_usd"
+          ]
+        },
+        "exit_plan": {
+          "ladder": [
+            "profit_target",
+            "max_defined_loss",
+            "delta_breach",
+            "dte_stop"
+          ],
+          "management": []
+        },
+        "config": {
+          "long_dte": 14,
+          "long_target_delta": 0.2,
+          "spread_width": 2.0,
+          "min_credit_pct": 0.18,
+          "profit_target": 0.5,
+          "defined_loss_exit_frac": 0.8850522873422912,
+          "max_loss_mult": 2.0,
+          "delta_breach": 0.45,
+          "dte_stop": 8,
+          "iv_rank_min": 0.0,
+          "max_loss_budget_usd": 144.00112683702443,
+          "bear_dte": 0,
+          "call_in_bull_ok": false,
+          "regime_flip_exit_enabled": true,
+          "wheel_enabled": false,
+          "roll_on_max_loss": false
+        },
+        "parent_id": "dna_b8fbeefa6f96",
+        "generation": 1,
+        "dna_id": "dna_875bb7c74e19",
+        "notes": "mutate from dna_b8fbeefa6f96 knobs=['dte_stop', 'max_loss_budget_usd', 'defined_loss_exit_frac']",
+        "last_sim": {
+          "ok": true,
+          "skipped": false,
+          "reason": "zero_trades",
+          "n_trades": 0,
+          "metrics": {
+            "n_trades": 0,
+            "contract_grid_mode": "synthetic",
+            "structure": "iron_condor"
+          },
+          "verdict": "NULL",
+          "score": 0.0,
+          "period": "2y",
+          "pnl_per_contract": 0.0,
+          "win_rate": 0.0,
+          "max_dd_per_contract": 0.0,
+          "profit_factor": 0.0,
+          "ship_bar": {
+            "min_trades_ship": 15,
+            "min_trades_signal": 8,
+            "pf_cap": 10.0
+          },
+          "sim_engine": "pcs_sim:iron_condor",
+          "capital": {
+            "structure": "iron_condor",
+            "capital_fit_usd": 150.0,
+            "max_loss_usd": 150.0,
+            "max_lots": 3,
+            "capital_fit": "fit_sleeve_soft",
+            "fits_open_risk_budget": true,
+            "fits_max_loss_budget": false,
+            "open_risk_budget_usd": 750.0,
+            "max_loss_budget_usd": 144.00112683702443,
+            "sleeve_usd": 3000.0,
+            "note": "defined_risk_bp_proxy=max_loss_usd (not cash CSP)"
+          }
+        }
+      },
+      "ok": true,
+      "skipped": false,
+      "reason": "zero_trades",
+      "n_trades": 0,
+      "metrics": {
+        "n_trades": 0,
+        "contract_grid_mode": "synthetic",
+        "structure": "iron_condor"
+      },
+      "score": 0.0,
+      "verdict": "NULL",
+      "evidence_path": ""
+    },
+    {
+      "dna": {
+        "structure": "call_credit_spread",
+        "symbols": [
+          "SNAP"
+        ],
+        "entry_plan": {
+          "side_policy": "prefer_call",
+          "legs": [
+            {
+              "action": "sell",
+              "right": "call",
+              "qty": 1,
+              "role": "short"
+            },
+            {
+              "action": "buy",
+              "right": "call",
+              "qty": 1,
+              "role": "long_protection"
+            }
+          ],
+          "filters": [
+            "iv_rank_min",
+            "min_credit_pct_of_width",
+            "max_loss_budget_usd"
+          ]
+        },
+        "exit_plan": {
+          "ladder": [
+            "profit_target",
+            "max_defined_loss",
+            "delta_breach",
+            "dte_stop",
+            "regime_flip"
+          ],
+          "management": []
+        },
+        "config": {
+          "long_dte": 14,
+          "long_target_delta": 0.2,
+          "spread_width": 2.0,
+          "min_credit_pct": 0.18,
+          "profit_target": 0.5,
+          "defined_loss_exit_frac": 0.938167284916346,
+          "max_loss_mult": 2.0,
+          "delta_breach": 0.38852862330096716,
+          "dte_stop": 3,
+          "iv_rank_min": 0.0,
+          "max_loss_budget_usd": 250.0,
+          "bear_dte": 0,
+          "call_in_bull_ok": false,
+          "regime_flip_exit_enabled": true,
+          "wheel_enabled": false,
+          "roll_on_max_loss": false
+        },
+        "parent_id": "dna_6b0637a190ed",
+        "generation": 1,
+        "dna_id": "dna_b2377a5f4cfa",
+        "notes": "mutate from dna_6b0637a190ed knobs=['defined_loss_exit_frac', 'delta_breach', 'dte_stop']",
+        "last_sim": {
+          "ok": true,
+          "skipped": false,
+          "reason": "zero_trades",
+          "n_trades": 0,
+          "metrics": {
+            "n_trades": 0,
+            "contract_grid_mode": "synthetic",
+            "structure": "call_credit_spread"
+          },
+          "verdict": "NULL",
+          "score": 0.0,
+          "period": "2y",
+          "pnl_per_contract": 0.0,
+          "win_rate": 0.0,
+          "max_dd_per_contract": 0.0,
+          "profit_factor": 0.0,
+          "ship_bar": {
+            "min_trades_ship": 15,
+            "min_trades_signal": 8,
+            "pf_cap": 10.0
+          },
+          "sim_engine": "pcs_sim:call_credit_spread",
+          "capital": {
+            "structure": "call_credit_spread",
+            "capital_fit_usd": 150.0,
+            "max_loss_usd": 150.0,
+            "max_lots": 3,
+            "capital_fit": "fit_3k",
+            "fits_open_risk_budget": true,
+            "fits_max_loss_budget": true,
+            "open_risk_budget_usd": 750.0,
+            "max_loss_budget_usd": 250.0,
+            "sleeve_usd": 3000.0,
+            "note": "defined_risk_bp_proxy=max_loss_usd (not cash CSP)"
+          }
+        }
+      },
+      "ok": true,
+      "skipped": false,
+      "reason": "zero_trades",
+      "n_trades": 0,
+      "metrics": {
+        "n_trades": 0,
+        "contract_grid_mode": "synthetic",
+        "structure": "call_credit_spread"
+      },
+      "score": 0.0,
+      "verdict": "NULL",
+      "evidence_path": ""
+    },
+    {
+      "dna": {
+        "structure": "put_credit_spread",
+        "symbols": [
+          "SMCI"
+        ],
+        "entry_plan": {
+          "side_policy": "prefer_put",
+          "legs": [
+            {
+              "action": "sell",
+              "right": "put",
+              "qty": 1,
+              "role": "short"
+            },
+            {
+              "action": "buy",
+              "right": "put",
+              "qty": 1,
+              "role": "long_protection"
+            }
+          ],
+          "filters": [
+            "iv_rank_min",
+            "min_credit_pct_of_width",
+            "max_loss_budget_usd"
+          ]
+        },
+        "exit_plan": {
+          "ladder": [
+            "profit_target",
+            "max_defined_loss",
+            "delta_breach",
+            "dte_stop",
+            "regime_flip"
+          ],
+          "management": []
+        },
+        "config": {
+          "long_dte": 14,
+          "long_target_delta": 0.2,
+          "spread_width": 5.378418000615629,
+          "min_credit_pct": 0.18,
+          "profit_target": 0.5,
+          "defined_loss_exit_frac": 0.85,
+          "max_loss_mult": 2.0,
+          "delta_breach": 0.45,
+          "dte_stop": 3,
+          "iv_rank_min": 0.0,
+          "max_loss_budget_usd": 250.0,
+          "bear_dte": 1,
+          "regime_flip_exit_enabled": true,
+          "wheel_enabled": false,
+          "roll_on_max_loss": false
+        },
+        "parent_id": "dna_e62e06741e59",
+        "generation": 1,
+        "dna_id": "dna_bba6b675504d",
+        "notes": "mutate from dna_e62e06741e59 knobs=['iv_rank_min', 'spread_width', 'bear_dte']",
+        "last_sim": {
+          "ok": true,
+          "skipped": false,
+          "reason": "zero_trades",
+          "n_trades": 0,
+          "metrics": {
+            "n_trades": 0,
+            "contract_grid_mode": "synthetic",
+            "structure": "put_credit_spread"
+          },
+          "verdict": "NULL",
+          "score": 0.0,
+          "period": "2y",
+          "pnl_per_contract": 0.0,
+          "win_rate": 0.0,
+          "max_dd_per_contract": 0.0,
+          "profit_factor": 0.0,
+          "ship_bar": {
+            "min_trades_ship": 15,
+            "min_trades_signal": 8,
+            "pf_cap": 10.0
+          },
+          "sim_engine": "pcs_sim:put_credit_spread",
+          "capital": {
+            "structure": "put_credit_spread",
+            "capital_fit_usd": 403.38,
+            "max_loss_usd": 403.38,
+            "max_lots": 1,
+            "capital_fit": "fit_sleeve_soft",
+            "fits_open_risk_budget": true,
+            "fits_max_loss_budget": false,
+            "open_risk_budget_usd": 750.0,
+            "max_loss_budget_usd": 250.0,
+            "sleeve_usd": 3000.0,
+            "note": "defined_risk_bp_proxy=max_loss_usd (not cash CSP)"
+          }
+        }
+      },
+      "ok": true,
+      "skipped": false,
+      "reason": "zero_trades",
+      "n_trades": 0,
+      "metrics": {
+        "n_trades": 0,
+        "contract_grid_mode": "synthetic",
+        "structure": "put_credit_spread"
+      },
+      "score": 0.0,
+      "verdict": "NULL",
+      "evidence_path": ""
+    },
+    {
+      "dna": {
+        "structure": "put_credit_spread",
+        "symbols": [
+          "BAC"
+        ],
+        "entry_plan": {
+          "side_policy": "prefer_put",
+          "legs": [
+            {
+              "action": "sell",
+              "right": "put",
+              "qty": 1,
+              "role": "short"
+            },
+            {
+              "action": "buy",
+              "right": "put",
+              "qty": 1,
+              "role": "long_protection"
+            }
+          ],
+          "filters": [
+            "iv_rank_min",
+            "min_credit_pct_of_width",
+            "max_loss_budget_usd"
+          ]
+        },
+        "exit_plan": {
+          "ladder": [
+            "profit_target",
+            "max_defined_loss",
+            "delta_breach",
+            "dte_stop",
+            "regime_flip"
+          ],
+          "management": []
+        },
+        "config": {
+          "long_dte": 14,
+          "long_target_delta": 0.2,
+          "spread_width": 2.0,
+          "min_credit_pct": 0.18,
+          "profit_target": 0.5,
+          "defined_loss_exit_frac": 0.85,
+          "max_loss_mult": 2.0,
+          "delta_breach": 0.45,
+          "dte_stop": 3,
+          "iv_rank_min": 0.0,
+          "max_loss_budget_usd": 250.0,
+          "bear_dte": 0,
+          "regime_flip_exit_enabled": true,
+          "wheel_enabled": false,
+          "roll_on_max_loss": false
+        },
+        "parent_id": "",
+        "generation": 0,
+        "dna_id": "dna_edbba80a6a74",
+        "notes": "Defined-risk bull put vertical: sell OTM put + buy further OTM put. max_loss_usd=(width-credit)*100; BP\u2248max_loss. Fits $3k open-risk when width small.",
+        "last_sim": {
+          "ok": true,
+          "skipped": false,
+          "reason": "zero_trades",
+          "n_trades": 0,
+          "metrics": {
+            "n_trades": 0,
+            "contract_grid_mode": "synthetic",
+            "structure": "put_credit_spread"
+          },
+          "verdict": "NULL",
+          "score": 0.0,
+          "period": "2y",
+          "pnl_per_contract": 0.0,
+          "win_rate": 0.0,
+          "max_dd_per_contract": 0.0,
+          "profit_factor": 0.0,
+          "ship_bar": {
+            "min_trades_ship": 15,
+            "min_trades_signal": 8,
+            "pf_cap": 10.0
+          },
+          "sim_engine": "pcs_sim:put_credit_spread",
+          "capital": {
+            "structure": "put_credit_spread",
+            "capital_fit_usd": 150.0,
+            "max_loss_usd": 150.0,
+            "max_lots": 3,
+            "capital_fit": "fit_3k",
+            "fits_open_risk_budget": true,
+            "fits_max_loss_budget": true,
+            "open_risk_budget_usd": 750.0,
+            "max_loss_budget_usd": 250.0,
+            "sleeve_usd": 3000.0,
+            "note": "defined_risk_bp_proxy=max_loss_usd (not cash CSP)"
+          }
+        }
+      },
+      "ok": true,
+      "skipped": false,
+      "reason": "zero_trades",
+      "n_trades": 0,
+      "metrics": {
+        "n_trades": 0,
+        "contract_grid_mode": "synthetic",
+        "structure": "put_credit_spread"
+      },
+      "score": 0.0,
+      "verdict": "NULL",
+      "evidence_path": ""
+    },
+    {
+      "dna": {
+        "structure": "iron_condor",
+        "symbols": [
+          "SNAP"
+        ],
+        "entry_plan": {
+          "side_policy": "range_bound",
+          "legs": [
+            {
+              "action": "sell",
+              "right": "put",
+              "qty": 1,
+              "role": "short_put"
+            },
+            {
+              "action": "buy",
+              "right": "put",
+              "qty": 1,
+              "role": "long_put"
+            },
+            {
+              "action": "sell",
+              "right": "call",
+              "qty": 1,
+              "role": "short_call"
+            },
+            {
+              "action": "buy",
+              "right": "call",
+              "qty": 1,
+              "role": "long_call"
+            }
+          ],
+          "filters": [
+            "iv_rank_min",
+            "min_credit_pct_of_width",
+            "max_loss_budget_usd"
+          ]
+        },
+        "exit_plan": {
+          "ladder": [
+            "profit_target",
+            "max_defined_loss",
+            "delta_breach",
+            "dte_stop"
+          ],
+          "management": []
+        },
+        "config": {
+          "long_dte": 21,
+          "long_target_delta": 0.16,
+          "spread_width": 2.0,
+          "min_credit_pct": 0.14,
+          "profit_target": 0.5,
+          "defined_loss_exit_frac": 0.8,
+          "max_loss_mult": 2.0,
+          "delta_breach": 0.4,
+          "dte_stop": 5,
+          "iv_rank_min": 15.0,
+          "max_loss_budget_usd": 300.0,
+          "bear_dte": 1,
+          "call_in_bull_ok": true,
+          "regime_flip_exit_enabled": false,
+          "wheel_enabled": false,
+          "roll_on_max_loss": false
+        },
+        "parent_id": "",
+        "generation": 0,
+        "dna_id": "dna_5b7db22da7a8",
+        "notes": "Defined-risk short iron condor: OTM put credit wing + OTM call credit wing. Collect both sides; max_loss\u2248max(wing_width)-total_credit. Neutral/high-IV range structure.",
+        "last_sim": {
+          "ok": true,
+          "skipped": false,
+          "reason": "zero_trades",
+          "n_trades": 0,
+          "metrics": {
+            "n_trades": 0,
+            "contract_grid_mode": "synthetic",
+            "structure": "iron_condor"
+          },
+          "verdict": "NULL",
+          "score": 0.0,
+          "period": "2y",
+          "pnl_per_contract": 0.0,
+          "win_rate": 0.0,
+          "max_dd_per_contract": 0.0,
+          "profit_factor": 0.0,
+          "ship_bar": {
+            "min_trades_ship": 15,
+            "min_trades_signal": 8,
+            "pf_cap": 10.0
+          },
+          "sim_engine": "pcs_sim:iron_condor",
+          "capital": {
+            "structure": "iron_condor",
+            "capital_fit_usd": 150.0,
+            "max_loss_usd": 150.0,
+            "max_lots": 3,
+            "capital_fit": "fit_3k",
+            "fits_open_risk_budget": true,
+            "fits_max_loss_budget": true,
+            "open_risk_budget_usd": 750.0,
+            "max_loss_budget_usd": 300.0,
+            "sleeve_usd": 3000.0,
+            "note": "defined_risk_bp_proxy=max_loss_usd (not cash CSP)"
+          }
+        }
+      },
+      "ok": true,
+      "skipped": false,
+      "reason": "zero_trades",
+      "n_trades": 0,
+      "metrics": {
+        "n_trades": 0,
+        "contract_grid_mode": "synthetic",
+        "structure": "iron_condor"
+      },
+      "score": 0.0,
+      "verdict": "NULL",
+      "evidence_path": ""
+    },
+    {
+      "dna": {
+        "structure": "put_credit_spread",
+        "symbols": [
+          "NFLX"
+        ],
+        "entry_plan": {
+          "side_policy": "prefer_put",
+          "legs": [
+            {
+              "action": "sell",
+              "right": "put",
+              "qty": 1,
+              "role": "short"
+            },
+            {
+              "action": "buy",
+              "right": "put",
+              "qty": 1,
+              "role": "long_protection"
+            }
+          ],
+          "filters": [
+            "iv_rank_min",
+            "min_credit_pct_of_width",
+            "max_loss_budget_usd"
+          ]
+        },
+        "exit_plan": {
+          "ladder": [
+            "profit_target",
+            "max_defined_loss",
+            "delta_breach",
+            "dte_stop",
+            "regime_flip"
+          ],
+          "management": []
+        },
+        "config": {
+          "long_dte": 20,
+          "long_target_delta": 0.2,
+          "spread_width": 2.0,
+          "min_credit_pct": 0.252283233309146,
+          "profit_target": 0.5,
+          "defined_loss_exit_frac": 0.85,
+          "max_loss_mult": 2.0,
+          "delta_breach": 0.45047152421544173,
+          "dte_stop": 3,
+          "iv_rank_min": 0.0,
+          "max_loss_budget_usd": 250.0,
+          "bear_dte": 0,
+          "regime_flip_exit_enabled": true,
+          "wheel_enabled": false,
+          "roll_on_max_loss": false
+        },
+        "parent_id": "dna_0ea0d43d544e",
+        "generation": 1,
+        "dna_id": "dna_a4949de123f6",
+        "notes": "mutate from dna_0ea0d43d544e knobs=['delta_breach', 'long_dte', 'min_credit_pct']",
+        "last_sim": {
+          "ok": true,
+          "skipped": false,
+          "reason": "zero_trades",
+          "n_trades": 0,
+          "metrics": {
+            "n_trades": 0,
+            "contract_grid_mode": "synthetic",
+            "structure": "put_credit_spread"
+          },
+          "verdict": "NULL",
+          "score": 0.0,
+          "period": "2y",
+          "pnl_per_contract": 0.0,
+          "win_rate": 0.0,
+          "max_dd_per_contract": 0.0,
+          "profit_factor": 0.0,
+          "ship_bar": {
+            "min_trades_ship": 15,
+            "min_trades_signal": 8,
+            "pf_cap": 10.0
+          },
+          "sim_engine": "pcs_sim:put_credit_spread",
+          "capital": {
+            "structure": "put_credit_spread",
+            "capital_fit_usd": 150.0,
+            "max_loss_usd": 150.0,
+            "max_lots": 3,
+            "capital_fit": "fit_3k",
+            "fits_open_risk_budget": true,
+            "fits_max_loss_budget": true,
+            "open_risk_budget_usd": 750.0,
+            "max_loss_budget_usd": 250.0,
+            "sleeve_usd": 3000.0,
+            "note": "defined_risk_bp_proxy=max_loss_usd (not cash CSP)"
+          }
+        }
+      },
+      "ok": true,
+      "skipped": false,
+      "reason": "zero_trades",
+      "n_trades": 0,
+      "metrics": {
+        "n_trades": 0,
+        "contract_grid_mode": "synthetic",
+        "structure": "put_credit_spread"
+      },
+      "score": 0.0,
+      "verdict": "NULL",
+      "evidence_path": ""
+    },
+    {
+      "dna": {
+        "structure": "call_credit_spread",
+        "symbols": [
+          "SNAP"
+        ],
+        "entry_plan": {
+          "side_policy": "prefer_call",
+          "legs": [
+            {
+              "action": "sell",
+              "right": "call",
+              "qty": 1,
+              "role": "short"
+            },
+            {
+              "action": "buy",
+              "right": "call",
+              "qty": 1,
+              "role": "long_protection"
+            }
+          ],
+          "filters": [
+            "iv_rank_min",
+            "min_credit_pct_of_width",
+            "max_loss_budget_usd"
+          ]
+        },
+        "exit_plan": {
+          "ladder": [
+            "profit_target",
+            "max_defined_loss",
+            "delta_breach",
+            "dte_stop",
+            "regime_flip"
+          ],
+          "management": []
+        },
+        "config": {
+          "long_dte": 14,
+          "long_target_delta": 0.22931421727891488,
+          "spread_width": 2.0,
+          "min_credit_pct": 0.18,
+          "profit_target": 0.4696442936931633,
+          "defined_loss_exit_frac": 0.85,
+          "max_loss_mult": 2.0,
+          "delta_breach": 0.504381259414629,
+          "dte_stop": 3,
+          "iv_rank_min": 0.0,
+          "max_loss_budget_usd": 250.0,
+          "bear_dte": 0,
+          "call_in_bull_ok": false,
+          "regime_flip_exit_enabled": true,
+          "wheel_enabled": false,
+          "roll_on_max_loss": true
+        },
+        "parent_id": "dna_6b0637a190ed",
+        "generation": 1,
+        "dna_id": "dna_681d90b6fb69",
+        "notes": "mutate from dna_6b0637a190ed knobs=['profit_target', 'delta_breach', 'long_target_delta']",
+        "last_sim": {
+          "ok": true,
+          "skipped": false,
+          "reason": "zero_trades",
+          "n_trades": 0,
+          "metrics": {
+            "n_trades": 0,
+            "contract_grid_mode": "synthetic",
+            "structure": "call_credit_spread"
+          },
+          "verdict": "NULL",
+          "score": 0.0,
+          "period": "2y",
+          "pnl_per_contract": 0.0,
+          "win_rate": 0.0,
+          "max_dd_per_contract": 0.0,
+          "profit_factor": 0.0,
+          "ship_bar": {
+            "min_trades_ship": 15,
+            "min_trades_signal": 8,
+            "pf_cap": 10.0
+          },
+          "sim_engine": "pcs_sim:call_credit_spread",
+          "capital": {
+            "structure": "call_credit_spread",
+            "capital_fit_usd": 150.0,
+            "max_loss_usd": 150.0,
+            "max_lots": 3,
+            "capital_fit": "fit_3k",
+            "fits_open_risk_budget": true,
+            "fits_max_loss_budget": true,
+            "open_risk_budget_usd": 750.0,
+            "max_loss_budget_usd": 250.0,
+            "sleeve_usd": 3000.0,
+            "note": "defined_risk_bp_proxy=max_loss_usd (not cash CSP)"
+          }
+        }
+      },
+      "ok": true,
+      "skipped": false,
+      "reason": "zero_trades",
+      "n_trades": 0,
+      "metrics": {
+        "n_trades": 0,
+        "contract_grid_mode": "synthetic",
+        "structure": "call_credit_spread"
+      },
+      "score": 0.0,
+      "verdict": "NULL",
+      "evidence_path": ""
+    },
+    {
+      "dna": {
+        "structure": "call_credit_spread",
+        "symbols": [
+          "COIN"
+        ],
+        "entry_plan": {
+          "side_policy": "prefer_call",
+          "legs": [
+            {
+              "action": "sell",
+              "right": "call",
+              "qty": 1,
+              "role": "short"
+            },
+            {
+              "action": "buy",
+              "right": "call",
+              "qty": 1,
+              "role": "long_protection"
+            }
+          ],
+          "filters": [
+            "iv_rank_min",
+            "min_credit_pct_of_width",
+            "max_loss_budget_usd"
+          ]
+        },
+        "exit_plan": {
+          "ladder": [
+            "profit_target",
+            "max_defined_loss",
+            "delta_breach",
+            "dte_stop",
+            "regime_flip"
+          ],
+          "management": []
+        },
+        "config": {
+          "long_dte": 24,
+          "long_target_delta": 0.2,
+          "spread_width": 2.0,
+          "min_credit_pct": 0.18,
+          "profit_target": 0.5,
+          "defined_loss_exit_frac": 0.8281630109545253,
+          "max_loss_mult": 2.8160606030058895,
+          "delta_breach": 0.45,
+          "dte_stop": 3,
+          "iv_rank_min": 0.0,
+          "max_loss_budget_usd": 250.0,
+          "bear_dte": 0,
+          "call_in_bull_ok": false,
+          "regime_flip_exit_enabled": true,
+          "wheel_enabled": false,
+          "roll_on_max_loss": false
+        },
+        "parent_id": "dna_528984410d19",
+        "generation": 1,
+        "dna_id": "dna_de4f30ef0a1f",
+        "notes": "mutate from dna_528984410d19 knobs=['long_dte', 'max_loss_mult', 'defined_loss_exit_frac']",
+        "last_sim": {
+          "ok": true,
+          "skipped": false,
+          "reason": "zero_trades",
+          "n_trades": 0,
+          "metrics": {
+            "n_trades": 0,
+            "contract_grid_mode": "synthetic",
+            "structure": "call_credit_spread"
+          },
+          "verdict": "NULL",
+          "score": 0.0,
+          "period": "2y",
+          "pnl_per_contract": 0.0,
+          "win_rate": 0.0,
+          "max_dd_per_contract": 0.0,
+          "profit_factor": 0.0,
+          "ship_bar": {
+            "min_trades_ship": 15,
+            "min_trades_signal": 8,
+            "pf_cap": 10.0
+          },
+          "sim_engine": "pcs_sim:call_credit_spread",
+          "capital": {
+            "structure": "call_credit_spread",
+            "capital_fit_usd": 150.0,
+            "max_loss_usd": 150.0,
+            "max_lots": 3,
+            "capital_fit": "fit_3k",
+            "fits_open_risk_budget": true,
+            "fits_max_loss_budget": true,
+            "open_risk_budget_usd": 750.0,
+            "max_loss_budget_usd": 250.0,
+            "sleeve_usd": 3000.0,
+            "note": "defined_risk_bp_proxy=max_loss_usd (not cash CSP)"
+          }
+        }
+      },
+      "ok": true,
+      "skipped": false,
+      "reason": "zero_trades",
+      "n_trades": 0,
+      "metrics": {
+        "n_trades": 0,
+        "contract_grid_mode": "synthetic",
+        "structure": "call_credit_spread"
+      },
+      "score": 0.0,
+      "verdict": "NULL",
+      "evidence_path": ""
+    },
+    {
+      "dna": {
+        "structure": "iron_condor",
+        "symbols": [
+          "SMCI"
+        ],
+        "entry_plan": {
+          "side_policy": "range_bound",
+          "legs": [
+            {
+              "action": "sell",
+              "right": "put",
+              "qty": 1,
+              "role": "short_put"
+            },
+            {
+              "action": "buy",
+              "right": "put",
+              "qty": 1,
+              "role": "long_put"
+            },
+            {
+              "action": "sell",
+              "right": "call",
+              "qty": 1,
+              "role": "short_call"
+            },
+            {
+              "action": "buy",
+              "right": "call",
+              "qty": 1,
+              "role": "long_call"
+            }
+          ],
+          "filters": [
+            "iv_rank_min",
+            "min_credit_pct_of_width",
+            "max_loss_budget_usd"
+          ]
+        },
+        "exit_plan": {
+          "ladder": [
+            "profit_target",
+            "max_defined_loss",
+            "delta_breach",
+            "dte_stop"
+          ],
+          "management": []
+        },
+        "config": {
+          "long_dte": 30,
+          "long_target_delta": 0.10516541447656517,
+          "spread_width": 2.0,
+          "min_credit_pct": 0.14,
+          "profit_target": 0.5,
+          "defined_loss_exit_frac": 0.79759950870229,
+          "max_loss_mult": 2.0,
+          "delta_breach": 0.4,
+          "dte_stop": 5,
+          "iv_rank_min": 15.0,
+          "max_loss_budget_usd": 300.0,
+          "bear_dte": 1,
+          "call_in_bull_ok": true,
+          "regime_flip_exit_enabled": false,
+          "wheel_enabled": false,
+          "roll_on_max_loss": false
+        },
+        "parent_id": "dna_dc56d6bb866e",
+        "generation": 1,
+        "dna_id": "dna_18e05b67ff86",
+        "notes": "mutate from dna_dc56d6bb866e knobs=['long_dte', 'long_target_delta', 'defined_loss_exit_frac']",
+        "last_sim": {
+          "ok": true,
+          "skipped": false,
+          "reason": "zero_trades",
+          "n_trades": 0,
+          "metrics": {
+            "n_trades": 0,
+            "contract_grid_mode": "synthetic",
+            "structure": "iron_condor"
+          },
+          "verdict": "NULL",
+          "score": 0.0,
+          "period": "2y",
+          "pnl_per_contract": 0.0,
+          "win_rate": 0.0,
+          "max_dd_per_contract": 0.0,
+          "profit_factor": 0.0,
+          "ship_bar": {
+            "min_trades_ship": 15,
+            "min_trades_signal": 8,
+            "pf_cap": 10.0
+          },
+          "sim_engine": "pcs_sim:iron_condor",
+          "capital": {
+            "structure": "iron_condor",
+            "capital_fit_usd": 150.0,
+            "max_loss_usd": 150.0,
+            "max_lots": 3,
+            "capital_fit": "fit_3k",
+            "fits_open_risk_budget": true,
+            "fits_max_loss_budget": true,
+            "open_risk_budget_usd": 750.0,
+            "max_loss_budget_usd": 300.0,
+            "sleeve_usd": 3000.0,
+            "note": "defined_risk_bp_proxy=max_loss_usd (not cash CSP)"
+          }
+        }
+      },
+      "ok": true,
+      "skipped": false,
+      "reason": "zero_trades",
+      "n_trades": 0,
+      "metrics": {
+        "n_trades": 0,
+        "contract_grid_mode": "synthetic",
+        "structure": "iron_condor"
+      },
+      "score": 0.0,
+      "verdict": "NULL",
+      "evidence_path": ""
+    },
+    {
+      "dna": {
+        "structure": "iron_condor",
+        "symbols": [
+          "COIN"
+        ],
+        "entry_plan": {
+          "side_policy": "range_bound",
+          "legs": [
+            {
+              "action": "sell",
+              "right": "put",
+              "qty": 1,
+              "role": "short_put"
+            },
+            {
+              "action": "buy",
+              "right": "put",
+              "qty": 1,
+              "role": "long_put"
+            },
+            {
+              "action": "sell",
+              "right": "call",
+              "qty": 1,
+              "role": "short_call"
+            },
+            {
+              "action": "buy",
+              "right": "call",
+              "qty": 1,
+              "role": "long_call"
+            }
+          ],
+          "filters": [
+            "iv_rank_min",
+            "min_credit_pct_of_width",
+            "max_loss_budget_usd"
+          ]
+        },
+        "exit_plan": {
+          "ladder": [
+            "profit_target",
+            "max_defined_loss",
+            "delta_breach",
+            "dte_stop"
+          ],
+          "management": []
+        },
+        "config": {
+          "long_dte": 14,
+          "long_target_delta": 0.2,
+          "spread_width": 2.0,
+          "min_credit_pct": 0.18,
+          "profit_target": 0.4768881805460685,
+          "defined_loss_exit_frac": 0.85,
+          "max_loss_mult": 1.2,
+          "delta_breach": 0.45,
+          "dte_stop": 3,
+          "iv_rank_min": 0.0,
+          "max_loss_budget_usd": 263.8708455330281,
+          "bear_dte": 0,
+          "call_in_bull_ok": false,
+          "regime_flip_exit_enabled": true,
+          "wheel_enabled": false,
+          "roll_on_max_loss": false
+        },
+        "parent_id": "dna_528984410d19",
+        "generation": 1,
+        "dna_id": "dna_79bb3f736b45",
+        "notes": "mutate from dna_528984410d19 knobs=['max_loss_mult', 'profit_target', 'max_loss_budget_usd']",
+        "last_sim": {
+          "ok": true,
+          "skipped": false,
+          "reason": "zero_trades",
+          "n_trades": 0,
+          "metrics": {
+            "n_trades": 0,
+            "contract_grid_mode": "synthetic",
+            "structure": "iron_condor"
+          },
+          "verdict": "NULL",
+          "score": 0.0,
+          "period": "2y",
+          "pnl_per_contract": 0.0,
+          "win_rate": 0.0,
+          "max_dd_per_contract": 0.0,
+          "profit_factor": 0.0,
+          "ship_bar": {
+            "min_trades_ship": 15,
+            "min_trades_signal": 8,
+            "pf_cap": 10.0
+          },
+          "sim_engine": "pcs_sim:iron_condor",
+          "capital": {
+            "structure": "iron_condor",
+            "capital_fit_usd": 150.0,
+            "max_loss_usd": 150.0,
+            "max_lots": 3,
+            "capital_fit": "fit_3k",
+            "fits_open_risk_budget": true,
+            "fits_max_loss_budget": true,
+            "open_risk_budget_usd": 750.0,
+            "max_loss_budget_usd": 263.8708455330281,
+            "sleeve_usd": 3000.0,
+            "note": "defined_risk_bp_proxy=max_loss_usd (not cash CSP)"
+          }
+        }
+      },
+      "ok": true,
+      "skipped": false,
+      "reason": "zero_trades",
+      "n_trades": 0,
+      "metrics": {
+        "n_trades": 0,
+        "contract_grid_mode": "synthetic",
+        "structure": "iron_condor"
+      },
+      "score": 0.0,
+      "verdict": "NULL",
+      "evidence_path": ""
+    },
+    {
+      "dna": {
+        "structure": "call_credit_spread",
+        "symbols": [
+          "COIN"
+        ],
+        "entry_plan": {
+          "side_policy": "prefer_call",
+          "legs": [
+            {
+              "action": "sell",
+              "right": "call",
+              "qty": 1,
+              "role": "short"
+            },
+            {
+              "action": "buy",
+              "right": "call",
+              "qty": 1,
+              "role": "long_protection"
+            }
+          ],
+          "filters": [
+            "iv_rank_min",
+            "min_credit_pct_of_width",
+            "max_loss_budget_usd"
+          ]
+        },
+        "exit_plan": {
+          "ladder": [
+            "profit_target",
+            "max_defined_loss",
+            "delta_breach",
+            "dte_stop",
+            "regime_flip"
+          ],
+          "management": []
+        },
+        "config": {
+          "long_dte": 14,
+          "long_target_delta": 0.2,
+          "spread_width": 2.0,
+          "min_credit_pct": 0.18,
+          "profit_target": 0.5,
+          "defined_loss_exit_frac": 0.85,
+          "max_loss_mult": 2.0,
+          "delta_breach": 0.45,
+          "dte_stop": 3,
+          "iv_rank_min": 0.0,
+          "max_loss_budget_usd": 250.0,
+          "bear_dte": 0,
+          "call_in_bull_ok": false,
+          "regime_flip_exit_enabled": true,
+          "wheel_enabled": false,
+          "roll_on_max_loss": false
+        },
+        "parent_id": "",
+        "generation": 0,
+        "dna_id": "dna_528984410d19",
+        "notes": "Defined-risk bear call vertical: sell OTM call + buy further OTM call. max_loss_usd=(width-credit)*100; BP\u2248max_loss. Good for bear/neutral or high IV range.",
+        "last_sim": {
+          "ok": true,
+          "skipped": false,
+          "reason": "zero_trades",
+          "n_trades": 0,
+          "metrics": {
+            "n_trades": 0,
+            "contract_grid_mode": "synthetic",
+            "structure": "call_credit_spread"
+          },
+          "verdict": "NULL",
+          "score": 0.0,
+          "period": "2y",
+          "pnl_per_contract": 0.0,
+          "win_rate": 0.0,
+          "max_dd_per_contract": 0.0,
+          "profit_factor": 0.0,
+          "ship_bar": {
+            "min_trades_ship": 15,
+            "min_trades_signal": 8,
+            "pf_cap": 10.0
+          },
+          "sim_engine": "pcs_sim:call_credit_spread",
+          "capital": {
+            "structure": "call_credit_spread",
+            "capital_fit_usd": 150.0,
+            "max_loss_usd": 150.0,
+            "max_lots": 3,
+            "capital_fit": "fit_3k",
+            "fits_open_risk_budget": true,
+            "fits_max_loss_budget": true,
+            "open_risk_budget_usd": 750.0,
+            "max_loss_budget_usd": 250.0,
+            "sleeve_usd": 3000.0,
+            "note": "defined_risk_bp_proxy=max_loss_usd (not cash CSP)"
+          }
+        }
+      },
+      "ok": true,
+      "skipped": false,
+      "reason": "zero_trades",
+      "n_trades": 0,
+      "metrics": {
+        "n_trades": 0,
+        "contract_grid_mode": "synthetic",
+        "structure": "call_credit_spread"
+      },
+      "score": 0.0,
+      "verdict": "NULL",
+      "evidence_path": ""
+    },
+    {
+      "dna": {
+        "structure": "iron_condor",
+        "symbols": [
+          "TSLL"
+        ],
+        "entry_plan": {
+          "side_policy": "range_bound",
+          "legs": [
+            {
+              "action": "sell",
+              "right": "put",
+              "qty": 1,
+              "role": "short_put"
+            },
+            {
+              "action": "buy",
+              "right": "put",
+              "qty": 1,
+              "role": "long_put"
+            },
+            {
+              "action": "sell",
+              "right": "call",
+              "qty": 1,
+              "role": "short_call"
+            },
+            {
+              "action": "buy",
+              "right": "call",
+              "qty": 1,
+              "role": "long_call"
+            }
+          ],
+          "filters": [
+            "iv_rank_min",
+            "min_credit_pct_of_width",
+            "max_loss_budget_usd"
+          ]
+        },
+        "exit_plan": {
+          "ladder": [
+            "profit_target",
+            "max_defined_loss",
+            "delta_breach",
+            "dte_stop"
+          ],
+          "management": []
+        },
+        "config": {
+          "long_dte": 21,
+          "long_target_delta": 0.16,
+          "spread_width": 2.0,
+          "min_credit_pct": 0.14,
+          "profit_target": 0.5,
+          "defined_loss_exit_frac": 0.8,
+          "max_loss_mult": 2.0,
+          "delta_breach": 0.4,
+          "dte_stop": 5,
+          "iv_rank_min": 15.0,
+          "max_loss_budget_usd": 300.0,
+          "bear_dte": 1,
+          "call_in_bull_ok": true,
+          "regime_flip_exit_enabled": false,
+          "wheel_enabled": false,
+          "roll_on_max_loss": false
+        },
+        "parent_id": "",
+        "generation": 0,
+        "dna_id": "dna_de97d747e9c5",
+        "notes": "Defined-risk short iron condor: OTM put credit wing + OTM call credit wing. Collect both sides; max_loss\u2248max(wing_width)-total_credit. Neutral/high-IV range structure.",
+        "last_sim": {
+          "ok": true,
+          "skipped": false,
+          "reason": "zero_trades",
+          "n_trades": 0,
+          "metrics": {
+            "n_trades": 0,
+            "contract_grid_mode": "synthetic",
+            "structure": "iron_condor"
+          },
+          "verdict": "NULL",
+          "score": 0.0,
+          "period": "2y",
+          "pnl_per_contract": 0.0,
+          "win_rate": 0.0,
+          "max_dd_per_contract": 0.0,
+          "profit_factor": 0.0,
+          "ship_bar": {
+            "min_trades_ship": 15,
+            "min_trades_signal": 8,
+            "pf_cap": 10.0
+          },
+          "sim_engine": "pcs_sim:iron_condor",
+          "capital": {
+            "structure": "iron_condor",
+            "capital_fit_usd": 150.0,
+            "max_loss_usd": 150.0,
+            "max_lots": 3,
+            "capital_fit": "fit_3k",
+            "fits_open_risk_budget": true,
+            "fits_max_loss_budget": true,
+            "open_risk_budget_usd": 750.0,
+            "max_loss_budget_usd": 300.0,
+            "sleeve_usd": 3000.0,
+            "note": "defined_risk_bp_proxy=max_loss_usd (not cash CSP)"
+          }
+        }
+      },
+      "ok": true,
+      "skipped": false,
+      "reason": "zero_trades",
+      "n_trades": 0,
+      "metrics": {
+        "n_trades": 0,
+        "contract_grid_mode": "synthetic",
+        "structure": "iron_condor"
+      },
+      "score": 0.0,
+      "verdict": "NULL",
+      "evidence_path": ""
+    },
+    {
+      "dna": {
+        "structure": "put_credit_spread",
+        "symbols": [
+          "COIN"
+        ],
+        "entry_plan": {
+          "side_policy": "prefer_put",
+          "legs": [
+            {
+              "action": "sell",
+              "right": "put",
+              "qty": 1,
+              "role": "short"
+            },
+            {
+              "action": "buy",
+              "right": "put",
+              "qty": 1,
+              "role": "long_protection"
+            }
+          ],
+          "filters": [
+            "iv_rank_min",
+            "min_credit_pct_of_width",
+            "max_loss_budget_usd"
+          ]
+        },
+        "exit_plan": {
+          "ladder": [
+            "profit_target",
+            "max_defined_loss",
+            "delta_breach",
+            "dte_stop",
+            "regime_flip"
+          ],
+          "management": []
+        },
+        "config": {
+          "long_dte": 14,
+          "long_target_delta": 0.2,
+          "spread_width": 4.340742476373212,
+          "min_credit_pct": 0.166413629533612,
+          "profit_target": 0.5,
+          "defined_loss_exit_frac": 0.85,
+          "max_loss_mult": 2.0,
+          "delta_breach": 0.45,
+          "dte_stop": 3,
+          "iv_rank_min": 8.832885492598741,
+          "max_loss_budget_usd": 250.0,
+          "bear_dte": 0,
+          "regime_flip_exit_enabled": true,
+          "wheel_enabled": false,
+          "roll_on_max_loss": false
+        },
+        "parent_id": "dna_e4bf3ecabc01",
+        "generation": 1,
+        "dna_id": "dna_3fb6a2b28f12",
+        "notes": "mutate from dna_e4bf3ecabc01 knobs=['spread_width', 'min_credit_pct', 'iv_rank_min']",
+        "last_sim": {
+          "ok": true,
+          "skipped": false,
+          "reason": "zero_trades",
+          "n_trades": 0,
+          "metrics": {
+            "n_trades": 0,
+            "contract_grid_mode": "synthetic",
+            "structure": "put_credit_spread"
+          },
+          "verdict": "NULL",
+          "score": 0.0,
+          "period": "2y",
+          "pnl_per_contract": 0.0,
+          "win_rate": 0.0,
+          "max_dd_per_contract": 0.0,
+          "profit_factor": 0.0,
+          "ship_bar": {
+            "min_trades_ship": 15,
+            "min_trades_signal": 8,
+            "pf_cap": 10.0
+          },
+          "sim_engine": "pcs_sim:put_credit_spread",
+          "capital": {
+            "structure": "put_credit_spread",
+            "capital_fit_usd": 325.56,
+            "max_loss_usd": 325.56,
+            "max_lots": 2,
+            "capital_fit": "fit_sleeve_soft",
+            "fits_open_risk_budget": true,
+            "fits_max_loss_budget": false,
+            "open_risk_budget_usd": 750.0,
+            "max_loss_budget_usd": 250.0,
+            "sleeve_usd": 3000.0,
+            "note": "defined_risk_bp_proxy=max_loss_usd (not cash CSP)"
+          }
+        }
+      },
+      "ok": true,
+      "skipped": false,
+      "reason": "zero_trades",
+      "n_trades": 0,
+      "metrics": {
+        "n_trades": 0,
+        "contract_grid_mode": "synthetic",
+        "structure": "put_credit_spread"
+      },
+      "score": 0.0,
+      "verdict": "NULL",
+      "evidence_path": ""
+    },
+    {
+      "dna": {
+        "structure": "iron_condor",
+        "symbols": [
+          "SNAP"
+        ],
+        "entry_plan": {
+          "side_policy": "range_bound",
+          "legs": [
+            {
+              "action": "sell",
+              "right": "put",
+              "qty": 1,
+              "role": "short_put"
+            },
+            {
+              "action": "buy",
+              "right": "put",
+              "qty": 1,
+              "role": "long_put"
+            },
+            {
+              "action": "sell",
+              "right": "call",
+              "qty": 1,
+              "role": "short_call"
+            },
+            {
+              "action": "buy",
+              "right": "call",
+              "qty": 1,
+              "role": "long_call"
+            }
+          ],
+          "filters": [
+            "iv_rank_min",
+            "min_credit_pct_of_width",
+            "max_loss_budget_usd"
+          ]
+        },
+        "exit_plan": {
+          "ladder": [
+            "profit_target",
+            "max_defined_loss",
+            "delta_breach",
+            "dte_stop"
+          ],
+          "management": []
+        },
+        "config": {
+          "long_dte": 21,
+          "long_target_delta": 0.16,
+          "spread_width": 2.0,
+          "min_credit_pct": 0.14,
+          "profit_target": 0.5,
+          "defined_loss_exit_frac": 0.8,
+          "max_loss_mult": 2.0,
+          "delta_breach": 0.4,
+          "dte_stop": 5,
+          "iv_rank_min": 8.366326926946348,
+          "max_loss_budget_usd": 323.23323953563244,
+          "bear_dte": 2,
+          "call_in_bull_ok": true,
+          "regime_flip_exit_enabled": false,
+          "wheel_enabled": false,
+          "roll_on_max_loss": false
+        },
+        "parent_id": "dna_5b7db22da7a8",
+        "generation": 1,
+        "dna_id": "dna_cc000272fcdb",
+        "notes": "mutate from dna_5b7db22da7a8 knobs=['iv_rank_min', 'bear_dte', 'max_loss_budget_usd']",
+        "last_sim": {
+          "ok": true,
+          "skipped": false,
+          "reason": "zero_trades",
+          "n_trades": 0,
+          "metrics": {
+            "n_trades": 0,
+            "contract_grid_mode": "synthetic",
+            "structure": "iron_condor"
+          },
+          "verdict": "NULL",
+          "score": 0.0,
+          "period": "2y",
+          "pnl_per_contract": 0.0,
+          "win_rate": 0.0,
+          "max_dd_per_contract": 0.0,
+          "profit_factor": 0.0,
+          "ship_bar": {
+            "min_trades_ship": 15,
+            "min_trades_signal": 8,
+            "pf_cap": 10.0
+          },
+          "sim_engine": "pcs_sim:iron_condor",
+          "capital": {
+            "structure": "iron_condor",
+            "capital_fit_usd": 150.0,
+            "max_loss_usd": 150.0,
+            "max_lots": 3,
+            "capital_fit": "fit_3k",
+            "fits_open_risk_budget": true,
+            "fits_max_loss_budget": true,
+            "open_risk_budget_usd": 750.0,
+            "max_loss_budget_usd": 323.23323953563244,
+            "sleeve_usd": 3000.0,
+            "note": "defined_risk_bp_proxy=max_loss_usd (not cash CSP)"
+          }
+        }
+      },
+      "ok": true,
+      "skipped": false,
+      "reason": "zero_trades",
+      "n_trades": 0,
+      "metrics": {
+        "n_trades": 0,
+        "contract_grid_mode": "synthetic",
+        "structure": "iron_condor"
+      },
+      "score": 0.0,
+      "verdict": "NULL",
+      "evidence_path": ""
+    },
+    {
+      "dna": {
+        "structure": "butterfly_spread",
+        "symbols": [
+          "SOFI"
+        ],
+        "entry_plan": {
+          "side_policy": "neutral_to_bullish_pin",
+          "legs": [
+            {
+              "action": "buy",
+              "right": "call",
+              "qty": 1,
+              "role": "lower_wing"
+            },
+            {
+              "action": "sell",
+              "right": "call",
+              "qty": 2,
+              "role": "body"
+            },
+            {
+              "action": "buy",
+              "right": "call",
+              "qty": 1,
+              "role": "upper_wing"
+            }
+          ],
+          "filters": [
+            "not_bearish",
+            "iv_rank_min",
+            "max_loss_budget_usd"
+          ]
+        },
+        "exit_plan": {
+          "ladder": [
+            "profit_target",
+            "defined_loss",
+            "dte_stop"
+          ],
+          "management": []
+        },
+        "config": {
+          "long_dte": 21,
+          "long_target_delta": 0.35,
+          "spread_width": 1.0,
+          "iv_rank_min": 0.0,
+          "profit_target": 0.4,
+          "defined_loss_exit_frac": 0.7,
+          "dte_stop": 3,
+          "max_loss_budget_usd": 300.0,
+          "regime_flip_exit_enabled": false,
+          "wheel_enabled": false,
+          "roll_on_max_loss": false
+        },
+        "parent_id": "",
+        "generation": 0,
+        "dna_id": "dna_37272e7873d4",
+        "notes": "Long symmetric call butterfly: buy lower call, sell two middle calls, buy upper call. Debit is defined 1-lot max loss; research-only BS same-expiry scaffold.",
+        "last_sim": {
+          "ok": true,
+          "skipped": false,
+          "reason": "weak_edge",
+          "n_trades": 16,
+          "metrics": {
+            "n_trades": 16,
+            "win_rate_pct": 56.25,
+            "total_pnl_per_contract": -1.8322199226723015,
+            "avg_pnl_per_contract": -0.11451374516701884,
+            "profit_factor": 0.9647416187239897,
+            "max_dd_per_contract": 32.85731655395512,
+            "avg_days_held": 10.875,
+            "exit_reasons": {
+              "profit_target": 9,
+              "defined_loss": 6,
+              "end_of_data": 1
+            },
+            "avg_max_loss_usd": 10.024906796887567,
+            "p95_max_loss_usd": 15.699717912995403,
+            "worst_max_loss_usd": 16.883996191156612,
+            "structure": "butterfly_spread"
+          },
+          "verdict": "NULL",
+          "score": -6.564536476627424,
+          "period": "2y",
+          "pnl_per_contract": -1.8322199226723015,
+          "win_rate": 0.5625,
+          "max_dd_per_contract": 32.85731655395512,
+          "profit_factor": 0.9647416187239897,
+          "ship_bar": {
+            "min_trades_ship": 15,
+            "min_trades_signal": 8,
+            "pf_cap": 10.0
+          },
+          "sim_engine": "butterfly_sim:butterfly_spread",
+          "capital": {
+            "structure": "butterfly_spread",
+            "capital_fit_usd": 15.7,
+            "max_loss_usd": 15.7,
+            "max_lots": 3,
+            "capital_fit": "fit_3k",
+            "fits_open_risk_budget": true,
+            "fits_max_loss_budget": true,
+            "open_risk_budget_usd": 750.0,
+            "max_loss_budget_usd": 300.0,
+            "sleeve_usd": 3000.0,
+            "note": "defined_debit_risk=max_entry_debit_usd; paper BS same-expiry symmetric call butterfly; pin/assignment and observed option surfaces not modeled"
+          }
+        }
+      },
+      "ok": true,
+      "skipped": false,
+      "reason": "weak_edge",
+      "n_trades": 16,
+      "metrics": {
+        "n_trades": 16,
+        "win_rate_pct": 56.25,
+        "total_pnl_per_contract": -1.8322199226723015,
+        "avg_pnl_per_contract": -0.11451374516701884,
+        "profit_factor": 0.9647416187239897,
+        "max_dd_per_contract": 32.85731655395512,
+        "avg_days_held": 10.875,
+        "exit_reasons": {
+          "profit_target": 9,
+          "defined_loss": 6,
+          "end_of_data": 1
+        },
+        "avg_max_loss_usd": 10.024906796887567,
+        "p95_max_loss_usd": 15.699717912995403,
+        "worst_max_loss_usd": 16.883996191156612,
+        "structure": "butterfly_spread"
+      },
+      "score": -6.564536476627424,
+      "verdict": "NULL",
+      "evidence_path": "/Users/jarvis/dev/tsla-tsll-options-tracker/.cache/platform/evolve_backtests/SOFI_butterfly_trades.json"
+    },
+    {
+      "dna": {
+        "structure": "butterfly_spread",
+        "symbols": [
+          "NFLX"
+        ],
+        "entry_plan": {
+          "side_policy": "neutral_to_bullish_pin",
+          "legs": [
+            {
+              "action": "buy",
+              "right": "call",
+              "qty": 1,
+              "role": "lower_wing"
+            },
+            {
+              "action": "sell",
+              "right": "call",
+              "qty": 2,
+              "role": "body"
+            },
+            {
+              "action": "buy",
+              "right": "call",
+              "qty": 1,
+              "role": "upper_wing"
+            }
+          ],
+          "filters": [
+            "not_bearish",
+            "iv_rank_min",
+            "max_loss_budget_usd"
+          ]
+        },
+        "exit_plan": {
+          "ladder": [
+            "profit_target",
+            "defined_loss",
+            "dte_stop"
+          ],
+          "management": []
+        },
+        "config": {
+          "long_dte": 21,
+          "long_target_delta": 0.2896430511940502,
+          "spread_width": 0.5,
+          "iv_rank_min": 0.0,
+          "profit_target": 0.4,
+          "defined_loss_exit_frac": 0.7,
+          "dte_stop": 3,
+          "max_loss_budget_usd": 300.0,
+          "regime_flip_exit_enabled": false,
+          "wheel_enabled": false,
+          "roll_on_max_loss": false
+        },
+        "parent_id": "dna_e98bc535fd11",
+        "generation": 1,
+        "dna_id": "dna_82b5dafb702a",
+        "notes": "mutate from dna_e98bc535fd11 knobs=['spread_width', 'iv_rank_min', 'long_target_delta']",
+        "last_sim": {
+          "ok": true,
+          "skipped": false,
+          "reason": "weak_edge",
+          "n_trades": 11,
+          "metrics": {
+            "n_trades": 11,
+            "win_rate_pct": 54.54545454545454,
+            "total_pnl_per_contract": -10.269474792499457,
+            "avg_pnl_per_contract": -0.9335886174999506,
+            "profit_factor": 0.8571568388722655,
+            "max_dd_per_contract": 31.303266534820487,
+            "avg_days_held": 8.909090909090908,
+            "exit_reasons": {
+              "profit_target": 6,
+              "dte_stop": 1,
+              "defined_loss": 4
+            },
+            "avg_max_loss_usd": 16.063741754203644,
+            "p95_max_loss_usd": 32.207457608928,
+            "worst_max_loss_usd": 33.31947755890852,
+            "structure": "butterfly_spread"
+          },
+          "verdict": "NULL",
+          "score": -14.300014054592676,
+          "period": "2y",
+          "pnl_per_contract": -10.269474792499457,
+          "win_rate": 0.5454545454545454,
+          "max_dd_per_contract": 31.303266534820487,
+          "profit_factor": 0.8571568388722655,
+          "ship_bar": {
+            "min_trades_ship": 15,
+            "min_trades_signal": 8,
+            "pf_cap": 10.0
+          },
+          "sim_engine": "butterfly_sim:butterfly_spread",
+          "capital": {
+            "structure": "butterfly_spread",
+            "capital_fit_usd": 32.21,
+            "max_loss_usd": 32.21,
+            "max_lots": 3,
+            "capital_fit": "fit_3k",
+            "fits_open_risk_budget": true,
+            "fits_max_loss_budget": true,
+            "open_risk_budget_usd": 750.0,
+            "max_loss_budget_usd": 300.0,
+            "sleeve_usd": 3000.0,
+            "note": "defined_debit_risk=max_entry_debit_usd; paper BS same-expiry symmetric call butterfly; pin/assignment and observed option surfaces not modeled"
+          }
+        }
+      },
+      "ok": true,
+      "skipped": false,
+      "reason": "weak_edge",
+      "n_trades": 11,
+      "metrics": {
+        "n_trades": 11,
+        "win_rate_pct": 54.54545454545454,
+        "total_pnl_per_contract": -10.269474792499457,
+        "avg_pnl_per_contract": -0.9335886174999506,
+        "profit_factor": 0.8571568388722655,
+        "max_dd_per_contract": 31.303266534820487,
+        "avg_days_held": 8.909090909090908,
+        "exit_reasons": {
+          "profit_target": 6,
+          "dte_stop": 1,
+          "defined_loss": 4
+        },
+        "avg_max_loss_usd": 16.063741754203644,
+        "p95_max_loss_usd": 32.207457608928,
+        "worst_max_loss_usd": 33.31947755890852,
+        "structure": "butterfly_spread"
+      },
+      "score": -14.300014054592676,
+      "verdict": "NULL",
+      "evidence_path": "/Users/jarvis/dev/tsla-tsll-options-tracker/.cache/platform/evolve_backtests/NFLX_butterfly_trades.json"
+    },
+    {
+      "dna": {
+        "structure": "butterfly_spread",
+        "symbols": [
+          "PLTR"
+        ],
+        "entry_plan": {
+          "side_policy": "neutral_to_bullish_pin",
+          "legs": [
+            {
+              "action": "buy",
+              "right": "call",
+              "qty": 1,
+              "role": "lower_wing"
+            },
+            {
+              "action": "sell",
+              "right": "call",
+              "qty": 2,
+              "role": "body"
+            },
+            {
+              "action": "buy",
+              "right": "call",
+              "qty": 1,
+              "role": "upper_wing"
+            }
+          ],
+          "filters": [
+            "not_bearish",
+            "iv_rank_min",
+            "max_loss_budget_usd"
+          ]
+        },
+        "exit_plan": {
+          "ladder": [
+            "profit_target",
+            "defined_loss",
+            "dte_stop"
+          ],
+          "management": []
+        },
+        "config": {
+          "long_dte": 21,
+          "long_target_delta": 0.35,
+          "spread_width": 3.706636061065681,
+          "iv_rank_min": 0.0,
+          "profit_target": 0.4,
+          "defined_loss_exit_frac": 0.5853775573776563,
+          "dte_stop": 3,
+          "max_loss_budget_usd": 300.0,
+          "regime_flip_exit_enabled": false,
+          "wheel_enabled": false,
+          "roll_on_max_loss": false
+        },
+        "parent_id": "dna_c92eed64b2b0",
+        "generation": 1,
+        "dna_id": "dna_d7581298df48",
+        "notes": "mutate from dna_c92eed64b2b0 knobs=['dte_stop', 'spread_width', 'defined_loss_exit_frac']",
+        "last_sim": {
+          "ok": true,
+          "skipped": false,
+          "reason": "weak_edge",
+          "n_trades": 17,
+          "metrics": {
+            "n_trades": 17,
+            "win_rate_pct": 41.17647058823529,
+            "total_pnl_per_contract": -25.848343840727384,
+            "avg_pnl_per_contract": -1.5204908141604343,
+            "profit_factor": 0.6099751089563274,
+            "max_dd_per_contract": 48.94723594936312,
+            "avg_days_held": 9.882352941176471,
+            "exit_reasons": {
+              "profit_target": 7,
+              "dte_stop": 1,
+              "defined_loss": 8,
+              "end_of_data": 1
+            },
+            "avg_max_loss_usd": 10.58393369791304,
+            "p95_max_loss_usd": 13.619759001683319,
+            "worst_max_loss_usd": 15.969941063432458,
+            "structure": "butterfly_spread"
+          },
+          "verdict": "NULL",
+          "score": -54.207344495972855,
+          "period": "2y",
+          "pnl_per_contract": -25.848343840727384,
+          "win_rate": 0.4117647058823529,
+          "max_dd_per_contract": 48.94723594936312,
+          "profit_factor": 0.6099751089563274,
+          "ship_bar": {
+            "min_trades_ship": 15,
+            "min_trades_signal": 8,
+            "pf_cap": 10.0
+          },
+          "sim_engine": "butterfly_sim:butterfly_spread",
+          "capital": {
+            "structure": "butterfly_spread",
+            "capital_fit_usd": 13.62,
+            "max_loss_usd": 13.62,
+            "max_lots": 3,
+            "capital_fit": "fit_3k",
+            "fits_open_risk_budget": true,
+            "fits_max_loss_budget": true,
+            "open_risk_budget_usd": 750.0,
+            "max_loss_budget_usd": 300.0,
+            "sleeve_usd": 3000.0,
+            "note": "defined_debit_risk=max_entry_debit_usd; paper BS same-expiry symmetric call butterfly; pin/assignment and observed option surfaces not modeled"
+          }
+        }
+      },
+      "ok": true,
+      "skipped": false,
+      "reason": "weak_edge",
+      "n_trades": 17,
+      "metrics": {
+        "n_trades": 17,
+        "win_rate_pct": 41.17647058823529,
+        "total_pnl_per_contract": -25.848343840727384,
+        "avg_pnl_per_contract": -1.5204908141604343,
+        "profit_factor": 0.6099751089563274,
+        "max_dd_per_contract": 48.94723594936312,
+        "avg_days_held": 9.882352941176471,
+        "exit_reasons": {
+          "profit_target": 7,
+          "dte_stop": 1,
+          "defined_loss": 8,
+          "end_of_data": 1
+        },
+        "avg_max_loss_usd": 10.58393369791304,
+        "p95_max_loss_usd": 13.619759001683319,
+        "worst_max_loss_usd": 15.969941063432458,
+        "structure": "butterfly_spread"
+      },
+      "score": -54.207344495972855,
+      "verdict": "NULL",
+      "evidence_path": "/Users/jarvis/dev/tsla-tsll-options-tracker/.cache/platform/evolve_backtests/PLTR_butterfly_trades.json"
+    },
+    {
+      "dna": {
+        "structure": "butterfly_spread",
+        "symbols": [
+          "NFLX"
+        ],
+        "entry_plan": {
+          "side_policy": "neutral_to_bullish_pin",
+          "legs": [
+            {
+              "action": "buy",
+              "right": "call",
+              "qty": 1,
+              "role": "lower_wing"
+            },
+            {
+              "action": "sell",
+              "right": "call",
+              "qty": 2,
+              "role": "body"
+            },
+            {
+              "action": "buy",
+              "right": "call",
+              "qty": 1,
+              "role": "upper_wing"
+            }
+          ],
+          "filters": [
+            "not_bearish",
+            "iv_rank_min",
+            "max_loss_budget_usd"
+          ]
+        },
+        "exit_plan": {
+          "ladder": [
+            "profit_target",
+            "defined_loss",
+            "dte_stop"
+          ],
+          "management": []
+        },
+        "config": {
+          "long_dte": 21,
+          "long_target_delta": 0.35,
+          "spread_width": 1.0,
+          "iv_rank_min": 0.0,
+          "profit_target": 0.3384162871646308,
+          "defined_loss_exit_frac": 0.57350855464011,
+          "dte_stop": 3,
+          "max_loss_budget_usd": 324.7109147708862,
+          "regime_flip_exit_enabled": false,
+          "wheel_enabled": false,
+          "roll_on_max_loss": false
+        },
+        "parent_id": "dna_e98bc535fd11",
+        "generation": 1,
+        "dna_id": "dna_b84a4e16e265",
+        "notes": "mutate from dna_e98bc535fd11 knobs=['profit_target', 'max_loss_budget_usd', 'defined_loss_exit_frac']",
+        "last_sim": {
+          "ok": true,
+          "skipped": false,
+          "reason": "weak_edge",
+          "n_trades": 13,
+          "metrics": {
+            "n_trades": 13,
+            "win_rate_pct": 53.84615384615385,
+            "total_pnl_per_contract": -42.95515090742238,
+            "avg_pnl_per_contract": -3.3042423774940293,
+            "profit_factor": 0.5543138605381892,
+            "max_dd_per_contract": 58.78264137297481,
+            "avg_days_held": 7.769230769230769,
+            "exit_reasons": {
+              "profit_target": 7,
+              "defined_loss": 6
+            },
+            "avg_max_loss_usd": 18.539784137922627,
+            "p95_max_loss_usd": 34.22674862224624,
+            "worst_max_loss_usd": 36.28614551556737,
+            "structure": "butterfly_spread"
+          },
+          "verdict": "NULL",
+          "score": -74.81471535732027,
+          "period": "2y",
+          "pnl_per_contract": -42.95515090742238,
+          "win_rate": 0.5384615384615384,
+          "max_dd_per_contract": 58.78264137297481,
+          "profit_factor": 0.5543138605381892,
+          "ship_bar": {
+            "min_trades_ship": 15,
+            "min_trades_signal": 8,
+            "pf_cap": 10.0
+          },
+          "sim_engine": "butterfly_sim:butterfly_spread",
+          "capital": {
+            "structure": "butterfly_spread",
+            "capital_fit_usd": 34.23,
+            "max_loss_usd": 34.23,
+            "max_lots": 3,
+            "capital_fit": "fit_3k",
+            "fits_open_risk_budget": true,
+            "fits_max_loss_budget": true,
+            "open_risk_budget_usd": 750.0,
+            "max_loss_budget_usd": 324.7109147708862,
+            "sleeve_usd": 3000.0,
+            "note": "defined_debit_risk=max_entry_debit_usd; paper BS same-expiry symmetric call butterfly; pin/assignment and observed option surfaces not modeled"
+          }
+        }
+      },
+      "ok": true,
+      "skipped": false,
+      "reason": "weak_edge",
+      "n_trades": 13,
+      "metrics": {
+        "n_trades": 13,
+        "win_rate_pct": 53.84615384615385,
+        "total_pnl_per_contract": -42.95515090742238,
+        "avg_pnl_per_contract": -3.3042423774940293,
+        "profit_factor": 0.5543138605381892,
+        "max_dd_per_contract": 58.78264137297481,
+        "avg_days_held": 7.769230769230769,
+        "exit_reasons": {
+          "profit_target": 7,
+          "defined_loss": 6
+        },
+        "avg_max_loss_usd": 18.539784137922627,
+        "p95_max_loss_usd": 34.22674862224624,
+        "worst_max_loss_usd": 36.28614551556737,
+        "structure": "butterfly_spread"
+      },
+      "score": -74.81471535732027,
+      "verdict": "NULL",
+      "evidence_path": "/Users/jarvis/dev/tsla-tsll-options-tracker/.cache/platform/evolve_backtests/NFLX_butterfly_trades.json"
+    },
+    {
+      "dna": {
+        "structure": "butterfly_spread",
+        "symbols": [
+          "NFLX"
+        ],
+        "entry_plan": {
+          "side_policy": "neutral_to_bullish_pin",
+          "legs": [
+            {
+              "action": "buy",
+              "right": "call",
+              "qty": 1,
+              "role": "lower_wing"
+            },
+            {
+              "action": "sell",
+              "right": "call",
+              "qty": 2,
+              "role": "body"
+            },
+            {
+              "action": "buy",
+              "right": "call",
+              "qty": 1,
+              "role": "upper_wing"
+            }
+          ],
+          "filters": [
+            "not_bearish",
+            "iv_rank_min",
+            "max_loss_budget_usd"
+          ]
+        },
+        "exit_plan": {
+          "ladder": [
+            "profit_target",
+            "defined_loss",
+            "dte_stop"
+          ],
+          "management": []
+        },
+        "config": {
+          "long_dte": 21,
+          "long_target_delta": 0.35,
+          "spread_width": 1.0,
+          "iv_rank_min": 0.0,
+          "profit_target": 0.4,
+          "defined_loss_exit_frac": 0.7,
+          "dte_stop": 3,
+          "max_loss_budget_usd": 300.0,
+          "regime_flip_exit_enabled": false,
+          "wheel_enabled": false,
+          "roll_on_max_loss": false
+        },
+        "parent_id": "",
+        "generation": 0,
+        "dna_id": "dna_e98bc535fd11",
+        "notes": "Long symmetric call butterfly: buy lower call, sell two middle calls, buy upper call. Debit is defined 1-lot max loss; research-only BS same-expiry scaffold.",
+        "last_sim": {
+          "ok": true,
+          "skipped": false,
+          "reason": "weak_edge",
+          "n_trades": 11,
+          "metrics": {
+            "n_trades": 11,
+            "win_rate_pct": 45.45454545454545,
+            "total_pnl_per_contract": -42.90850059843464,
+            "avg_pnl_per_contract": -3.9007727816758764,
+            "profit_factor": 0.5421788830426528,
+            "max_dd_per_contract": 58.73599106398707,
+            "avg_days_held": 9.818181818181818,
+            "exit_reasons": {
+              "profit_target": 5,
+              "dte_stop": 1,
+              "defined_loss": 5
+            },
+            "avg_max_loss_usd": 20.131827421016464,
+            "p95_max_loss_usd": 34.340668582108336,
+            "worst_max_loss_usd": 36.28614551556737,
+            "structure": "butterfly_spread"
+          },
+          "verdict": "NULL",
+          "score": -78.91721893514898,
+          "period": "2y",
+          "pnl_per_contract": -42.90850059843464,
+          "win_rate": 0.45454545454545453,
+          "max_dd_per_contract": 58.73599106398707,
+          "profit_factor": 0.5421788830426528,
+          "ship_bar": {
+            "min_trades_ship": 15,
+            "min_trades_signal": 8,
+            "pf_cap": 10.0
+          },
+          "sim_engine": "butterfly_sim:butterfly_spread",
+          "capital": {
+            "structure": "butterfly_spread",
+            "capital_fit_usd": 34.34,
+            "max_loss_usd": 34.34,
+            "max_lots": 3,
+            "capital_fit": "fit_3k",
+            "fits_open_risk_budget": true,
+            "fits_max_loss_budget": true,
+            "open_risk_budget_usd": 750.0,
+            "max_loss_budget_usd": 300.0,
+            "sleeve_usd": 3000.0,
+            "note": "defined_debit_risk=max_entry_debit_usd; paper BS same-expiry symmetric call butterfly; pin/assignment and observed option surfaces not modeled"
+          }
+        }
+      },
+      "ok": true,
+      "skipped": false,
+      "reason": "weak_edge",
+      "n_trades": 11,
+      "metrics": {
+        "n_trades": 11,
+        "win_rate_pct": 45.45454545454545,
+        "total_pnl_per_contract": -42.90850059843464,
+        "avg_pnl_per_contract": -3.9007727816758764,
+        "profit_factor": 0.5421788830426528,
+        "max_dd_per_contract": 58.73599106398707,
+        "avg_days_held": 9.818181818181818,
+        "exit_reasons": {
+          "profit_target": 5,
+          "dte_stop": 1,
+          "defined_loss": 5
+        },
+        "avg_max_loss_usd": 20.131827421016464,
+        "p95_max_loss_usd": 34.340668582108336,
+        "worst_max_loss_usd": 36.28614551556737,
+        "structure": "butterfly_spread"
+      },
+      "score": -78.91721893514898,
+      "verdict": "NULL",
+      "evidence_path": "/Users/jarvis/dev/tsla-tsll-options-tracker/.cache/platform/evolve_backtests/NFLX_butterfly_trades.json"
+    },
+    {
+      "dna": {
+        "structure": "put_credit_spread",
+        "symbols": [
+          "TSLL"
+        ],
+        "entry_plan": {
+          "side_policy": "prefer_put",
+          "legs": [
+            {
+              "action": "sell",
+              "right": "put",
+              "qty": 1,
+              "role": "short"
+            },
+            {
+              "action": "buy",
+              "right": "put",
+              "qty": 1,
+              "role": "long_protection"
+            }
+          ],
+          "filters": [
+            "iv_rank_min",
+            "min_credit_pct_of_width",
+            "max_loss_budget_usd"
+          ]
+        },
+        "exit_plan": {
+          "ladder": [
+            "profit_target",
+            "max_defined_loss",
+            "delta_breach",
+            "dte_stop",
+            "regime_flip"
+          ],
+          "management": []
+        },
+        "config": {
+          "long_dte": 14,
+          "long_target_delta": 0.2,
+          "spread_width": 2.0,
+          "min_credit_pct": 0.18,
+          "profit_target": 0.5,
+          "defined_loss_exit_frac": 0.85,
+          "max_loss_mult": 2.0,
+          "delta_breach": 0.45,
+          "dte_stop": 3,
+          "iv_rank_min": 0.0,
+          "max_loss_budget_usd": 250.0,
+          "bear_dte": 0,
+          "regime_flip_exit_enabled": true,
+          "wheel_enabled": false,
+          "roll_on_max_loss": false
+        },
+        "parent_id": "",
+        "generation": 0,
+        "dna_id": "dna_6c4fea2bc4a1",
+        "notes": "Defined-risk bull put vertical: sell OTM put + buy further OTM put. max_loss_usd=(width-credit)*100; BP\u2248max_loss. Fits $3k open-risk when width small.",
+        "last_sim": {
+          "ok": true,
+          "skipped": false,
+          "reason": "weak_edge",
+          "n_trades": 8,
+          "metrics": {
+            "n_trades": 8,
+            "win_rate_pct": 50.0,
+            "total_pnl_per_contract": -65.63813639923933,
+            "avg_pnl_per_contract": -8.204767049904916,
+            "avg_win_per_contract": 26.901847271667272,
+            "avg_loss_per_contract": -43.31138137147711,
+            "profit_factor": 0.621126512704201,
+            "max_dd_per_contract": 102.4077149499839,
+            "avg_days_held": 7.75,
+            "exit_reasons": {
+              "delta_breach": 4,
+              "profit_target": 4
+            },
+            "n_groups": 8,
+            "group_win_rate_pct": 50.0,
+            "avg_group_pnl_per_contract": -8.204767049904916,
+            "worst_group_pnl_per_contract": -61.32347921593482,
+            "best_group_pnl_per_contract": 35.629854280903146,
+            "avg_positions_per_group": 1.0,
+            "max_positions_per_group": 1.0,
+            "avg_max_loss_usd": 161.08978996658033,
+            "p95_max_loss_usd": 162.60469507850436,
+            "worst_max_loss_usd": 162.73431572125858,
+            "avg_width": 2.0,
+            "avg_net_credit": 0.3891021003341967,
+            "structure": "put_credit_spread",
+            "contract_grid_mode": "synthetic"
+          },
+          "verdict": "NULL",
+          "score": -143.04585134922323,
+          "period": "2y",
+          "pnl_per_contract": -65.63813639923933,
+          "win_rate": 0.5,
+          "max_dd_per_contract": 102.4077149499839,
+          "profit_factor": 0.621126512704201,
+          "ship_bar": {
+            "min_trades_ship": 15,
+            "min_trades_signal": 8,
+            "pf_cap": 10.0
+          },
+          "sim_engine": "pcs_sim:put_credit_spread",
+          "capital": {
+            "structure": "put_credit_spread",
+            "capital_fit_usd": 160.92,
+            "max_loss_usd": 160.92,
+            "max_lots": 3,
+            "capital_fit": "fit_3k",
+            "fits_open_risk_budget": true,
+            "fits_max_loss_budget": true,
+            "open_risk_budget_usd": 750.0,
+            "max_loss_budget_usd": 250.0,
+            "sleeve_usd": 3000.0,
+            "note": "defined_risk_bp_proxy=max_loss_usd (not cash CSP)",
+            "median_max_loss_usd": 160.92,
+            "p95_max_loss_usd": 162.6
+          }
+        }
+      },
+      "ok": true,
+      "skipped": false,
+      "reason": "weak_edge",
+      "n_trades": 8,
+      "metrics": {
+        "n_trades": 8,
+        "win_rate_pct": 50.0,
+        "total_pnl_per_contract": -65.63813639923933,
+        "avg_pnl_per_contract": -8.204767049904916,
+        "avg_win_per_contract": 26.901847271667272,
+        "avg_loss_per_contract": -43.31138137147711,
+        "profit_factor": 0.621126512704201,
+        "max_dd_per_contract": 102.4077149499839,
+        "avg_days_held": 7.75,
+        "exit_reasons": {
+          "delta_breach": 4,
+          "profit_target": 4
+        },
+        "n_groups": 8,
+        "group_win_rate_pct": 50.0,
+        "avg_group_pnl_per_contract": -8.204767049904916,
+        "worst_group_pnl_per_contract": -61.32347921593482,
+        "best_group_pnl_per_contract": 35.629854280903146,
+        "avg_positions_per_group": 1.0,
+        "max_positions_per_group": 1.0,
+        "avg_max_loss_usd": 161.08978996658033,
+        "p95_max_loss_usd": 162.60469507850436,
+        "worst_max_loss_usd": 162.73431572125858,
+        "avg_width": 2.0,
+        "avg_net_credit": 0.3891021003341967,
+        "structure": "put_credit_spread",
+        "contract_grid_mode": "synthetic"
+      },
+      "score": -143.04585134922323,
+      "verdict": "NULL",
+      "evidence_path": "/Users/jarvis/dev/tsla-tsll-options-tracker/.cache/platform/evolve_backtests/TSLL_pcs_trades.json"
+    },
+    {
+      "dna": {
+        "structure": "call_credit_spread",
+        "symbols": [
+          "NFLX"
+        ],
+        "entry_plan": {
+          "side_policy": "prefer_call",
+          "legs": [
+            {
+              "action": "sell",
+              "right": "call",
+              "qty": 1,
+              "role": "short"
+            },
+            {
+              "action": "buy",
+              "right": "call",
+              "qty": 1,
+              "role": "long_protection"
+            }
+          ],
+          "filters": [
+            "iv_rank_min",
+            "min_credit_pct_of_width",
+            "max_loss_budget_usd"
+          ]
+        },
+        "exit_plan": {
+          "ladder": [
+            "profit_target",
+            "max_defined_loss",
+            "delta_breach",
+            "dte_stop",
+            "regime_flip"
+          ],
+          "management": []
+        },
+        "config": {
+          "long_dte": 14,
+          "long_target_delta": 0.2,
+          "spread_width": 0.5,
+          "min_credit_pct": 0.18,
+          "profit_target": 0.5447103923065505,
+          "defined_loss_exit_frac": 0.85,
+          "max_loss_mult": 1.3897486575404256,
+          "delta_breach": 0.45,
+          "dte_stop": 3,
+          "iv_rank_min": 0.0,
+          "max_loss_budget_usd": 250.0,
+          "bear_dte": 0,
+          "call_in_bull_ok": false,
+          "regime_flip_exit_enabled": true,
+          "wheel_enabled": false,
+          "roll_on_max_loss": true
+        },
+        "parent_id": "dna_7336e19e7e17",
+        "generation": 1,
+        "dna_id": "dna_7a2edc48900f",
+        "notes": "mutate from dna_7336e19e7e17 knobs=['max_loss_mult', 'spread_width', 'profit_target']",
+        "last_sim": {
+          "ok": true,
+          "skipped": false,
+          "reason": "few_trades",
+          "n_trades": 3,
+          "metrics": {
+            "n_trades": 3,
+            "win_rate_pct": 66.66666666666666,
+            "total_pnl_per_contract": 12.397725975801045,
+            "avg_pnl_per_contract": 4.132575325267015,
+            "avg_win_per_contract": 18.885430183557517,
+            "avg_loss_per_contract": -25.37313439131399,
+            "profit_factor": 1.4886162578339226,
+            "max_dd_per_contract": 25.37313439131399,
+            "avg_days_held": 2.3333333333333335,
+            "exit_reasons": {
+              "regime_flip": 1,
+              "profit_target": 1,
+              "delta_breach": 1
+            },
+            "n_groups": 3,
+            "group_win_rate_pct": 66.66666666666666,
+            "avg_group_pnl_per_contract": 4.132575325267015,
+            "worst_group_pnl_per_contract": -25.37313439131399,
+            "best_group_pnl_per_contract": 21.51109987075923,
+            "avg_positions_per_group": 1.0,
+            "max_positions_per_group": 1.0,
+            "avg_max_loss_usd": 122.68988659996018,
+            "p95_max_loss_usd": 192.48954489594703,
+            "worst_max_loss_usd": 204.78408006702224,
+            "avg_width": 1.5,
+            "avg_net_credit": 0.2731011340003982,
+            "structure": "call_credit_spread",
+            "contract_grid_mode": "synthetic"
+          },
+          "verdict": "NEEDS_MORE_DATA",
+          "score": 1.5065125037249418,
+          "period": "2y",
+          "pnl_per_contract": 12.397725975801045,
+          "win_rate": 0.6666666666666665,
+          "max_dd_per_contract": 25.37313439131399,
+          "profit_factor": 1.4886162578339226,
+          "ship_bar": {
+            "min_trades_ship": 15,
+            "min_trades_signal": 8,
+            "pf_cap": 10.0
+          },
+          "sim_engine": "pcs_sim:call_credit_spread",
+          "capital": {
+            "structure": "call_credit_spread",
+            "capital_fit_usd": 163.62,
+            "max_loss_usd": 163.62,
+            "max_lots": 3,
+            "capital_fit": "fit_3k",
+            "fits_open_risk_budget": true,
+            "fits_max_loss_budget": true,
+            "open_risk_budget_usd": 750.0,
+            "max_loss_budget_usd": 250.0,
+            "sleeve_usd": 3000.0,
+            "note": "defined_risk_bp_proxy=max_loss_usd (not cash CSP)",
+            "median_max_loss_usd": 81.84,
+            "p95_max_loss_usd": 192.49
+          }
+        }
+      },
+      "ok": true,
+      "skipped": false,
+      "reason": "few_trades",
+      "n_trades": 3,
+      "metrics": {
+        "n_trades": 3,
+        "win_rate_pct": 66.66666666666666,
+        "total_pnl_per_contract": 12.397725975801045,
+        "avg_pnl_per_contract": 4.132575325267015,
+        "avg_win_per_contract": 18.885430183557517,
+        "avg_loss_per_contract": -25.37313439131399,
+        "profit_factor": 1.4886162578339226,
+        "max_dd_per_contract": 25.37313439131399,
+        "avg_days_held": 2.3333333333333335,
+        "exit_reasons": {
+          "regime_flip": 1,
+          "profit_target": 1,
+          "delta_breach": 1
+        },
+        "n_groups": 3,
+        "group_win_rate_pct": 66.66666666666666,
+        "avg_group_pnl_per_contract": 4.132575325267015,
+        "worst_group_pnl_per_contract": -25.37313439131399,
+        "best_group_pnl_per_contract": 21.51109987075923,
+        "avg_positions_per_group": 1.0,
+        "max_positions_per_group": 1.0,
+        "avg_max_loss_usd": 122.68988659996018,
+        "p95_max_loss_usd": 192.48954489594703,
+        "worst_max_loss_usd": 204.78408006702224,
+        "avg_width": 1.5,
+        "avg_net_credit": 0.2731011340003982,
+        "structure": "call_credit_spread",
+        "contract_grid_mode": "synthetic"
+      },
+      "score": 1.5065125037249418,
+      "verdict": "NEEDS_MORE_DATA",
+      "evidence_path": "/Users/jarvis/dev/tsla-tsll-options-tracker/.cache/platform/evolve_backtests/NFLX_pcs_trades.json"
+    },
+    {
+      "dna": {
+        "structure": "iron_condor",
+        "symbols": [
+          "NFLX"
+        ],
+        "entry_plan": {
+          "side_policy": "range_bound",
+          "legs": [
+            {
+              "action": "sell",
+              "right": "put",
+              "qty": 1,
+              "role": "short_put"
+            },
+            {
+              "action": "buy",
+              "right": "put",
+              "qty": 1,
+              "role": "long_put"
+            },
+            {
+              "action": "sell",
+              "right": "call",
+              "qty": 1,
+              "role": "short_call"
+            },
+            {
+              "action": "buy",
+              "right": "call",
+              "qty": 1,
+              "role": "long_call"
+            }
+          ],
+          "filters": [
+            "iv_rank_min",
+            "min_credit_pct_of_width",
+            "max_loss_budget_usd"
+          ]
+        },
+        "exit_plan": {
+          "ladder": [
+            "profit_target",
+            "max_defined_loss",
+            "delta_breach",
+            "dte_stop"
+          ],
+          "management": []
+        },
+        "config": {
+          "long_dte": 21,
+          "long_target_delta": 0.16,
+          "spread_width": 1.2673279122625116,
+          "min_credit_pct": 0.14,
+          "profit_target": 0.5,
+          "defined_loss_exit_frac": 0.8,
+          "max_loss_mult": 2.0,
+          "delta_breach": 0.4,
+          "dte_stop": 5,
+          "iv_rank_min": 24.474709793148843,
+          "max_loss_budget_usd": 362.5353656445891,
+          "bear_dte": 1,
+          "call_in_bull_ok": true,
+          "regime_flip_exit_enabled": false,
+          "wheel_enabled": false,
+          "roll_on_max_loss": false
+        },
+        "parent_id": "dna_244ef2d711f9",
+        "generation": 1,
+        "dna_id": "dna_8ac31c64bff6",
+        "notes": "mutate from dna_244ef2d711f9 knobs=['spread_width', 'max_loss_budget_usd', 'iv_rank_min']",
+        "last_sim": {
+          "ok": true,
+          "skipped": false,
+          "reason": "few_trades",
+          "n_trades": 1,
+          "metrics": {
+            "n_trades": 1,
+            "win_rate_pct": 0.0,
+            "total_pnl_per_contract": -22.939561024245727,
+            "avg_pnl_per_contract": -22.939561024245727,
+            "avg_win_per_contract": 0.0,
+            "avg_loss_per_contract": -22.939561024245727,
+            "profit_factor": 0.0,
+            "max_dd_per_contract": 0.0,
+            "avg_days_held": 6.0,
+            "exit_reasons": {
+              "delta_breach": 1
+            },
+            "n_groups": 1,
+            "group_win_rate_pct": 0.0,
+            "avg_group_pnl_per_contract": -22.939561024245727,
+            "worst_group_pnl_per_contract": -22.939561024245727,
+            "best_group_pnl_per_contract": -22.939561024245727,
+            "avg_positions_per_group": 1.0,
+            "max_positions_per_group": 1.0,
+            "avg_max_loss_usd": 68.47933411118188,
+            "p95_max_loss_usd": 68.47933411118188,
+            "worst_max_loss_usd": 68.47933411118188,
+            "avg_width": 1.0,
+            "avg_net_credit": 0.3152066588881812,
+            "structure": "iron_condor",
+            "contract_grid_mode": "synthetic"
+          },
+          "verdict": "NEEDS_MORE_DATA",
+          "score": -1.1469780512122865,
+          "period": "2y",
+          "pnl_per_contract": -22.939561024245727,
+          "win_rate": 0.0,
+          "max_dd_per_contract": 0.0,
+          "profit_factor": 0.0,
+          "ship_bar": {
+            "min_trades_ship": 15,
+            "min_trades_signal": 8,
+            "pf_cap": 10.0
+          },
+          "sim_engine": "pcs_sim:iron_condor",
+          "capital": {
+            "structure": "iron_condor",
+            "capital_fit_usd": 68.48,
+            "max_loss_usd": 68.48,
+            "max_lots": 3,
+            "capital_fit": "fit_3k",
+            "fits_open_risk_budget": true,
+            "fits_max_loss_budget": true,
+            "open_risk_budget_usd": 750.0,
+            "max_loss_budget_usd": 362.5353656445891,
+            "sleeve_usd": 3000.0,
+            "note": "defined_risk_bp_proxy=max_loss_usd (not cash CSP)",
+            "median_max_loss_usd": 68.48,
+            "p95_max_loss_usd": 68.48
+          }
+        }
+      },
+      "ok": true,
+      "skipped": false,
+      "reason": "few_trades",
+      "n_trades": 1,
+      "metrics": {
+        "n_trades": 1,
+        "win_rate_pct": 0.0,
+        "total_pnl_per_contract": -22.939561024245727,
+        "avg_pnl_per_contract": -22.939561024245727,
+        "avg_win_per_contract": 0.0,
+        "avg_loss_per_contract": -22.939561024245727,
+        "profit_factor": 0.0,
+        "max_dd_per_contract": 0.0,
+        "avg_days_held": 6.0,
+        "exit_reasons": {
+          "delta_breach": 1
+        },
+        "n_groups": 1,
+        "group_win_rate_pct": 0.0,
+        "avg_group_pnl_per_contract": -22.939561024245727,
+        "worst_group_pnl_per_contract": -22.939561024245727,
+        "best_group_pnl_per_contract": -22.939561024245727,
+        "avg_positions_per_group": 1.0,
+        "max_positions_per_group": 1.0,
+        "avg_max_loss_usd": 68.47933411118188,
+        "p95_max_loss_usd": 68.47933411118188,
+        "worst_max_loss_usd": 68.47933411118188,
+        "avg_width": 1.0,
+        "avg_net_credit": 0.3152066588881812,
+        "structure": "iron_condor",
+        "contract_grid_mode": "synthetic"
+      },
+      "score": -1.1469780512122865,
+      "verdict": "NEEDS_MORE_DATA",
+      "evidence_path": "/Users/jarvis/dev/tsla-tsll-options-tracker/.cache/platform/evolve_backtests/NFLX_pcs_trades.json"
+    }
+  ],
+  "created_hyps": [],
+  "updated_hyps": [],
+  "audit_path": "/Users/jarvis/dev/tsla-tsll-options-tracker/.cache/platform/evolve_audit.jsonl",
+  "errors": [],
+  "n_ship": 3,
+  "n_null": 31,
+  "n_reject": 0
+}
