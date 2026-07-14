@@ -1,6 +1,8 @@
-# Go-live readiness scoreboard — 2026-07-14T1131 RTH reconfirm + 0859 MoA (BUILD/L0; capital path empty)
+# Go-live readiness scoreboard — 2026-07-14T1231 RTH reconfirm + 0859 MoA (BUILD/L0; capital path empty)
 
 Source: `docs/GO_LIVE_READINESS.md`. Honest pass/fail. Not an arm.
+
+**2026-07-14T1231 RTH condition (late-session ~15:31 ET):** Freshness pass (engine day 2026-07-14; live YF intraday drift vs engine, not multi-day stale; PLTR live rebound ~7.9% vs prior daily bar). Scout reconfirm 14 eligible / 0 intents / 14 STAND_ASIDE. Historical PCS reference `b195f5fe` (no living leader) honest bear STAND_ASIDE (`bear_dte=0`). Real paper open risk 0 (stub smoke ignored). No same-date archive thrash; density still **3/3** with 13 expirations / n_quotes 1990; `provider_backtest_eligible=true` by date count. No paper place, evolve, shadow, arm, or live. C-row: opportunity filters fail → stand-aside success; B6 still waiting non-bear capital-fit OPEN_PCS. Checkout clean on integrated `main` @ `f99932a` before report-only write. Capital path empty; living leader none.
 
 **2026-07-14T1131 RTH condition (mid-session ~14:31 ET):** Freshness pass (engine day 2026-07-14; live YF intraday drift vs engine, not multi-day stale; PLTR live rebound ~8.8% vs prior daily bar). Scout reconfirm 14 eligible / 0 intents / 14 STAND_ASIDE. Historical PCS reference `b195f5fe` (no living leader) honest bear STAND_ASIDE (`bear_dte=0`). Real paper open risk 0 (stub smoke ignored). No same-date archive thrash; density still **3/3** with 13 expirations / n_quotes 1990; `provider_backtest_eligible=true` by date count. No paper place, evolve, shadow, arm, or live. C-row: opportunity filters fail → stand-aside success; B6 still waiting non-bear capital-fit OPEN_PCS. Checkout clean on integrated `main` @ `b19a1a2` before report-only write. Capital path empty; living leader none.
 
