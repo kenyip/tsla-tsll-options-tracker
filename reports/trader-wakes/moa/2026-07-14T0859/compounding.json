@@ -1,0 +1,107 @@
+{
+  "schema_version": 2,
+  "stamp": "2026-07-14T0859",
+  "loop_signature": "historical-underlying/spy-vix-rv-ratio/current-code-integrity-reconciliation/overlap-safe-density",
+  "economic_mechanism": "Persistent index-option insurance demand can make observed VIX exceed subsequent SPY realized volatility; the frozen high same-close VIX-to-fully-warmed-RV20 ratio in a positive SPY trend was tested as a selector for bounded bullish carry.",
+  "candidate_or_family_scope": "Frozen candidate SPY_VRP_PCS_VIX_RV_21D_V1 in canonical family SPY_VRP_VIX_RV_21D: same-close VIX/RV20 at least 1.25, SPY close above fully warmed SMA200, non-overlapping 21-session outcomes, outcome-independent positive-trend low-ratio controls, and only conditionally a one-lot 21-DTE approximately 0.20-delta $1-wide put credit spread; no threshold, timing, DTE, width, symbol, matching-tolerance, or management mutation.",
+  "funnel_stage_before": "F0_MECHANISM",
+  "funnel_stage_after": "F0_MECHANISM",
+  "falsifier": "Close the family if any frozen assessment has fewer than 10 non-overlapping treated episodes, treated mean below 1 vol point, treated positive frequency below 60%, fewer than 8 outcome-independent matched controls, or matched treated-minus-control mean at or below zero; also close if pooled treated count is below 45, pooled matched count is below 24, either one-sided 95% circular-block-bootstrap lower bound is at or below zero, any chronology/overlap/integrity counter is nonzero, option pricing is reached after mechanism failure, or a same-source-hash current-code reproduction differs on any substantive field other than generated_at.",
+  "outcome": "BLOCKER_REMOVED_AND_RETESTED",
+  "retest_decision": "FAMILY_CLOSED",
+  "strategy_advancement": {
+    "advanced": false,
+    "summary": "No candidate advanced beyond F0. The current overlap-safe exact retest produced 51 treated episodes but only 6 disjoint matched controls, with assessment treated/matched counts 19/0, 9/6, and 23/0; the frozen control-density gates failed before option pricing, so pricing_calls remained zero and the family stayed closed."
+  },
+  "search_information": {
+    "summary": "The 0612 claim-bearing 53-treated/35-control story was superseded after a code-aligned same-fold, half-open row audit found control-treated outcome-window overlaps in 33/35 old matched rows and three assessment-boundary crossings while the artifact omitted both current counters. Current integrated code regenerated a substantively reproducible 51-treated/6-control artifact with complete zero-valued integrity counters. Dominant-failure machinery and its regression now derive the actual sparse-control failure rather than reusing a stale negative-bootstrap narrative. The current no-advance burst stops at DIMINISHING_RETURNS, without globally freezing historical-proxy or simulator routes.",
+    "delta_kinds": [
+      "evidence",
+      "falsification",
+      "repair",
+      "stop_rule"
+    ]
+  },
+  "useful_deltas": [
+    {
+      "kind": "repair",
+      "summary": "Dominant SPY VRP failure labeling is now derived from the frozen gate results and explicitly reports assessment control counts 0/6/0, pooled 6<24, middle-assessment treated count 9, and underpowered positive paired statistics; a behavioral regression excludes the stale pooled-bootstrap claim.",
+      "novelty_key": "spy-vrp-current-gate-dominant-failure-reconciliation-v2",
+      "artifacts": [
+        "scripts/spy_vrp_pcs_study.py",
+        "tests/test_spy_vrp_pcs_study.py"
+      ]
+    },
+    {
+      "kind": "evidence",
+      "summary": "A machine-readable audit records the exact old-artifact same-fold, half-open overlap definition, 33/35 control-treated overlaps, three assessment-boundary violations, missing counter keys, unchanged source hashes, current complete counters, and substantive current-code reproduction equality.",
+      "novelty_key": "spy-vrp-0612-samefold-integrity-supersession-v1",
+      "artifacts": [
+        "reports/trader-wakes/moa/2026-07-14T0859/artifact-integrity-audit.json",
+        "reports/trader-wakes/moa/2026-07-14T0859/spy-vrp-pcs-study.json"
+      ]
+    },
+    {
+      "kind": "falsification",
+      "summary": "The overlap-safe unchanged-DNA retest decisively closes SPY_VRP_VIX_RV_21D at F0 for insufficient disjoint matched-control density: 51 treated, 6 matched, assessment pairs 0/6/0, pooled 6<24, integrity zero, pricing_calls=0, candidate_pass=false, and registration_eligible=false.",
+      "novelty_key": "spy-vrp-overlap-safe-density-family-close-v2",
+      "artifacts": [
+        "reports/trader-wakes/moa/2026-07-14T0859/spy-vrp-pcs-study.json",
+        "reports/trader-wakes/2026-07-14T0859-moa-merge.md"
+      ]
+    },
+    {
+      "kind": "stop_rule",
+      "summary": "DIMINISHING_RETURNS stops the current 18-wake no-advance burst after integrity reconciliation. It is not an archive freeze or permanent BUILD stop; restart requires a written search-design/data reassessment naming a materially new mechanism or evidence class outside quarantined families and not another inspected same-class F0 screen.",
+      "novelty_key": "post-vrp-integrity-reconciled-burst-stop-v2",
+      "artifacts": [
+        "reports/trader-wakes/moa/2026-07-14T0859/merged-next-seed.md",
+        "reports/trader-wakes/moa/2026-07-14T0859/learning-promotion.md"
+      ]
+    }
+  ],
+  "critic_findings": [
+    {
+      "finding": "The stale dominant-failure label could remain because the family was closed either way.",
+      "status": "repaired",
+      "rationale": "Claim-bearing failure semantics matter even when the decision is unchanged. The runner now derives the actual insufficient-control-density failure and the new regression requires exact sparse counts, underpowered wording, and absence of the stale pooled-bootstrap claim; the dependent exact retest remained FAMILY_CLOSED.",
+      "repair_artifacts": [
+        "scripts/spy_vrp_pcs_study.py"
+      ],
+      "test_artifacts": [
+        "tests/test_spy_vrp_pcs_study.py"
+      ]
+    },
+    {
+      "finding": "Unqualified 33/35 overlap wording is precise enough for durable evidence.",
+      "status": "rejected",
+      "rationale": "A looser any-fold inclusive recomputation yields 34/35. Finalized living surfaces and the machine audit therefore say code-aligned same-fold, half-open control-treated outcome-window overlaps in 33/35 old matched rows."
+    },
+    {
+      "finding": "DIMINISHING_RETURNS can be treated as an archive-based global freeze of BUILD research.",
+      "status": "rejected",
+      "rationale": "The merged seed and finalized reports preserve it as a stop for the current 18-wake no-advance burst only. Historical-underlying proxy discovery and simulator work remain available after a written reassessment identifies a materially new mechanism or evidence class outside quarantined families."
+    },
+    {
+      "finding": "The challenger's read-only checks are sufficient final verification without rerunning focused and full suites.",
+      "status": "rejected",
+      "rationale": "The finalizer independently reran the 14-test VRP behavioral/boundary/negative-control suite, 36 compounding/completion regressions, 1 coverage regression, compile, platform smoke, a 10,000-bootstrap substantive reproduction, and the full 263-test suite; all passed."
+    },
+    {
+      "finding": "The concurrent 2026-07-14T0930 RTH stand-aside residue should be absorbed as MoA strategy evidence or removed.",
+      "status": "rejected",
+      "rationale": "The RTH stamp is preserved as separate operational evidence. It remains 14/0/14 STAND_ASIDE with zero real paper risk and contributes no strategy advancement, family decision, or MoA experiment result."
+    },
+    {
+      "finding": "The closed-family inventory can retain the superseded 0612 negative paired-bootstrap rationale.",
+      "status": "rejected",
+      "rationale": "The current handoff, readiness, INDEX, supersession headers, and final merge identify SPY_VRP_VIX_RV_21D as closed under the overlap-safe runner for insufficient disjoint matched-control density; the 0612 paired-bootstrap story is historical and explicitly non-reusable."
+    }
+  ],
+  "closed_families": [
+    "SPY_VRP_VIX_RV_21D"
+  ],
+  "data_dependencies": [],
+  "evidence_wake_condition": null,
+  "next": "DIMINISHING_RETURNS"
+}

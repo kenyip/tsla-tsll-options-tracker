@@ -247,6 +247,52 @@ class SpyVrpPcsStudyTest(unittest.TestCase):
         failed_chronology = vrp._axis_metrics("fixed_0p01_per_leg", chronology_breach)
         self.assertFalse(failed_chronology["gate_checks"]["zero_integrity_violations"])
 
+    def test_dominant_failure_reports_disjoint_control_density_not_stale_incremental_metrics(self):
+        mechanism = {
+            "assessments": {
+                "assessment_2020_2021": {
+                    "n_treated": 19,
+                    "n_matched_pairs": 0,
+                    "gate_checks": {
+                        "minimum_10_nonoverlapping_treated": True,
+                        "minimum_8_matched_pairs": False,
+                    },
+                },
+                "assessment_2022_2023": {
+                    "n_treated": 9,
+                    "n_matched_pairs": 6,
+                    "gate_checks": {
+                        "minimum_10_nonoverlapping_treated": False,
+                        "minimum_8_matched_pairs": False,
+                    },
+                },
+                "assessment_2024_2026": {
+                    "n_treated": 23,
+                    "n_matched_pairs": 0,
+                    "gate_checks": {
+                        "minimum_10_nonoverlapping_treated": True,
+                        "minimum_8_matched_pairs": False,
+                    },
+                },
+            },
+            "pooled": {
+                "n_matched_pairs": 6,
+                "gate_checks": {"minimum_24_matched_pairs": False},
+            },
+            "integrity": {"violations": []},
+        }
+
+        failure = vrp._dominant_mechanism_failure(mechanism)
+
+        self.assertIn("insufficient matched-control density", failure)
+        self.assertIn("assessment_2020_2021=0", failure)
+        self.assertIn("assessment_2022_2023=6", failure)
+        self.assertIn("assessment_2024_2026=0", failure)
+        self.assertIn("pooled=6<24", failure)
+        self.assertIn("assessment_2022_2023=9", failure)
+        self.assertIn("underpowered", failure)
+        self.assertNotIn("pooled matched bootstrap", failure)
+
     def test_strict_json_output_has_development_not_f2_labels(self):
         features, folds = self._three_fold_features()
         features.loc[features["vrp_ratio"] < vrp.RATIO_THRESHOLD, "mechanism_outcome"] = 6.0

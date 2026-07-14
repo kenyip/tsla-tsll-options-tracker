@@ -835,6 +835,46 @@ def _failure_reasons(mechanism: dict[str, Any], option: dict[str, Any]) -> list[
     return failures
 
 
+def _dominant_mechanism_failure(mechanism: dict[str, Any]) -> str:
+    """Describe the actual frozen gate failure without stale metric claims."""
+    assessments = mechanism["assessments"]
+    pooled = mechanism["pooled"]
+    sparse_pairs = {
+        name: int(row["n_matched_pairs"])
+        for name, row in assessments.items()
+        if not row["gate_checks"]["minimum_8_matched_pairs"]
+    }
+    sparse_treated = {
+        name: int(row["n_treated"])
+        for name, row in assessments.items()
+        if not row["gate_checks"]["minimum_10_nonoverlapping_treated"]
+    }
+    if sparse_pairs or not pooled["gate_checks"]["minimum_24_matched_pairs"]:
+        pair_counts = ", ".join(f"{name}={count}" for name, count in sparse_pairs.items()) or "none"
+        treated_clause = (
+            "; treated density also failed "
+            + ", ".join(f"{name}={count}" for name, count in sparse_treated.items())
+            if sparse_treated
+            else ""
+        )
+        return (
+            "the raw treated VIX-minus-forward-RV premium passed pooled treated-density and treated-effect gates, "
+            "but enforcing assessment-bounded controls whose outcome windows are disjoint from every treated and "
+            "control window left insufficient matched-control density "
+            f"(assessment pairs: {pair_counts}; pooled={int(pooled['n_matched_pairs'])}<24{treated_clause}); "
+            "any positive paired mean or bootstrap lower bound is underpowered and cannot establish incremental "
+            "selector edge"
+        )
+    integrity = mechanism["integrity"]
+    if integrity["violations"]:
+        return "the mechanism study failed chronology/overlap integrity: " + ", ".join(integrity["violations"])
+    return (
+        "the raw treated VIX-minus-forward-RV premium passed pooled density and treated-effect gates, "
+        "but the high-ratio positive-trend selector failed stable incremental edge versus matched controls "
+        "in at least one frozen assessment or on the pooled matched bootstrap"
+    )
+
+
 def run_study(
     spy: pd.DataFrame,
     vix: pd.Series,
@@ -898,11 +938,7 @@ def run_study(
         "dominant_failure_mechanism": (
             None
             if candidate_pass
-            else (
-                "the raw treated VIX-minus-forward-RV premium passed pooled density and treated-effect gates, "
-                "but the high-ratio positive-trend selector failed stable incremental edge versus matched controls "
-                "in assessment_2020_2021 and the pooled matched bootstrap"
-            )
+            else _dominant_mechanism_failure(mechanism)
             if mechanism_failed
             else "exact one-lot PCS proxy failed frozen dual-cost capital/path-risk gates despite observed mechanism success"
         ),

@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "stamp": "2026-07-14T0859",
+  "purpose": "Reconcile the superseded 0612 SPY VRP claim-bearing artifact with the current integrated overlap-safe runner before any successor strategy loop.",
+  "old_artifact": {
+    "path": "reports/trader-wakes/moa/2026-07-14T0612/spy-vrp-pcs-study.json",
+    "sha256": "4a22bec0e15e3d71b1163e6528790e951044d27169a5567b0c4c38dc6bdf68fd",
+    "treated_count": 53,
+    "matched_control_count": 35,
+    "recomputed_from_persisted_rows": {
+      "overlap_definition": "same-fold, half-open outcome-window intersection",
+      "control_treated_overlap_violations": 33,
+      "treated_assessment_boundary_violations": 2,
+      "control_assessment_boundary_violations": 1,
+      "total_assessment_boundary_violations": 3
+    },
+    "counter_presence": {
+      "assessment_boundary_violations": false,
+      "control_treated_overlap_violations": false
+    },
+    "disposition": "SUPERSEDED_CLAIM_BEARING_EVIDENCE"
+  },
+  "current_artifact": {
+    "path": "reports/trader-wakes/moa/2026-07-14T0859/spy-vrp-pcs-study.json",
+    "sha256": "71822cdf55bdc1b63c91a4047e0dc631e77940fcabda1cf35a2c7f8168ae3bfb",
+    "source_sha256": {
+      "spy": "f15bfd1830d86085bb9159ffb4bd0ccbb1f6b7f92254b9852314b1a0b23d35e7",
+      "vix": "4545e9eb167bb8cd40bd379d2fa80d8fc7e5aab629cfcb0db65f5f3d3361499b"
+    },
+    "treated_count": 51,
+    "matched_control_count": 6,
+    "assessment_treated_counts": [19, 9, 23],
+    "assessment_matched_counts": [0, 6, 0],
+    "integrity_total_violations": 0,
+    "counter_presence": {
+      "assessment_boundary_violations": true,
+      "control_treated_overlap_violations": true
+    },
+    "option_pricing_calls": 0,
+    "candidate_pass": false,
+    "registration_eligible": false,
+    "strategy_outcome": "FAMILY_CLOSED",
+    "dominant_failure_mechanism": "Insufficient disjoint outcome-independent matched-control density"
+  },
+  "independent_reproduction": {
+    "bootstrap_samples": 10000,
+    "full_file_sha256": "cc12b06cc8d2d62b9ed1d277226a00de99e48e11d40e3068da3388f4306c3f5f",
+    "substantive_payload_sha256_excluding_generated_at": "1e4cc893da3a25b1778bf21cefe763e80bcceb0ac15e0163f0672663cb016ef3",
+    "canonical_substantive_payload_sha256_excluding_generated_at": "1e4cc893da3a25b1778bf21cefe763e80bcceb0ac15e0163f0672663cb016ef3",
+    "substantive_payload_equal": true,
+    "excluded_fields": ["generated_at"]
+  },
+  "executor_outcome": "BLOCKER_REMOVED_AND_RETESTED",
+  "retest_decision": "FAMILY_CLOSED",
+  "strategy_advancement": false,
+  "funnel_before": "F0_MECHANISM",
+  "funnel_after": "F0_MECHANISM"
+}
