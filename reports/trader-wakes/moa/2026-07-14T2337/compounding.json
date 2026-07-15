@@ -1,0 +1,115 @@
+{
+  "schema_version": 2,
+  "stamp": "2026-07-14T2337",
+  "loop_signature": "build|cross-section-12-1-momentum|fixed14-monthly-top3-vs-bottom3|252-lookback-21-skip|21-session-nonoverlap|train60-only|block-bootstrap-lb90|family-close",
+  "economic_mechanism": "Gradual information diffusion and investor underreaction may cause equities with the strongest prior completed 12-minus-1-month returns to outperform same-date weakest-momentum controls over the next 21 sessions; a future bullish defined-risk PCS was conditional on train-only underlying selector evidence.",
+  "candidate_or_family_scope": "CROSS_SECTION_12_1_MOMENTUM_PCS_21D_V1 / MONTHLY_CROSS_SECTION_12_1_MOMENTUM_FORWARD_DRIFT: fixed present-day 14-name panel; month-end 252-session momentum ranks skipping the latest 21 sessions; top-three versus bottom-three disjoint same-date controls; next-session entry; non-overlapping 21-session outcomes; chronological first 60% train only; labeled 20-bps underlying round-trip sensitivity; one-sided 90% circular-block-bootstrap lower bound; final 40% unread; structural future one-lot $1-wide PCS context only with capital_fit_usd=100, max_loss_usd=100, max_lots=1.",
+  "funnel_stage_before": "F0_MECHANISM",
+  "funnel_stage_after": "F0_MECHANISM",
+  "falsifier": "Close the exact frozen family before holdout or option pricing if fewer than 24 train episodes exist, adjusted top-momentum mean is non-positive, paired top-minus-bottom mean is non-positive, the one-sided 90% circular-block-bootstrap lower bound is non-positive, chronology/integrity fails, holdout metrics are read, or option pricing runs. Quarantine unchanged 252/21/top-three/21-session fixed-panel reruns after close.",
+  "outcome": "FAMILY_CLOSED",
+  "strategy_advancement": {
+    "advanced": false,
+    "summary": "Train n=40 had positive absolute top drift and positive paired point excess, but the predeclared dependence-aware LB90 was -0.013561302557; the uncertainty gate failed, so the family remained F0 and the 27-blueprint holdout and option stage stayed unread/unrun."
+  },
+  "search_information": {
+    "summary": "The wake closes one materially different F0 monthly cross-sectional momentum mechanism while adding a reusable train-only chronology/control/bootstrap harness. The negative uncertainty-bound result is information about this frozen selector on this fixed panel, not general market evidence and not permission to invert or retune the inspected control. The third consecutive active-epoch no-advance close triggers burst-stop reassessment.",
+    "delta_kinds": [
+      "capability",
+      "evidence",
+      "falsification",
+      "stop_rule"
+    ]
+  },
+  "useful_deltas": [
+    {
+      "kind": "falsification",
+      "summary": "Closed the exact monthly 12-minus-1 top-three momentum family at F0 after its favorable paired point estimate failed the frozen dependence-aware lower-bound gate; holdout and option pricing remained untouched.",
+      "novelty_key": "monthly-12-1-momentum-fixed14-21session-uncertainty-close-v1",
+      "artifacts": [
+        "reports/trader-wakes/moa/2026-07-14T2337/cross-section-momentum-train.json",
+        "reports/trader-wakes/2026-07-14T2337-moa-merge.md"
+      ]
+    },
+    {
+      "kind": "capability",
+      "summary": "Added a reusable train-only monthly 12-minus-1 cross-sectional harness and proved the real failure boundary where absolute and paired point means are positive but the bootstrap lower bound is non-positive.",
+      "novelty_key": "cross-section-momentum-train-harness-bootstrap-only-reject-v1",
+      "artifacts": [
+        "scripts/cross_section_momentum_train_lab.py",
+        "tests/test_cross_section_momentum_train_lab.py"
+      ]
+    },
+    {
+      "kind": "evidence",
+      "summary": "Finalizer independently regenerated the canonical experiment, reproduced the complete substantive payload excluding only generated_at, and aligned final wake/readiness/coverage surfaces without opening the holdout; final canonical SHA-256 is 9d4225314e2c86321da1a5b18d38581752362e90497483253cc6a4b5e0151104.",
+      "novelty_key": "cross-section-momentum-finalizer-substantive-reproduction-v1",
+      "artifacts": [
+        "reports/trader-wakes/moa/2026-07-14T2337/cross-section-momentum-train.json",
+        "reports/trader-wakes/moa/2026-07-14T2337/learning-promotion.md",
+        "reports/trader-wakes/LATEST.md",
+        "reports/readiness/LATEST.md",
+        "reports/readiness/income-coverage-2026-07-14T2337.md",
+        "reports/readiness/income-coverage-LATEST.md"
+      ]
+    },
+    {
+      "kind": "stop_rule",
+      "summary": "Recorded active-epoch consecutive no-advance close three, superseded the prior pivot with strategy_burst_stop_required=true, and made search-design/data reassessment the unconditional single NEXT.",
+      "novelty_key": "active-epoch-third-close-burst-stop-reassessment-v1",
+      "artifacts": [
+        "reports/trader-wakes/moa/2026-07-14T2337/merged-next-seed.md",
+        "reports/trader-wakes/INDEX.md",
+        "reports/readiness/LATEST.md"
+      ]
+    }
+  ],
+  "critic_findings": [
+    {
+      "finding": "The focused suite lacked the real failure-mode control where top drift and paired point excess are both positive but the dependence-aware lower bound is non-positive.",
+      "status": "repaired",
+      "rationale": "The new fixture holds both point checks positive while forcing LB90 non-positive and asserts the isolated lower-bound gate and aggregate gate fail closed.",
+      "repair_artifacts": [
+        "scripts/cross_section_momentum_train_lab.py"
+      ],
+      "test_artifacts": [
+        "tests/test_cross_section_momentum_train_lab.py"
+      ]
+    },
+    {
+      "finding": "A positive paired train point estimate could justify advancement despite the negative predeclared bootstrap lower bound.",
+      "status": "rejected",
+      "rationale": "The frozen uncertainty gate is authoritative. FAMILY_CLOSED F0-to-F0 is preserved across the canonical payload, final reports, readiness, and this handoff."
+    },
+    {
+      "finding": "Executor-reported verification was sufficient finalizer completion evidence.",
+      "status": "rejected",
+      "rationale": "The finalizer independently reran focused momentum 6/6, shared harness 13/13, compile, exact experiment and reproduction, coverage, platform smoke, and the full 282-test suite."
+    },
+    {
+      "finding": "The fixed present-day 14-name panel result can be generalized or immediately retuned/inverted after inspecting the outcome.",
+      "status": "rejected",
+      "rationale": "The evidence remains explicitly survivorship/listing-biased and non-generalizing; exact nearby knobs are quarantined, the holdout is unread, and any inverted thesis requires a new predeclared mechanism after burst-stop reassessment."
+    },
+    {
+      "finding": "The shared low-HV panel/bootstrap helper reuse introduced an unresolved implementation drift.",
+      "status": "rejected",
+      "rationale": "No drift was found: direct-script import behavior, focused momentum tests, and the combined 13-test shared-harness regression all passed; shared machinery remains single-source rather than duplicated."
+    },
+    {
+      "finding": "NEXT could remain a conditional suggestion after the third active-epoch no-advance close.",
+      "status": "rejected",
+      "rationale": "Living readiness and final wake surfaces now unconditionally stop strategy-search volume and require SEARCH_BURST_STOP_REASSESS_2026-07-14 before any new epoch."
+    },
+    {
+      "finding": "Changing executor, challenger, and finalizer artifact hashes may indicate substantive evidence drift.",
+      "status": "rejected",
+      "rationale": "Each canonical regeneration changes generated_at. A second unchanged-source finalizer run matched the complete substantive payload after excluding only generated_at; final living surfaces cite SHA-256 9d4225314e2c86321da1a5b18d38581752362e90497483253cc6a4b5e0151104 and preserve the same FAMILY_CLOSED metrics and decision."
+    }
+  ],
+  "closed_families": [
+    "MONTHLY_CROSS_SECTION_12_1_MOMENTUM_FORWARD_DRIFT"
+  ],
+  "data_dependencies": [],
+  "next": "SEARCH_BURST_STOP_REASSESS_2026-07-14: stop strategy-search volume and reassess the three active-epoch closes. Distinguish mechanism weakness from fixed present-day panel bias, uncertainty/density, and pre-option selector limits; inventory genuinely independent evidence routes outside quarantined families; then open at most one new predeclared epoch or emit DIMINISHING_RETURNS. No holdout peek, nearby momentum/HV retune, control inversion, option pricing, paper, shadow, arm, broker, or live action."
+}
