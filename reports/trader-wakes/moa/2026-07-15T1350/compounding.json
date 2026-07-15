@@ -1,0 +1,119 @@
+{
+  "schema_version": 2,
+  "stamp": "2026-07-15T1350",
+  "loop_signature": "historical-underlying/monthly-opex-post-expiry/fixed-four-index-basket/first-friday-control/train60-only/five-session/block-bootstrap-lb90",
+  "economic_mechanism": "Monthly index-option expiration may unwind dealer hedges and rebalance index exposure, creating a short positive broad-index drift after third-Friday OPEX relative to an outcome-free same-month first-Friday control.",
+  "candidate_or_family_scope": "MONTHLY_OPEX_POST_EXPIRY_BULL_CALL_14D_V1 / MONTHLY_OPEX_POST_EXPIRY_BROAD_INDEX_DRIFT: equal-weight SPY/QQQ/IWM/DIA adjusted-close basket; holiday-adjusted third-Friday OPEX; next-session entry; five-session hold; first-Friday same-month paired control; chronological first 60% train only; labeled 10-bps underlying round-trip sensitivity; future one-lot 14-DTE $2-wide bull-call structural context only with capital_fit_usd=max_loss_usd=200 and max_lots=1.",
+  "funnel_stage_before": "F0_MECHANISM",
+  "funnel_stage_after": "F0_MECHANISM",
+  "falsifier": "Close the exact frozen family before holdout or option pricing if train has fewer than 48 episodes, the event basket mean after the labeled 10-bps underlying sensitivity is non-positive, paired excess versus the first-Friday control is non-positive, the one-sided 90% circular-block-bootstrap lower bound is non-positive, or chronology/control/overlap integrity has any violation.",
+  "outcome": "FAMILY_CLOSED",
+  "strategy_advancement": {
+    "advanced": false,
+    "summary": "No funnel movement. Train n=74 had positive event drift after 10 bps (+0.4000%) and positive paired excess (+0.3168%), but the predeclared dependence-aware LB90 was -0.2542%; the uncertainty gate failed, so the exact family stayed at F0 while 50 holdout blueprints and all option pricing remained unread/unrun."
+  },
+  "search_information": {
+    "summary": "The wake decisively closed one materially different calendar-flow mechanism and added a reusable holiday-aware paired event-study lab with outcome-independent blueprints, non-overlap, train/unread-holdout separation, provenance hashes, strict JSON, bootstrap uncertainty, option-stage fail-close, and boundary/negative controls. Finalizer clarified that population purity means complete evaluation of the fixed basket, not freedom from survivorship bias, and activated the three-no-advance burst stop.",
+    "delta_kinds": [
+      "capability",
+      "falsification",
+      "repair",
+      "stop_rule"
+    ]
+  },
+  "useful_deltas": [
+    {
+      "kind": "falsification",
+      "summary": "Closed the exact unconditional monthly post-OPEX five-session broad-index drift family at F0 because the positive point excess failed the frozen dependence-aware lower-bound gate; holdout and option pricing remained untouched.",
+      "novelty_key": "monthly-opex-post-expiry-four-index-uncertainty-close-2026-07-15T1350",
+      "artifacts": [
+        "reports/trader-wakes/moa/2026-07-15T1350/monthly-opex-post-expiry.json",
+        "reports/trader-wakes/2026-07-15T1350-moa-merge.md"
+      ]
+    },
+    {
+      "kind": "capability",
+      "summary": "Added a reusable holiday-aware monthly-OPEX paired event-study lab and behavioral, boundary, negative-control, unread-holdout, no-option-pricing, and direct-CLI tests.",
+      "novelty_key": "monthly-opex-holiday-paired-event-study-train-harness-v1",
+      "artifacts": [
+        "scripts/monthly_opex_post_expiry_train_lab.py",
+        "tests/test_monthly_opex_post_expiry_train_lab.py"
+      ]
+    },
+    {
+      "kind": "repair",
+      "summary": "Removed ambiguity from population_pure by emitting and testing explicit fixed-basket-completeness semantics, bias_free=false, survivorship/listing bias, and generalization_allowed=false; regenerated and independently reproduced the canonical artifact unchanged in strategy metrics.",
+      "novelty_key": "monthly-opex-fixed-basket-population-semantics-finalizer-v1",
+      "artifacts": [
+        "scripts/monthly_opex_post_expiry_train_lab.py",
+        "tests/test_monthly_opex_post_expiry_train_lab.py",
+        "reports/trader-wakes/moa/2026-07-15T1350/monthly-opex-post-expiry.json"
+      ]
+    },
+    {
+      "kind": "stop_rule",
+      "summary": "Recorded active-epoch no-advance close three, set both pivot and burst-stop true with burst-stop authoritative, and made search-design/data reassessment the single next action before further strategy volume.",
+      "novelty_key": "active-epoch-third-close-burst-stop-reassessment-2026-07-15T1350-v1",
+      "artifacts": [
+        "reports/trader-wakes/moa/2026-07-15T1350/merged-next-seed.md",
+        "reports/readiness/LATEST.md",
+        "reports/trader-wakes/INDEX.md"
+      ]
+    }
+  ],
+  "critic_findings": [
+    {
+      "finding": "population_pure=true could be misread as bias-free despite explicit survivorship and listing-bias flags.",
+      "status": "repaired",
+      "rationale": "The canonical payload now defines population_pure as complete fixed-basket evaluation without row mixing, separately emits bias_free=false, and preserves survivorship_bias=true, listing_bias=true, and generalization_allowed=false; the payload boundary test asserts all labels together.",
+      "repair_artifacts": [
+        "scripts/monthly_opex_post_expiry_train_lab.py"
+      ],
+      "test_artifacts": [
+        "tests/test_monthly_opex_post_expiry_train_lab.py"
+      ]
+    },
+    {
+      "finding": "Executor or challenger self-reported verification could substitute for independent finalizer verification.",
+      "status": "rejected",
+      "rationale": "Finalizer independently ran the 20-test focused/shared event-study suite, compile, two unchanged-source experiment invocations with full substantive equality excluding only generated_at, manual episode recomputation, coverage regeneration, platform smoke, and the full 304-test suite."
+    },
+    {
+      "finding": "The positive event and paired point estimates could justify F1 advancement despite the negative predeclared bootstrap lower bound.",
+      "status": "rejected",
+      "rationale": "The frozen conjunction is authoritative. The negative LB90 alone keeps gate_pass=false and FAMILY_CLOSED F0-to-F0 across canonical evidence, final wake, readiness, and this handoff."
+    },
+    {
+      "finding": "The 50 reserved holdout outcomes or a 14-DTE bull-call simulation could be read to rescue the train failure.",
+      "status": "rejected",
+      "rationale": "The canonical payload contains only holdout blueprint dates/counts with outcome_metrics_read=false and simulation_run=false; option pricing_calls=0. Holdout inspection and option pricing remain explicitly banned for this closed family."
+    },
+    {
+      "finding": "The exact OPEX family could be reopened with nearby control-Friday, hold-length, window, cost, or block-length retunes after inspecting the outcome.",
+      "status": "rejected",
+      "rationale": "The exact SPY/QQQ/IWM/DIA, first-Friday control, next-session entry, five-session hold, 60/40 split, 10-bps sensitivity, and three-month block-bootstrap family is quarantined. Reopening requires a genuinely new mechanism or evidence class."
+    },
+    {
+      "finding": "The three-date observed-option archive could be treated as edge evidence or as the reason to stop search.",
+      "status": "rejected",
+      "rationale": "The archive remains plumbing/current-chain coverage only and was not used by this underlying experiment. The burst stop is triggered by three consecutive active-epoch no-advance outcomes, not archive density."
+    },
+    {
+      "finding": "Readiness could remain at streak two/pivot-only or another strategy-volume wake could run before reassessment.",
+      "status": "rejected",
+      "rationale": "Living readiness, final wake, INDEX, merged NEXT, and compounding surfaces record consecutive_no_strategy_advance=3, strategy_pivot_required=true, strategy_burst_stop_required=true, with burst-stop reassessment authoritative before another strategy experiment."
+    },
+    {
+      "finding": "The future $200 structural bull-call bound could be presented as an executable capital seat, L1 evidence, or paper authority.",
+      "status": "rejected",
+      "rationale": "The $200 value remains only the $2-wide debit-spread structural ceiling before closing friction. No option mark, path, drawdown, paid debit, fill, liquidity, assignment, seat, L1, registry, paper, shadow, broker, arm, or live authority is claimed."
+    }
+  ],
+  "closed_families": [
+    "MONTHLY_OPEX_POST_EXPIRY_BROAD_INDEX_DRIFT: exact SPY/QQQ/IWM/DIA first-Friday-control next-session five-session 60/40 10-bps three-month-block-bootstrap specification"
+  ],
+  "data_dependencies": [],
+  "retest_decision": null,
+  "evidence_wake_condition": "",
+  "next": "SEARCH_BURST_STOP_REASSESS_2026-07-15: stop active-epoch strategy-search volume after three consecutive no-advance wakes. Write a search-design/data reassessment that inventories open non-quarantined mechanisms and independent evidence classes, separates mechanism weakness from sample-information and fixed-panel limits, and names at most one successor-epoch success definition or DIMINISHING_RETURNS. Do not read this holdout, price its options, reopen nearby OPEX/cadence/tracking/cross-section/VRP/TOM/session families, treat the three-date option archive as edge, or take paper/shadow/arm/broker/live action."
+}

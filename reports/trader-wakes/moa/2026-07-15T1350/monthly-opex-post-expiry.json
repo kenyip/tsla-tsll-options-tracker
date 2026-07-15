@@ -1,0 +1,1921 @@
+{
+  "all_train_rows_are_inspected_development_data": true,
+  "authority": "research only; no registry, paper, shadow, funding, broker, arm, or live authority",
+  "candidate_id": "MONTHLY_OPEX_POST_EXPIRY_BULL_CALL_14D_V1",
+  "candidate_or_family_scope": "equal-weight SPY/QQQ/IWM/DIA five-session adjusted-close return entered on the next completed session after monthly OPEX versus the identical horizon after the first Friday of the same month",
+  "capital_basis": "structural $2-wide one-lot debit-spread upper bound before closing friction; not an observed or simulated paid debit",
+  "capital_fit_usd": 200.0,
+  "claim_scope": "split/dividend-adjusted broad-index ETF closes with a labeled underlying 10-bps round-trip sensitivity; train-only L0 discovery; no option marks, option costs, fills, L1, capital-seat, or paper eligibility claim",
+  "closed_family": "MONTHLY_OPEX_POST_EXPIRY_BROAD_INDEX_DRIFT",
+  "config": {
+    "bootstrap_block_length": 3,
+    "bootstrap_confidence": 0.9,
+    "bootstrap_samples": 10000,
+    "control": "next completed session after adjusted first Friday of the same month",
+    "event": "next completed session after adjusted third-Friday monthly OPEX",
+    "forward_sessions": 5,
+    "minimum_train_episodes": 48,
+    "non_overlapping_episodes": true,
+    "round_trip_cost_bps_per_basket_episode": 10.0,
+    "symbols": [
+      "SPY",
+      "QQQ",
+      "IWM",
+      "DIA"
+    ],
+    "train_fraction": 0.6
+  },
+  "data_provenance": {
+    "common_panel": {
+      "end": "2026-07-15",
+      "join": "inner join on trading dates; no forward fill",
+      "rows": 2647,
+      "start": "2016-01-04"
+    },
+    "sources": {
+      "DIA": {
+        "adjustment_semantics": "yfinance auto_adjust=True",
+        "discarded_trailing_unsettled_rows": 0,
+        "end": "2026-07-15",
+        "path": ".cache/platform/monthly_opex_broad_index/DIA_2016-01-01_2026-07-16_auto_adjust.csv",
+        "rows": 2647,
+        "sha256": "b799055b669728ee5cc8428c959470629313d0e9c7024c6182e461f35906dcbc",
+        "start": "2016-01-04"
+      },
+      "IWM": {
+        "adjustment_semantics": "yfinance auto_adjust=True",
+        "discarded_trailing_unsettled_rows": 0,
+        "end": "2026-07-15",
+        "path": ".cache/platform/monthly_opex_broad_index/IWM_2016-01-01_2026-07-16_auto_adjust.csv",
+        "rows": 2647,
+        "sha256": "72d88516757ad98ea7f930d1ced56c496f08a4aef2784bfd1e020ed84f1607cd",
+        "start": "2016-01-04"
+      },
+      "QQQ": {
+        "adjustment_semantics": "yfinance auto_adjust=True",
+        "discarded_trailing_unsettled_rows": 0,
+        "end": "2026-07-15",
+        "path": ".cache/platform/monthly_opex_broad_index/QQQ_2016-01-01_2026-07-16_auto_adjust.csv",
+        "rows": 2647,
+        "sha256": "c01b3a06e86a5e93c76f295afcc617894f20e403e40004b6fce6e3df38ab48c2",
+        "start": "2016-01-04"
+      },
+      "SPY": {
+        "adjustment_semantics": "yfinance auto_adjust=True",
+        "discarded_trailing_unsettled_rows": 0,
+        "end": "2026-07-15",
+        "path": ".cache/platform/monthly_opex_broad_index/SPY_2016-01-01_2026-07-16_auto_adjust.csv",
+        "rows": 2647,
+        "sha256": "e89ec667e5c3c1ec6ca18fad223d9de607f07e4d062857b929753bb18229476b",
+        "start": "2016-01-04"
+      }
+    }
+  },
+  "decision": "CLOSE_MONTHLY_OPEX_POST_EXPIRY_TRAIN_FAMILY",
+  "dominant_failure_mechanism": "the frozen post-OPEX basket did not establish positive, uncertainty-bounded incremental train drift over the same-month first-Friday control",
+  "economic_mechanism": "monthly index-option expiration may unwind dealer hedges and rebalance index exposure, creating a short positive broad-index drift after third-Friday OPEX relative to an outcome-free same-month pre-OPEX Friday control",
+  "f2_or_l1_claim": false,
+  "falsifier": "on the chronological first 60% of eligible non-overlapping monthly episodes, fewer than 48 episodes, non-positive equal-weight basket mean after a labeled 10-bps round-trip sensitivity, non-positive paired excess versus the first-Friday control, a non-positive one-sided 90% circular-block-bootstrap lower bound, or any integrity violation closes the exact family",
+  "funnel_stage_after": "F0_MECHANISM",
+  "funnel_stage_before": "F0_MECHANISM",
+  "generated_at": "2026-07-15T21:12:47.353108+00:00",
+  "max_loss_usd": 200.0,
+  "max_lots": 1,
+  "mechanism_family": "MONTHLY_OPEX_POST_EXPIRY_BROAD_INDEX_DRIFT",
+  "one_lot_max_loss_usd": 200.0,
+  "option_stage": {
+    "option_mark_provenance": null,
+    "planned_dte": 14,
+    "planned_structure": "bull_call_debit_spread",
+    "planned_width_usd": 2.0,
+    "pricing_calls": 0,
+    "pricing_run": false,
+    "status": "NOT_RUN_TRAIN_GATE_FAILED"
+  },
+  "paper_only": true,
+  "phase": "BUILD_L0_UNDERLYING_DISCOVERY",
+  "population_validity": {
+    "bias_free": false,
+    "generalization_allowed": false,
+    "listing_bias": true,
+    "population_pure": true,
+    "population_pure_semantics": "the frozen four-symbol basket was evaluated completely and without row mixing; this does not mean the basket is survivorship-bias-free",
+    "population_type": "fixed broad-index ETF basket",
+    "ranking_complete": true,
+    "survivorship_bias": true
+  },
+  "registration_eligible": false,
+  "schema_version": 1,
+  "sleeve_usd": 3000.0,
+  "strategy_outcome": "FAMILY_CLOSED",
+  "structure": "conditional_bull_call_debit_spread_not_yet_priced",
+  "train": {
+    "bootstrap_block_length": 3,
+    "bootstrap_samples": 10000,
+    "control_basket_mean_return_after_cost": 0.0008318034514890836,
+    "episodes": [
+      {
+        "control_basket_return_after_cost": 0.02345547699160233,
+        "control_entry_date": "2016-02-08",
+        "control_exit_date": "2016-02-16",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.011537814410740754,
+          "IWM": 0.025406539267977424,
+          "QQQ": 0.03736296241833581,
+          "SPY": 0.02351459186935534
+        },
+        "control_session_date": "2016-02-05",
+        "event_basket_return_after_cost": -0.003075452789919413,
+        "event_entry_date": "2016-02-22",
+        "event_exit_date": "2016-02-29",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": -0.00590565626199413,
+          "IWM": 0.011420196781153136,
+          "QQQ": -0.007552485988159718,
+          "SPY": -0.00626386569067694
+        },
+        "month": "2016-02",
+        "opex_session_date": "2016-02-19",
+        "paired_excess_return": -0.026530929781521745
+      },
+      {
+        "control_basket_return_after_cost": 0.005703798119864129,
+        "control_entry_date": "2016-03-07",
+        "control_exit_date": "2016-03-14",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.010490370269836902,
+          "IWM": -0.008908043790539888,
+          "QQQ": 0.0157112967697568,
+          "SPY": 0.009521569230402704
+        },
+        "control_session_date": "2016-03-04",
+        "event_basket_return_after_cost": 0.00499909611651861,
+        "event_entry_date": "2016-03-21",
+        "event_exit_date": "2016-03-29",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.0003407184652759465,
+          "IWM": 0.011808501856543474,
+          "QQQ": 0.00964850536921702,
+          "SPY": 0.0021986587750379982
+        },
+        "month": "2016-03",
+        "opex_session_date": "2016-03-18",
+        "paired_excess_return": -0.0007047020033455198
+      },
+      {
+        "control_basket_return_after_cost": -0.012343035747712144,
+        "control_entry_date": "2016-04-04",
+        "control_exit_date": "2016-04-11",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": -0.009484755010356616,
+          "IWM": -0.012887117577685903,
+          "QQQ": -0.012188360032654222,
+          "SPY": -0.010811910370151834
+        },
+        "control_session_date": "2016-04-01",
+        "event_basket_return_after_cost": -0.007143537168848828,
+        "event_entry_date": "2016-04-18",
+        "event_exit_date": "2016-04-25",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": -0.001334570937622237,
+          "IWM": 0.0,
+          "QQQ": -0.02022863324541424,
+          "SPY": -0.0030109444923588358
+        },
+        "month": "2016-04",
+        "opex_session_date": "2016-04-15",
+        "paired_excess_return": 0.005199498578863316
+      },
+      {
+        "control_basket_return_after_cost": 0.002246166158135111,
+        "control_entry_date": "2016-05-09",
+        "control_exit_date": "2016-05-16",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.0015820545357763116,
+          "IWM": -0.0017980063393014944,
+          "QQQ": 0.008877805633026536,
+          "SPY": 0.00432281080303909
+        },
+        "control_session_date": "2016-05-06",
+        "event_basket_return_after_cost": 0.027978221809605297,
+        "event_entry_date": "2016-05-23",
+        "event_exit_date": "2016-05-31",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.01641951822270049,
+          "IWM": 0.03921911592252836,
+          "QQQ": 0.037712262834455945,
+          "SPY": 0.022561990258736397
+        },
+        "month": "2016-05",
+        "opex_session_date": "2016-05-20",
+        "paired_excess_return": 0.025732055651470187
+      },
+      {
+        "control_basket_return_after_cost": -0.017609399511364865,
+        "control_entry_date": "2016-06-06",
+        "control_exit_date": "2016-06-13",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": -0.010158220413218344,
+          "IWM": -0.020559575628283366,
+          "QQQ": -0.02199868326730503,
+          "SPY": -0.013721118736652715
+        },
+        "control_session_date": "2016-06-03",
+        "event_basket_return_after_cost": -0.04606038407818916,
+        "event_entry_date": "2016-06-20",
+        "event_exit_date": "2016-06-27",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": -0.037120835687996956,
+          "IWM": -0.05732896551557709,
+          "QQQ": -0.04609944229352425,
+          "SPY": -0.03969229281565834
+        },
+        "month": "2016-06",
+        "opex_session_date": "2016-06-17",
+        "paired_excess_return": -0.028450984566824294
+      },
+      {
+        "control_basket_return_after_cost": 0.038289231126729995,
+        "control_entry_date": "2016-07-05",
+        "control_exit_date": "2016-07-12",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.02906598776604996,
+          "IWM": 0.058822044748471525,
+          "QQQ": 0.03788859378974552,
+          "SPY": 0.03138029820265298
+        },
+        "control_session_date": "2016-07-01",
+        "event_basket_return_after_cost": 0.002067824313302381,
+        "event_entry_date": "2016-07-18",
+        "event_exit_date": "2016-07-25",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": -0.0014585361720775847,
+          "IWM": 0.002668417867732309,
+          "QQQ": 0.009952232365024516,
+          "SPY": 0.001109183192530283
+        },
+        "month": "2016-07",
+        "opex_session_date": "2016-07-15",
+        "paired_excess_return": -0.036221406813427615
+      },
+      {
+        "control_basket_return_after_cost": 0.006488119499572843,
+        "control_entry_date": "2016-08-08",
+        "control_exit_date": "2016-08-15",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.006692481290033525,
+          "IWM": 0.009489395316340632,
+          "QQQ": 0.009001251678846245,
+          "SPY": 0.0047693497130709694
+        },
+        "control_session_date": "2016-08-05",
+        "event_basket_return_after_cost": -0.0014856159946223238,
+        "event_entry_date": "2016-08-22",
+        "event_exit_date": "2016-08-29",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": -0.001566129850393061,
+          "IWM": 0.0038953789256797045,
+          "QQQ": -0.0034938003959074093,
+          "SPY": -0.0007779126578685291
+        },
+        "month": "2016-08",
+        "opex_session_date": "2016-08-19",
+        "paired_excess_return": -0.007973735494195167
+      },
+      {
+        "control_basket_return_after_cost": -0.02727213260333744,
+        "control_entry_date": "2016-09-06",
+        "control_exit_date": "2016-09-13",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": -0.024389507354176776,
+          "IWM": -0.03249630908269241,
+          "QQQ": -0.021722139108605765,
+          "SPY": -0.026480574867874807
+        },
+        "control_session_date": "2016-09-02",
+        "event_basket_return_after_cost": 0.00268887477569943,
+        "event_entry_date": "2016-09-19",
+        "event_exit_date": "2016-09-26",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": -0.0012710698233825424,
+          "IWM": 0.007341799083389056,
+          "QQQ": 0.004795403563955913,
+          "SPY": 0.0038893662788352934
+        },
+        "month": "2016-09",
+        "opex_session_date": "2016-09-16",
+        "paired_excess_return": 0.02996100737903687
+      },
+      {
+        "control_basket_return_after_cost": -0.021746016779031152,
+        "control_entry_date": "2016-10-10",
+        "control_exit_date": "2016-10-17",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": -0.013105957506908461,
+          "IWM": -0.03226063382874156,
+          "QQQ": -0.020130862406076977,
+          "SPY": -0.017486613374397608
+        },
+        "control_session_date": "2016-10-07",
+        "event_basket_return_after_cost": -0.017055268155934666,
+        "event_entry_date": "2016-10-24",
+        "event_exit_date": "2016-10-31",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": -0.004340999848896909,
+          "IWM": -0.02741279433138566,
+          "QQQ": -0.02157749356678329,
+          "SPY": -0.010889784876672803
+        },
+        "month": "2016-10",
+        "opex_session_date": "2016-10-21",
+        "paired_excess_return": 0.004690748623096486
+      },
+      {
+        "control_basket_return_after_cost": 0.03043391022361769,
+        "control_entry_date": "2016-11-07",
+        "control_exit_date": "2016-11-14",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.035150071730100096,
+          "IWM": 0.08922967979834251,
+          "QQQ": -0.014783055723746275,
+          "SPY": 0.016138945089774426
+        },
+        "control_session_date": "2016-11-04",
+        "event_basket_return_after_cost": 0.004403290483864953,
+        "event_entry_date": "2016-11-21",
+        "event_exit_date": "2016-11-29",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.009771255288083536,
+          "IWM": 0.005015279064840339,
+          "QQQ": 0.003374263814811318,
+          "SPY": 0.00345236376772462
+        },
+        "month": "2016-11",
+        "opex_session_date": "2016-11-18",
+        "paired_excess_return": -0.026030619739752736
+      },
+      {
+        "control_basket_return_after_cost": 0.024567727660816163,
+        "control_entry_date": "2016-12-05",
+        "control_exit_date": "2016-12-12",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.030486042126313118,
+          "IWM": 0.027788595990064113,
+          "QQQ": 0.020240262715213397,
+          "SPY": 0.023756009811674028
+        },
+        "control_session_date": "2016-12-02",
+        "event_basket_return_after_cost": 0.0028637319415063542,
+        "event_entry_date": "2016-12-19",
+        "event_exit_date": "2016-12-27",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.0030718927533539553,
+          "IWM": 0.003023247428061593,
+          "QQQ": 0.00607882195418008,
+          "SPY": 0.0032809656304297885
+        },
+        "month": "2016-12",
+        "opex_session_date": "2016-12-16",
+        "paired_excess_return": -0.02170399571930981
+      },
+      {
+        "control_basket_return_after_cost": -0.0018577942425160856,
+        "control_entry_date": "2017-01-09",
+        "control_exit_date": "2017-01-17",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": -0.0033706100065659106,
+          "IWM": -0.0028932228119246117,
+          "QQQ": 0.0037602224067059264,
+          "SPY": -0.0009275665582797465
+        },
+        "control_session_date": "2017-01-06",
+        "event_basket_return_after_cost": 0.006315173764438243,
+        "event_entry_date": "2017-01-23",
+        "event_exit_date": "2017-01-30",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.00809008515201981,
+          "IWM": 0.0030623838583367924,
+          "QQQ": 0.011917485034171893,
+          "SPY": 0.006190741013224477
+        },
+        "month": "2017-01",
+        "opex_session_date": "2017-01-20",
+        "paired_excess_return": 0.008172968006954329
+      },
+      {
+        "control_basket_return_after_cost": 0.017123963132476494,
+        "control_entry_date": "2017-02-06",
+        "control_exit_date": "2017-02-13",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.019572409552041536,
+          "IWM": 0.018109249055710652,
+          "QQQ": 0.018040470956574906,
+          "SPY": 0.016773722965578886
+        },
+        "control_session_date": "2017-02-03",
+        "event_basket_return_after_cost": -0.004954818417529149,
+        "event_entry_date": "2017-02-21",
+        "event_exit_date": "2017-02-28",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.004394931435930838,
+          "IWM": -0.01683320628148255,
+          "QQQ": -0.0032963344245066084,
+          "SPY": -8.466440005827636e-05
+        },
+        "month": "2017-02",
+        "opex_session_date": "2017-02-17",
+        "paired_excess_return": -0.022078781550005644
+      },
+      {
+        "control_basket_return_after_cost": -0.0024345321291182323,
+        "control_entry_date": "2017-03-06",
+        "control_exit_date": "2017-03-13",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": -0.0025779132445914454,
+          "IWM": -0.010312071566087377,
+          "QQQ": 0.0067313777283262155,
+          "SPY": 0.00042047856587967836
+        },
+        "control_session_date": "2017-03-03",
+        "event_basket_return_after_cost": -0.015406358828920386,
+        "event_entry_date": "2017-03-20",
+        "event_exit_date": "2017-03-27",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": -0.017145247563552846,
+          "IWM": -0.01981728789376702,
+          "QQQ": -0.007359022407110616,
+          "SPY": -0.013303877451251056
+        },
+        "month": "2017-03",
+        "opex_session_date": "2017-03-17",
+        "paired_excess_return": -0.012971826699802153
+      },
+      {
+        "control_basket_return_after_cost": -0.0064699903960934715,
+        "control_entry_date": "2017-04-10",
+        "control_exit_date": "2017-04-18",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": -0.006347283461202391,
+          "IWM": -0.0036813036697835866,
+          "QQQ": -0.005605128756429267,
+          "SPY": -0.006246245696958641
+        },
+        "control_session_date": "2017-04-07",
+        "event_basket_return_after_cost": 0.009804662749751558,
+        "event_entry_date": "2017-04-24",
+        "event_exit_date": "2017-05-01",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.007426248417696568,
+          "IWM": 0.006766478121589037,
+          "QQQ": 0.022659391647841698,
+          "SPY": 0.006366532811878933
+        },
+        "month": "2017-04",
+        "opex_session_date": "2017-04-21",
+        "paired_excess_return": 0.01627465314584503
+      },
+      {
+        "control_basket_return_after_cost": 0.002163044862512676,
+        "control_entry_date": "2017-05-08",
+        "control_exit_date": "2017-05-15",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 4.8477414598124824e-05,
+          "IWM": 0.0012276302121148053,
+          "QQQ": 0.008705540377421439,
+          "SPY": 0.0026705314459163354
+        },
+        "control_session_date": "2017-05-05",
+        "event_basket_return_after_cost": 0.006249860621384663,
+        "event_entry_date": "2017-05-22",
+        "event_exit_date": "2017-05-30",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.007476802183180586,
+          "IWM": -0.003578140152535436,
+          "QQQ": 0.01683459068615112,
+          "SPY": 0.008266189768742382
+        },
+        "month": "2017-05",
+        "opex_session_date": "2017-05-19",
+        "paired_excess_return": 0.004086815758871987
+      },
+      {
+        "control_basket_return_after_cost": -0.004011528897316068,
+        "control_entry_date": "2017-06-05",
+        "control_exit_date": "2017-06-12",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.0025490916253347873,
+          "IWM": 0.01726891055080193,
+          "QQQ": -0.02928212210379577,
+          "SPY": -0.0025819956616052187
+        },
+        "control_session_date": "2017-06-02",
+        "event_basket_return_after_cost": -0.0036732048464779834,
+        "event_entry_date": "2017-06-19",
+        "event_exit_date": "2017-06-26",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": -0.004884991775733427,
+          "IWM": -0.0010621342470743533,
+          "QQQ": 0.0008542070359096599,
+          "SPY": -0.005599900399013813
+        },
+        "month": "2017-06",
+        "opex_session_date": "2017-06-16",
+        "paired_excess_return": 0.0003383240508380847
+      },
+      {
+        "control_basket_return_after_cost": 0.015125793293033929,
+        "control_entry_date": "2017-07-10",
+        "control_exit_date": "2017-07-17",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.010421873624178124,
+          "IWM": 0.015584938889256161,
+          "QQQ": 0.025458123662748244,
+          "SPY": 0.01303823699595319
+        },
+        "control_session_date": "2017-07-07",
+        "event_basket_return_after_cost": -0.001685685279890741,
+        "event_entry_date": "2017-07-24",
+        "event_exit_date": "2017-07-31",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.01678368291240817,
+          "IWM": -0.008686554388182333,
+          "QQQ": -0.010637360651984173,
+          "SPY": -0.00020250899180462856
+        },
+        "month": "2017-07",
+        "opex_session_date": "2017-07-21",
+        "paired_excess_return": -0.01681147857292467
+      },
+      {
+        "control_basket_return_after_cost": -0.007809399859288051,
+        "control_entry_date": "2017-08-07",
+        "control_exit_date": "2017-08-14",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": -0.00398472976425801,
+          "IWM": -0.013528971675261792,
+          "QQQ": -0.004358150514004233,
+          "SPY": -0.005365747483628169
+        },
+        "control_session_date": "2017-08-04",
+        "event_basket_return_after_cost": 0.00939011752752189,
+        "event_entry_date": "2017-08-21",
+        "event_exit_date": "2017-08-28",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.005536710852733107,
+          "IWM": 0.019506060235609635,
+          "QQQ": 0.0096421255362793,
+          "SPY": 0.006875573485465525
+        },
+        "month": "2017-08",
+        "opex_session_date": "2017-08-18",
+        "paired_excess_return": 0.017199517386809943
+      },
+      {
+        "control_basket_return_after_cost": 0.014261895228494748,
+        "control_entry_date": "2017-09-05",
+        "control_exit_date": "2017-09-12",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.01722782405971679,
+          "IWM": 0.017029865987164827,
+          "QQQ": 0.010574669698878214,
+          "SPY": 0.016215221168219163
+        },
+        "control_session_date": "2017-09-01",
+        "event_basket_return_after_cost": -0.004942324093705901,
+        "event_entry_date": "2017-09-18",
+        "event_exit_date": "2017-09-25",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": -0.0015231397184799489,
+          "IWM": 0.007811260385258034,
+          "QQQ": -0.018893872027107572,
+          "SPY": -0.003163545014494118
+        },
+        "month": "2017-09",
+        "opex_session_date": "2017-09-15",
+        "paired_excess_return": -0.01920421932220065
+      },
+      {
+        "control_basket_return_after_cost": 0.004416093705205904,
+        "control_entry_date": "2017-10-09",
+        "control_exit_date": "2017-10-16",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.0084385582939841,
+          "IWM": -0.001271387418740888,
+          "QQQ": 0.009220569665577383,
+          "SPY": 0.005276634280003023
+        },
+        "control_session_date": "2017-10-06",
+        "event_basket_return_after_cost": 0.005761703437901417,
+        "event_entry_date": "2017-10-23",
+        "event_exit_date": "2017-10-30",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.0029227274383911706,
+          "IWM": -0.004366380527120017,
+          "QQQ": 0.02599138412108526,
+          "SPY": 0.002499082719249257
+        },
+        "month": "2017-10",
+        "opex_session_date": "2017-10-20",
+        "paired_excess_return": 0.001345609732695513
+      },
+      {
+        "control_basket_return_after_cost": -0.005814783434311937,
+        "control_entry_date": "2017-11-06",
+        "control_exit_date": "2017-11-13",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": -0.0031857111776341096,
+          "IWM": -0.014584617861605809,
+          "QQQ": 0.0005202355782958357,
+          "SPY": -0.002009040276303664
+        },
+        "control_session_date": "2017-11-03",
+        "event_basket_return_after_cost": 0.017949815910306754,
+        "event_entry_date": "2017-11-20",
+        "event_exit_date": "2017-11-28",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.017894778179671667,
+          "IWM": 0.0222697325829877,
+          "QQQ": 0.017941785914096453,
+          "SPY": 0.017692966964471202
+        },
+        "month": "2017-11",
+        "opex_session_date": "2017-11-17",
+        "paired_excess_return": 0.023764599344618692
+      },
+      {
+        "control_basket_return_after_cost": 0.005562431272092772,
+        "control_entry_date": "2017-12-04",
+        "control_exit_date": "2017-12-11",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.004360467800642587,
+          "IWM": -0.007215405453090407,
+          "QQQ": 0.0208892275428616,
+          "SPY": 0.00821543519795731
+        },
+        "control_session_date": "2017-12-01",
+        "event_basket_return_after_cost": -0.006538687770644313,
+        "event_entry_date": "2017-12-18",
+        "event_exit_date": "2017-12-26",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": -0.0021792201781788423,
+          "IWM": -0.0028463321347094173,
+          "QQQ": -0.013363395945489076,
+          "SPY": -0.0037658028241999153
+        },
+        "month": "2017-12",
+        "opex_session_date": "2017-12-15",
+        "paired_excess_return": -0.012101119042737085
+      },
+      {
+        "control_basket_return_after_cost": 0.011000966691824765,
+        "control_entry_date": "2018-01-08",
+        "control_exit_date": "2018-01-16",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.020665999322819317,
+          "IWM": 0.007159938454178283,
+          "QQQ": 0.009043463811322372,
+          "SPY": 0.011134465178979092
+        },
+        "control_session_date": "2018-01-05",
+        "event_basket_return_after_cost": 0.004608844653334333,
+        "event_entry_date": "2018-01-22",
+        "event_exit_date": "2018-01-29",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.008321383176685737,
+          "IWM": -0.004703548367517962,
+          "QQQ": 0.011777679934806384,
+          "SPY": 0.007039863869363172
+        },
+        "month": "2018-01",
+        "opex_session_date": "2018-01-19",
+        "paired_excess_return": -0.006392122038490432
+      },
+      {
+        "control_basket_return_after_cost": 0.0049072088225265995,
+        "control_entry_date": "2018-02-05",
+        "control_exit_date": "2018-02-12",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.011920810125986003,
+          "IWM": 0.0016225712133568493,
+          "QQQ": 0.004743154069031252,
+          "SPY": 0.005342299881732293
+        },
+        "control_session_date": "2018-02-02",
+        "event_basket_return_after_cost": 0.012068592094439223,
+        "event_entry_date": "2018-02-20",
+        "event_exit_date": "2018-02-27",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.018488351284907,
+          "IWM": 0.00447121527006944,
+          "QQQ": 0.018150209436743836,
+          "SPY": 0.01116459238603662
+        },
+        "month": "2018-02",
+        "opex_session_date": "2018-02-16",
+        "paired_excess_return": 0.007161383271912624
+      },
+      {
+        "control_basket_return_after_cost": 0.026187828052248396,
+        "control_entry_date": "2018-03-05",
+        "control_exit_date": "2018-03-12",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.012538662887188856,
+          "IWM": 0.0357166760850689,
+          "QQQ": 0.03723992168001922,
+          "SPY": 0.023256051556716617
+        },
+        "control_session_date": "2018-03-02",
+        "event_basket_return_after_cost": -0.018322634057026638,
+        "event_entry_date": "2018-03-19",
+        "event_exit_date": "2018-03-26",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": -0.01663163374732346,
+          "IWM": -0.016611217495483332,
+          "QQQ": -0.01615806857711355,
+          "SPY": -0.019889616408186206
+        },
+        "month": "2018-03",
+        "opex_session_date": "2018-03-16",
+        "paired_excess_return": -0.044510462109275034
+      },
+      {
+        "control_basket_return_after_cost": 0.026945514103661805,
+        "control_entry_date": "2018-04-09",
+        "control_exit_date": "2018-04-16",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.02456922891097446,
+          "IWM": 0.0320847986362629,
+          "QQQ": 0.030875549711462114,
+          "SPY": 0.024252479155947748
+        },
+        "control_session_date": "2018-04-06",
+        "event_basket_return_after_cost": -0.010493399400409054,
+        "event_entry_date": "2018-04-23",
+        "event_exit_date": "2018-04-30",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": -0.011500372347792331,
+          "IWM": -0.012876693865628619,
+          "QQQ": -0.005868755862121655,
+          "SPY": -0.007727775526093605
+        },
+        "month": "2018-04",
+        "opex_session_date": "2018-04-20",
+        "paired_excess_return": -0.03743891350407086
+      },
+      {
+        "control_basket_return_after_cost": 0.01943276408006578,
+        "control_entry_date": "2018-05-07",
+        "control_exit_date": "2018-05-14",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.024032366154606244,
+          "IWM": 0.013881112676881413,
+          "QQQ": 0.021114105758879953,
+          "SPY": 0.022703471729895508
+        },
+        "control_session_date": "2018-05-04",
+        "event_basket_return_after_cost": -0.01280223815167672,
+        "event_entry_date": "2018-05-21",
+        "event_exit_date": "2018-05-29",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": -0.025966429458998297,
+          "IWM": -0.008714801567678343,
+          "QQQ": 0.003384862367307395,
+          "SPY": -0.015912583947337633
+        },
+        "month": "2018-05",
+        "opex_session_date": "2018-05-18",
+        "paired_excess_return": -0.0322350022317425
+      },
+      {
+        "control_basket_return_after_cost": 0.01155763031332252,
+        "control_entry_date": "2018-06-04",
+        "control_exit_date": "2018-06-11",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.020910748064363327,
+          "IWM": 0.012506854058675465,
+          "QQQ": 0.0034996837813090487,
+          "SPY": 0.013313235348942243
+        },
+        "control_session_date": "2018-06-01",
+        "event_basket_return_after_cost": -0.02593993948442383,
+        "event_entry_date": "2018-06-18",
+        "event_exit_date": "2018-06-25",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": -0.02971221065335794,
+          "IWM": -0.020877928916191335,
+          "QQQ": -0.029065123852668573,
+          "SPY": -0.020104494515477467
+        },
+        "month": "2018-06",
+        "opex_session_date": "2018-06-15",
+        "paired_excess_return": -0.03749756979774635
+      },
+      {
+        "control_basket_return_after_cost": 0.0022072753046241964,
+        "control_entry_date": "2018-07-09",
+        "control_exit_date": "2018-07-16",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.01141859975276982,
+          "IWM": -0.01500217984643648,
+          "QQQ": 0.0112310089803489,
+          "SPY": 0.005181672331814546
+        },
+        "control_session_date": "2018-07-06",
+        "event_basket_return_after_cost": -0.011465510414470054,
+        "event_entry_date": "2018-07-23",
+        "event_exit_date": "2018-07-30",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.010429226249557999,
+          "IWM": -0.026616673674874414,
+          "QQQ": -0.02478243810247327,
+          "SPY": -0.0008921561300905267
+        },
+        "month": "2018-07",
+        "opex_session_date": "2018-07-20",
+        "paired_excess_return": -0.01367278571909425
+      },
+      {
+        "control_basket_return_after_cost": -0.00826952980606871,
+        "control_entry_date": "2018-08-06",
+        "control_exit_date": "2018-08-13",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": -0.011025769258797946,
+          "IWM": -0.0046020642325397265,
+          "QQQ": -0.004526811637622474,
+          "SPY": -0.008923474095314687
+        },
+        "control_session_date": "2018-08-03",
+        "event_basket_return_after_cost": 0.01658323448330884,
+        "event_entry_date": "2018-08-20",
+        "event_exit_date": "2018-08-27",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.012236134688846212,
+          "IWM": 0.017889001244337788,
+          "QQQ": 0.025820646975225348,
+          "SPY": 0.014387155024826015
+        },
+        "month": "2018-08",
+        "opex_session_date": "2018-08-17",
+        "paired_excess_return": 0.02485276428937755
+      },
+      {
+        "control_basket_return_after_cost": -0.00021954279333513595,
+        "control_entry_date": "2018-09-10",
+        "control_exit_date": "2018-09-17",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.007877994046481263,
+          "IWM": -0.006969079477029405,
+          "QQQ": -0.002091091430978187,
+          "SPY": 0.004304005688185786
+        },
+        "control_session_date": "2018-09-07",
+        "event_basket_return_after_cost": -0.00047229448279500954,
+        "event_entry_date": "2018-09-24",
+        "event_exit_date": "2018-10-01",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.0049355661568930564,
+          "IWM": -0.017663251944636915,
+          "QQQ": 0.012398790982570684,
+          "SPY": 0.0024397168739931363
+        },
+        "month": "2018-09",
+        "opex_session_date": "2018-09-21",
+        "paired_excess_return": -0.0002527516894598736
+      },
+      {
+        "control_basket_return_after_cost": -0.045816231209240166,
+        "control_entry_date": "2018-10-08",
+        "control_exit_date": "2018-10-15",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": -0.04716211197562181,
+          "IWM": -0.04727475959808558,
+          "QQQ": -0.03820174954922184,
+          "SPY": -0.046626303714031425
+        },
+        "control_session_date": "2018-10-05",
+        "event_basket_return_after_cost": -0.04534578214414253,
+        "event_entry_date": "2018-10-22",
+        "event_exit_date": "2018-10-29",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": -0.033868250731447835,
+          "IWM": -0.041559968902085465,
+          "QQQ": -0.061410678405470764,
+          "SPY": -0.04054423053756606
+        },
+        "month": "2018-10",
+        "opex_session_date": "2018-10-19",
+        "paired_excess_return": 0.0004704490650976334
+      },
+      {
+        "control_basket_return_after_cost": -0.010527221219942873,
+        "control_entry_date": "2018-11-05",
+        "control_exit_date": "2018-11-12",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": -0.0010217259891966979,
+          "IWM": -0.01852116364328904,
+          "QQQ": -0.01556606440308439,
+          "SPY": -0.0029999308442013595
+        },
+        "control_session_date": "2018-11-02",
+        "event_basket_return_after_cost": -0.0023697581196933095,
+        "event_entry_date": "2018-11-19",
+        "event_exit_date": "2018-11-27",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": -0.009445371812177195,
+          "IWM": -0.0019474933135348316,
+          "QQQ": 0.008514984220265864,
+          "SPY": -0.0026011515733270762
+        },
+        "month": "2018-11",
+        "opex_session_date": "2018-11-16",
+        "paired_excess_return": 0.008157463100249562
+      },
+      {
+        "control_basket_return_after_cost": -0.03700856122936208,
+        "control_entry_date": "2018-12-10",
+        "control_exit_date": "2018-12-17",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": -0.033835898022922195,
+          "IWM": -0.042628332012372705,
+          "QQQ": -0.034586209743363905,
+          "SPY": -0.03298380513878951
+        },
+        "control_session_date": "2018-12-07",
+        "event_basket_return_after_cost": 0.07065322095484716,
+        "event_entry_date": "2018-12-24",
+        "event_exit_date": "2019-01-02",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.06996735385166208,
+          "IWM": 0.06974868989786964,
+          "QQQ": 0.07930286553297416,
+          "SPY": 0.06759397453688276
+        },
+        "month": "2018-12",
+        "opex_session_date": "2018-12-21",
+        "paired_excess_return": 0.10766178218420924
+      },
+      {
+        "control_basket_return_after_cost": 0.012400641316199168,
+        "control_entry_date": "2019-01-07",
+        "control_exit_date": "2019-01-14",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.015210659167085527,
+          "IWM": 0.01905619819559523,
+          "QQQ": 0.00746364390032217,
+          "SPY": 0.011872064001793747
+        },
+        "control_session_date": "2019-01-04",
+        "event_basket_return_after_cost": 0.002772770006696735,
+        "event_entry_date": "2019-01-22",
+        "event_exit_date": "2019-01-29",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.0070078909921953425,
+          "IWM": 0.008275598880169932,
+          "QQQ": -0.002284587119349757,
+          "SPY": 0.002092177273771423
+        },
+        "month": "2019-01",
+        "opex_session_date": "2019-01-18",
+        "paired_excess_return": -0.009627871309502434
+      },
+      {
+        "control_basket_return_after_cost": -0.005033661109454273,
+        "control_entry_date": "2019-02-04",
+        "control_exit_date": "2019-02-11",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": -0.005469222635383186,
+          "IWM": 0.0009271539048856248,
+          "QQQ": -0.00666559452551907,
+          "SPY": -0.0049269811818004605
+        },
+        "control_session_date": "2019-02-01",
+        "event_basket_return_after_cost": 0.004772492136999319,
+        "event_entry_date": "2019-02-19",
+        "event_exit_date": "2019-02-26",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.0066844819516351794,
+          "IWM": 0.0028728762675680475,
+          "QQQ": 0.008242106868450172,
+          "SPY": 0.005290503460343876
+        },
+        "month": "2019-02",
+        "opex_session_date": "2019-02-15",
+        "paired_excess_return": 0.009806153246453592
+      },
+      {
+        "control_basket_return_after_cost": -0.006903566852187486,
+        "control_entry_date": "2019-03-04",
+        "control_exit_date": "2019-03-11",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": -0.005885229327658892,
+          "IWM": -0.016070026189543674,
+          "QQQ": 0.0017771605910514854,
+          "SPY": -0.003436172482598865
+        },
+        "control_session_date": "2019-03-01",
+        "event_basket_return_after_cost": -0.016156391580502527,
+        "event_entry_date": "2019-03-18",
+        "event_exit_date": "2019-03-25",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": -0.015135684076200362,
+          "IWM": -0.03254804208392892,
+          "QQQ": -0.0012888716419543478,
+          "SPY": -0.011652968519926477
+        },
+        "month": "2019-03",
+        "opex_session_date": "2019-03-15",
+        "paired_excess_return": -0.00925282472831504
+      },
+      {
+        "control_basket_return_after_cost": 0.0016470885635365704,
+        "control_entry_date": "2019-04-08",
+        "control_exit_date": "2019-04-15",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.002241219410050066,
+          "IWM": 0.00031808073148353877,
+          "QQQ": 0.003943204822011603,
+          "SPY": 0.0040858492906010735
+        },
+        "control_session_date": "2019-04-05",
+        "event_basket_return_after_cost": 0.012693705815310818,
+        "event_entry_date": "2019-04-22",
+        "event_exit_date": "2019-04-29",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.0013958952678518877,
+          "IWM": 0.024480091283301197,
+          "QQQ": 0.016496441437170217,
+          "SPY": 0.012402395272919975
+        },
+        "month": "2019-04",
+        "opex_session_date": "2019-04-18",
+        "paired_excess_return": 0.011046617251774249
+      },
+      {
+        "control_basket_return_after_cost": -0.050504876908636864,
+        "control_entry_date": "2019-05-06",
+        "control_exit_date": "2019-05-13",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": -0.04086703255308599,
+          "IWM": -0.056499694845127624,
+          "QQQ": -0.05980856160681869,
+          "SPY": -0.04084421862951515
+        },
+        "control_session_date": "2019-05-03",
+        "event_basket_return_after_cost": -0.014487358299168057,
+        "event_entry_date": "2019-05-20",
+        "event_exit_date": "2019-05-28",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": -0.01246751359508258,
+          "IWM": -0.014428630777315266,
+          "QQQ": -0.013670508053633124,
+          "SPY": -0.013382780770641256
+        },
+        "month": "2019-05",
+        "opex_session_date": "2019-05-17",
+        "paired_excess_return": 0.03601751860946881
+      },
+      {
+        "control_basket_return_after_cost": 0.002503847737634347,
+        "control_entry_date": "2019-06-10",
+        "control_exit_date": "2019-06-17",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.0026440820408657473,
+          "IWM": 0.006765932186356682,
+          "QQQ": 0.0032212775731090826,
+          "SPY": 0.0013840991502058753
+        },
+        "control_session_date": "2019-06-07",
+        "event_basket_return_after_cost": 0.008602590825622036,
+        "event_entry_date": "2019-06-24",
+        "event_exit_date": "2019-07-01",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": -0.00074886304751276,
+          "IWM": 0.02643371367524594,
+          "QQQ": 0.005846057045666875,
+          "SPY": 0.006879455629088094
+        },
+        "month": "2019-06",
+        "opex_session_date": "2019-06-21",
+        "paired_excess_return": 0.006098743087987689
+      },
+      {
+        "control_basket_return_after_cost": 0.013489069669099685,
+        "control_entry_date": "2019-07-08",
+        "control_exit_date": "2019-07-15",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.02066689897067575,
+          "IWM": 0.0006444918151469192,
+          "QQQ": 0.023404265672999802,
+          "SPY": 0.01324062221757627
+        },
+        "control_session_date": "2019-07-05",
+        "event_basket_return_after_cost": 0.00916133240906769,
+        "event_entry_date": "2019-07-22",
+        "event_exit_date": "2019-07-29",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.0017673202974868296,
+          "IWM": 0.016072407987779425,
+          "QQQ": 0.01085537691484073,
+          "SPY": 0.011950224436163781
+        },
+        "month": "2019-07",
+        "opex_session_date": "2019-07-19",
+        "paired_excess_return": -0.004327737260031994
+      },
+      {
+        "control_basket_return_after_cost": 0.01111915986857348,
+        "control_entry_date": "2019-08-05",
+        "control_exit_date": "2019-08-12",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.00894574995431996,
+          "IWM": 0.004527165184172066,
+          "QQQ": 0.020029935254773257,
+          "SPY": 0.014973789081028643
+        },
+        "control_session_date": "2019-08-02",
+        "event_basket_return_after_cost": -0.016797750028900577,
+        "event_entry_date": "2019-08-19",
+        "event_exit_date": "2019-08-26",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": -0.00857125612353149,
+          "IWM": -0.020649188636161053,
+          "QQQ": -0.019158300504051984,
+          "SPY": -0.014812254851857776
+        },
+        "month": "2019-08",
+        "opex_session_date": "2019-08-16",
+        "paired_excess_return": -0.027916909897474057
+      },
+      {
+        "control_basket_return_after_cost": 0.013346078356892332,
+        "control_entry_date": "2019-09-09",
+        "control_exit_date": "2019-09-16",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.00881717771942081,
+          "IWM": 0.03943125602430797,
+          "QQQ": 0.0025629255030779063,
+          "SPY": 0.006572954180762647
+        },
+        "control_session_date": "2019-09-06",
+        "event_basket_return_after_cost": -0.010126253337555569,
+        "event_entry_date": "2019-09-23",
+        "event_exit_date": "2019-09-30",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": -0.0006679879093419716,
+          "IWM": -0.022136818409070558,
+          "QQQ": -0.008871333025584072,
+          "SPY": -0.00482887400622567
+        },
+        "month": "2019-09",
+        "opex_session_date": "2019-09-20",
+        "paired_excess_return": -0.0234723316944479
+      },
+      {
+        "control_basket_return_after_cost": 0.009505898271974178,
+        "control_entry_date": "2019-10-07",
+        "control_exit_date": "2019-10-14",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.011784220801321021,
+          "IWM": 0.005306391466636251,
+          "QQQ": 0.015140278905515281,
+          "SPY": 0.009792701914424162
+        },
+        "control_session_date": "2019-10-04",
+        "event_basket_return_after_cost": 0.01331827276716352,
+        "event_entry_date": "2019-10-21",
+        "event_exit_date": "2019-10-28",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.009693932919679016,
+          "IWM": 0.014931092854651773,
+          "QQQ": 0.021614319181514352,
+          "SPY": 0.01103374611280894
+        },
+        "month": "2019-10",
+        "opex_session_date": "2019-10-18",
+        "paired_excess_return": 0.0038123744951893412
+      },
+      {
+        "control_basket_return_after_cost": 0.002980802783303372,
+        "control_entry_date": "2019-11-04",
+        "control_exit_date": "2019-11-11",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.009506504974706509,
+          "IWM": -0.0010693841211484312,
+          "QQQ": 0.004297759866696227,
+          "SPY": 0.003188330412959184
+        },
+        "control_session_date": "2019-11-01",
+        "event_basket_return_after_cost": 0.006796084210509702,
+        "event_entry_date": "2019-11-18",
+        "event_exit_date": "2019-11-25",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.0018910764759705323,
+          "IWM": 0.01930363644525057,
+          "QQQ": 0.005662808360887173,
+          "SPY": 0.00432681555993053
+        },
+        "month": "2019-11",
+        "opex_session_date": "2019-11-15",
+        "paired_excess_return": 0.0038152814272063296
+      },
+      {
+        "control_basket_return_after_cost": 0.01583712741858273,
+        "control_entry_date": "2019-12-09",
+        "control_exit_date": "2019-12-16",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.011831823314752521,
+          "IWM": 0.012129862866054442,
+          "QQQ": 0.025481533606061868,
+          "SPY": 0.017905289887462095
+        },
+        "control_session_date": "2019-12-06",
+        "event_basket_return_after_cost": -0.0007061732206537765,
+        "event_entry_date": "2019-12-23",
+        "event_exit_date": "2019-12-31",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": -0.0008061478197866068,
+          "IWM": -0.0037881355039521836,
+          "QQQ": 0.003777180900279342,
+          "SPY": 0.001992409540844342
+        },
+        "month": "2019-12",
+        "opex_session_date": "2019-12-20",
+        "paired_excess_return": -0.016543300639236508
+      },
+      {
+        "control_basket_return_after_cost": 0.01127971579955872,
+        "control_entry_date": "2020-01-06",
+        "control_exit_date": "2020-01-13",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.007107962486929464,
+          "IWM": 0.0036887652770731805,
+          "QQQ": 0.02500496894839266,
+          "SPY": 0.013317166485839582
+        },
+        "control_session_date": "2020-01-03",
+        "event_basket_return_after_cost": -0.014440965657426752,
+        "event_entry_date": "2020-01-21",
+        "event_exit_date": "2020-01-28",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": -0.015557020644272779,
+          "IWM": -0.016699453306315504,
+          "QQQ": -0.008196070764460828,
+          "SPY": -0.013311317914657894
+        },
+        "month": "2020-01",
+        "opex_session_date": "2020-01-17",
+        "paired_excess_return": -0.025720681456985472
+      },
+      {
+        "control_basket_return_after_cost": 0.006114233323298635,
+        "control_entry_date": "2020-02-10",
+        "control_exit_date": "2020-02-18",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.0,
+          "IWM": 0.010433503223399532,
+          "QQQ": 0.011898052498068301,
+          "SPY": 0.006125377571726709
+        },
+        "control_session_date": "2020-02-07",
+        "event_basket_return_after_cost": -0.04518299520102681,
+        "event_entry_date": "2020-02-24",
+        "event_exit_date": "2020-03-02",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": -0.044820308115948615,
+          "IWM": -0.06811882076549092,
+          "QQQ": -0.022448987335890402,
+          "SPY": -0.0413438645867773
+        },
+        "month": "2020-02",
+        "opex_session_date": "2020-02-21",
+        "paired_excess_return": -0.051297228524325444
+      },
+      {
+        "control_basket_return_after_cost": -0.15291050093404684,
+        "control_entry_date": "2020-03-09",
+        "control_exit_date": "2020-03-16",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": -0.1517678539532149,
+          "IWM": -0.2051242037108323,
+          "QQQ": -0.12538059498061305,
+          "SPY": -0.12536935109152714
+        },
+        "control_session_date": "2020-03-06",
+        "event_basket_return_after_cost": 0.16270227176403068,
+        "event_entry_date": "2020-03-23",
+        "event_exit_date": "2020-03-30",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.1986245985083539,
+          "IWM": 0.15600445090591708,
+          "QQQ": 0.1265986611382599,
+          "SPY": 0.17358137650359184
+        },
+        "month": "2020-03",
+        "opex_session_date": "2020-03-20",
+        "paired_excess_return": 0.3156127726980775
+      },
+      {
+        "control_basket_return_after_cost": 0.07354567118517563,
+        "control_entry_date": "2020-04-06",
+        "control_exit_date": "2020-04-14",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.058049229770924304,
+          "IWM": 0.09038404366620001,
+          "QQQ": 0.07827758796432649,
+          "SPY": 0.07147182333925173
+        },
+        "control_session_date": "2020-04-03",
+        "event_basket_return_after_cost": 0.02586772246394098,
+        "event_entry_date": "2020-04-20",
+        "event_exit_date": "2020-04-27",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.01977663543822694,
+          "IWM": 0.05504912329259937,
+          "QQQ": 0.01325546358137819,
+          "SPY": 0.01938966754355942
+        },
+        "month": "2020-04",
+        "opex_session_date": "2020-04-17",
+        "paired_excess_return": -0.04767794872123465
+      },
+      {
+        "control_basket_return_after_cost": 0.03779267651149604,
+        "control_entry_date": "2020-05-04",
+        "control_exit_date": "2020-05-11",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.0216493076617712,
+          "IWM": 0.04789935927885791,
+          "QQQ": 0.05413089479392963,
+          "SPY": 0.03149114431142541
+        },
+        "control_session_date": "2020-05-01",
+        "event_basket_return_after_cost": 0.02011291727415704,
+        "event_entry_date": "2020-05-18",
+        "event_exit_date": "2020-05-26",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.017566223493656663,
+          "IWM": 0.045975577504235865,
+          "QQQ": 0.007079331520491783,
+          "SPY": 0.013830536578243846
+        },
+        "month": "2020-05",
+        "opex_session_date": "2020-05-15",
+        "paired_excess_return": -0.017679759237339
+      },
+      {
+        "control_basket_return_after_cost": -0.05159573305320836,
+        "control_entry_date": "2020-06-08",
+        "control_exit_date": "2020-06-15",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": -0.06489781363085834,
+          "IWM": -0.07592433503461327,
+          "QQQ": -0.011591766058025477,
+          "SPY": -0.049969017489336354
+        },
+        "control_session_date": "2020-06-05",
+        "event_basket_return_after_cost": -0.016356463133303023,
+        "event_entry_date": "2020-06-22",
+        "event_exit_date": "2020-06-29",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": -0.016940548775422393,
+          "IWM": -0.008848010773154447,
+          "QQQ": -0.015806232263727127,
+          "SPY": -0.019831060720908122
+        },
+        "month": "2020-06",
+        "opex_session_date": "2020-06-19",
+        "paired_excess_return": 0.035239269919905336
+      },
+      {
+        "control_basket_return_after_cost": -0.01127587795614593,
+        "control_entry_date": "2020-07-06",
+        "control_exit_date": "2020-07-13",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": -0.007452837252268307,
+          "IWM": -0.02726050953468684,
+          "QQQ": 0.0005803341458541222,
+          "SPY": -0.006970499183482692
+        },
+        "control_session_date": "2020-07-02",
+        "event_basket_return_after_cost": -0.006094997530390888,
+        "event_entry_date": "2020-07-20",
+        "event_exit_date": "2020-07-27",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": -0.0032600391420655184,
+          "IWM": 0.01123619502359352,
+          "QQQ": -0.02496414551263748,
+          "SPY": -0.0033920004904540724
+        },
+        "month": "2020-07",
+        "opex_session_date": "2020-07-17",
+        "paired_excess_return": 0.005180880425755042
+      },
+      {
+        "control_basket_return_after_cost": 0.006279142220301682,
+        "control_entry_date": "2020-08-10",
+        "control_exit_date": "2020-08-17",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.002912023333720981,
+          "IWM": 0.0006967590462481077,
+          "QQQ": 0.018534382903567792,
+          "SPY": 0.006973403597669847
+        },
+        "control_session_date": "2020-08-07",
+        "event_basket_return_after_cost": 0.013265677911040802,
+        "event_entry_date": "2020-08-24",
+        "event_exit_date": "2020-08-31",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.0038841711753676567,
+          "IWM": -0.00512050713803458,
+          "QQQ": 0.03966466632248222,
+          "SPY": 0.018634381284347912
+        },
+        "month": "2020-08",
+        "opex_session_date": "2020-08-21",
+        "paired_excess_return": 0.00698653569073912
+      },
+      {
+        "control_basket_return_after_cost": 0.023198039264268056,
+        "control_entry_date": "2020-09-08",
+        "control_exit_date": "2020-09-15",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.018734940384137255,
+          "IWM": 0.02342226766394684,
+          "QQQ": 0.033747171992017266,
+          "SPY": 0.020887777016970865
+        },
+        "control_session_date": "2020-09-04",
+        "event_basket_return_after_cost": 0.022199610651708612,
+        "event_entry_date": "2020-09-21",
+        "event_exit_date": "2020-09-28",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.01643084393187455,
+          "IWM": 0.01806273230742339,
+          "QQQ": 0.036223286251588105,
+          "SPY": 0.022081580115948407
+        },
+        "month": "2020-09",
+        "opex_session_date": "2020-09-18",
+        "paired_excess_return": -0.0009984286125594433
+      },
+      {
+        "control_basket_return_after_cost": 0.03801372912775963,
+        "control_entry_date": "2020-10-05",
+        "control_exit_date": "2020-10-12",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.024688473300883418,
+          "IWM": 0.04278371627519206,
+          "QQQ": 0.051291984872860796,
+          "SPY": 0.037290742062102256
+        },
+        "control_session_date": "2020-10-02",
+        "event_basket_return_after_cost": -0.011647678671359546,
+        "event_entry_date": "2020-10-19",
+        "event_exit_date": "2020-10-26",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": -0.017835469745360988,
+          "IWM": -0.0053613391589592,
+          "QQQ": -0.011733498727718339,
+          "SPY": -0.007660407053399654
+        },
+        "month": "2020-10",
+        "opex_session_date": "2020-10-16",
+        "paired_excess_return": -0.04966140779911918
+      },
+      {
+        "control_basket_return_after_cost": 0.027634023198632007,
+        "control_entry_date": "2020-11-09",
+        "control_exit_date": "2020-11-16",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.028314762627357437,
+          "IWM": 0.04765572515250094,
+          "QQQ": 0.015974174848730982,
+          "SPY": 0.022591430165938675
+        },
+        "control_session_date": "2020-11-06",
+        "event_basket_return_after_cost": 0.020992444328585103,
+        "event_entry_date": "2020-11-23",
+        "event_exit_date": "2020-12-01",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.008617869830722436,
+          "IWM": 0.010396921002942872,
+          "QQQ": 0.04500815545197323,
+          "SPY": 0.023946831028701876
+        },
+        "month": "2020-11",
+        "opex_session_date": "2020-11-20",
+        "paired_excess_return": -0.006641578870046905
+      },
+      {
+        "control_basket_return_after_cost": -0.0054293532621601795,
+        "control_entry_date": "2020-12-07",
+        "control_exit_date": "2020-12-14",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": -0.006642047531747464,
+          "IWM": 0.011374134710623984,
+          "QQQ": -0.010447104326946732,
+          "SPY": -0.012002395900570506
+        },
+        "control_session_date": "2020-12-04",
+        "event_basket_return_after_cost": 0.004771136828796625,
+        "event_entry_date": "2020-12-21",
+        "event_exit_date": "2020-12-29",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.004368925832979098,
+          "IWM": -0.004148594300758757,
+          "QQQ": 0.013077995739271486,
+          "SPY": 0.009786220043694671
+        },
+        "month": "2020-12",
+        "opex_session_date": "2020-12-18",
+        "paired_excess_return": 0.010200490090956804
+      },
+      {
+        "control_basket_return_after_cost": 0.0013332213642798527,
+        "control_entry_date": "2021-02-08",
+        "control_exit_date": "2021-02-16",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.005384381635215485,
+          "IWM": -0.0065108484273738165,
+          "QQQ": 0.005875632647044382,
+          "SPY": 0.00458371960223336
+        },
+        "control_session_date": "2021-02-05",
+        "event_basket_return_after_cost": 0.004454836261395646,
+        "event_entry_date": "2021-02-22",
+        "event_exit_date": "2021-03-01",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.0012051246287672068,
+          "IWM": 0.010459137004673824,
+          "QQQ": 0.0035664871431178025,
+          "SPY": 0.00658859626902375
+        },
+        "month": "2021-02",
+        "opex_session_date": "2021-02-19",
+        "paired_excess_return": 0.003121614897115793
+      },
+      {
+        "control_basket_return_after_cost": 0.05158740416625035,
+        "control_entry_date": "2021-03-08",
+        "control_exit_date": "2021-03-15",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.0372035302552316,
+          "IWM": 0.07168315704768546,
+          "QQQ": 0.06297927972995132,
+          "SPY": 0.03848364963213302
+        },
+        "control_session_date": "2021-03-05",
+        "event_basket_return_after_cost": -0.009283923382016307,
+        "event_entry_date": "2021-03-22",
+        "event_exit_date": "2021-03-29",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.013506812984853456,
+          "IWM": -0.04629379915463927,
+          "QQQ": -0.008474291562742597,
+          "SPY": 0.008125584204463188
+        },
+        "month": "2021-03",
+        "opex_session_date": "2021-03-19",
+        "paired_excess_return": -0.06087132754826666
+      },
+      {
+        "control_basket_return_after_cost": 0.004633504536322831,
+        "control_entry_date": "2021-04-05",
+        "control_exit_date": "2021-04-12",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.007010452776740506,
+          "IWM": -0.014446237792340666,
+          "QQQ": 0.016976144120676384,
+          "SPY": 0.0129936590402151
+        },
+        "control_session_date": "2021-04-01",
+        "event_basket_return_after_cost": 0.009021753249263464,
+        "event_entry_date": "2021-04-19",
+        "event_exit_date": "2021-04-26",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": -0.002582222496926745,
+          "IWM": 0.028773807123472217,
+          "QQQ": 0.00811511529756781,
+          "SPY": 0.005780313072940579
+        },
+        "month": "2021-04",
+        "opex_session_date": "2021-04-16",
+        "paired_excess_return": 0.004388248712940634
+      },
+      {
+        "control_basket_return_after_cost": -0.004534705187334231,
+        "control_entry_date": "2021-05-10",
+        "control_exit_date": "2021-05-17",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": -0.011761641951865576,
+          "IWM": 0.007557129916489602,
+          "QQQ": -0.004144097581944561,
+          "SPY": -0.005790211132016387
+        },
+        "control_session_date": "2021-05-07",
+        "event_basket_return_after_cost": 0.008439859651091952,
+        "event_entry_date": "2021-05-24",
+        "event_exit_date": "2021-06-01",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.0055531458159312486,
+          "IWM": 0.030081228432580875,
+          "QQQ": 0.0009323135796532878,
+          "SPY": 0.0011927507762024003
+        },
+        "month": "2021-05",
+        "opex_session_date": "2021-05-21",
+        "paired_excess_return": 0.012974564838426184
+      },
+      {
+        "control_basket_return_after_cost": 0.00603591410076565,
+        "control_entry_date": "2021-06-07",
+        "control_exit_date": "2021-06-14",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": -0.006607084191906143,
+          "IWM": 0.003979483395448513,
+          "QQQ": 0.023499662779362218,
+          "SPY": 0.007271594420158012
+        },
+        "control_session_date": "2021-06-04",
+        "event_basket_return_after_cost": 0.016603733441721114,
+        "event_entry_date": "2021-06-21",
+        "event_exit_date": "2021-06-28",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.011865815104896482,
+          "IWM": 0.01569101886015667,
+          "QQQ": 0.02715206570364881,
+          "SPY": 0.015706034098182498
+        },
+        "month": "2021-06",
+        "opex_session_date": "2021-06-18",
+        "paired_excess_return": 0.010567819340955464
+      },
+      {
+        "control_basket_return_after_cost": 0.0004421549622621321,
+        "control_entry_date": "2021-07-06",
+        "control_exit_date": "2021-07-13",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.009195561300306299,
+          "IWM": -0.015762021946949867,
+          "QQQ": 0.006190983377566628,
+          "SPY": 0.006144097118125469
+        },
+        "control_session_date": "2021-07-02",
+        "event_basket_return_after_cost": 0.036653311581869574,
+        "event_entry_date": "2021-07-19",
+        "event_exit_date": "2021-07-26",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.03392371400967287,
+          "IWM": 0.03995639430542863,
+          "QQQ": 0.038966001699817454,
+          "SPY": 0.037767136312559346
+        },
+        "month": "2021-07",
+        "opex_session_date": "2021-07-16",
+        "paired_excess_return": 0.03621115661960744
+      },
+      {
+        "control_basket_return_after_cost": 0.0022877552275817623,
+        "control_entry_date": "2021-08-09",
+        "control_exit_date": "2021-08-16",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.015435214707034683,
+          "IWM": -0.013909040580345367,
+          "QQQ": 0.0006778963160611884,
+          "SPY": 0.010946950467576544
+        },
+        "control_session_date": "2021-08-06",
+        "event_basket_return_after_cost": 0.01360315692518177,
+        "event_entry_date": "2021-08-23",
+        "event_exit_date": "2021-08-30",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.0017828283725851435,
+          "IWM": 0.026682386240123757,
+          "QQQ": 0.018835317226617132,
+          "SPY": 0.01111209586140105
+        },
+        "month": "2021-08",
+        "opex_session_date": "2021-08-20",
+        "paired_excess_return": 0.011315401697600008
+      },
+      {
+        "control_basket_return_after_cost": -0.020066326164071724,
+        "control_entry_date": "2021-09-07",
+        "control_exit_date": "2021-09-14",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": -0.014141906281039285,
+          "IWM": -0.028048881870009645,
+          "QQQ": -0.017926790469439013,
+          "SPY": -0.01614772603579895
+        },
+        "control_session_date": "2021-09-03",
+        "event_basket_return_after_cost": 0.02535332287876324,
+        "event_entry_date": "2021-09-20",
+        "event_exit_date": "2021-09-27",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.0271359862727778,
+          "IWM": 0.04574794108694813,
+          "QQQ": 0.012715464595453474,
+          "SPY": 0.01981389955987356
+        },
+        "month": "2021-09",
+        "opex_session_date": "2021-09-17",
+        "paired_excess_return": 0.045419649042834964
+      },
+      {
+        "control_basket_return_after_cost": 0.010330334929040785,
+        "control_entry_date": "2021-10-04",
+        "control_exit_date": "2021-10-11",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.014616841580799456,
+          "IWM": 0.00022712164694227432,
+          "QQQ": 0.016363029012747,
+          "SPY": 0.014114347475674416
+        },
+        "control_session_date": "2021-10-01",
+        "event_basket_return_after_cost": 0.01584112361791301,
+        "event_entry_date": "2021-10-18",
+        "event_exit_date": "2021-10-25",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.01432614926907183,
+          "IWM": 0.02017499828593161,
+          "QQQ": 0.014169012111404422,
+          "SPY": 0.018694334805244184
+        },
+        "month": "2021-10",
+        "opex_session_date": "2021-10-15",
+        "paired_excess_return": 0.005510788688872226
+      },
+      {
+        "control_basket_return_after_cost": -0.010213046274114401,
+        "control_entry_date": "2021-11-08",
+        "control_exit_date": "2021-11-15",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": -0.00845418640161033,
+          "IWM": -0.016532049379828773,
+          "QQQ": -0.008667187785307284,
+          "SPY": -0.0031987615297112137
+        },
+        "control_session_date": "2021-11-05",
+        "event_basket_return_after_cost": -0.03341259915975753,
+        "event_entry_date": "2021-11-22",
+        "event_exit_date": "2021-11-30",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": -0.03172392715544314,
+          "IWM": -0.05851646896788387,
+          "QQQ": -0.013723965493031676,
+          "SPY": -0.025686035022671416
+        },
+        "month": "2021-11",
+        "opex_session_date": "2021-11-19",
+        "paired_excess_return": -0.023199552885643127
+      },
+      {
+        "control_basket_return_after_cost": 0.007499963751586459,
+        "control_entry_date": "2021-12-06",
+        "control_exit_date": "2021-12-13",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.011960674475012922,
+          "IWM": -0.010609712729164222,
+          "QQQ": 0.015691135023142122,
+          "SPY": 0.016957758237355014
+        },
+        "control_session_date": "2021-12-03",
+        "event_basket_return_after_cost": 0.04783090660051087,
+        "event_entry_date": "2021-12-20",
+        "event_exit_date": "2021-12-28",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.042145458726891905,
+          "IWM": 0.050113094954563175,
+          "QQQ": 0.05495301651284312,
+          "SPY": 0.04811205620774528
+        },
+        "month": "2021-12",
+        "opex_session_date": "2021-12-17",
+        "paired_excess_return": 0.04033094284892441
+      },
+      {
+        "control_basket_return_after_cost": -0.02563702552770933,
+        "control_entry_date": "2022-01-10",
+        "control_exit_date": "2022-01-18",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": -0.019235746071856963,
+          "IWM": -0.034785398540213563,
+          "QQQ": -0.025150424198468024,
+          "SPY": -0.01937653330029876
+        },
+        "control_session_date": "2022-01-07",
+        "event_basket_return_after_cost": 0.01654943061597594,
+        "event_entry_date": "2022-01-24",
+        "event_exit_date": "2022-01-31",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.02114538409103539,
+          "IWM": -0.001439058422664119,
+          "QQQ": 0.0275966789899873,
+          "SPY": 0.022894717805545195
+        },
+        "month": "2022-01",
+        "opex_session_date": "2022-01-21",
+        "paired_excess_return": 0.04218645614368527
+      },
+      {
+        "control_basket_return_after_cost": -0.012898068642045901,
+        "control_entry_date": "2022-02-07",
+        "control_exit_date": "2022-02-14",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": -0.014277011551874774,
+          "IWM": 0.00662122223899031,
+          "QQQ": -0.021513194530817126,
+          "SPY": -0.01842329072448201
+        },
+        "control_session_date": "2022-02-04",
+        "event_basket_return_after_cost": 0.0032372530442918166,
+        "event_entry_date": "2022-02-22",
+        "event_exit_date": "2022-03-01",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": -0.008482238523238483,
+          "IWM": 0.014390419999906312,
+          "QQQ": 0.010086624734560568,
+          "SPY": 0.0009542059659388702
+        },
+        "month": "2022-02",
+        "opex_session_date": "2022-02-18",
+        "paired_excess_return": 0.016135321686337717
+      },
+      {
+        "control_basket_return_after_cost": -0.007682311195548851,
+        "control_entry_date": "2022-03-07",
+        "control_exit_date": "2022-03-14",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": 0.004871202179871581,
+          "IWM": -0.005213767726214513,
+          "QQQ": -0.02059324426789466,
+          "SPY": -0.005793434967957811
+        },
+        "control_session_date": "2022-03-04",
+        "event_basket_return_after_cost": 0.0204082662719281,
+        "event_entry_date": "2022-03-21",
+        "event_exit_date": "2022-03-28",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": 0.01172444094337699,
+          "IWM": 0.005623580856632504,
+          "QQQ": 0.04236183046210473,
+          "SPY": 0.025923212825598174
+        },
+        "month": "2022-03",
+        "opex_session_date": "2022-03-18",
+        "paired_excess_return": 0.02809057746747695
+      },
+      {
+        "control_basket_return_after_cost": -0.04746582796190993,
+        "control_entry_date": "2022-04-04",
+        "control_exit_date": "2022-04-11",
+        "control_returns_by_symbol_before_cost": {
+          "DIA": -0.0172941427790404,
+          "IWM": -0.05468708112321363,
+          "QQQ": -0.07692934213387481,
+          "SPY": -0.03695274581151087
+        },
+        "control_session_date": "2022-04-01",
+        "event_basket_return_after_cost": -0.020465412732418753,
+        "event_entry_date": "2022-04-18",
+        "event_exit_date": "2022-04-25",
+        "event_returns_by_symbol_before_cost": {
+          "DIA": -0.010287833727271711,
+          "IWM": -0.019076669253392686,
+          "QQQ": -0.02689750916234135,
+          "SPY": -0.021599638786669262
+        },
+        "month": "2022-04",
+        "opex_session_date": "2022-04-14",
+        "paired_excess_return": 0.027000415229491176
+      }
+    ],
+    "event_basket_mean_return_after_cost": 0.0040002755886144195,
+    "event_basket_median_return_after_cost": 0.003820271764078385,
+    "gate_checks": {
+      "minimum_train_episodes": true,
+      "paired_excess_bootstrap_lb90_positive": false,
+      "positive_event_basket_mean_return_after_cost": true,
+      "positive_paired_excess_mean": true,
+      "zero_integrity_violations": true
+    },
+    "gate_pass": false,
+    "integrity_violations": [],
+    "n_episodes": 74,
+    "paired_excess_bootstrap_lb90": -0.0025417514348058264,
+    "paired_excess_mean": 0.003168472137125337,
+    "paired_excess_median": 0.002233612314905653,
+    "paired_excess_positive_frequency": 0.5405405405405406,
+    "round_trip_cost_bps_per_basket_episode": 10.0
+  },
+  "untouched_holdout": {
+    "first_event_entry_date": "2022-05-23",
+    "first_month": "2022-05",
+    "last_event_exit_date": "2026-06-29",
+    "last_month": "2026-06",
+    "n_blueprints": 50,
+    "outcome_metrics_read": false,
+    "simulation_run": false
+  }
+}
