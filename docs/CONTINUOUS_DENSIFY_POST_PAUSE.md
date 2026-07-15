@@ -27,6 +27,19 @@ Stop reasons:
 - `novelty_stall` — last N wakes added no advance and no new closed family
 - `thrash_stall` — low-quality / capability-only loops
 
+**Not a densify pause:** a single incomplete BUILD stamp (iteration budget, missing closeout, dirty run branch). That is **stranded recovery**, not burst-stop. Continuous densify should prefer finishing that stamp via smart resume before launching a new free-search wake.
+
+### Stranded recovery (self-heal)
+
+| Condition | Controller action |
+|---|---|
+| Current/local `trader/run-<stamp>` with moa meta and no completion receipt | Launch zero-input recovery (even dirty tree; may run in RTH) |
+| Executor closeout missing | Smart resume re-runs executor with recovery guidance + 90-turn default, then challenge/finalize/integrate |
+| Closeout present, later phase missing | Resume from first missing phase |
+| New free search densify | Still requires clean main preflight + off-RTH + progress gate |
+
+Do **not** delete partial lab residue just to “make preflight green” when the stamp can be finished. Clean restart is only for empty/pre-residue failures.
+
 ---
 
 ## 2. After-action loop (required)

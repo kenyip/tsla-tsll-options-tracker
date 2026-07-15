@@ -1,0 +1,122 @@
+{
+  "schema_version": 2,
+  "stamp": "2026-07-15T0024",
+  "loop_signature": "build|tsll-tsla-5d-tracking-shortfall|prior-neutral-matched-controls|train60-only|control-support-close",
+  "economic_mechanism": "A path-dependent five-session TSLL tracking shortfall versus twice TSLA's five-session return may reflect a transient leveraged-ETF rebalance/noise dislocation that rebounds when TSLA remains above a fully warmed SMA100 and its five-session return is at least -5%.",
+  "candidate_or_family_scope": "TSLL_RELATIVE_DISLOCATION_BULL_CALL_14D_V1 / TSLL_TSLA_5D_TRACKING_SHORTFALL_REBOUND: residual r_TSLL(5d)-2*r_TSLA(5d) <= -4%; next-session entry; five-session hold; non-overlapping treated episodes; earlier neutral-residual controls in [-1%,+1%] matched without replacement within frozen TSLA-return, trend-distance, calendar-distance, and disjoint-window bounds; chronological train-only decision before holdout or option pricing; future one-lot 14-DTE $1-wide bull-call debit context only with capital_fit_usd=100, max_loss_usd=100 structural width bound before closing friction, max_lots=1.",
+  "funnel_stage_before": "F0_MECHANISM",
+  "funnel_stage_after": "F0_MECHANISM",
+  "falsifier": "Close the exact family if fewer than 20 valid matched train pairs survive; any chronology, overlap, control-reuse, residual-group, or frozen match-bound violation occurs; treated mean after labeled 20-bps underlying round-trip sensitivity is non-positive; paired excess is non-positive; or the one-sided 90% circular-block-bootstrap lower bound is non-positive. Do not inspect holdout outcomes or price options after train failure.",
+  "outcome": "FAMILY_CLOSED",
+  "strategy_advancement": {
+    "advanced": false,
+    "summary": "The fixed panel contained 454 eligible dates, 36 treated shortfall events, and 274 neutral-residual control candidates, but zero treated events had an earlier control inside the complete frozen match geometry; train n_pairs=0 failed the predeclared minimum 20 before expectancy estimation, so the family remained F0."
+  },
+  "search_information": {
+    "summary": "The wake decisively closes one materially distinct relative-dislocation control design and adds a reusable train-only harness with strict chronology, prior-only controls, fail-closed null metrics, unread-holdout/no-option boundaries, labeled underlying sensitivity, and an exact treated-plus-neutral-but-zero-match negative control. It also hardens phase-aware recovery so a stranded executor stamp can self-heal without discarding valid residue. The strategy failure is control support, not signed rebound expectancy.",
+    "delta_kinds": [
+      "capability",
+      "evidence",
+      "falsification"
+    ]
+  },
+  "useful_deltas": [
+    {
+      "kind": "falsification",
+      "summary": "Closed TSLL_TSLA_5D_TRACKING_SHORTFALL_REBOUND at F0 because 36 treated and 274 neutral candidates produced zero frozen prior matches and train n_pairs=0<20; unchanged residual, threshold, match-bound, and horizon reruns are quarantined without holdout or option rescue.",
+      "novelty_key": "tsll-tsla-5d-tracking-shortfall-control-support-close-v1",
+      "artifacts": [
+        "reports/trader-wakes/moa/2026-07-15T0024/tsll-tracking-dislocation-train.json",
+        "reports/trader-wakes/2026-07-15T0024-moa-merge.md"
+      ]
+    },
+    {
+      "kind": "capability",
+      "summary": "Added a deterministic TSLL-versus-TSLA train-only matched-control harness and exact negative control proving that treated and neutral populations can coexist while frozen matching has zero support, with unavailable expectancy metrics remaining strict JSON null and holdout/options untouched.",
+      "novelty_key": "tsll-tracking-dislocation-train-harness-zero-support-boundary-v1",
+      "artifacts": [
+        "scripts/tsll_tracking_dislocation_train_lab.py",
+        "tests/test_tsll_tracking_dislocation_train_lab.py"
+      ]
+    },
+    {
+      "kind": "capability",
+      "summary": "Added phase-aware stranded-run self-heal: zero-input or --resume on the matching run branch re-runs a missing executor closeout before challenger/finalizer, raises bounded role budgets, preserves prior residue, and retains fail-closed deterministic integration.",
+      "novelty_key": "build-lab-stranded-executor-smart-recovery-v1",
+      "artifacts": [
+        "scripts/trader_build_lab_moa.sh",
+        "tests/test_trader_completion_contract.py",
+        "docs/CONTINUOUS_DENSIFY_POST_PAUSE.md",
+        "docs/BUILD_LAB_ENVIRONMENT.md"
+      ]
+    },
+    {
+      "kind": "evidence",
+      "summary": "Finalizer promoted the canonical claim artifact from ignored cache into tracked run evidence, reproduced its full substantive payload excluding only generated_at, and aligned final wake, readiness, coverage, quarantine, active-epoch streak, and merged NEXT surfaces; final tracked SHA-256 is 863aeec035c624ff5117cb3c37227d9c0286449ee5f58ef537565e06ea4f3386.",
+      "novelty_key": "tsll-tracking-dislocation-finalizer-tracked-reproduction-v1",
+      "artifacts": [
+        "reports/trader-wakes/moa/2026-07-15T0024/tsll-tracking-dislocation-train.json",
+        "reports/trader-wakes/moa/2026-07-15T0024/learning-promotion.md",
+        "reports/trader-wakes/LATEST.md",
+        "reports/trader-wakes/INDEX.md",
+        "reports/readiness/LATEST.md",
+        "reports/readiness/income-coverage-2026-07-15T0024.md",
+        "reports/readiness/income-coverage-LATEST.md"
+      ]
+    }
+  ],
+  "critic_findings": [
+    {
+      "finding": "The exact family could be rescued after zero matches by widening the residual, TSLA-return, trend-distance, calendar-distance, or horizon bounds.",
+      "status": "rejected",
+      "rationale": "Those bounds were predeclared and inspected. Zero frozen support closes the exact design; changing them now would be post-hoc mechanism mutation. Reopening requires a materially new predeclared mechanism or control design."
+    },
+    {
+      "finding": "The control-support dominant-failure branch lacked an exact negative control with both treated and neutral populations present but zero admissible frozen matches.",
+      "status": "repaired",
+      "rationale": "The focused suite now constructs treated and neutral populations, removes admissible support through the frozen calendar bound, and asserts FAMILY_CLOSED, null expectancy metrics, unread holdout, zero pricing calls, and the control-support failure label.",
+      "repair_artifacts": [
+        "scripts/tsll_tracking_dislocation_train_lab.py"
+      ],
+      "test_artifacts": [
+        "tests/test_tsll_tracking_dislocation_train_lab.py"
+      ]
+    },
+    {
+      "finding": "The thin treated residual tail or null return metrics establish positive or negative rebound expectancy.",
+      "status": "rejected",
+      "rationale": "Residual p05 approximately -4.865% and 36 treated events are design-feasibility context only. With n_pairs=0, return and bootstrap fields are null; no signed expectancy was estimated."
+    },
+    {
+      "finding": "Executor-reported focused and full-suite results were sufficient finalizer verification.",
+      "status": "rejected",
+      "rationale": "The finalizer independently reran the focused/shared suites, compile checks, exact tracked experiment, substantive reproduction, completion-contract regression, coverage regeneration, platform smoke, and full suite; exact final results are recorded in learning-promotion.md."
+    },
+    {
+      "finding": "Living readiness could continue to advertise the prior 2026-07-14 epoch burst-stop after the new epoch activated.",
+      "status": "rejected",
+      "rationale": "Final living readiness names active epoch 2026-07-15-viable-path, records this close as active-epoch no-advance streak one, keeps leader none/capital path empty, and advertises the merged cadence-policy NEXT rather than the historical burst-stop."
+    },
+    {
+      "finding": "The cadence-policy NEXT was sufficiently specified without freezing its signal stream and policy knobs.",
+      "status": "rejected",
+      "rationale": "The merged single NEXT now requires one concrete chronological defined-risk stream, explicit one-risk-unit/correlation-cluster/concurrency rules, an identical uncapped comparator, train-only dual-cost evaluation, non-vacuous drawdown improvement with non-negative expectancy, and reserved holdout."
+    },
+    {
+      "finding": "An ignored .cache artifact alone was sufficient durable claim evidence for deterministic integration.",
+      "status": "repaired",
+      "rationale": "The unchanged experiment was regenerated into tracked run evidence, independently reproduced excluding only generated_at, and cited by final living surfaces. The same harness and zero-support boundary test protect the promoted artifact semantics.",
+      "repair_artifacts": [
+        "scripts/tsll_tracking_dislocation_train_lab.py"
+      ],
+      "test_artifacts": [
+        "tests/test_tsll_tracking_dislocation_train_lab.py"
+      ]
+    }
+  ],
+  "closed_families": [
+    "TSLL_TSLA_5D_TRACKING_SHORTFALL_REBOUND"
+  ],
+  "data_dependencies": [],
+  "next": "ONE_RISK_UNIT_CADENCE_POLICY_F0: in the next zero-input BUILD wake, freeze one concrete chronological defined-risk signal stream with named structures, symbols, DNA provenance, and no closed-family retunes; predeclare one-open-risk-unit, correlation/symbol-cluster cap, and concurrency rules; compare the capped policy with the identical uncapped stream on train only under labeled dual-cost/path-realism semantics; require non-vacuous drawdown improvement and non-negative expectancy; reserve untouched holdout unless train passes; discovery bar only, with no registry auto-promote, paper force, shadow, arm, broker, or live action."
+}

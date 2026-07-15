@@ -27,9 +27,12 @@ EXEC_PROVIDER="${MOA_EXEC_PROVIDER:-openai-codex}"
 EXEC_MODEL="${MOA_EXEC_MODEL:-gpt-5.6-sol}"
 CHALL_PROVIDER="${MOA_CHALL_PROVIDER:-xai-oauth}"
 CHALL_MODEL="${MOA_CHALL_MODEL:-grok-4.5}"
-MAX_EXEC="${MOA_MAX_TURNS_EXEC:-60}"
-MAX_CHALL="${MOA_MAX_TURNS_CHALL:-35}"
-MAX_FINAL="${MOA_MAX_TURNS_FINAL:-45}"
+# Executor labs routinely need more than 60 turns when implementing a new
+# falsifier harness + suite + claim artifact + closeout. 90 is the self-heal
+# default so iteration budget exhaustion is less likely to strand a stamp.
+MAX_EXEC="${MOA_MAX_TURNS_EXEC:-90}"
+MAX_CHALL="${MOA_MAX_TURNS_CHALL:-40}"
+MAX_FINAL="${MOA_MAX_TURNS_FINAL:-50}"
 GATE="$REPO/scripts/trader_run_completion_gate.py"
 COMPOUNDING="$REPO/scripts/trader_build_compounding.py"
 GOAL_FILE="$REPO/configs/build_lab_free_goal.txt"
@@ -148,7 +151,9 @@ on_exit() {
     current="$(git branch --show-current 2>/dev/null || true)"
     echo "RUN INCOMPLETE: stamp=$STAMP phase=$PHASE exit=$ec branch=${current:-unknown}" >&2
     if [[ -n "$RUN_BRANCH" && "$current" == "$RUN_BRANCH" && -f "reports/trader-wakes/moa/$STAMP/meta.json" ]]; then
-      echo "RECOVERY: scripts/trader_build_lab_moa.sh --stamp $STAMP --resume" >&2
+      # Phase-aware --resume re-runs missing executor/challenger/finalizer stages.
+      # Zero-input launch on this run branch also auto-resumes the same stamp.
+      echo "RECOVERY: stay on $RUN_BRANCH and run scripts/trader_build_lab_moa.sh --stamp $STAMP --resume (or zero-input launch on this branch). Smart resume re-runs incomplete phases, including executor when closeout is missing." >&2
     else
       echo "RECOVERY: resolve the reported preflight/startup blocker, return to clean synchronized main, and rerun" >&2
     fi
@@ -417,9 +422,42 @@ EOF
 
 fi  # generation is skipped for clean committed integrate-only recovery
 
+has_executor_closeout() {
+  [[ -f "$MOA_DIR/executor-closeout.md" ]] || [[ -f "reports/trader-wakes/${STAMP}-moa-exec.md" ]]
+}
+
+has_challenger_critique() {
+  [[ -f "$MOA_DIR/challenger-critique.md" ]]
+}
+
+has_finalizer_handoff() {
+  [[ -f "$MOA_DIR/compounding.json" ]] && [[ -f "$MOA_DIR/learning-promotion.md" ]] && [[ -f "$MOA_DIR/merged-next-seed.md" ]]
+}
+
+append_executor_recovery_guidance() {
+  # Teach the executor how to finish a stranded stamp without abandoning valid work.
+  cat >> "$MOA_DIR/prompts/01-executor.txt" <<'RECOVERY_EOF'
+
+RECOVERY SESSION (platform self-heal — not a new strategy assignment):
+A prior executor attempt on this exact stamp ended incomplete (commonly iteration-budget exhaustion) before required residue was finished.
+1) Inspect existing stamp residue first: strategy-charter.md, lab scripts/tests, claim JSON under .cache/platform/, and any partial reports for THIS stamp only.
+2) Prefer completing the already-predeclared closed loop and falsifier. Do not silently open a different family unless the existing charter/residue is integrity-invalid; if superseding, write a short reason in closeout.
+3) Required successful exit artifacts for this phase:
+   - reports/trader-wakes/moa/<stamp>/executor-closeout.md (charter + closed strategy outcome)
+   - reports/trader-wakes/<stamp>-moa-exec.md
+   - LATEST/INDEX/coverage refresh as applicable
+   - Close with MOA_EXEC_DONE
+4) Do not commit/push/merge/claim RUN COMPLETE. Challenger + finalizer + wrapper integrate next.
+5) If the experiment already produced a claim artifact, re-run only what is needed to verify and write durable closeout rather than thrashing the design.
+RECOVERY_EOF
+}
+
 run_exec() {
   PHASE="executor"
   echo "=== BUILD LAB EXECUTOR: $EXEC_PROVIDER / $EXEC_MODEL (context=$SLOT, source=$SLOT_SOURCE) ==="
+  if [[ -f "$MOA_DIR/executor-session.log" ]]; then
+    mv -f "$MOA_DIR/executor-session.log" "$MOA_DIR/executor-session.prev.log" 2>/dev/null || true
+  fi
   set +e
   hermes -p trader chat \
     -q "$(cat "$MOA_DIR/prompts/01-executor.txt")" \
@@ -433,10 +471,14 @@ run_exec() {
   if [[ $ec -ne 0 ]]; then
     echo "WARN: executor exit $ec — challenger may still review partial residue" >&2
   fi
+  if ! has_executor_closeout; then
+    echo "ERROR: executor finished without closeout under $MOA_DIR or ${STAMP}-moa-exec.md" >&2
+    return 1
+  fi
 }
 
 run_chall() {
-  if [[ ! -f "$MOA_DIR/executor-closeout.md" ]] && [[ ! -f "reports/trader-wakes/${STAMP}-moa-exec.md" ]]; then
+  if ! has_executor_closeout; then
     echo "ERROR: no executor closeout under $MOA_DIR or ${STAMP}-moa-exec.md" >&2
     exit 1
   fi
@@ -567,8 +609,25 @@ case "$MODE" in
     echo "PARTIAL PHASE COMPLETE: challenger residue written; RUN INCOMPLETE until finalization, verification, and integration"
     ;;
   resume)
-    run_chall
-    run_finalize
+    # Phase-aware self-recovery: re-run only missing stages so incomplete
+    # executor residue (no closeout) does not dead-end the stamp.
+    if ! has_executor_closeout; then
+      echo "SMART-RECOVERY: executor closeout missing for $STAMP — re-running executor before challenge/finalize" >&2
+      append_executor_recovery_guidance
+      run_exec
+    fi
+    if ! has_challenger_critique; then
+      echo "SMART-RECOVERY: challenger critique missing for $STAMP — running challenger" >&2
+      run_chall
+    else
+      echo "SMART-RECOVERY: reusing existing challenger-critique.md for $STAMP" >&2
+    fi
+    if ! has_finalizer_handoff; then
+      echo "SMART-RECOVERY: finalizer handoff incomplete for $STAMP — running finalizer" >&2
+      run_finalize
+    else
+      echo "SMART-RECOVERY: reusing existing finalizer handoff artifacts for $STAMP" >&2
+    fi
     integrate_run
     ;;
   finalizer-only)

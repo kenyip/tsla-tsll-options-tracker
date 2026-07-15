@@ -66,7 +66,7 @@ Do not force capital-seat absolute gates to be the only pass/fail for early funn
 | **Discovery bar** | F0→F1, F1→F2 signals | Chronology, labeled costs, non-vacuous n, falsifier; looser risk thresholds OK when claim is labeled L0 discovery | **No** |
 | **Capital-seat bar** | L1 / paper eligibility | Dual-cost non-vacuous edge, B3 density, max loss ≤$300, window DD ≤$75, dense-neg ≤5, defined-risk preferred | **Yes** (still not live) |
 
-Config: `configs/search_epoch.json`. Reassessment: `docs/SEARCH_DESIGN_REASSESSMENT_2026-07-14.md`. Alignment charter: `docs/TRADER_RESTART_CHARTER.md`.
+Config: `configs/search_epoch.json`. Active reassessment: `docs/SEARCH_DESIGN_REASSESSMENT_2026-07-15.md`. Alignment charter: `docs/TRADER_RESTART_CHARTER.md`.
 
 See `docs/INCOME_STRATEGY_COVERAGE.md` for the structure matrix and gaps.
 
@@ -148,7 +148,7 @@ A BUILD wake has three judgment phases plus deterministic integration:
 
 The wrapper may emit `RUN COMPLETE` only after all four close. Executor/challenger markers are phase receipts—not completion. A red test, dirty tree, untracked residue, missing learning artifact, unpushed commit, or unmerged branch leaves the run `RUN INCOMPLETE` with its branch/evidence preserved for repair.
 
-Recovery is explicit and resumable: run `scripts/trader_build_lab_moa.sh --stamp <stamp> --resume` to rerun challenge → finalizer → integration, or `--finalizer-only` when the critique is already green. Recovery must run from the original `trader/run-<stamp>` branch recorded in `meta.json`; old pre-contract runs cannot masquerade as recoverable completed runs.
+Recovery is explicit and phase-aware: from the original `trader/run-<stamp>` branch recorded in `meta.json`, run `scripts/trader_build_lab_moa.sh --stamp <stamp> --resume` (or use the zero-input front door while still on that matching run branch). Smart resume reruns the first missing phase—executor when no closeout exists, then challenger/finalizer as needed—before deterministic integration; `--finalizer-only` remains available when critique is already green. Old pre-contract runs cannot masquerade as recoverable completed runs.
 
 Each finalizer promotes learning by type:
 

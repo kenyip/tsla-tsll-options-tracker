@@ -1,0 +1,143 @@
+{
+  "all_train_rows_are_inspected_development_data": true,
+  "authority": "research only; no registry, paper, shadow, funding, broker, arm, or live authority",
+  "candidate_id": "TSLL_RELATIVE_DISLOCATION_BULL_CALL_14D_V1",
+  "candidate_or_family_scope": "TSLL five-session return minus twice TSLA five-session return at or below -4%, TSLA above fully warmed SMA100 and five-session return at least -5%, next-session entry, five-session hold, and earlier neutral-residual matched controls",
+  "capital_basis": "structural upper bound for a future $1-wide debit vertical before closing friction; not an observed or simulated trade loss",
+  "capital_fit_usd": 100.0,
+  "claim_scope": "split/dividend-adjusted TSLA/TSLL underlying closes only; train-only L0 discovery; no option marks, option costs, fills, L1, capital seat, or paper eligibility claim",
+  "closed_family": "TSLL_TSLA_5D_TRACKING_SHORTFALL_REBOUND",
+  "config": {
+    "bootstrap_block_length": 3,
+    "bootstrap_confidence": 0.9,
+    "bootstrap_samples": 10000,
+    "controls_prior_only": true,
+    "feature_sessions": 5,
+    "forward_sessions": 5,
+    "matched_without_replacement": true,
+    "max_match_distance_sessions": 63,
+    "max_trend_distance": 0.15,
+    "max_tsla_return_distance": 0.05,
+    "minimum_train_pairs": 20,
+    "neutral_residual_bounds": [
+      -0.01,
+      0.01
+    ],
+    "non_overlapping_pair_windows": true,
+    "residual_threshold": -0.04,
+    "round_trip_cost_bps": 20.0,
+    "symbols": [
+      "TSLA",
+      "TSLL"
+    ],
+    "train_fraction": 0.6,
+    "trend_lookback_sessions": 100,
+    "tsla_return_floor": -0.05
+  },
+  "data_provenance": {
+    "common_panel": {
+      "end": "2026-07-13",
+      "join": "inner join on trading dates; no forward fill",
+      "rows": 984,
+      "start": "2022-08-09"
+    },
+    "sources": {
+      "TSLA": {
+        "adjustment_semantics": "yfinance auto_adjust=True",
+        "discarded_trailing_unsettled_rows": 1,
+        "end": "2026-07-13",
+        "path": ".cache/platform/tsll_tracking_dislocation/TSLA_2022-08-01_2026-07-15_auto_adjust.csv",
+        "rows": 990,
+        "sha256": "e0035545c51c3738177497bdad94091e5f76574e7f11968b5e7393fa20454bc2",
+        "start": "2022-08-01"
+      },
+      "TSLL": {
+        "adjustment_semantics": "yfinance auto_adjust=True",
+        "discarded_trailing_unsettled_rows": 0,
+        "end": "2026-07-14",
+        "path": ".cache/platform/tsll_tracking_dislocation/TSLL_2022-08-01_2026-07-15_auto_adjust.csv",
+        "rows": 985,
+        "sha256": "7a8fd467aad4f157a6b92c067a43b4843f057c4ddf79bfed1d0b68b3bcdef2eb",
+        "start": "2022-08-09"
+      }
+    }
+  },
+  "decision": "CLOSE_TSLL_TRACKING_SHORTFALL_REBOUND_TRAIN_FAMILY",
+  "dominant_failure_mechanism": "eligible treated signals existed but none admitted an earlier neutral-residual control inside the frozen match bounds and disjoint chronology",
+  "economic_mechanism": "a path-dependent five-session TSLL tracking shortfall versus twice TSLA's return may be a transient leveraged-ETF rebalance/noise dislocation when TSLA remains in a positive fully warmed trend",
+  "f2_or_l1_claim": false,
+  "falsifier": "fewer than 20 chronological matched train pairs, any integrity or frozen match-bound violation, non-positive treated mean after 20-bps underlying round-trip sensitivity, non-positive paired excess, or non-positive one-sided 90% circular-block-bootstrap lower bound closes the exact family",
+  "funnel_stage_after": "F0_MECHANISM",
+  "funnel_stage_before": "F0_MECHANISM",
+  "generated_at": "2026-07-15T13:38:07.725743+00:00",
+  "max_loss_usd": 100.0,
+  "max_lots": 1,
+  "mechanism_family": "TSLL_TSLA_5D_TRACKING_SHORTFALL_REBOUND",
+  "one_lot_max_loss_usd": 100.0,
+  "option_stage": {
+    "option_mark_provenance": null,
+    "planned_dte": 14,
+    "planned_structure": "bull_call_debit_spread",
+    "planned_width_usd": 1.0,
+    "pricing_calls": 0,
+    "pricing_run": false,
+    "status": "NOT_RUN_TRAIN_GATE_FAILED"
+  },
+  "paper_only": true,
+  "phase": "BUILD_L0_UNDERLYING_DISCOVERY",
+  "population_validity": {
+    "generalization_allowed": false,
+    "listing_bias": true,
+    "population_pure": true,
+    "population_type": "fixed TSLA/TSLL economic pair from TSLL availability",
+    "ranking_complete": true,
+    "survivorship_bias": true
+  },
+  "registration_eligible": false,
+  "schema_version": 1,
+  "selection_diagnostics": {
+    "eligible_residual_min": -0.07752772734152091,
+    "eligible_residual_p01": -0.07033863901991096,
+    "eligible_residual_p05": -0.04865357581310601,
+    "eligible_signal_dates": 454,
+    "matched_blueprints": 0,
+    "neutral_control_candidates": 274,
+    "treated_signal_candidates": 36
+  },
+  "sleeve_usd": 3000.0,
+  "strategy_outcome": "FAMILY_CLOSED",
+  "structure": "conditional_bull_call_debit_spread_not_yet_priced",
+  "train": {
+    "bootstrap_block_length": 3,
+    "bootstrap_samples": 10000,
+    "control_mean_return_after_cost": null,
+    "gate_checks": {
+      "minimum_train_pairs": false,
+      "paired_excess_bootstrap_lb90_positive": false,
+      "positive_paired_excess_mean": false,
+      "positive_treated_mean_after_cost": false,
+      "zero_integrity_violations": true
+    },
+    "gate_pass": false,
+    "integrity_violations": [],
+    "max_calendar_distance_sessions": null,
+    "max_trend_match_distance": null,
+    "max_tsla_return_match_distance": null,
+    "n_pairs": 0,
+    "paired_excess_bootstrap_lb90": null,
+    "paired_excess_mean": null,
+    "paired_excess_median": null,
+    "paired_excess_positive_frequency": null,
+    "pairs": [],
+    "round_trip_cost_bps": 20.0,
+    "treated_mean_return_after_cost": null
+  },
+  "untouched_holdout": {
+    "first_control_signal_date": null,
+    "first_treated_signal_date": null,
+    "last_treated_exit_date": null,
+    "n_blueprints": 0,
+    "outcome_metrics_read": false,
+    "simulation_run": false
+  }
+}

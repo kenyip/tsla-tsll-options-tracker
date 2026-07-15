@@ -35,6 +35,10 @@ class TraderCompletionContractSurfaceTest(unittest.TestCase):
         self.assertNotIn("args=(--slot", stress)
         self.assertIn("--finalizer-only", stress)
         self.assertIn("--resume", stress)
+        self.assertIn("SMART-RECOVERY", build)
+        self.assertIn("append_executor_recovery_guidance", build)
+        self.assertIn("has_executor_closeout", build)
+        self.assertIn('MAX_EXEC="${MOA_MAX_TURNS_EXEC:-90}"', build)
 
     def test_bootstrap_does_not_overwrite_evolved_profile_contract(self) -> None:
         bootstrap = (REPO / "scripts" / "bootstrap_trader_profile.sh").read_text()
