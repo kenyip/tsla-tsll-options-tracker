@@ -20,17 +20,29 @@ Preferred initial exploration lanes remain preferences, not allowlists:
 2. Directional swing capture via call debit spreads.
 3. Long-biased diagonal income via bullish diagonals.
 
-## Verification
+## VERIFICATION
 
 - `LAYERED_EDGE_DOCTRINE_ASSERTIONS_OK` — doctrine/config/platform references and required terms present.
 - `.venv/bin/python -m unittest discover -s tests -v` — 297/297 OK.
 - `git diff --check` — OK.
+- Commit/push: doctrine changes pushed to `origin/main`.
+
+## DURABLE
+
+- Durable doctrine: `docs/TRADER_LAYERED_EDGE_DOCTRINE.md`.
+- Platform pin: `docs/TRADER_PLATFORM_GOAL.md` now references and summarizes the doctrine.
+- Runtime BUILD contract: `configs/build_lab_free_goal.txt` now requires the Layered Edge Stack in strategy decision charters and challenger/finalizer acceptance.
+- History receipt: this report.
+
+## LESSON
+
+When Trader needs a strategy, encode the thinking as a reusable decision architecture rather than a transient prompt. The key invariant is forecast → payoff → regime → risk → evidence; an option structure alone is never the strategy.
 
 ## Safety / authority
 
 - No broker login, orders, paper placement, shadow/live promotion, funding, or arming.
 - The auto-started `2026-07-15T1344` BUILD had only orientation/prompt/log prelude and no strategy charter or experiment; it was stopped and its pre-action residue removed before this doctrine update.
 
-## Next
+## NEXT
 
 Next Trader BUILD wake should inherit the doctrine from `configs/build_lab_free_goal.txt` and produce a strategy charter with the full Layered Edge Stack before claiming any strategy progress.
