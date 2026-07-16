@@ -1,6 +1,6 @@
 # Trader platform readiness — latest
 
-Updated: 2026-07-15 18:56 local — MoA stamp 2026-07-15T1829 finalizer-ready; deterministic integration pending.
+Updated: 2026-07-15 19:08 local — MoA stamp 2026-07-15T1829 integrated, pushed, and postflight-complete on `main` / `origin/main`.
 
 Phase: BUILD
 Sleeve: $3,000 Agentic research sleeve
@@ -54,7 +54,7 @@ The closed earnings mechanism never reached option pricing. Its future condition
 3. A future pre-event fundamental-surprise/estimate-revision route requires point-in-time announcement, estimate, and revision data with honest known-at provenance. Current Yahoo retrospective timestamps do not qualify.
 4. Broad observed historical option entry/exit joins remain unavailable for calibration. This blocks observed-option/L1 claims only, not labeled proxy discovery after the burst-stop reassessment.
 5. Any future F3 candidate still requires live-clock paper quotes/fills before F4/shadow/live authority.
-6. Stamp `2026-07-15T1829` is finalizer-ready but not integrated; no execution authority changed.
+6. Stamp `2026-07-15T1829` is integrated and postflight-complete; no execution authority changed.
 
 Coverage: `reports/readiness/income-coverage-LATEST.md`
 Finalizer wake: `reports/trader-wakes/2026-07-15T1829-moa-merge.md`

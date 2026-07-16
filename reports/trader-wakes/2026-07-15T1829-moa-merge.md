@@ -4,7 +4,7 @@ WAKE: 2026-07-15T1829
 PHASE: BUILD / L0 research only
 ROLE: GPT 5.6 Sol finalizer / single writer
 SLEEVE: $3,000 Agentic research sleeve
-STATUS: `MOA_FINALIZE_READY`; deterministic integration pending
+STATUS: `RUN COMPLETE`; integrated, pushed, and postflight-complete
 CHOSE: reconcile challenger judgment for the frozen post-earnings signed-continuation mechanism, repair evidence-methodology nits without reopening strategy search, reproduce the decision on current code, and prepare one schema-v2 handoff.
 
 ## Strategy decision
@@ -79,6 +79,6 @@ BURST_STOP_SEARCH_DESIGN_REASSESSMENT: stop strategy-experiment volume. Diagnose
 
 ## Integration
 
-Pending deterministic wrapper gate. The finalizer has not committed, pushed, merged, switched branches, or claimed `RUN COMPLETE`.
+Wrapper postflight passed after deterministic integration. Commit `e210370dea867953b7a0dcefc2ba65205a052ed2` is on `main` and `origin/main`; checkout was clean; completion receipt `.cache/platform/completion/2026-07-15T1829.json` recorded `integrated=true` and `pushed=true`.
 
-MOA_FINALIZE_READY
+RUN COMPLETE
