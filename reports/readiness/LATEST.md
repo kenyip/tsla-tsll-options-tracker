@@ -1,6 +1,6 @@
 # Trader platform readiness — latest
 
-Updated: 2026-07-15 21:38 PDT — MoA stamp 2026-07-15T2045 finalizer green and `MOA_FINALIZE_READY`; deterministic integration/postflight pending. Prior integrated stamp remains 2026-07-15T2007 until wrapper completion.
+Updated: 2026-07-15 21:55 PDT — MoA stamp 2026-07-15T2045 `RUN COMPLETE`; integrated/pushed/postflight-complete as `c75185a` with `main == origin/main` and a clean checkout.
 
 Phase: BUILD
 Sleeve: $3,000 Agentic research sleeve
@@ -45,7 +45,7 @@ Authority: research/paper-safe only; no shadow/live auto-promotion, broker acces
 - current-code claim replay: substantive equality true; normalized SHA `794e87ab…`; holdout outcomes unread
 - coverage: `21` structures / `246` hypotheses / `70` evolve artifacts / no leader; dated/LATEST SHA `f751533e…`
 - schema-v2 handoff: exit `0`; `ok=true`; `role_ready=true`; `outcome=BLOCKER_REMOVED_AND_RETESTED`; `strategy_advanced=false`; 4 useful deltas / 5 critic findings closed
-- disposable-index prepare: clean `git diff --cached --check`; gate exit `0`; `ok=true`; 20 intended paths; live index untouched; deterministic wrapper integration still pending
+- deterministic wrapper postflight: `ok=true`; integrated/pushed/postflight-complete as `c75185a`; `main == origin/main`; checkout clean; run branch deleted
 
 ## Readiness blockers
 
@@ -54,7 +54,7 @@ Authority: research/paper-safe only; no shadow/live auto-promotion, broker acces
 3. The three active-epoch mechanisms closed without advancement; burst-stop reassessment is mandatory before more strategy volume.
 4. Broad observed historical option entry/exit joins remain unavailable. This blocks observed-option/L1 claims only; it does not overturn the exact proxy family close.
 5. Any future F3 candidate still requires live-clock paper quotes/fills before F4/shadow/live authority.
-6. Stamp `2026-07-15T2045` is finalizer-ready but not integrated or postflight-complete; no execution authority changed.
+6. Stamp `2026-07-15T2045` is integrated/pushed/postflight-complete as `c75185a`; no execution authority changed.
 
 Coverage: `reports/readiness/income-coverage-LATEST.md`
 Finalizer wake: `reports/trader-wakes/2026-07-15T2045-moa-merge.md`

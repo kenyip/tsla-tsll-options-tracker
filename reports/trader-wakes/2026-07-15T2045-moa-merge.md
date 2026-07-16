@@ -4,7 +4,7 @@ WAKE: 2026-07-15T2045
 PHASE: BUILD / L0 research only
 ROLE: GPT 5.6 Sol finalizer / single writer
 SLEEVE: $3,000 Agentic research sleeve
-STATUS: `MOA_FINALIZE_READY`; deterministic integration pending; not `RUN COMPLETE`
+STATUS: `RUN COMPLETE`; integrated/pushed/postflight-complete as `c75185a`
 CHOSE: reconcile every challenger finding, repair temporal-coverage evidence and stale labels, preserve the exact family close, rewrite living readiness/NEXT surfaces, run focused and full verification, and prepare one schema-v2 handoff.
 
 ## Strategy decision
@@ -89,6 +89,6 @@ Absolute proxy profitability and mechanism identification are separate. With zer
 
 ## Integration
 
-Pending the deterministic wrapper gate. Schema-v2 handoff validation and disposable-index prepare are green; the finalizer has not committed, pushed, merged, switched branches, or claimed `RUN COMPLETE`.
+Deterministic wrapper gate passed after integration-format repair. The run committed, pushed, merged to `main`, verified `main == origin/main`, deleted the run branch, and wrote the postflight receipt as `c75185a4455e2b5a81ae759cea7e08212b5a908d`.
 
-MOA_FINALIZE_READY
+RUN COMPLETE
