@@ -1,9 +1,9 @@
 # Trader readiness — LATEST
 
-Updated: 2026-07-16T0546 finalizer handoff; deterministic wrapper integration pending
+Updated: 2026-07-16T0546 RUN COMPLETE (`317384d`); integrated/pushed/postflight-complete on `main == origin/main`
 Phase: **BUILD**
 Authority: **research / paper-safe only; no broker, shadow, arm, or live authority**
-Integration: **pending deterministic wrapper gate; no commit/push/merge/RUN COMPLETE claim from finalizer**
+Integration: complete; wrapper postflight receipt confirms clean pushed main
 
 ## Current strategy decision
 
@@ -104,7 +104,7 @@ Finalizer-owned results:
 - Strict JSON, source/holdout hashes, outcome `FAMILY_CLOSED`, and option-pricing count zero verified.
 - Income coverage: **21 structures / 246 hypotheses / 70 evolve artifacts / no quality leader**.
 
-Deterministic secret/path/diff/staging and integration checks remain wrapper-owned and pending.
+Deterministic secret/path/diff/staging and integration checks passed under the wrapper postflight receipt.
 
 ## Active search-epoch implication
 

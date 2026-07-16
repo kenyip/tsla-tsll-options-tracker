@@ -13,7 +13,7 @@ Finalizer-owned commands and exact results:
 - `.venv/bin/python scripts/trader_income_coverage.py --json --no-write` → 21 catalog structures, 246 hypotheses, 70 evolve artifacts, no quality leader; current TSLL option archive is 2/3 RTH market dates and `provider_backtest_eligible=false`.
 - `git diff --check cfbaee28f66f39d82696db71930157a858598061` was green before handoff writing and is rerun in the final audit. Raw executor/challenger/finalizer session logs, generated prompts, and coverage stderr were removed as run-created debris; claim evidence, phase receipts, exit codes, charter, orientation, and reports were preserved.
 
-The deterministic wrapper still owns staging, secret/path enforcement, commit, push, fast-forward integration into `main`, remote equality, clean-tree postflight, and the only valid `RUN COMPLETE` receipt. Integration is pending that gate.
+The deterministic wrapper owns staging, secret/path enforcement, commit, push, fast-forward integration into `main`, remote equality, clean-tree postflight, and the only valid `RUN COMPLETE` receipt. That gate passed as `317384db18b2d0569574fca421189089d64e7f21` on clean pushed `main == origin/main`.
 
 ## DURABLE
 

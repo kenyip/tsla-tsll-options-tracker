@@ -13,7 +13,7 @@ OUTCOME: STAND_ASIDE (success). No paper place. No evolve. First RTH of 2026-07-
 - B6: still waiting non-bear capital-fit OPEN_PCS (or other defined-risk capital-fit intent)
 - Overnight BUILD residue (not executed here): MoA `2026-07-16T0546` finalizer-ready `FAMILY_CLOSED` on `BROAD_INDEX_OVERNIGHT_ABSORPTION_*`; ONE NEXT BUILD seed `YIELD_CURVE_STEEPENING_REGIONAL_BANK_FORWARD_UPDRIFT_PREFLIGHT`
 - Authority: research/paper only; agentic_live blocked; no shadow/live/arm/broker
-- Concurrent checkout: dirty branch `trader/run-2026-07-16T0546` (BUILD MoA finalize/integration pending) → **reports-only RTH**; no absorb/stash of foreign WIP
+- Concurrent checkout at RTH time: dirty branch `trader/run-2026-07-16T0546` forced **reports-only RTH**; that BUILD has since integrated cleanly as `317384d`, without changing the RTH STAND_ASIDE decision
 
 ## Orient
 

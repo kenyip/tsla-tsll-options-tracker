@@ -140,7 +140,9 @@ def main() -> int:
     latest = LATEST.read_text(encoding="utf-8", errors="replace") if LATEST.exists() else ""
     l0 = bool(re.search(r"\bL0\b|PHASE: BUILD", latest))
     l1 = bool(re.search(r"\bL1\b", latest)) and not re.search(
-        r"(?:not|no) L1|L0(?:/| )BUILD(?: only)?", latest, re.I
+        r"(?:not|no)\s+(?:F\d+/)?L1|no\s+[^\n]{0,40}\bL1\b|\b0\s+L1\b|L0(?:/| )BUILD(?: only)?",
+        latest,
+        re.I,
     )
     live_claim = bool(
         re.search(r"LIVE_PACKET|agentic arm|shadow auto-promote|ready for real", latest, re.I)
