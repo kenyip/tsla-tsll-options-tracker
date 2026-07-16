@@ -16,10 +16,27 @@ class TraderCompletionContractSurfaceTest(unittest.TestCase):
     def test_repo_contract_and_goal_require_shipped_clean_learning(self) -> None:
         agents = (REPO / "AGENTS.md").read_text()
         goal = (REPO / "configs" / "build_lab_free_goal.txt").read_text()
+        platform_goal = (REPO / "docs" / "TRADER_PLATFORM_GOAL.md").read_text()
+        direct_plan = (REPO / "docs" / "TRADER_DIRECT_TO_PAPER_WATCH_PLAN.md").read_text()
         for token in ("RUN COMPLETE", "full-suite", "integrated into `main`", "Learning is promoted"):
             self.assertIn(token, agents)
         for token in ("deterministic completion gate", "durable learning", "RUN COMPLETE"):
             self.assertIn(token, goal)
+        for token in (
+            "TRADER_DIRECT_TO_PAPER_WATCH_PLAN.md",
+            "cheap batch candidate screening",
+            "reusable option payoff validators",
+            "patient opportunity watcher",
+        ):
+            self.assertIn(token, goal)
+        for token in (
+            "cheap batch screen → selected candidate deep validation → reusable payoff map → patient watcher → paper packet",
+            "NO_QUALIFIED_STRATEGY",
+            "NO_SETUP",
+            "PAPER_PACKET_READY",
+            "live limit orders remain behind paper evidence",
+        ):
+            self.assertIn(token, platform_goal + direct_plan)
 
     def test_all_moa_entrypoints_share_fail_closed_build_orchestrator(self) -> None:
         build = (REPO / "scripts" / "trader_build_lab_moa.sh").read_text()

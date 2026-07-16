@@ -1,6 +1,6 @@
 # Agentic go-live readiness — LATEST
 
-Updated: 2026-07-16T0029 finalizer
+Updated: 2026-07-16T0029 `RUN COMPLETE`; integrated/pushed/postflight-complete as `76c1a86` with `main == origin/main` and a clean checkout.
 Phase: BUILD
 Authority: L0 proxy research only
 Sleeve planning capital: `$3,000`
@@ -69,4 +69,4 @@ Do not reopen by alias, width/DTE/delta retune, subset salvage, or stale F2 pros
 
 `FOMC_INFORMATION_RESOLUTION_SPY_DIRECTION_F0`: open one successor epoch around official prior-known FOMC decision dates; before outcomes freeze the official schedule/published-time session map, ambiguous-time stand-aside, next-completed-session entry, signed five-session SPY return with positive direction predeclared and no post-hoc short/two-sided flip, prior-only same-regime matched controls with no reuse/substitution, chronological train/sealed unread holdout, dependence-aware uncertainty/tail/density and control-support gates, and zero option pricing at F0. Keep it distinct from closed issuer post-earnings drift. Conditional future structure is one-lot 18–24 DTE `$2` bull-call debit spread with `capital_fit_usd=$200`, frictionless `max_loss_usd=$200` before closing friction, `max_lots=1`; no OPEX/TOM/breadth/residual/breakout retune, registry, paper force, shadow, arm, broker, or live action.
 
-Finalizer handoff: `MOA_FINALIZE_READY`. Integration, push, remote equality, clean-tree postflight, and `RUN COMPLETE` remain pending the deterministic wrapper gate.
+Deterministic wrapper postflight: `ok=true`; integrated/pushed/postflight-complete as `76c1a86`; `main == origin/main`; checkout clean; run branch deleted.

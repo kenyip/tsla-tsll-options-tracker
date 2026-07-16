@@ -6,6 +6,7 @@
 > **Alignment / restart / clean-start vs tweak:** [TRADER_RESTART_CHARTER.md](TRADER_RESTART_CHARTER.md) — re-read before densified BUILD or doctrine changes.
 > **Progress honesty:** [BUILD_PROGRESS_AND_CONFIDENCE.md](BUILD_PROGRESS_AND_CONFIDENCE.md) — ops complete ≠ strategy closer.
 > **Layered edge doctrine:** [TRADER_LAYERED_EDGE_DOCTRINE.md](TRADER_LAYERED_EDGE_DOCTRINE.md) — forecast → payoff → regime → risk → evidence before strategy advancement.
+> **Direct paper-watch path:** [TRADER_DIRECT_TO_PAPER_WATCH_PLAN.md](TRADER_DIRECT_TO_PAPER_WATCH_PLAN.md) — cheap candidate factory → reusable payoff validators → patient no-trade/opportunity watcher.
 
 ---
 
@@ -81,6 +82,23 @@ Every trade-shaped BUILD candidate must include the Layered Edge Stack from [TRA
 Initial preferred research lanes are long-biased theta income via bull put / put credit spreads, directional swing capture via call debit spreads, and long-biased diagonal income. These are preferences, not allowlists: Trader may supersede them only by naming a better economic mechanism and completing the full stack.
 
 `STRATEGY_ADVANCED` requires a complete stack plus claim-appropriate evidence. Tooling, plumbing, coverage, vague “promising” language, or option-structure enthusiasm without a repeatable forecast is not strategy advancement.
+
+### Direct path to paper opportunity watch
+
+Trader should compress the path to readiness without weakening evidence gates. The active operating plan is [TRADER_DIRECT_TO_PAPER_WATCH_PLAN.md](TRADER_DIRECT_TO_PAPER_WATCH_PLAN.md):
+
+```text
+cheap batch screen → selected candidate deep validation → reusable payoff map → patient watcher → paper packet
+```
+
+The system should not spend a full MoA cycle on every weak idea when cheap train-only/development-only screens can eliminate them. A factory wake may screen many frozen candidates, but a BUILD wake still closes with one claim-bearing decision, reassessment, or no-delta stop.
+
+Parallel build debt is now explicit:
+
+- reusable defined-risk payoff validators for bull-call, put-credit, and bullish-diagonal structures;
+- a watcher scaffold that returns `NO_QUALIFIED_STRATEGY` or `NO_SETUP` until a candidate earns paper readiness;
+- paper/suggested limit-order packets only after candidate, setup, liquidity, sizing, and risk gates align;
+- live limit orders remain behind paper evidence, risk-governor proof, a Ken-facing live packet, and explicit arming.
 
 ### Promotion path (non-negotiable)
 

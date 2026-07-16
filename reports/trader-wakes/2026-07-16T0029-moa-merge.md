@@ -4,7 +4,7 @@ WAKE: 2026-07-16T0029
 PHASE: BUILD / L0 proxy research
 ROLE: GPT 5.6 Sol finalizer / single writer
 SLEEVE: $3,000 Agentic research sleeve
-STATUS: `MOA_FINALIZE_READY`; deterministic integration, push, remote equality, clean-tree postflight, and `RUN COMPLETE` remain wrapper-owned and pending.
+STATUS: `RUN COMPLETE`; integrated/pushed/postflight-complete as `76c1a86`.
 CHOSE: reconcile every Grok 4.5 finding, close candidate-lineage and epoch-state defects, independently verify the unchanged option-family close, promote learning, and prepare a schema-v2 handoff without opening a new strategy experiment.
 
 ## Strategy decision
@@ -81,8 +81,8 @@ Readiness: `reports/readiness/LATEST.md`.
 
 `FOMC_INFORMATION_RESOLUTION_SPY_DIRECTION_F0`: open one successor epoch around official prior-known FOMC decision dates; before outcomes freeze the official schedule/published-time session map, ambiguous-time stand-aside, next-completed-session entry, signed five-session SPY return with positive direction predeclared and no post-hoc short/two-sided flip, prior-only same-regime matched controls with no reuse/substitution, chronological train/sealed unread holdout, dependence-aware uncertainty/tail/density and control-support gates, and zero option pricing at F0. Keep it distinct from closed issuer post-earnings drift. Conditional future structure is one-lot 18–24 DTE `$2` bull-call debit spread with `capital_fit_usd=$200`, frictionless `max_loss_usd=$200` before closing friction, `max_lots=1`; no OPEX/TOM/breadth/residual/breakout retune, registry, paper force, shadow, arm, broker, or live action.
 
-Integration is pending the deterministic wrapper gate. No commit, push, merge, branch switch, postflight, or `RUN COMPLETE` claim occurred.
+Deterministic wrapper gate passed. The run committed, pushed, merged to `main`, verified `main == origin/main`, deleted the run branch, and wrote the postflight receipt as `76c1a8658491348c8dffbe4dfc6de2bcec9f78a6`.
 
-MOA_FINALIZE_READY
+RUN COMPLETE
 Verification: `reports/trader-wakes/2026-07-16T0029-moa-merge.md`
 Learning: `reports/trader-wakes/moa/2026-07-16T0029/learning-promotion.md`
