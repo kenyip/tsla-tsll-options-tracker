@@ -1,0 +1,3157 @@
+{
+  "all_train_rows_are_inspected_development_data": true,
+  "authority": "research only; no L1, capital seat, registry, paper, shadow, broker, funding, arm, or live authority",
+  "candidate_id": "BROAD_INDEX_OVERNIGHT_ABSORPTION_BULL_CALL_21D_V1",
+  "capital_fit_usd": 200.0,
+  "claim_bar": "L0_DISCOVERY_ONLY",
+  "closed_families": [
+    "BROAD_INDEX_OVERNIGHT_ABSORPTION_BULL_CALL_21D_V1",
+    "BROAD_INDEX_OVERNIGHT_SELL_INTRADAY_ABSORPTION_FORWARD_UPDRIFT"
+  ],
+  "data_provenance": {
+    "DIA": {
+      "adjustment_semantics": "yfinance auto_adjust=True",
+      "end": "2026-07-15",
+      "path": ".cache/platform/broad_index_overnight_absorption/DIA_2007-05-01_2026-07-16_auto_adjust_ohlcv.csv",
+      "requested_end_exclusive": "2026-07-16",
+      "requested_start": "2007-05-01",
+      "rows": 4832,
+      "sha256": "a758084739ad51ffdfeea41c09eab2ff37e41b903ecce00d6579fe67a868e3ab",
+      "start": "2007-05-01"
+    },
+    "IWM": {
+      "adjustment_semantics": "yfinance auto_adjust=True",
+      "end": "2026-07-15",
+      "path": ".cache/platform/broad_index_overnight_absorption/IWM_2007-05-01_2026-07-16_auto_adjust_ohlcv.csv",
+      "requested_end_exclusive": "2026-07-16",
+      "requested_start": "2007-05-01",
+      "rows": 4832,
+      "sha256": "ce9ab9105ed4a55b97a4838e8ab14e5106fc0f9d1b8657f3150b1e0812f72c82",
+      "start": "2007-05-01"
+    },
+    "QQQ": {
+      "adjustment_semantics": "yfinance auto_adjust=True",
+      "end": "2026-07-15",
+      "path": ".cache/platform/broad_index_overnight_absorption/QQQ_2007-05-01_2026-07-16_auto_adjust_ohlcv.csv",
+      "requested_end_exclusive": "2026-07-16",
+      "requested_start": "2007-05-01",
+      "rows": 4832,
+      "sha256": "e73603f4849d89978e5530e2c10bcaad0be8612355404c131c2c070c1cf23c3c",
+      "start": "2007-05-01"
+    },
+    "SPY": {
+      "adjustment_semantics": "yfinance auto_adjust=True",
+      "end": "2026-07-15",
+      "path": ".cache/platform/broad_index_overnight_absorption/SPY_2007-05-01_2026-07-16_auto_adjust_ohlcv.csv",
+      "requested_end_exclusive": "2026-07-16",
+      "requested_start": "2007-05-01",
+      "rows": 4832,
+      "sha256": "abd6fba9e96fa0a0a6832918c5eeaee31531ca4c547547a7d1c6d71f45470941",
+      "start": "2007-05-01"
+    }
+  },
+  "dominant_failure_mechanism": "The exact broad-index overnight-sell/intraday-absorption trigger did not clear the frozen clustered train conjunction. Failed gates: event_mean_after_10bps_positive, paired_excess_mean_positive, paired_excess_five_episode_block_lb90_positive, event_return_worst_decile_at_least_negative_5pct.",
+  "economic_mechanism": "Repeated overnight selling absorbed by positive regular-session demand across liquid broad-index ETFs may be transitory risk-transfer pressure rather than durable negative information.",
+  "f2_claim": false,
+  "failed_gates": [
+    "event_mean_after_10bps_positive",
+    "paired_excess_mean_positive",
+    "paired_excess_five_episode_block_lb90_positive",
+    "event_return_worst_decile_at_least_negative_5pct"
+  ],
+  "family_id": "BROAD_INDEX_OVERNIGHT_SELL_INTRADAY_ABSORPTION_FORWARD_UPDRIFT",
+  "funnel_stage_after": "F0_MECHANISM",
+  "funnel_stage_before": "F0_MECHANISM",
+  "generated_at": "2026-07-16T13:19:44.723975+00:00",
+  "holdout": {
+    "first_signal_date": "2020-01-06",
+    "identity_fields": [
+      "symbol",
+      "signal_date",
+      "entry_date",
+      "exit_date",
+      "control_feature_date",
+      "control_entry_date",
+      "control_exit_date"
+    ],
+    "identity_sha256": "8d427bb57ee199bc6fa2f1abefbd920df184650ac0a0bd1356f2e0a2c228b193",
+    "last_signal_date": "2026-06-29",
+    "n_eligible_signal_rows": 105,
+    "n_matched_signal_rows": 105,
+    "n_signal_dates": 68,
+    "option_pricing_calls": 0,
+    "outcome_metrics_read": false,
+    "simulation_run": false
+  },
+  "l1_claim": false,
+  "max_loss_usd": 200.0,
+  "max_lots": 1,
+  "methodology_boundaries": {
+    "controls": "same-symbol deterministic prior-only, full outcome before signal, no reuse, non-trigger, matched on ret60/hv20/SMA100 distance",
+    "cost": "10 bps underlying round-trip sensitivity, not option debit/spread/fill friction",
+    "dependence": "same-date cross-index rows clustered before circular five-episode bootstrap",
+    "entry_exit": "next completed close to fifth subsequent completed close per symbol",
+    "features": "completed adjusted daily OHLCV; signal-day close is final feature",
+    "holdout": "chronological final 40% identity only; no outcomes or option simulation",
+    "option_marks": "none; future defined-risk expression is planning context only",
+    "population_limit": "fixed present-day index ETFs with inception/composition survivorship limits"
+  },
+  "option_pricing_calls": 0,
+  "paper_only": true,
+  "phase": "BUILD_L0_UNDERLYING_DISCOVERY",
+  "planned_option_structure": "future_conditional_18_24dte_2wide_bull_call_debit_spread",
+  "planning_risk_boundaries": {
+    "capital_fit_usd": 200.0,
+    "f0_underlying_horizon_sessions": 5,
+    "max_loss_semantics": "frictionless planning width ceiling before debit, closing friction, assignment, exercise, or management-path validation",
+    "max_loss_usd": 200.0,
+    "option_path_measured": false,
+    "option_pricing_calls": 0,
+    "planned_option_dte_max": 24,
+    "planned_option_dte_min": 18,
+    "planned_option_width_usd": 2.0
+  },
+  "population": {
+    "signal_dates_total": 168,
+    "simultaneous_signals": "same-date ETF rows averaged to one inference episode",
+    "split": "chronological 60/40 by unique signal date",
+    "symbols": [
+      "SPY",
+      "QQQ",
+      "IWM",
+      "DIA"
+    ],
+    "train_last_signal_date": "2019-11-14"
+  },
+  "schema_version": "broad_index_overnight_absorption_train.v1",
+  "sleeve_usd": 3000.0,
+  "strategy_advancement": false,
+  "strategy_outcome": "FAMILY_CLOSED",
+  "train": {
+    "bootstrap_block_length_episodes": 5,
+    "bootstrap_samples": 10000,
+    "control_mean_return_after_cost": 0.00017988388260603468,
+    "control_support": 0.9652777777777778,
+    "dependence_diagnostics": {
+      "consecutive_episode_gaps_le_7_calendar_days": 28,
+      "episode_n_symbols_distribution": {
+        "1": 67,
+        "2": 20,
+        "3": 8,
+        "4": 2
+      },
+      "n_consecutive_episode_gaps": 96,
+      "residual_boundary": "nearby signal dates can retain shared calendar exposure across five-session windows; the circular five-episode block is a sensitivity, not proof of independent episodes",
+      "same_date_rows_clustered": true
+    },
+    "episodes": [
+      {
+        "control_return_after_cost": -0.008784527371765383,
+        "event_return_after_cost": -0.02218553952496438,
+        "n_symbols": 1,
+        "paired_excess": -0.013401012153198999,
+        "signal_date": "2008-08-12",
+        "symbols": [
+          "IWM"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.0021220098611425256,
+        "event_return_after_cost": -0.05727244754227023,
+        "n_symbols": 1,
+        "paired_excess": -0.055150437681127706,
+        "signal_date": "2008-09-18",
+        "symbols": [
+          "IWM"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.05520274298351213,
+        "event_return_after_cost": 0.03615378130435032,
+        "n_symbols": 1,
+        "paired_excess": -0.019048961679161813,
+        "signal_date": "2009-04-01",
+        "symbols": [
+          "QQQ"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.020991828420807934,
+        "event_return_after_cost": 0.03531532301552587,
+        "n_symbols": 2,
+        "paired_excess": 0.0563071514363338,
+        "signal_date": "2009-04-21",
+        "symbols": [
+          "DIA",
+          "QQQ"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.05485517751776264,
+        "event_return_after_cost": 0.041696878669374215,
+        "n_symbols": 2,
+        "paired_excess": 0.09655205618713686,
+        "signal_date": "2009-04-28",
+        "symbols": [
+          "IWM",
+          "SPY"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.06291859163904168,
+        "event_return_after_cost": 0.05051986628968386,
+        "n_symbols": 1,
+        "paired_excess": 0.11343845792872553,
+        "signal_date": "2009-05-26",
+        "symbols": [
+          "QQQ"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.007565834092244613,
+        "event_return_after_cost": 0.02665770385284975,
+        "n_symbols": 3,
+        "paired_excess": 0.03422353794509436,
+        "signal_date": "2009-07-28",
+        "symbols": [
+          "DIA",
+          "IWM",
+          "SPY"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.013325016033706338,
+        "event_return_after_cost": 0.023551784650512886,
+        "n_symbols": 2,
+        "paired_excess": 0.036876800684219224,
+        "signal_date": "2009-08-19",
+        "symbols": [
+          "DIA",
+          "SPY"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.031743122572151006,
+        "event_return_after_cost": 1.6197817837024578e-06,
+        "n_symbols": 2,
+        "paired_excess": 0.03174474235393471,
+        "signal_date": "2009-08-20",
+        "symbols": [
+          "IWM",
+          "QQQ"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.01976473551835567,
+        "event_return_after_cost": 0.032175860973569725,
+        "n_symbols": 1,
+        "paired_excess": 0.051940596491925395,
+        "signal_date": "2009-10-06",
+        "symbols": [
+          "SPY"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.00544882854718387,
+        "event_return_after_cost": -0.011400920504448409,
+        "n_symbols": 1,
+        "paired_excess": -0.005952091957264539,
+        "signal_date": "2009-11-20",
+        "symbols": [
+          "IWM"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.009172099233917078,
+        "event_return_after_cost": 0.005919264477357986,
+        "n_symbols": 3,
+        "paired_excess": -0.003252834756559092,
+        "signal_date": "2009-11-27",
+        "symbols": [
+          "DIA",
+          "QQQ",
+          "SPY"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.0033834577350295705,
+        "event_return_after_cost": 0.010024449337170505,
+        "n_symbols": 1,
+        "paired_excess": 0.013407907072200076,
+        "signal_date": "2009-12-02",
+        "symbols": [
+          "IWM"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.009447742818870508,
+        "event_return_after_cost": 0.03069585655046103,
+        "n_symbols": 1,
+        "paired_excess": 0.021248113731590523,
+        "signal_date": "2010-02-25",
+        "symbols": [
+          "SPY"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.010237717466110685,
+        "event_return_after_cost": -0.010672946082977641,
+        "n_symbols": 1,
+        "paired_excess": -0.020910663549088326,
+        "signal_date": "2010-03-22",
+        "symbols": [
+          "IWM"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.011743747273791683,
+        "event_return_after_cost": 0.008858239369698206,
+        "n_symbols": 1,
+        "paired_excess": -0.002885507904093476,
+        "signal_date": "2010-03-24",
+        "symbols": [
+          "SPY"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.030236177980950907,
+        "event_return_after_cost": -0.03445478773294541,
+        "n_symbols": 1,
+        "paired_excess": -0.0042186097519945065,
+        "signal_date": "2010-04-22",
+        "symbols": [
+          "IWM"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.04823146397026623,
+        "event_return_after_cost": -0.066358614710891,
+        "n_symbols": 1,
+        "paired_excess": -0.018127150740624765,
+        "signal_date": "2010-05-27",
+        "symbols": [
+          "IWM"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.011485661660665114,
+        "event_return_after_cost": -0.024335906224832116,
+        "n_symbols": 2,
+        "paired_excess": -0.03582156788549723,
+        "signal_date": "2010-08-09",
+        "symbols": [
+          "DIA",
+          "SPY"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.021192396833893068,
+        "event_return_after_cost": 0.0023037244097091633,
+        "n_symbols": 1,
+        "paired_excess": -0.018888672424183905,
+        "signal_date": "2010-08-10",
+        "symbols": [
+          "QQQ"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.02538054962597199,
+        "event_return_after_cost": 0.028923778468257333,
+        "n_symbols": 3,
+        "paired_excess": 0.05430432809422932,
+        "signal_date": "2010-11-26",
+        "symbols": [
+          "IWM",
+          "QQQ",
+          "SPY"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.030479294157843007,
+        "event_return_after_cost": -0.016516477543101482,
+        "n_symbols": 1,
+        "paired_excess": -0.04699577170094449,
+        "signal_date": "2011-02-11",
+        "symbols": [
+          "IWM"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.015432081615851634,
+        "event_return_after_cost": -0.025061927542564866,
+        "n_symbols": 2,
+        "paired_excess": -0.009629845926713232,
+        "signal_date": "2011-02-14",
+        "symbols": [
+          "QQQ",
+          "SPY"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.006487467527677037,
+        "event_return_after_cost": -0.01862626722020755,
+        "n_symbols": 1,
+        "paired_excess": -0.01213879969253051,
+        "signal_date": "2011-02-15",
+        "symbols": [
+          "DIA"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.0065322947127987585,
+        "event_return_after_cost": 0.010879003539056686,
+        "n_symbols": 4,
+        "paired_excess": 0.017411298251855445,
+        "signal_date": "2011-03-14",
+        "symbols": [
+          "DIA",
+          "IWM",
+          "QQQ",
+          "SPY"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.006620204986475142,
+        "event_return_after_cost": 0.023218271311695515,
+        "n_symbols": 2,
+        "paired_excess": 0.016598066325220373,
+        "signal_date": "2011-04-19",
+        "symbols": [
+          "IWM",
+          "QQQ"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.01685771140038017,
+        "event_return_after_cost": -0.005672230484111473,
+        "n_symbols": 1,
+        "paired_excess": 0.011185480916268697,
+        "signal_date": "2011-05-18",
+        "symbols": [
+          "IWM"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.013920778632680486,
+        "event_return_after_cost": -0.05307275219238422,
+        "n_symbols": 2,
+        "paired_excess": -0.039151973559703734,
+        "signal_date": "2011-05-27",
+        "symbols": [
+          "IWM",
+          "SPY"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.011874744335456433,
+        "event_return_after_cost": 0.022122464533580577,
+        "n_symbols": 1,
+        "paired_excess": 0.010247720198124144,
+        "signal_date": "2011-07-11",
+        "symbols": [
+          "QQQ"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.006301039499621131,
+        "event_return_after_cost": -0.01631201823077799,
+        "n_symbols": 1,
+        "paired_excess": -0.022613057730399122,
+        "signal_date": "2011-11-04",
+        "symbols": [
+          "IWM"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.0046914504338456675,
+        "event_return_after_cost": -0.014406655047109806,
+        "n_symbols": 2,
+        "paired_excess": -0.009715204613264139,
+        "signal_date": "2011-11-07",
+        "symbols": [
+          "QQQ",
+          "SPY"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.014290377442446878,
+        "event_return_after_cost": 0.025688296044530268,
+        "n_symbols": 1,
+        "paired_excess": 0.01139791860208339,
+        "signal_date": "2011-12-12",
+        "symbols": [
+          "IWM"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.001023627849630838,
+        "event_return_after_cost": 0.022445006084384045,
+        "n_symbols": 1,
+        "paired_excess": 0.021421378234753208,
+        "signal_date": "2012-01-27",
+        "symbols": [
+          "SPY"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.0038846164141321253,
+        "event_return_after_cost": 0.031519258247244775,
+        "n_symbols": 2,
+        "paired_excess": 0.02763464183311265,
+        "signal_date": "2012-01-30",
+        "symbols": [
+          "DIA",
+          "IWM"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.003226405382723673,
+        "event_return_after_cost": 0.007200522344747441,
+        "n_symbols": 1,
+        "paired_excess": 0.010426927727471114,
+        "signal_date": "2012-02-10",
+        "symbols": [
+          "SPY"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.020104745095943843,
+        "event_return_after_cost": -0.020370359464846444,
+        "n_symbols": 1,
+        "paired_excess": -0.04047510456079029,
+        "signal_date": "2012-02-28",
+        "symbols": [
+          "IWM"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.012783958260565442,
+        "event_return_after_cost": -0.007753713507087422,
+        "n_symbols": 1,
+        "paired_excess": 0.00503024475347802,
+        "signal_date": "2012-03-23",
+        "symbols": [
+          "IWM"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.0305712387334377,
+        "event_return_after_cost": 0.008829069023723934,
+        "n_symbols": 1,
+        "paired_excess": -0.021742169709713766,
+        "signal_date": "2012-04-09",
+        "symbols": [
+          "QQQ"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.0327154561790407,
+        "event_return_after_cost": -0.01782892389961499,
+        "n_symbols": 1,
+        "paired_excess": -0.05054438007865569,
+        "signal_date": "2012-05-11",
+        "symbols": [
+          "QQQ"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.010801489205274684,
+        "event_return_after_cost": 0.04011617045811822,
+        "n_symbols": 1,
+        "paired_excess": 0.0509176596633929,
+        "signal_date": "2012-12-24",
+        "symbols": [
+          "IWM"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.002498805166789241,
+        "event_return_after_cost": 0.006299978365413073,
+        "n_symbols": 1,
+        "paired_excess": 0.008798783532202314,
+        "signal_date": "2013-03-18",
+        "symbols": [
+          "IWM"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.005832000415148641,
+        "event_return_after_cost": -0.02745078530332623,
+        "n_symbols": 1,
+        "paired_excess": -0.02161878488817759,
+        "signal_date": "2013-04-11",
+        "symbols": [
+          "QQQ"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.021160975455568054,
+        "event_return_after_cost": 0.007259121858415375,
+        "n_symbols": 1,
+        "paired_excess": -0.01390185359715268,
+        "signal_date": "2013-05-30",
+        "symbols": [
+          "SPY"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.02773522848356047,
+        "event_return_after_cost": -0.03614128337007394,
+        "n_symbols": 1,
+        "paired_excess": -0.06387651185363441,
+        "signal_date": "2013-09-30",
+        "symbols": [
+          "IWM"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.013044709186394665,
+        "event_return_after_cost": -0.034521438114206826,
+        "n_symbols": 1,
+        "paired_excess": -0.02147672892781216,
+        "signal_date": "2013-10-01",
+        "symbols": [
+          "QQQ"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.011117792075986066,
+        "event_return_after_cost": 0.00824715891760286,
+        "n_symbols": 1,
+        "paired_excess": -0.0028706331583832068,
+        "signal_date": "2013-10-02",
+        "symbols": [
+          "SPY"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.007824857704564203,
+        "event_return_after_cost": 0.011043340400483603,
+        "n_symbols": 1,
+        "paired_excess": 0.0032184826959194,
+        "signal_date": "2013-10-17",
+        "symbols": [
+          "DIA"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.036136283878316244,
+        "event_return_after_cost": 0.0082030060977486,
+        "n_symbols": 1,
+        "paired_excess": -0.027933277780567645,
+        "signal_date": "2013-11-14",
+        "symbols": [
+          "IWM"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.009801998145991253,
+        "event_return_after_cost": 0.011629254987813531,
+        "n_symbols": 1,
+        "paired_excess": 0.0018272568418222779,
+        "signal_date": "2013-11-15",
+        "symbols": [
+          "QQQ"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.010437440650371999,
+        "event_return_after_cost": 0.02233058942085331,
+        "n_symbols": 1,
+        "paired_excess": 0.03276803007122531,
+        "signal_date": "2014-02-19",
+        "symbols": [
+          "IWM"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.006365441763650725,
+        "event_return_after_cost": -0.015771084652769995,
+        "n_symbols": 1,
+        "paired_excess": -0.00940564288911927,
+        "signal_date": "2014-03-03",
+        "symbols": [
+          "IWM"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.0036303195683534675,
+        "event_return_after_cost": -0.018030199366399713,
+        "n_symbols": 1,
+        "paired_excess": -0.014399879798046245,
+        "signal_date": "2014-06-27",
+        "symbols": [
+          "IWM"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.05207137274970741,
+        "event_return_after_cost": -0.013134971070801638,
+        "n_symbols": 1,
+        "paired_excess": -0.06520634382050905,
+        "signal_date": "2014-09-11",
+        "symbols": [
+          "IWM"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.008806905352947259,
+        "event_return_after_cost": 0.034696030334441574,
+        "n_symbols": 1,
+        "paired_excess": 0.025889124981494316,
+        "signal_date": "2014-10-21",
+        "symbols": [
+          "QQQ"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.009349685977770084,
+        "event_return_after_cost": 0.009634477139679132,
+        "n_symbols": 1,
+        "paired_excess": 0.018984163117449215,
+        "signal_date": "2014-12-09",
+        "symbols": [
+          "IWM"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.005363775050657994,
+        "event_return_after_cost": -0.023594544951719643,
+        "n_symbols": 1,
+        "paired_excess": -0.028958320002377635,
+        "signal_date": "2015-01-21",
+        "symbols": [
+          "DIA"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.017587227071715932,
+        "event_return_after_cost": 0.0168827222635692,
+        "n_symbols": 3,
+        "paired_excess": -0.0007045048081467317,
+        "signal_date": "2015-01-27",
+        "symbols": [
+          "IWM",
+          "QQQ",
+          "SPY"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.01178932674837141,
+        "event_return_after_cost": -0.0027388636890577347,
+        "n_symbols": 2,
+        "paired_excess": -0.014528190437429145,
+        "signal_date": "2015-02-23",
+        "symbols": [
+          "DIA",
+          "SPY"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.02325834059799814,
+        "event_return_after_cost": -0.02393323866262842,
+        "n_symbols": 1,
+        "paired_excess": -0.0006748980646302805,
+        "signal_date": "2015-03-19",
+        "symbols": [
+          "DIA"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.013071289076691195,
+        "event_return_after_cost": 0.007607517009344923,
+        "n_symbols": 1,
+        "paired_excess": -0.005463772067346272,
+        "signal_date": "2015-04-07",
+        "symbols": [
+          "IWM"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.018235883166611067,
+        "event_return_after_cost": 0.014911134987206753,
+        "n_symbols": 1,
+        "paired_excess": 0.03314701815381782,
+        "signal_date": "2015-06-08",
+        "symbols": [
+          "IWM"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.038069728935845704,
+        "event_return_after_cost": -0.1011470637056473,
+        "n_symbols": 1,
+        "paired_excess": -0.139216792641493,
+        "signal_date": "2015-08-14",
+        "symbols": [
+          "SPY"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.006908837693274107,
+        "event_return_after_cost": -0.11619044311129856,
+        "n_symbols": 1,
+        "paired_excess": -0.12309928080457266,
+        "signal_date": "2015-08-17",
+        "symbols": [
+          "QQQ"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.00966179370429987,
+        "event_return_after_cost": -0.004316644441466288,
+        "n_symbols": 1,
+        "paired_excess": -0.013978438145766159,
+        "signal_date": "2015-12-10",
+        "symbols": [
+          "SPY"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.021658701450578355,
+        "event_return_after_cost": 0.01929094279168042,
+        "n_symbols": 1,
+        "paired_excess": -0.002367758658897934,
+        "signal_date": "2016-03-08",
+        "symbols": [
+          "DIA"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.003502600928966592,
+        "event_return_after_cost": 0.01080842115774272,
+        "n_symbols": 1,
+        "paired_excess": 0.014311022086709313,
+        "signal_date": "2016-03-18",
+        "symbols": [
+          "IWM"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.022983954224155334,
+        "event_return_after_cost": 0.017371810278651423,
+        "n_symbols": 1,
+        "paired_excess": -0.005612143945503911,
+        "signal_date": "2016-03-22",
+        "symbols": [
+          "QQQ"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.01900409395316871,
+        "event_return_after_cost": 0.00039518055419107776,
+        "n_symbols": 2,
+        "paired_excess": 0.019399274507359787,
+        "signal_date": "2016-03-29",
+        "symbols": [
+          "DIA",
+          "SPY"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.026690607545770573,
+        "event_return_after_cost": 0.023490619919380173,
+        "n_symbols": 2,
+        "paired_excess": -0.0031999876263903992,
+        "signal_date": "2016-04-06",
+        "symbols": [
+          "IWM",
+          "QQQ"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.010411733166484305,
+        "event_return_after_cost": 0.015985012624619266,
+        "n_symbols": 2,
+        "paired_excess": 0.02639674579110357,
+        "signal_date": "2016-04-07",
+        "symbols": [
+          "DIA",
+          "SPY"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.0060726273175744075,
+        "event_return_after_cost": 0.0032680586846328694,
+        "n_symbols": 1,
+        "paired_excess": 0.009340686002207277,
+        "signal_date": "2016-06-10",
+        "symbols": [
+          "IWM"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.020351280473952404,
+        "event_return_after_cost": 0.014132496244902648,
+        "n_symbols": 1,
+        "paired_excess": -0.006218784229049756,
+        "signal_date": "2016-06-29",
+        "symbols": [
+          "SPY"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.011795089888999835,
+        "event_return_after_cost": 0.022831997189501945,
+        "n_symbols": 3,
+        "paired_excess": 0.01103690730050211,
+        "signal_date": "2016-06-30",
+        "symbols": [
+          "DIA",
+          "IWM",
+          "QQQ"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.015367177680274624,
+        "event_return_after_cost": 0.00786690409740809,
+        "n_symbols": 1,
+        "paired_excess": 0.023234081777682714,
+        "signal_date": "2016-09-15",
+        "symbols": [
+          "QQQ"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.011469906226666993,
+        "event_return_after_cost": 0.00030916747638748496,
+        "n_symbols": 2,
+        "paired_excess": -0.011160738750279509,
+        "signal_date": "2016-09-16",
+        "symbols": [
+          "DIA",
+          "SPY"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.02578385868620725,
+        "event_return_after_cost": 0.004588470778591814,
+        "n_symbols": 1,
+        "paired_excess": -0.021195387907615437,
+        "signal_date": "2017-02-21",
+        "symbols": [
+          "IWM"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.008778024190305767,
+        "event_return_after_cost": -0.008094527396978468,
+        "n_symbols": 2,
+        "paired_excess": 0.0006834967933272984,
+        "signal_date": "2017-03-28",
+        "symbols": [
+          "DIA",
+          "IWM"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.00028335725140371613,
+        "event_return_after_cost": -0.0009573435289046408,
+        "n_symbols": 1,
+        "paired_excess": -0.001240700780308357,
+        "signal_date": "2017-03-31",
+        "symbols": [
+          "SPY"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.025142899741103397,
+        "event_return_after_cost": -0.0012599826461321397,
+        "n_symbols": 1,
+        "paired_excess": 0.023882917094971257,
+        "signal_date": "2017-11-10",
+        "symbols": [
+          "QQQ"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.012222633518879977,
+        "event_return_after_cost": 0.023532847006761393,
+        "n_symbols": 2,
+        "paired_excess": 0.03575548052564137,
+        "signal_date": "2017-11-14",
+        "symbols": [
+          "IWM",
+          "SPY"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.005722120295797661,
+        "event_return_after_cost": 0.00017380916773882937,
+        "n_symbols": 3,
+        "paired_excess": 0.005895929463536491,
+        "signal_date": "2018-02-20",
+        "symbols": [
+          "DIA",
+          "IWM",
+          "SPY"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.00793417876001476,
+        "event_return_after_cost": 0.002937529360710512,
+        "n_symbols": 4,
+        "paired_excess": 0.01087170812072527,
+        "signal_date": "2018-03-07",
+        "symbols": [
+          "DIA",
+          "IWM",
+          "QQQ",
+          "SPY"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.016912706569766844,
+        "event_return_after_cost": 0.022732301120602316,
+        "n_symbols": 1,
+        "paired_excess": 0.03964500769036916,
+        "signal_date": "2018-05-30",
+        "symbols": [
+          "SPY"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.016049206584357267,
+        "event_return_after_cost": -0.04342621164109539,
+        "n_symbols": 1,
+        "paired_excess": -0.05947541822545266,
+        "signal_date": "2018-06-19",
+        "symbols": [
+          "QQQ"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.0065526893305943865,
+        "event_return_after_cost": 0.015061794680262808,
+        "n_symbols": 1,
+        "paired_excess": 0.008509105349668422,
+        "signal_date": "2018-07-17",
+        "symbols": [
+          "QQQ"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.010468803769495438,
+        "event_return_after_cost": 0.019052227302062463,
+        "n_symbols": 1,
+        "paired_excess": 0.008583423532567025,
+        "signal_date": "2019-02-07",
+        "symbols": [
+          "QQQ"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.005534007381664984,
+        "event_return_after_cost": 0.025716014242053054,
+        "n_symbols": 1,
+        "paired_excess": 0.03125002162371804,
+        "signal_date": "2019-02-08",
+        "symbols": [
+          "SPY"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.002650787785643095,
+        "event_return_after_cost": 0.012949257458055752,
+        "n_symbols": 1,
+        "paired_excess": 0.010298469672412658,
+        "signal_date": "2019-03-11",
+        "symbols": [
+          "DIA"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.019342083780295338,
+        "event_return_after_cost": -0.018351551172755,
+        "n_symbols": 1,
+        "paired_excess": 0.0009905326075403398,
+        "signal_date": "2019-05-07",
+        "symbols": [
+          "IWM"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.008355549426072972,
+        "event_return_after_cost": -0.0001340544193700879,
+        "n_symbols": 1,
+        "paired_excess": 0.008221495006702884,
+        "signal_date": "2019-05-08",
+        "symbols": [
+          "QQQ"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.00019565341940425184,
+        "event_return_after_cost": -0.008459286765108376,
+        "n_symbols": 2,
+        "paired_excess": -0.008654940184512627,
+        "signal_date": "2019-05-09",
+        "symbols": [
+          "DIA",
+          "SPY"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.005723203491028729,
+        "event_return_after_cost": -0.014412735743893235,
+        "n_symbols": 1,
+        "paired_excess": -0.020135939234921962,
+        "signal_date": "2019-05-16",
+        "symbols": [
+          "IWM"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.05893208365468883,
+        "event_return_after_cost": -0.014669981012462419,
+        "n_symbols": 1,
+        "paired_excess": 0.04426210264222641,
+        "signal_date": "2019-05-17",
+        "symbols": [
+          "QQQ"
+        ]
+      },
+      {
+        "control_return_after_cost": -0.013496790835556105,
+        "event_return_after_cost": -0.02987151908796898,
+        "n_symbols": 2,
+        "paired_excess": -0.016374728252412873,
+        "signal_date": "2019-05-20",
+        "symbols": [
+          "DIA",
+          "SPY"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.006251878818106664,
+        "event_return_after_cost": 0.0018594367879021247,
+        "n_symbols": 3,
+        "paired_excess": -0.004392442030204539,
+        "signal_date": "2019-07-09",
+        "symbols": [
+          "DIA",
+          "QQQ",
+          "SPY"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.012445635938852987,
+        "event_return_after_cost": -0.010553511676797375,
+        "n_symbols": 3,
+        "paired_excess": -0.02299914761565036,
+        "signal_date": "2019-08-08",
+        "symbols": [
+          "DIA",
+          "QQQ",
+          "SPY"
+        ]
+      },
+      {
+        "control_return_after_cost": 0.007508172387164058,
+        "event_return_after_cost": -0.005863658275200244,
+        "n_symbols": 2,
+        "paired_excess": -0.013371830662364304,
+        "signal_date": "2019-11-14",
+        "symbols": [
+          "IWM",
+          "QQQ"
+        ]
+      }
+    ],
+    "event_mean_return_after_cost": -0.0004887895651278448,
+    "event_return_worst_decile_mean_after_10bps": -0.057245656120878174,
+    "gate_checks": {
+      "event_mean_after_10bps_positive": false,
+      "event_return_worst_decile_at_least_negative_5pct": false,
+      "minimum_clustered_train_episodes": true,
+      "minimum_control_support": true,
+      "minimum_represented_symbols": true,
+      "minimum_signal_years": true,
+      "paired_excess_five_episode_block_lb90_positive": false,
+      "paired_excess_mean_positive": false,
+      "positive_frequency_at_least_55pct": true,
+      "zero_integrity_violations": true
+    },
+    "gate_pass": false,
+    "integrity_violations": [],
+    "max_control_distance_sessions": 735,
+    "median_control_distance_sessions": 268.0,
+    "n_clustered_episodes": 97,
+    "n_matched_signal_rows": 139,
+    "n_train_eligible_signal_rows": 144,
+    "paired_excess_block_bootstrap_lb90": -0.00623970583587196,
+    "paired_excess_mean": -0.0006686734477338795,
+    "paired_excess_median": -0.001240700780308357,
+    "paired_excess_worst_decile_mean": -0.06831920149268837,
+    "positive_frequency": 0.5773195876288659,
+    "represented_symbols": [
+      "DIA",
+      "IWM",
+      "QQQ",
+      "SPY"
+    ],
+    "round_trip_underlying_cost_bps": 10.0,
+    "signal_rows": [
+      {
+        "control_distance_sessions": 214,
+        "control_entry_date": "2007-10-08",
+        "control_exit_date": "2007-10-15",
+        "control_feature_date": "2007-10-05",
+        "control_return_after_cost": -0.008784527371765383,
+        "entry_date": "2008-08-13",
+        "event_return_after_cost": -0.02218553952496438,
+        "exit_date": "2008-08-20",
+        "match_score": 0.5291617700680671,
+        "paired_excess": -0.013401012153198999,
+        "signal_date": "2008-08-12",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 35,
+        "control_entry_date": "2008-07-31",
+        "control_exit_date": "2008-08-07",
+        "control_feature_date": "2008-07-30",
+        "control_return_after_cost": -0.0021220098611425256,
+        "entry_date": "2008-09-19",
+        "event_return_after_cost": -0.05727244754227023,
+        "exit_date": "2008-09-26",
+        "match_score": 1.2755313216622965,
+        "paired_excess": -0.055150437681127706,
+        "signal_date": "2008-09-18",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 9,
+        "control_entry_date": "2009-03-20",
+        "control_exit_date": "2009-03-27",
+        "control_feature_date": "2009-03-19",
+        "control_return_after_cost": 0.05520274298351213,
+        "entry_date": "2009-04-02",
+        "event_return_after_cost": 0.03615378130435032,
+        "exit_date": "2009-04-09",
+        "match_score": 0.48976235539572477,
+        "paired_excess": -0.019048961679161813,
+        "signal_date": "2009-04-01",
+        "symbol": "QQQ"
+      },
+      {
+        "control_distance_sessions": 341,
+        "control_entry_date": "2007-12-12",
+        "control_exit_date": "2007-12-19",
+        "control_feature_date": "2007-12-11",
+        "control_return_after_cost": -0.02122122501502255,
+        "entry_date": "2009-04-22",
+        "event_return_after_cost": 0.03655905784301006,
+        "exit_date": "2009-04-29",
+        "match_score": 0.9659440613051279,
+        "paired_excess": 0.057780282858032606,
+        "signal_date": "2009-04-21",
+        "symbol": "DIA"
+      },
+      {
+        "control_distance_sessions": 7,
+        "control_entry_date": "2009-04-13",
+        "control_exit_date": "2009-04-20",
+        "control_feature_date": "2009-04-09",
+        "control_return_after_cost": -0.02076243182659332,
+        "entry_date": "2009-04-22",
+        "event_return_after_cost": 0.03407158818804168,
+        "exit_date": "2009-04-29",
+        "match_score": 0.8506392632059084,
+        "paired_excess": 0.054834020014635,
+        "signal_date": "2009-04-21",
+        "symbol": "QQQ"
+      },
+      {
+        "control_distance_sessions": 151,
+        "control_entry_date": "2008-09-22",
+        "control_exit_date": "2008-09-29",
+        "control_feature_date": "2008-09-19",
+        "control_return_after_cost": -0.09498537945158725,
+        "entry_date": "2009-04-29",
+        "event_return_after_cost": 0.030039647048319185,
+        "exit_date": "2009-05-06",
+        "match_score": 0.35510556592978304,
+        "paired_excess": 0.12502502649990643,
+        "signal_date": "2009-04-28",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 347,
+        "control_entry_date": "2007-12-11",
+        "control_exit_date": "2007-12-18",
+        "control_feature_date": "2007-12-10",
+        "control_return_after_cost": -0.014724975583938038,
+        "entry_date": "2009-04-29",
+        "event_return_after_cost": 0.053354110290429246,
+        "exit_date": "2009-05-06",
+        "match_score": 0.8129461411529643,
+        "paired_excess": 0.06807908587436728,
+        "signal_date": "2009-04-28",
+        "symbol": "SPY"
+      },
+      {
+        "control_distance_sessions": 245,
+        "control_entry_date": "2008-06-05",
+        "control_exit_date": "2008-06-12",
+        "control_feature_date": "2008-06-04",
+        "control_return_after_cost": -0.06291859163904168,
+        "entry_date": "2009-05-27",
+        "event_return_after_cost": 0.05051986628968386,
+        "exit_date": "2009-06-03",
+        "match_score": 1.6440052893555417,
+        "paired_excess": 0.11343845792872553,
+        "signal_date": "2009-05-26",
+        "symbol": "QQQ"
+      },
+      {
+        "control_distance_sessions": 7,
+        "control_entry_date": "2009-07-20",
+        "control_exit_date": "2009-07-27",
+        "control_feature_date": "2009-07-17",
+        "control_return_after_cost": 0.030811867805253468,
+        "entry_date": "2009-07-29",
+        "event_return_after_cost": 0.022708987461729335,
+        "exit_date": "2009-08-05",
+        "match_score": 0.4775728982345409,
+        "paired_excess": -0.008102880343524133,
+        "signal_date": "2009-07-28",
+        "symbol": "DIA"
+      },
+      {
+        "control_distance_sessions": 20,
+        "control_entry_date": "2009-06-30",
+        "control_exit_date": "2009-07-08",
+        "control_feature_date": "2009-06-29",
+        "control_return_after_cost": -0.05663182641595499,
+        "entry_date": "2009-07-29",
+        "event_return_after_cost": 0.029999673365628587,
+        "exit_date": "2009-08-05",
+        "match_score": 0.7961189756031886,
+        "paired_excess": 0.08663149978158358,
+        "signal_date": "2009-07-28",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 28,
+        "control_entry_date": "2009-06-18",
+        "control_exit_date": "2009-06-25",
+        "control_feature_date": "2009-06-17",
+        "control_return_after_cost": 0.0031224563339676834,
+        "entry_date": "2009-07-29",
+        "event_return_after_cost": 0.027264450731191325,
+        "exit_date": "2009-08-05",
+        "match_score": 0.3940492452203301,
+        "paired_excess": 0.024141994397223643,
+        "signal_date": "2009-07-28",
+        "symbol": "SPY"
+      },
+      {
+        "control_distance_sessions": 9,
+        "control_entry_date": "2009-08-07",
+        "control_exit_date": "2009-08-14",
+        "control_feature_date": "2009-08-06",
+        "control_return_after_cost": -0.005051958341176443,
+        "entry_date": "2009-08-20",
+        "event_return_after_cost": 0.024240514058120444,
+        "exit_date": "2009-08-27",
+        "match_score": 0.198827024010029,
+        "paired_excess": 0.029292472399296887,
+        "signal_date": "2009-08-19",
+        "symbol": "DIA"
+      },
+      {
+        "control_distance_sessions": 34,
+        "control_entry_date": "2009-07-02",
+        "control_exit_date": "2009-07-10",
+        "control_feature_date": "2009-07-01",
+        "control_return_after_cost": -0.021598073726236233,
+        "entry_date": "2009-08-20",
+        "event_return_after_cost": 0.022863055242905328,
+        "exit_date": "2009-08-27",
+        "match_score": 0.2832344978641896,
+        "paired_excess": 0.04446112896914156,
+        "signal_date": "2009-08-19",
+        "symbol": "SPY"
+      },
+      {
+        "control_distance_sessions": 7,
+        "control_entry_date": "2009-08-12",
+        "control_exit_date": "2009-08-19",
+        "control_feature_date": "2009-08-11",
+        "control_return_after_cost": -0.016581720008539302,
+        "entry_date": "2009-08-21",
+        "event_return_after_cost": -0.0027194946927705512,
+        "exit_date": "2009-08-28",
+        "match_score": 0.3397027094363156,
+        "paired_excess": 0.01386222531576875,
+        "signal_date": "2009-08-20",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 37,
+        "control_entry_date": "2009-06-30",
+        "control_exit_date": "2009-07-08",
+        "control_feature_date": "2009-06-29",
+        "control_return_after_cost": -0.04690452513576271,
+        "entry_date": "2009-08-21",
+        "event_return_after_cost": 0.002722734256337956,
+        "exit_date": "2009-08-28",
+        "match_score": 0.1828984082183055,
+        "paired_excess": 0.049627259392100664,
+        "signal_date": "2009-08-20",
+        "symbol": "QQQ"
+      },
+      {
+        "control_distance_sessions": 8,
+        "control_entry_date": "2009-09-25",
+        "control_exit_date": "2009-10-02",
+        "control_feature_date": "2009-09-24",
+        "control_return_after_cost": -0.01976473551835567,
+        "entry_date": "2009-10-07",
+        "event_return_after_cost": 0.032175860973569725,
+        "exit_date": "2009-10-14",
+        "match_score": 0.583862930919258,
+        "paired_excess": 0.051940596491925395,
+        "signal_date": "2009-10-06",
+        "symbol": "SPY"
+      },
+      {
+        "control_distance_sessions": 338,
+        "control_entry_date": "2008-07-23",
+        "control_exit_date": "2008-07-30",
+        "control_feature_date": "2008-07-22",
+        "control_return_after_cost": -0.00544882854718387,
+        "entry_date": "2009-11-23",
+        "event_return_after_cost": -0.011400920504448409,
+        "exit_date": "2009-12-01",
+        "match_score": 0.26745393112781957,
+        "paired_excess": -0.005952091957264539,
+        "signal_date": "2009-11-20",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 112,
+        "control_entry_date": "2009-06-22",
+        "control_exit_date": "2009-06-29",
+        "control_feature_date": "2009-06-19",
+        "control_return_after_cost": 0.022163396157072968,
+        "entry_date": "2009-11-30",
+        "event_return_after_cost": 0.0035380853420851075,
+        "exit_date": "2009-12-07",
+        "match_score": 0.22965263365870264,
+        "paired_excess": -0.01862531081498786,
+        "signal_date": "2009-11-27",
+        "symbol": "DIA"
+      },
+      {
+        "control_distance_sessions": 527,
+        "control_entry_date": "2007-10-26",
+        "control_exit_date": "2007-11-02",
+        "control_feature_date": "2007-10-25",
+        "control_return_after_cost": 0.00808577224160223,
+        "entry_date": "2009-11-30",
+        "event_return_after_cost": 0.007033989887170856,
+        "exit_date": "2009-12-07",
+        "match_score": 0.19202277518484162,
+        "paired_excess": -0.0010517823544313734,
+        "signal_date": "2009-11-27",
+        "symbol": "QQQ"
+      },
+      {
+        "control_distance_sessions": 10,
+        "control_entry_date": "2009-11-13",
+        "control_exit_date": "2009-11-20",
+        "control_feature_date": "2009-11-12",
+        "control_return_after_cost": -0.0027328706969239605,
+        "entry_date": "2009-11-30",
+        "event_return_after_cost": 0.007185718202817993,
+        "exit_date": "2009-12-07",
+        "match_score": 0.4244306285244259,
+        "paired_excess": 0.009918588899741954,
+        "signal_date": "2009-11-27",
+        "symbol": "SPY"
+      },
+      {
+        "control_distance_sessions": 13,
+        "control_entry_date": "2009-11-13",
+        "control_exit_date": "2009-11-20",
+        "control_feature_date": "2009-11-12",
+        "control_return_after_cost": -0.0033834577350295705,
+        "entry_date": "2009-12-03",
+        "event_return_after_cost": 0.010024449337170505,
+        "exit_date": "2009-12-10",
+        "match_score": 0.21953528175318426,
+        "paired_excess": 0.013407907072200076,
+        "signal_date": "2009-12-02",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 609,
+        "control_entry_date": "2007-09-26",
+        "control_exit_date": "2007-10-03",
+        "control_feature_date": "2007-09-25",
+        "control_return_after_cost": 0.009447742818870508,
+        "entry_date": "2010-02-26",
+        "event_return_after_cost": 0.03069585655046103,
+        "exit_date": "2010-03-05",
+        "match_score": 0.10565618755164957,
+        "paired_excess": 0.021248113731590523,
+        "signal_date": "2010-02-25",
+        "symbol": "SPY"
+      },
+      {
+        "control_distance_sessions": 11,
+        "control_entry_date": "2010-03-08",
+        "control_exit_date": "2010-03-15",
+        "control_feature_date": "2010-03-05",
+        "control_return_after_cost": 0.010237717466110685,
+        "entry_date": "2010-03-23",
+        "event_return_after_cost": -0.010672946082977641,
+        "exit_date": "2010-03-30",
+        "match_score": 0.23966109418378123,
+        "paired_excess": -0.020910663549088326,
+        "signal_date": "2010-03-22",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 7,
+        "control_entry_date": "2010-03-16",
+        "control_exit_date": "2010-03-23",
+        "control_feature_date": "2010-03-15",
+        "control_return_after_cost": 0.011743747273791683,
+        "entry_date": "2010-03-25",
+        "event_return_after_cost": 0.008858239369698206,
+        "exit_date": "2010-04-01",
+        "match_score": 0.29756665330298204,
+        "paired_excess": -0.002885507904093476,
+        "signal_date": "2010-03-24",
+        "symbol": "SPY"
+      },
+      {
+        "control_distance_sessions": 145,
+        "control_entry_date": "2009-09-24",
+        "control_exit_date": "2009-10-01",
+        "control_feature_date": "2009-09-23",
+        "control_return_after_cost": -0.030236177980950907,
+        "entry_date": "2010-04-23",
+        "event_return_after_cost": -0.03445478773294541,
+        "exit_date": "2010-04-30",
+        "match_score": 0.494233195890853,
+        "paired_excess": -0.0042186097519945065,
+        "signal_date": "2010-04-22",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 7,
+        "control_entry_date": "2010-05-19",
+        "control_exit_date": "2010-05-26",
+        "control_feature_date": "2010-05-18",
+        "control_return_after_cost": -0.04823146397026623,
+        "entry_date": "2010-05-28",
+        "event_return_after_cost": -0.066358614710891,
+        "exit_date": "2010-06-07",
+        "match_score": 1.2718125583777362,
+        "paired_excess": -0.018127150740624765,
+        "signal_date": "2010-05-27",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 115,
+        "control_entry_date": "2010-02-25",
+        "control_exit_date": "2010-03-04",
+        "control_feature_date": "2010-02-24",
+        "control_return_after_cost": 0.010616303097339075,
+        "entry_date": "2010-08-10",
+        "event_return_after_cost": -0.022845489055924872,
+        "exit_date": "2010-08-17",
+        "match_score": 0.02181592877220695,
+        "paired_excess": -0.03346179215326395,
+        "signal_date": "2010-08-09",
+        "symbol": "DIA"
+      },
+      {
+        "control_distance_sessions": 116,
+        "control_entry_date": "2010-02-24",
+        "control_exit_date": "2010-03-03",
+        "control_feature_date": "2010-02-23",
+        "control_return_after_cost": 0.012355020223991153,
+        "entry_date": "2010-08-10",
+        "event_return_after_cost": -0.02582632339373936,
+        "exit_date": "2010-08-17",
+        "match_score": 0.20502243648873736,
+        "paired_excess": -0.03818134361773051,
+        "signal_date": "2010-08-09",
+        "symbol": "SPY"
+      },
+      {
+        "control_distance_sessions": 117,
+        "control_entry_date": "2010-02-24",
+        "control_exit_date": "2010-03-03",
+        "control_feature_date": "2010-02-23",
+        "control_return_after_cost": 0.021192396833893068,
+        "entry_date": "2010-08-11",
+        "event_return_after_cost": 0.0023037244097091633,
+        "exit_date": "2010-08-18",
+        "match_score": 0.260185714465381,
+        "paired_excess": -0.018888672424183905,
+        "signal_date": "2010-08-10",
+        "symbol": "QQQ"
+      },
+      {
+        "control_distance_sessions": 146,
+        "control_entry_date": "2010-05-03",
+        "control_exit_date": "2010-05-10",
+        "control_feature_date": "2010-04-30",
+        "control_return_after_cost": -0.05873958936773416,
+        "entry_date": "2010-11-29",
+        "event_return_after_cost": 0.037319994687172175,
+        "exit_date": "2010-12-06",
+        "match_score": 0.10203150620332974,
+        "paired_excess": 0.09605958405490633,
+        "signal_date": "2010-11-26",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 287,
+        "control_entry_date": "2009-10-08",
+        "control_exit_date": "2009-10-15",
+        "control_feature_date": "2009-10-07",
+        "control_return_after_cost": 0.01841339039293588,
+        "entry_date": "2010-11-29",
+        "event_return_after_cost": 0.020239884886493864,
+        "exit_date": "2010-12-06",
+        "match_score": 0.11270424792892642,
+        "paired_excess": 0.001826494493557984,
+        "signal_date": "2010-11-26",
+        "symbol": "QQQ"
+      },
+      {
+        "control_distance_sessions": 146,
+        "control_entry_date": "2010-05-03",
+        "control_exit_date": "2010-05-10",
+        "control_feature_date": "2010-04-30",
+        "control_return_after_cost": -0.03581544990311769,
+        "entry_date": "2010-11-29",
+        "event_return_after_cost": 0.02921145583110596,
+        "exit_date": "2010-12-06",
+        "match_score": 0.18841777128566328,
+        "paired_excess": 0.06502690573422365,
+        "signal_date": "2010-11-26",
+        "symbol": "SPY"
+      },
+      {
+        "control_distance_sessions": 56,
+        "control_entry_date": "2010-11-23",
+        "control_exit_date": "2010-12-01",
+        "control_feature_date": "2010-11-22",
+        "control_return_after_cost": 0.030479294157843007,
+        "entry_date": "2011-02-14",
+        "event_return_after_cost": -0.016516477543101482,
+        "exit_date": "2011-02-22",
+        "match_score": 0.2460042142998739,
+        "paired_excess": -0.04699577170094449,
+        "signal_date": "2011-02-11",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 84,
+        "control_entry_date": "2010-10-15",
+        "control_exit_date": "2010-10-22",
+        "control_feature_date": "2010-10-14",
+        "control_return_after_cost": 0.0019131258204830867,
+        "entry_date": "2011-02-15",
+        "event_return_after_cost": -0.03416234750849445,
+        "exit_date": "2011-02-23",
+        "match_score": 0.10776800284021365,
+        "paired_excess": -0.036075473328977536,
+        "signal_date": "2011-02-14",
+        "symbol": "QQQ"
+      },
+      {
+        "control_distance_sessions": 66,
+        "control_entry_date": "2010-11-10",
+        "control_exit_date": "2010-11-17",
+        "control_feature_date": "2010-11-09",
+        "control_return_after_cost": -0.032777289052186354,
+        "entry_date": "2011-02-15",
+        "event_return_after_cost": -0.01596150757663528,
+        "exit_date": "2011-02-23",
+        "match_score": 0.06594135712581134,
+        "paired_excess": 0.016815781475551073,
+        "signal_date": "2011-02-14",
+        "symbol": "SPY"
+      },
+      {
+        "control_distance_sessions": 209,
+        "control_entry_date": "2010-04-21",
+        "control_exit_date": "2010-04-28",
+        "control_feature_date": "2010-04-20",
+        "control_return_after_cost": -0.006487467527677037,
+        "entry_date": "2011-02-16",
+        "event_return_after_cost": -0.01862626722020755,
+        "exit_date": "2011-02-24",
+        "match_score": 0.15389080974706093,
+        "paired_excess": -0.01213879969253051,
+        "signal_date": "2011-02-15",
+        "symbol": "DIA"
+      },
+      {
+        "control_distance_sessions": 71,
+        "control_entry_date": "2010-12-01",
+        "control_exit_date": "2010-12-08",
+        "control_feature_date": "2010-11-30",
+        "control_return_after_cost": 0.00982852274283419,
+        "entry_date": "2011-03-15",
+        "event_return_after_cost": 0.013529525928319353,
+        "exit_date": "2011-03-22",
+        "match_score": 0.12396163335990307,
+        "paired_excess": 0.0037010031854851633,
+        "signal_date": "2011-03-14",
+        "symbol": "DIA"
+      },
+      {
+        "control_distance_sessions": 270,
+        "control_entry_date": "2010-02-18",
+        "control_exit_date": "2010-02-25",
+        "control_feature_date": "2010-02-17",
+        "control_return_after_cost": 0.0002697065412499153,
+        "entry_date": "2011-03-15",
+        "event_return_after_cost": 0.0221528561816563,
+        "exit_date": "2011-03-22",
+        "match_score": 0.09146334842525167,
+        "paired_excess": 0.021883149640406385,
+        "signal_date": "2011-03-14",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 286,
+        "control_entry_date": "2010-01-26",
+        "control_exit_date": "2010-02-02",
+        "control_feature_date": "2010-01-25",
+        "control_return_after_cost": -0.01678335626009808,
+        "entry_date": "2011-03-15",
+        "event_return_after_cost": -0.0012135287008340203,
+        "exit_date": "2011-03-22",
+        "match_score": 0.08462646291501702,
+        "paired_excess": 0.01556982755926406,
+        "signal_date": "2011-03-14",
+        "symbol": "QQQ"
+      },
+      {
+        "control_distance_sessions": 722,
+        "control_entry_date": "2008-05-02",
+        "control_exit_date": "2008-05-09",
+        "control_feature_date": "2008-05-01",
+        "control_return_after_cost": -0.019444051875181056,
+        "entry_date": "2011-03-15",
+        "event_return_after_cost": 0.009047160747085115,
+        "exit_date": "2011-03-22",
+        "match_score": 0.09407424740046633,
+        "paired_excess": 0.02849121262226617,
+        "signal_date": "2011-03-14",
+        "symbol": "SPY"
+      },
+      {
+        "control_distance_sessions": 735,
+        "control_entry_date": "2008-05-21",
+        "control_exit_date": "2008-05-29",
+        "control_feature_date": "2008-05-20",
+        "control_return_after_cost": 0.02322522827599538,
+        "entry_date": "2011-04-20",
+        "event_return_after_cost": 0.025839959725115214,
+        "exit_date": "2011-04-28",
+        "match_score": 0.45131377767126474,
+        "paired_excess": 0.0026147314491198337,
+        "signal_date": "2011-04-19",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 7,
+        "control_entry_date": "2011-04-11",
+        "control_exit_date": "2011-04-18",
+        "control_feature_date": "2011-04-08",
+        "control_return_after_cost": -0.009984818303045095,
+        "entry_date": "2011-04-20",
+        "event_return_after_cost": 0.020596582898275817,
+        "exit_date": "2011-04-28",
+        "match_score": 0.717778854565211,
+        "paired_excess": 0.030581401201320912,
+        "signal_date": "2011-04-19",
+        "symbol": "QQQ"
+      },
+      {
+        "control_distance_sessions": 333,
+        "control_entry_date": "2010-01-25",
+        "control_exit_date": "2010-02-01",
+        "control_feature_date": "2010-01-22",
+        "control_return_after_cost": -0.01685771140038017,
+        "entry_date": "2011-05-19",
+        "event_return_after_cost": -0.005672230484111473,
+        "exit_date": "2011-05-26",
+        "match_score": 0.19140025950940026,
+        "paired_excess": 0.011185480916268697,
+        "signal_date": "2011-05-18",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 10,
+        "control_entry_date": "2011-05-16",
+        "control_exit_date": "2011-05-23",
+        "control_feature_date": "2011-05-13",
+        "control_return_after_cost": -0.012179653029205983,
+        "entry_date": "2011-05-31",
+        "event_return_after_cost": -0.061112831162648096,
+        "exit_date": "2011-06-07",
+        "match_score": 0.09605277220354091,
+        "paired_excess": -0.04893317813344211,
+        "signal_date": "2011-05-27",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 8,
+        "control_entry_date": "2011-05-18",
+        "control_exit_date": "2011-05-25",
+        "control_feature_date": "2011-05-17",
+        "control_return_after_cost": -0.01566190423615499,
+        "entry_date": "2011-05-31",
+        "event_return_after_cost": -0.045032673222120345,
+        "exit_date": "2011-06-07",
+        "match_score": 0.1559734377395515,
+        "paired_excess": -0.029370768985965356,
+        "signal_date": "2011-05-27",
+        "symbol": "SPY"
+      },
+      {
+        "control_distance_sessions": 75,
+        "control_entry_date": "2011-03-24",
+        "control_exit_date": "2011-03-31",
+        "control_feature_date": "2011-03-23",
+        "control_return_after_cost": 0.011874744335456433,
+        "entry_date": "2011-07-12",
+        "event_return_after_cost": 0.022122464533580577,
+        "exit_date": "2011-07-19",
+        "match_score": 0.14285292381732456,
+        "paired_excess": 0.010247720198124144,
+        "signal_date": "2011-07-11",
+        "symbol": "QQQ"
+      },
+      {
+        "control_distance_sessions": 627,
+        "control_entry_date": "2009-05-14",
+        "control_exit_date": "2009-05-21",
+        "control_feature_date": "2009-05-13",
+        "control_return_after_cost": 0.006301039499621131,
+        "entry_date": "2011-11-07",
+        "event_return_after_cost": -0.01631201823077799,
+        "exit_date": "2011-11-14",
+        "match_score": 0.7264889448803624,
+        "paired_excess": -0.022613057730399122,
+        "signal_date": "2011-11-04",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 588,
+        "control_entry_date": "2009-07-13",
+        "control_exit_date": "2009-07-20",
+        "control_feature_date": "2009-07-10",
+        "control_return_after_cost": 0.0644679045231914,
+        "entry_date": "2011-11-08",
+        "event_return_after_cost": -0.013737743401986857,
+        "exit_date": "2011-11-15",
+        "match_score": 0.6066698636283785,
+        "paired_excess": -0.07820564792517826,
+        "signal_date": "2011-11-07",
+        "symbol": "QQQ"
+      },
+      {
+        "control_distance_sessions": 377,
+        "control_entry_date": "2010-05-13",
+        "control_exit_date": "2010-05-20",
+        "control_feature_date": "2010-05-12",
+        "control_return_after_cost": -0.07385080539088273,
+        "entry_date": "2011-11-08",
+        "event_return_after_cost": -0.015075566692232756,
+        "exit_date": "2011-11-15",
+        "match_score": 0.08002364660544492,
+        "paired_excess": 0.05877523869864998,
+        "signal_date": "2011-11-07",
+        "symbol": "SPY"
+      },
+      {
+        "control_distance_sessions": 23,
+        "control_entry_date": "2011-11-09",
+        "control_exit_date": "2011-11-16",
+        "control_feature_date": "2011-11-08",
+        "control_return_after_cost": 0.014290377442446878,
+        "entry_date": "2011-12-13",
+        "event_return_after_cost": 0.025688296044530268,
+        "exit_date": "2011-12-20",
+        "match_score": 0.35666421804499027,
+        "paired_excess": 0.01139791860208339,
+        "signal_date": "2011-12-12",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 516,
+        "control_entry_date": "2010-01-12",
+        "control_exit_date": "2010-01-20",
+        "control_feature_date": "2010-01-11",
+        "control_return_after_cost": 0.001023627849630838,
+        "entry_date": "2012-01-30",
+        "event_return_after_cost": 0.022445006084384045,
+        "exit_date": "2012-02-06",
+        "match_score": 0.1564714749470235,
+        "paired_excess": 0.021421378234753208,
+        "signal_date": "2012-01-27",
+        "symbol": "SPY"
+      },
+      {
+        "control_distance_sessions": 243,
+        "control_entry_date": "2011-02-11",
+        "control_exit_date": "2011-02-18",
+        "control_feature_date": "2011-02-10",
+        "control_return_after_cost": 0.009206552021958081,
+        "entry_date": "2012-01-31",
+        "event_return_after_cost": 0.01835385160437697,
+        "exit_date": "2012-02-07",
+        "match_score": 0.11755044981632726,
+        "paired_excess": 0.009147299582418889,
+        "signal_date": "2012-01-30",
+        "symbol": "DIA"
+      },
+      {
+        "control_distance_sessions": 473,
+        "control_entry_date": "2010-03-17",
+        "control_exit_date": "2010-03-24",
+        "control_feature_date": "2010-03-16",
+        "control_return_after_cost": -0.0014373191936938303,
+        "entry_date": "2012-01-31",
+        "event_return_after_cost": 0.04468466489011258,
+        "exit_date": "2012-02-07",
+        "match_score": 0.15130095302366656,
+        "paired_excess": 0.04612198408380641,
+        "signal_date": "2012-01-30",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 462,
+        "control_entry_date": "2010-04-15",
+        "control_exit_date": "2010-04-22",
+        "control_feature_date": "2010-04-14",
+        "control_return_after_cost": -0.003226405382723673,
+        "entry_date": "2012-02-13",
+        "event_return_after_cost": 0.007200522344747441,
+        "exit_date": "2012-02-21",
+        "match_score": 0.21352531716826773,
+        "paired_excess": 0.010426927727471114,
+        "signal_date": "2012-02-10",
+        "symbol": "SPY"
+      },
+      {
+        "control_distance_sessions": 279,
+        "control_entry_date": "2011-01-20",
+        "control_exit_date": "2011-01-27",
+        "control_feature_date": "2011-01-19",
+        "control_return_after_cost": 0.020104745095943843,
+        "entry_date": "2012-02-29",
+        "event_return_after_cost": -0.020370359464846444,
+        "exit_date": "2012-03-07",
+        "match_score": 0.16341850569254912,
+        "paired_excess": -0.04047510456079029,
+        "signal_date": "2012-02-28",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 17,
+        "control_entry_date": "2012-03-01",
+        "control_exit_date": "2012-03-08",
+        "control_feature_date": "2012-02-29",
+        "control_return_after_cost": -0.012783958260565442,
+        "entry_date": "2012-03-26",
+        "event_return_after_cost": -0.007753713507087422,
+        "exit_date": "2012-04-02",
+        "match_score": 0.11077848086959968,
+        "paired_excess": 0.00503024475347802,
+        "signal_date": "2012-03-23",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 20,
+        "control_entry_date": "2012-03-12",
+        "control_exit_date": "2012-03-19",
+        "control_feature_date": "2012-03-09",
+        "control_return_after_cost": 0.0305712387334377,
+        "entry_date": "2012-04-10",
+        "event_return_after_cost": 0.008829069023723934,
+        "exit_date": "2012-04-17",
+        "match_score": 0.06840424900079689,
+        "paired_excess": -0.021742169709713766,
+        "signal_date": "2012-04-09",
+        "symbol": "QQQ"
+      },
+      {
+        "control_distance_sessions": 208,
+        "control_entry_date": "2011-07-18",
+        "control_exit_date": "2011-07-25",
+        "control_feature_date": "2011-07-15",
+        "control_return_after_cost": 0.0327154561790407,
+        "entry_date": "2012-05-14",
+        "event_return_after_cost": -0.01782892389961499,
+        "exit_date": "2012-05-21",
+        "match_score": 0.07667032007463354,
+        "paired_excess": -0.05054438007865569,
+        "signal_date": "2012-05-11",
+        "symbol": "QQQ"
+      },
+      {
+        "control_distance_sessions": 48,
+        "control_entry_date": "2012-10-15",
+        "control_exit_date": "2012-10-22",
+        "control_feature_date": "2012-10-12",
+        "control_return_after_cost": -0.010801489205274684,
+        "entry_date": "2012-12-26",
+        "event_return_after_cost": 0.04011617045811822,
+        "exit_date": "2013-01-03",
+        "match_score": 0.20554391488784032,
+        "paired_excess": 0.0509176596633929,
+        "signal_date": "2012-12-24",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 594,
+        "control_entry_date": "2010-11-04",
+        "control_exit_date": "2010-11-11",
+        "control_feature_date": "2010-11-03",
+        "control_return_after_cost": -0.002498805166789241,
+        "entry_date": "2013-03-19",
+        "event_return_after_cost": 0.006299978365413073,
+        "exit_date": "2013-03-26",
+        "match_score": 0.20485927421241695,
+        "paired_excess": 0.008798783532202314,
+        "signal_date": "2013-03-18",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 22,
+        "control_entry_date": "2013-03-12",
+        "control_exit_date": "2013-03-19",
+        "control_feature_date": "2013-03-11",
+        "control_return_after_cost": -0.005832000415148641,
+        "entry_date": "2013-04-12",
+        "event_return_after_cost": -0.02745078530332623,
+        "exit_date": "2013-04-19",
+        "match_score": 0.11033208671806918,
+        "paired_excess": -0.02161878488817759,
+        "signal_date": "2013-04-11",
+        "symbol": "QQQ"
+      },
+      {
+        "control_distance_sessions": 41,
+        "control_entry_date": "2013-04-03",
+        "control_exit_date": "2013-04-10",
+        "control_feature_date": "2013-04-02",
+        "control_return_after_cost": 0.021160975455568054,
+        "entry_date": "2013-05-31",
+        "event_return_after_cost": 0.007259121858415375,
+        "exit_date": "2013-06-07",
+        "match_score": 0.09312301701336859,
+        "paired_excess": -0.01390185359715268,
+        "signal_date": "2013-05-30",
+        "symbol": "SPY"
+      },
+      {
+        "control_distance_sessions": 268,
+        "control_entry_date": "2012-09-05",
+        "control_exit_date": "2012-09-12",
+        "control_feature_date": "2012-09-04",
+        "control_return_after_cost": 0.02773522848356047,
+        "entry_date": "2013-10-01",
+        "event_return_after_cost": -0.03614128337007394,
+        "exit_date": "2013-10-08",
+        "match_score": 0.1677945064098646,
+        "paired_excess": -0.06387651185363441,
+        "signal_date": "2013-09-30",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 89,
+        "control_entry_date": "2013-05-28",
+        "control_exit_date": "2013-06-04",
+        "control_feature_date": "2013-05-24",
+        "control_return_after_cost": -0.013044709186394665,
+        "entry_date": "2013-10-02",
+        "event_return_after_cost": -0.034521438114206826,
+        "exit_date": "2013-10-09",
+        "match_score": 0.08299663880649635,
+        "paired_excess": -0.02147672892781216,
+        "signal_date": "2013-10-01",
+        "symbol": "QQQ"
+      },
+      {
+        "control_distance_sessions": 620,
+        "control_entry_date": "2011-04-15",
+        "control_exit_date": "2011-04-25",
+        "control_feature_date": "2011-04-14",
+        "control_return_after_cost": 0.011117792075986066,
+        "entry_date": "2013-10-03",
+        "event_return_after_cost": 0.00824715891760286,
+        "exit_date": "2013-10-10",
+        "match_score": 0.05297776787646924,
+        "paired_excess": -0.0028706331583832068,
+        "signal_date": "2013-10-02",
+        "symbol": "SPY"
+      },
+      {
+        "control_distance_sessions": 196,
+        "control_entry_date": "2013-01-09",
+        "control_exit_date": "2013-01-16",
+        "control_feature_date": "2013-01-08",
+        "control_return_after_cost": 0.007824857704564203,
+        "entry_date": "2013-10-18",
+        "event_return_after_cost": 0.011043340400483603,
+        "exit_date": "2013-10-25",
+        "match_score": 0.10422537358704936,
+        "paired_excess": 0.0032184826959194,
+        "signal_date": "2013-10-17",
+        "symbol": "DIA"
+      },
+      {
+        "control_distance_sessions": 650,
+        "control_entry_date": "2011-04-18",
+        "control_exit_date": "2011-04-26",
+        "control_feature_date": "2011-04-15",
+        "control_return_after_cost": 0.036136283878316244,
+        "entry_date": "2013-11-15",
+        "event_return_after_cost": 0.0082030060977486,
+        "exit_date": "2013-11-22",
+        "match_score": 0.24224762352982515,
+        "paired_excess": -0.027933277780567645,
+        "signal_date": "2013-11-14",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 300,
+        "control_entry_date": "2012-09-07",
+        "control_exit_date": "2012-09-14",
+        "control_feature_date": "2012-09-06",
+        "control_return_after_cost": 0.009801998145991253,
+        "entry_date": "2013-11-18",
+        "event_return_after_cost": 0.011629254987813531,
+        "exit_date": "2013-11-25",
+        "match_score": 0.16537876421585718,
+        "paired_excess": 0.0018272568418222779,
+        "signal_date": "2013-11-15",
+        "symbol": "QQQ"
+      },
+      {
+        "control_distance_sessions": 407,
+        "control_entry_date": "2012-07-06",
+        "control_exit_date": "2012-07-13",
+        "control_feature_date": "2012-07-05",
+        "control_return_after_cost": -0.010437440650371999,
+        "entry_date": "2014-02-20",
+        "event_return_after_cost": 0.02233058942085331,
+        "exit_date": "2014-02-27",
+        "match_score": 0.17010736801095439,
+        "paired_excess": 0.03276803007122531,
+        "signal_date": "2014-02-19",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 81,
+        "control_entry_date": "2013-11-04",
+        "control_exit_date": "2013-11-11",
+        "control_feature_date": "2013-11-01",
+        "control_return_after_cost": -0.006365441763650725,
+        "entry_date": "2014-03-04",
+        "event_return_after_cost": -0.015771084652769995,
+        "exit_date": "2014-03-11",
+        "match_score": 0.08337705951541624,
+        "paired_excess": -0.00940564288911927,
+        "signal_date": "2014-03-03",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 7,
+        "control_entry_date": "2014-06-19",
+        "control_exit_date": "2014-06-26",
+        "control_feature_date": "2014-06-18",
+        "control_return_after_cost": -0.0036303195683534675,
+        "entry_date": "2014-06-30",
+        "event_return_after_cost": -0.018030199366399713,
+        "exit_date": "2014-07-08",
+        "match_score": 0.1286552116912104,
+        "paired_excess": -0.014399879798046245,
+        "signal_date": "2014-06-27",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 429,
+        "control_entry_date": "2012-12-28",
+        "control_exit_date": "2013-01-07",
+        "control_feature_date": "2012-12-27",
+        "control_return_after_cost": 0.05207137274970741,
+        "entry_date": "2014-09-12",
+        "event_return_after_cost": -0.013134971070801638,
+        "exit_date": "2014-09-19",
+        "match_score": 0.11905001221218223,
+        "paired_excess": -0.06520634382050905,
+        "signal_date": "2014-09-11",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 567,
+        "control_entry_date": "2012-07-20",
+        "control_exit_date": "2012-07-27",
+        "control_feature_date": "2012-07-19",
+        "control_return_after_cost": 0.008806905352947259,
+        "entry_date": "2014-10-22",
+        "event_return_after_cost": 0.034696030334441574,
+        "exit_date": "2014-10-29",
+        "match_score": 0.23327651119619597,
+        "paired_excess": 0.025889124981494316,
+        "signal_date": "2014-10-21",
+        "symbol": "QQQ"
+      },
+      {
+        "control_distance_sessions": 20,
+        "control_entry_date": "2014-11-11",
+        "control_exit_date": "2014-11-18",
+        "control_feature_date": "2014-11-10",
+        "control_return_after_cost": -0.009349685977770084,
+        "entry_date": "2014-12-10",
+        "event_return_after_cost": 0.009634477139679132,
+        "exit_date": "2014-12-17",
+        "match_score": 0.10215397704651186,
+        "paired_excess": 0.018984163117449215,
+        "signal_date": "2014-12-09",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 614,
+        "control_entry_date": "2012-08-10",
+        "control_exit_date": "2012-08-17",
+        "control_feature_date": "2012-08-09",
+        "control_return_after_cost": 0.005363775050657994,
+        "entry_date": "2015-01-22",
+        "event_return_after_cost": -0.023594544951719643,
+        "exit_date": "2015-01-29",
+        "match_score": 0.2500381480284994,
+        "paired_excess": -0.028958320002377635,
+        "signal_date": "2015-01-21",
+        "symbol": "DIA"
+      },
+      {
+        "control_distance_sessions": 704,
+        "control_entry_date": "2012-04-10",
+        "control_exit_date": "2012-04-17",
+        "control_feature_date": "2012-04-09",
+        "control_return_after_cost": 0.03052535143663826,
+        "entry_date": "2015-01-28",
+        "event_return_after_cost": 0.013739840823671634,
+        "exit_date": "2015-02-04",
+        "match_score": 0.145071449859617,
+        "paired_excess": -0.016785510612966625,
+        "signal_date": "2015-01-27",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 201,
+        "control_entry_date": "2014-04-10",
+        "control_exit_date": "2014-04-17",
+        "control_feature_date": "2014-04-09",
+        "control_return_after_cost": 0.01192586636336801,
+        "entry_date": "2015-01-28",
+        "event_return_after_cost": 0.018322194921547852,
+        "exit_date": "2015-02-04",
+        "match_score": 0.14256708224717862,
+        "paired_excess": 0.006396328558179842,
+        "signal_date": "2015-01-27",
+        "symbol": "QQQ"
+      },
+      {
+        "control_distance_sessions": 15,
+        "control_entry_date": "2015-01-06",
+        "control_exit_date": "2015-01-13",
+        "control_feature_date": "2015-01-05",
+        "control_return_after_cost": 0.010310463415141524,
+        "entry_date": "2015-01-28",
+        "event_return_after_cost": 0.01858613104548812,
+        "exit_date": "2015-02-04",
+        "match_score": 0.15592090841984652,
+        "paired_excess": 0.008275667630346595,
+        "signal_date": "2015-01-27",
+        "symbol": "SPY"
+      },
+      {
+        "control_distance_sessions": 43,
+        "control_entry_date": "2014-12-19",
+        "control_exit_date": "2014-12-29",
+        "control_feature_date": "2014-12-18",
+        "control_return_after_cost": 0.012847924185528492,
+        "entry_date": "2015-02-24",
+        "event_return_after_cost": -0.0012198449903296762,
+        "exit_date": "2015-03-03",
+        "match_score": 0.18265801210260418,
+        "paired_excess": -0.014067769175858169,
+        "signal_date": "2015-02-23",
+        "symbol": "DIA"
+      },
+      {
+        "control_distance_sessions": 527,
+        "control_entry_date": "2013-01-18",
+        "control_exit_date": "2013-01-28",
+        "control_feature_date": "2013-01-17",
+        "control_return_after_cost": 0.010730729311214326,
+        "entry_date": "2015-02-24",
+        "event_return_after_cost": -0.004257882387785793,
+        "exit_date": "2015-03-03",
+        "match_score": 0.11053431557407706,
+        "paired_excess": -0.01498861169900012,
+        "signal_date": "2015-02-23",
+        "symbol": "SPY"
+      },
+      {
+        "control_distance_sessions": 721,
+        "control_entry_date": "2012-05-07",
+        "control_exit_date": "2012-05-14",
+        "control_feature_date": "2012-05-04",
+        "control_return_after_cost": -0.02325834059799814,
+        "entry_date": "2015-03-20",
+        "event_return_after_cost": -0.02393323866262842,
+        "exit_date": "2015-03-27",
+        "match_score": 0.07351555158443046,
+        "paired_excess": -0.0006748980646302805,
+        "signal_date": "2015-03-19",
+        "symbol": "DIA"
+      },
+      {
+        "control_distance_sessions": 324,
+        "control_entry_date": "2013-12-20",
+        "control_exit_date": "2013-12-30",
+        "control_feature_date": "2013-12-19",
+        "control_return_after_cost": 0.013071289076691195,
+        "entry_date": "2015-04-08",
+        "event_return_after_cost": 0.007607517009344923,
+        "exit_date": "2015-04-15",
+        "match_score": 0.08311156331708203,
+        "paired_excess": -0.005463772067346272,
+        "signal_date": "2015-04-07",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 193,
+        "control_entry_date": "2014-09-02",
+        "control_exit_date": "2014-09-09",
+        "control_feature_date": "2014-08-29",
+        "control_return_after_cost": -0.018235883166611067,
+        "entry_date": "2015-06-09",
+        "event_return_after_cost": 0.014911134987206753,
+        "exit_date": "2015-06-16",
+        "match_score": 0.1631295353753709,
+        "paired_excess": 0.03314701815381782,
+        "signal_date": "2015-06-08",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 466,
+        "control_entry_date": "2013-10-09",
+        "control_exit_date": "2013-10-16",
+        "control_feature_date": "2013-10-08",
+        "control_return_after_cost": 0.038069728935845704,
+        "entry_date": "2015-08-17",
+        "event_return_after_cost": -0.1011470637056473,
+        "exit_date": "2015-08-24",
+        "match_score": 0.03771350338188498,
+        "paired_excess": -0.139216792641493,
+        "signal_date": "2015-08-14",
+        "symbol": "SPY"
+      },
+      {
+        "control_distance_sessions": 353,
+        "control_entry_date": "2014-03-25",
+        "control_exit_date": "2014-04-01",
+        "control_feature_date": "2014-03-24",
+        "control_return_after_cost": 0.006908837693274107,
+        "entry_date": "2015-08-18",
+        "event_return_after_cost": -0.11619044311129856,
+        "exit_date": "2015-08-25",
+        "match_score": 0.10860391557328042,
+        "paired_excess": -0.12309928080457266,
+        "signal_date": "2015-08-17",
+        "symbol": "QQQ"
+      },
+      {
+        "control_distance_sessions": 174,
+        "control_entry_date": "2015-04-07",
+        "control_exit_date": "2015-04-14",
+        "control_feature_date": "2015-04-06",
+        "control_return_after_cost": 0.00966179370429987,
+        "entry_date": "2015-12-11",
+        "event_return_after_cost": -0.004316644441466288,
+        "exit_date": "2015-12-18",
+        "match_score": 0.15111970977734646,
+        "paired_excess": -0.013978438145766159,
+        "signal_date": "2015-12-10",
+        "symbol": "SPY"
+      },
+      {
+        "control_distance_sessions": 97,
+        "control_entry_date": "2015-10-19",
+        "control_exit_date": "2015-10-26",
+        "control_feature_date": "2015-10-16",
+        "control_return_after_cost": 0.021658701450578355,
+        "entry_date": "2016-03-09",
+        "event_return_after_cost": 0.01929094279168042,
+        "exit_date": "2016-03-16",
+        "match_score": 0.18722949273111966,
+        "paired_excess": -0.002367758658897934,
+        "signal_date": "2016-03-08",
+        "symbol": "DIA"
+      },
+      {
+        "control_distance_sessions": 450,
+        "control_entry_date": "2014-06-06",
+        "control_exit_date": "2014-06-13",
+        "control_feature_date": "2014-06-05",
+        "control_return_after_cost": -0.003502600928966592,
+        "entry_date": "2016-03-21",
+        "event_return_after_cost": 0.01080842115774272,
+        "exit_date": "2016-03-29",
+        "match_score": 0.1419235024847354,
+        "paired_excess": 0.014311022086709313,
+        "signal_date": "2016-03-18",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 467,
+        "control_entry_date": "2014-05-15",
+        "control_exit_date": "2014-05-22",
+        "control_feature_date": "2014-05-14",
+        "control_return_after_cost": 0.022983954224155334,
+        "entry_date": "2016-03-23",
+        "event_return_after_cost": 0.017371810278651423,
+        "exit_date": "2016-03-31",
+        "match_score": 0.36353649905066815,
+        "paired_excess": -0.005612143945503911,
+        "signal_date": "2016-03-22",
+        "symbol": "QQQ"
+      },
+      {
+        "control_distance_sessions": 499,
+        "control_entry_date": "2014-04-04",
+        "control_exit_date": "2014-04-11",
+        "control_feature_date": "2014-04-03",
+        "control_return_after_cost": -0.024553803996956503,
+        "entry_date": "2016-03-30",
+        "event_return_after_cost": -0.00015143856592480989,
+        "exit_date": "2016-04-06",
+        "match_score": 0.1288416540240704,
+        "paired_excess": 0.024402365431031692,
+        "signal_date": "2016-03-29",
+        "symbol": "DIA"
+      },
+      {
+        "control_distance_sessions": 99,
+        "control_entry_date": "2015-11-04",
+        "control_exit_date": "2015-11-11",
+        "control_feature_date": "2015-11-03",
+        "control_return_after_cost": -0.013454383909380918,
+        "entry_date": "2016-03-30",
+        "event_return_after_cost": 0.0009417996743069654,
+        "exit_date": "2016-04-06",
+        "match_score": 0.12306881922855825,
+        "paired_excess": 0.014396183583687883,
+        "signal_date": "2016-03-29",
+        "symbol": "SPY"
+      },
+      {
+        "control_distance_sessions": 697,
+        "control_entry_date": "2013-07-01",
+        "control_exit_date": "2013-07-09",
+        "control_feature_date": "2013-06-28",
+        "control_return_after_cost": 0.02803744340857295,
+        "entry_date": "2016-04-07",
+        "event_return_after_cost": 0.031112738260064998,
+        "exit_date": "2016-04-14",
+        "match_score": 0.2054263299693765,
+        "paired_excess": 0.0030752948514920497,
+        "signal_date": "2016-04-06",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 418,
+        "control_entry_date": "2014-08-08",
+        "control_exit_date": "2014-08-15",
+        "control_feature_date": "2014-08-07",
+        "control_return_after_cost": 0.025343771682968197,
+        "entry_date": "2016-04-07",
+        "event_return_after_cost": 0.01586850157869535,
+        "exit_date": "2016-04-14",
+        "match_score": 0.11989007085351888,
+        "paired_excess": -0.009475270104272848,
+        "signal_date": "2016-04-06",
+        "symbol": "QQQ"
+      },
+      {
+        "control_distance_sessions": 642,
+        "control_entry_date": "2013-09-19",
+        "control_exit_date": "2013-09-26",
+        "control_feature_date": "2013-09-18",
+        "control_return_after_cost": -0.02065107726173454,
+        "entry_date": "2016-04-08",
+        "event_return_after_cost": 0.016931067898134144,
+        "exit_date": "2016-04-15",
+        "match_score": 0.059737404960534535,
+        "paired_excess": 0.037582145159868685,
+        "signal_date": "2016-04-07",
+        "symbol": "DIA"
+      },
+      {
+        "control_distance_sessions": 638,
+        "control_entry_date": "2013-09-25",
+        "control_exit_date": "2013-10-02",
+        "control_feature_date": "2013-09-24",
+        "control_return_after_cost": -0.00017238907123406835,
+        "entry_date": "2016-04-08",
+        "event_return_after_cost": 0.015038957351104387,
+        "exit_date": "2016-04-15",
+        "match_score": 0.12250790331186562,
+        "paired_excess": 0.015211346422338456,
+        "signal_date": "2016-04-07",
+        "symbol": "SPY"
+      },
+      {
+        "control_distance_sessions": 663,
+        "control_entry_date": "2013-10-23",
+        "control_exit_date": "2013-10-30",
+        "control_feature_date": "2013-10-22",
+        "control_return_after_cost": -0.0060726273175744075,
+        "entry_date": "2016-06-13",
+        "event_return_after_cost": 0.0032680586846328694,
+        "exit_date": "2016-06-20",
+        "match_score": 0.2373014864800227,
+        "paired_excess": 0.009340686002207277,
+        "signal_date": "2016-06-10",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 420,
+        "control_entry_date": "2014-10-29",
+        "control_exit_date": "2014-11-05",
+        "control_feature_date": "2014-10-28",
+        "control_return_after_cost": 0.020351280473952404,
+        "entry_date": "2016-06-30",
+        "event_return_after_cost": 0.014132496244902648,
+        "exit_date": "2016-07-08",
+        "match_score": 0.17321423280276999,
+        "paired_excess": -0.006218784229049756,
+        "signal_date": "2016-06-29",
+        "symbol": "SPY"
+      },
+      {
+        "control_distance_sessions": 353,
+        "control_entry_date": "2015-02-06",
+        "control_exit_date": "2015-02-13",
+        "control_feature_date": "2015-02-05",
+        "control_return_after_cost": 0.01163397166956981,
+        "entry_date": "2016-07-01",
+        "event_return_after_cost": 0.014671157376206279,
+        "exit_date": "2016-07-11",
+        "match_score": 0.1598779343974946,
+        "paired_excess": 0.0030371857066364694,
+        "signal_date": "2016-06-30",
+        "symbol": "DIA"
+      },
+      {
+        "control_distance_sessions": 594,
+        "control_entry_date": "2014-02-24",
+        "control_exit_date": "2014-03-03",
+        "control_feature_date": "2014-02-21",
+        "control_return_after_cost": 0.0022612682696262496,
+        "entry_date": "2016-07-01",
+        "event_return_after_cost": 0.02845579027911993,
+        "exit_date": "2016-07-11",
+        "match_score": 0.5283512768536716,
+        "paired_excess": 0.02619452200949368,
+        "signal_date": "2016-06-30",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 425,
+        "control_entry_date": "2014-10-23",
+        "control_exit_date": "2014-10-30",
+        "control_feature_date": "2014-10-22",
+        "control_return_after_cost": 0.02149002972780345,
+        "entry_date": "2016-07-01",
+        "event_return_after_cost": 0.025369043913179623,
+        "exit_date": "2016-07-11",
+        "match_score": 0.3389245712434599,
+        "paired_excess": 0.003879014185376173,
+        "signal_date": "2016-06-30",
+        "symbol": "QQQ"
+      },
+      {
+        "control_distance_sessions": 203,
+        "control_entry_date": "2015-11-25",
+        "control_exit_date": "2015-12-03",
+        "control_feature_date": "2015-11-24",
+        "control_return_after_cost": -0.015367177680274624,
+        "entry_date": "2016-09-16",
+        "event_return_after_cost": 0.00786690409740809,
+        "exit_date": "2016-09-23",
+        "match_score": 0.0856086274220344,
+        "paired_excess": 0.023234081777682714,
+        "signal_date": "2016-09-15",
+        "symbol": "QQQ"
+      },
+      {
+        "control_distance_sessions": 663,
+        "control_entry_date": "2014-01-31",
+        "control_exit_date": "2014-02-07",
+        "control_feature_date": "2014-01-30",
+        "control_return_after_cost": 0.005570262956841155,
+        "entry_date": "2016-09-19",
+        "event_return_after_cost": -0.0022708655921874757,
+        "exit_date": "2016-09-26",
+        "match_score": 0.07452050953505401,
+        "paired_excess": -0.007841128549028631,
+        "signal_date": "2016-09-16",
+        "symbol": "DIA"
+      },
+      {
+        "control_distance_sessions": 531,
+        "control_entry_date": "2014-08-11",
+        "control_exit_date": "2014-08-18",
+        "control_feature_date": "2014-08-08",
+        "control_return_after_cost": 0.01736954949649283,
+        "entry_date": "2016-09-19",
+        "event_return_after_cost": 0.0028892005449624456,
+        "exit_date": "2016-09-26",
+        "match_score": 0.12394599370936718,
+        "paired_excess": -0.014480348951530386,
+        "signal_date": "2016-09-16",
+        "symbol": "SPY"
+      },
+      {
+        "control_distance_sessions": 166,
+        "control_entry_date": "2016-06-24",
+        "control_exit_date": "2016-07-01",
+        "control_feature_date": "2016-06-23",
+        "control_return_after_cost": 0.02578385868620725,
+        "entry_date": "2017-02-22",
+        "event_return_after_cost": 0.004588470778591814,
+        "exit_date": "2017-03-01",
+        "match_score": 0.11435170656071664,
+        "paired_excess": -0.021195387907615437,
+        "signal_date": "2017-02-21",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 167,
+        "control_entry_date": "2016-07-29",
+        "control_exit_date": "2016-08-05",
+        "control_feature_date": "2016-07-28",
+        "control_return_after_cost": 0.005136537326365765,
+        "entry_date": "2017-03-29",
+        "event_return_after_cost": -0.0012419010187663107,
+        "exit_date": "2017-04-05",
+        "match_score": 0.08774032768154111,
+        "paired_excess": -0.006378438345132076,
+        "signal_date": "2017-03-28",
+        "symbol": "DIA"
+      },
+      {
+        "control_distance_sessions": 429,
+        "control_entry_date": "2015-07-16",
+        "control_exit_date": "2015-07-23",
+        "control_feature_date": "2015-07-15",
+        "control_return_after_cost": -0.022692585706977297,
+        "entry_date": "2017-03-29",
+        "event_return_after_cost": -0.014947153775190625,
+        "exit_date": "2017-04-05",
+        "match_score": 0.10004408588170532,
+        "paired_excess": 0.007745431931786673,
+        "signal_date": "2017-03-28",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 165,
+        "control_entry_date": "2016-08-05",
+        "control_exit_date": "2016-08-12",
+        "control_feature_date": "2016-08-04",
+        "control_return_after_cost": 0.00028335725140371613,
+        "entry_date": "2017-04-03",
+        "event_return_after_cost": -0.0009573435289046408,
+        "exit_date": "2017-04-10",
+        "match_score": 0.0449044597354116,
+        "paired_excess": -0.001240700780308357,
+        "signal_date": "2017-03-31",
+        "symbol": "SPY"
+      },
+      {
+        "control_distance_sessions": 642,
+        "control_entry_date": "2015-04-29",
+        "control_exit_date": "2015-05-06",
+        "control_feature_date": "2015-04-28",
+        "control_return_after_cost": -0.025142899741103397,
+        "entry_date": "2017-11-13",
+        "event_return_after_cost": -0.0012599826461321397,
+        "exit_date": "2017-11-20",
+        "match_score": 0.1701864319107313,
+        "paired_excess": 0.023882917094971257,
+        "signal_date": "2017-11-10",
+        "symbol": "QQQ"
+      },
+      {
+        "control_distance_sessions": 644,
+        "control_entry_date": "2015-04-29",
+        "control_exit_date": "2015-05-06",
+        "control_feature_date": "2015-04-28",
+        "control_return_after_cost": -0.021436293980216514,
+        "entry_date": "2017-11-15",
+        "event_return_after_cost": 0.03511923615477375,
+        "exit_date": "2017-11-22",
+        "match_score": 0.345174432022112,
+        "paired_excess": 0.05655553013499026,
+        "signal_date": "2017-11-14",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 7,
+        "control_entry_date": "2017-11-06",
+        "control_exit_date": "2017-11-13",
+        "control_feature_date": "2017-11-03",
+        "control_return_after_cost": -0.0030089730575434395,
+        "entry_date": "2017-11-15",
+        "event_return_after_cost": 0.011946457858749038,
+        "exit_date": "2017-11-22",
+        "match_score": 0.10703821699457973,
+        "paired_excess": 0.014955430916292478,
+        "signal_date": "2017-11-14",
+        "symbol": "SPY"
+      },
+      {
+        "control_distance_sessions": 9,
+        "control_entry_date": "2018-02-07",
+        "control_exit_date": "2018-02-14",
+        "control_feature_date": "2018-02-06",
+        "control_return_after_cost": 0.0011711775407562417,
+        "entry_date": "2018-02-21",
+        "event_return_after_cost": 0.009011411904867761,
+        "exit_date": "2018-02-28",
+        "match_score": 0.6044985504535729,
+        "paired_excess": 0.00784023436411152,
+        "signal_date": "2018-02-20",
+        "symbol": "DIA"
+      },
+      {
+        "control_distance_sessions": 574,
+        "control_entry_date": "2015-11-09",
+        "control_exit_date": "2015-11-16",
+        "control_feature_date": "2015-11-06",
+        "control_return_after_cost": -0.024510359434502527,
+        "entry_date": "2018-02-21",
+        "event_return_after_cost": -0.013414624615497694,
+        "exit_date": "2018-02-28",
+        "match_score": 0.42623710429473854,
+        "paired_excess": 0.011095734819004832,
+        "signal_date": "2018-02-20",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 9,
+        "control_entry_date": "2018-02-07",
+        "control_exit_date": "2018-02-14",
+        "control_feature_date": "2018-02-06",
+        "control_return_after_cost": 0.006172821006353303,
+        "entry_date": "2018-02-21",
+        "event_return_after_cost": 0.004924640213846422,
+        "exit_date": "2018-02-28",
+        "match_score": 0.6213934276961866,
+        "paired_excess": -0.001248180792506881,
+        "signal_date": "2018-02-20",
+        "symbol": "SPY"
+      },
+      {
+        "control_distance_sessions": 420,
+        "control_entry_date": "2016-07-07",
+        "control_exit_date": "2016-07-14",
+        "control_feature_date": "2016-07-06",
+        "control_return_after_cost": 0.033510283430160936,
+        "entry_date": "2018-03-08",
+        "event_return_after_cost": -0.0015617507062929406,
+        "exit_date": "2018-03-15",
+        "match_score": 0.596730037298904,
+        "paired_excess": -0.03507203413645388,
+        "signal_date": "2018-03-07",
+        "symbol": "DIA"
+      },
+      {
+        "control_distance_sessions": 355,
+        "control_entry_date": "2016-10-07",
+        "control_exit_date": "2016-10-14",
+        "control_feature_date": "2016-10-06",
+        "control_return_after_cost": -0.02053922522598539,
+        "entry_date": "2018-03-08",
+        "event_return_after_cost": 0.002196656459007796,
+        "exit_date": "2018-03-15",
+        "match_score": 0.15759900610362781,
+        "paired_excess": 0.022735881684993187,
+        "signal_date": "2018-03-07",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 550,
+        "control_entry_date": "2015-12-30",
+        "control_exit_date": "2016-01-07",
+        "control_feature_date": "2015-12-29",
+        "control_return_after_cost": -0.07515920226901929,
+        "entry_date": "2018-03-08",
+        "event_return_after_cost": 0.008831731588025415,
+        "exit_date": "2018-03-15",
+        "match_score": 0.6122357913622545,
+        "paired_excess": 0.0839909338570447,
+        "signal_date": "2018-03-07",
+        "symbol": "QQQ"
+      },
+      {
+        "control_distance_sessions": 420,
+        "control_entry_date": "2016-07-07",
+        "control_exit_date": "2016-07-14",
+        "control_feature_date": "2016-07-06",
+        "control_return_after_cost": 0.030451429024784704,
+        "entry_date": "2018-03-08",
+        "event_return_after_cost": 0.0022834801021017767,
+        "exit_date": "2018-03-15",
+        "match_score": 0.23549005152942282,
+        "paired_excess": -0.02816794892268293,
+        "signal_date": "2018-03-07",
+        "symbol": "SPY"
+      },
+      {
+        "control_distance_sessions": 7,
+        "control_entry_date": "2018-05-21",
+        "control_exit_date": "2018-05-29",
+        "control_feature_date": "2018-05-18",
+        "control_return_after_cost": -0.016912706569766844,
+        "entry_date": "2018-05-31",
+        "event_return_after_cost": 0.022732301120602316,
+        "exit_date": "2018-06-07",
+        "match_score": 0.06035356306658621,
+        "paired_excess": 0.03964500769036916,
+        "signal_date": "2018-05-30",
+        "symbol": "SPY"
+      },
+      {
+        "control_distance_sessions": 474,
+        "control_entry_date": "2016-08-02",
+        "control_exit_date": "2016-08-09",
+        "control_feature_date": "2016-08-01",
+        "control_return_after_cost": 0.016049206584357267,
+        "entry_date": "2018-06-20",
+        "event_return_after_cost": -0.04342621164109539,
+        "exit_date": "2018-06-27",
+        "match_score": 0.20033011415776333,
+        "paired_excess": -0.05947541822545266,
+        "signal_date": "2018-06-19",
+        "symbol": "QQQ"
+      },
+      {
+        "control_distance_sessions": 452,
+        "control_entry_date": "2016-09-29",
+        "control_exit_date": "2016-10-06",
+        "control_feature_date": "2016-09-28",
+        "control_return_after_cost": 0.0065526893305943865,
+        "entry_date": "2018-07-18",
+        "event_return_after_cost": 0.015061794680262808,
+        "exit_date": "2018-07-25",
+        "match_score": 0.2495042375202336,
+        "paired_excess": 0.008509105349668422,
+        "signal_date": "2018-07-17",
+        "symbol": "QQQ"
+      },
+      {
+        "control_distance_sessions": 726,
+        "control_entry_date": "2016-03-22",
+        "control_exit_date": "2016-03-30",
+        "control_feature_date": "2016-03-21",
+        "control_return_after_cost": 0.010468803769495438,
+        "entry_date": "2019-02-08",
+        "event_return_after_cost": 0.019052227302062463,
+        "exit_date": "2019-02-15",
+        "match_score": 0.2601373390128206,
+        "paired_excess": 0.008583423532567025,
+        "signal_date": "2019-02-07",
+        "symbol": "QQQ"
+      },
+      {
+        "control_distance_sessions": 723,
+        "control_entry_date": "2016-03-29",
+        "control_exit_date": "2016-04-05",
+        "control_feature_date": "2016-03-28",
+        "control_return_after_cost": -0.005534007381664984,
+        "entry_date": "2019-02-11",
+        "event_return_after_cost": 0.025716014242053054,
+        "exit_date": "2019-02-19",
+        "match_score": 0.2531597501583638,
+        "paired_excess": 0.03125002162371804,
+        "signal_date": "2019-02-08",
+        "symbol": "SPY"
+      },
+      {
+        "control_distance_sessions": 696,
+        "control_entry_date": "2016-06-03",
+        "control_exit_date": "2016-06-10",
+        "control_feature_date": "2016-06-02",
+        "control_return_after_cost": 0.002650787785643095,
+        "entry_date": "2019-03-12",
+        "event_return_after_cost": 0.012949257458055752,
+        "exit_date": "2019-03-19",
+        "match_score": 0.13823806483822518,
+        "paired_excess": 0.010298469672412658,
+        "signal_date": "2019-03-11",
+        "symbol": "DIA"
+      },
+      {
+        "control_distance_sessions": 291,
+        "control_entry_date": "2018-03-12",
+        "control_exit_date": "2018-03-19",
+        "control_feature_date": "2018-03-09",
+        "control_return_after_cost": -0.019342083780295338,
+        "entry_date": "2019-05-08",
+        "event_return_after_cost": -0.018351551172755,
+        "exit_date": "2019-05-15",
+        "match_score": 0.06153881961662888,
+        "paired_excess": 0.0009905326075403398,
+        "signal_date": "2019-05-07",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 347,
+        "control_entry_date": "2017-12-19",
+        "control_exit_date": "2017-12-27",
+        "control_feature_date": "2017-12-18",
+        "control_return_after_cost": -0.008355549426072972,
+        "entry_date": "2019-05-09",
+        "event_return_after_cost": -0.0001340544193700879,
+        "exit_date": "2019-05-16",
+        "match_score": 0.16436246425275317,
+        "paired_excess": 0.008221495006702884,
+        "signal_date": "2019-05-08",
+        "symbol": "QQQ"
+      },
+      {
+        "control_distance_sessions": 731,
+        "control_entry_date": "2016-06-14",
+        "control_exit_date": "2016-06-21",
+        "control_feature_date": "2016-06-13",
+        "control_return_after_cost": 0.008088903252648882,
+        "entry_date": "2019-05-10",
+        "event_return_after_cost": -0.008074019277286126,
+        "exit_date": "2019-05-17",
+        "match_score": 0.10914972286588304,
+        "paired_excess": -0.01616292252993501,
+        "signal_date": "2019-05-09",
+        "symbol": "DIA"
+      },
+      {
+        "control_distance_sessions": 51,
+        "control_entry_date": "2019-02-27",
+        "control_exit_date": "2019-03-06",
+        "control_feature_date": "2019-02-26",
+        "control_return_after_cost": -0.007697596413840379,
+        "entry_date": "2019-05-10",
+        "event_return_after_cost": -0.008844554252930625,
+        "exit_date": "2019-05-17",
+        "match_score": 0.1064449312573311,
+        "paired_excess": -0.0011469578390902466,
+        "signal_date": "2019-05-09",
+        "symbol": "SPY"
+      },
+      {
+        "control_distance_sessions": 265,
+        "control_entry_date": "2018-04-27",
+        "control_exit_date": "2018-05-04",
+        "control_feature_date": "2018-04-26",
+        "control_return_after_cost": 0.005723203491028729,
+        "entry_date": "2019-05-17",
+        "event_return_after_cost": -0.014412735743893235,
+        "exit_date": "2019-05-24",
+        "match_score": 0.3099105839571348,
+        "paired_excess": -0.020135939234921962,
+        "signal_date": "2019-05-16",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 292,
+        "control_entry_date": "2018-03-21",
+        "control_exit_date": "2018-03-28",
+        "control_feature_date": "2018-03-20",
+        "control_return_after_cost": -0.05893208365468883,
+        "entry_date": "2019-05-20",
+        "event_return_after_cost": -0.014669981012462419,
+        "exit_date": "2019-05-28",
+        "match_score": 0.19702757376015845,
+        "paired_excess": 0.04426210264222641,
+        "signal_date": "2019-05-17",
+        "symbol": "QQQ"
+      },
+      {
+        "control_distance_sessions": 657,
+        "control_entry_date": "2016-10-07",
+        "control_exit_date": "2016-10-14",
+        "control_feature_date": "2016-10-06",
+        "control_return_after_cost": -0.006103902535006366,
+        "entry_date": "2019-05-21",
+        "event_return_after_cost": -0.02998288629635104,
+        "exit_date": "2019-05-29",
+        "match_score": 0.18743303151101398,
+        "paired_excess": -0.023878983761344674,
+        "signal_date": "2019-05-20",
+        "symbol": "DIA"
+      },
+      {
+        "control_distance_sessions": 295,
+        "control_entry_date": "2018-03-19",
+        "control_exit_date": "2018-03-26",
+        "control_feature_date": "2018-03-16",
+        "control_return_after_cost": -0.020889679136105843,
+        "entry_date": "2019-05-21",
+        "event_return_after_cost": -0.029760151879586916,
+        "exit_date": "2019-05-29",
+        "match_score": 0.06612829377657059,
+        "paired_excess": -0.008870472743481073,
+        "signal_date": "2019-05-20",
+        "symbol": "SPY"
+      },
+      {
+        "control_distance_sessions": 225,
+        "control_entry_date": "2018-08-15",
+        "control_exit_date": "2018-08-22",
+        "control_feature_date": "2018-08-14",
+        "control_return_after_cost": 0.022680436307477625,
+        "entry_date": "2019-07-10",
+        "event_return_after_cost": 0.012361362341569815,
+        "exit_date": "2019-07-17",
+        "match_score": 0.0779654933901347,
+        "paired_excess": -0.01031907396590781,
+        "signal_date": "2019-07-09",
+        "symbol": "DIA"
+      },
+      {
+        "control_distance_sessions": 206,
+        "control_entry_date": "2018-09-12",
+        "control_exit_date": "2018-09-19",
+        "control_feature_date": "2018-09-11",
+        "control_return_after_cost": -0.0003426593916869827,
+        "entry_date": "2019-07-10",
+        "event_return_after_cost": -0.0028695236645145386,
+        "exit_date": "2019-07-17",
+        "match_score": 0.13987791284317083,
+        "paired_excess": -0.002526864272827556,
+        "signal_date": "2019-07-09",
+        "symbol": "QQQ"
+      },
+      {
+        "control_distance_sessions": 527,
+        "control_entry_date": "2017-06-05",
+        "control_exit_date": "2017-06-12",
+        "control_feature_date": "2017-06-02",
+        "control_return_after_cost": -0.00358214046147065,
+        "entry_date": "2019-07-10",
+        "event_return_after_cost": -0.003913528313348901,
+        "exit_date": "2019-07-17",
+        "match_score": 0.08481867661760858,
+        "paired_excess": -0.00033138785187825093,
+        "signal_date": "2019-07-09",
+        "symbol": "SPY"
+      },
+      {
+        "control_distance_sessions": 207,
+        "control_entry_date": "2018-10-11",
+        "control_exit_date": "2018-10-18",
+        "control_feature_date": "2018-10-10",
+        "control_return_after_cost": 0.012625261517764552,
+        "entry_date": "2019-08-09",
+        "event_return_after_cost": -0.014746092568848623,
+        "exit_date": "2019-08-16",
+        "match_score": 0.25963308513062,
+        "paired_excess": -0.027371354086613175,
+        "signal_date": "2019-08-08",
+        "symbol": "DIA"
+      },
+      {
+        "control_distance_sessions": 317,
+        "control_entry_date": "2018-05-07",
+        "control_exit_date": "2018-05-14",
+        "control_feature_date": "2018-05-04",
+        "control_return_after_cost": 0.020114301380257937,
+        "entry_date": "2019-08-09",
+        "event_return_after_cost": -0.006416005946545122,
+        "exit_date": "2019-08-16",
+        "match_score": 0.18065313529116472,
+        "paired_excess": -0.02653030732680306,
+        "signal_date": "2019-08-08",
+        "symbol": "QQQ"
+      },
+      {
+        "control_distance_sessions": 44,
+        "control_entry_date": "2019-06-07",
+        "control_exit_date": "2019-06-14",
+        "control_feature_date": "2019-06-06",
+        "control_return_after_cost": 0.004597344918536473,
+        "entry_date": "2019-08-09",
+        "event_return_after_cost": -0.010498436514998377,
+        "exit_date": "2019-08-16",
+        "match_score": 0.2373861967651955,
+        "paired_excess": -0.01509578143353485,
+        "signal_date": "2019-08-08",
+        "symbol": "SPY"
+      },
+      {
+        "control_distance_sessions": 381,
+        "control_entry_date": "2018-05-14",
+        "control_exit_date": "2018-05-21",
+        "control_feature_date": "2018-05-11",
+        "control_return_after_cost": 0.022299952211543572,
+        "entry_date": "2019-11-15",
+        "event_return_after_cost": -0.0054047355264364985,
+        "exit_date": "2019-11-22",
+        "match_score": 0.1527157243639804,
+        "paired_excess": -0.02770468773798007,
+        "signal_date": "2019-11-14",
+        "symbol": "IWM"
+      },
+      {
+        "control_distance_sessions": 307,
+        "control_entry_date": "2018-08-28",
+        "control_exit_date": "2018-09-05",
+        "control_feature_date": "2018-08-27",
+        "control_return_after_cost": -0.007283607437215455,
+        "entry_date": "2019-11-15",
+        "event_return_after_cost": -0.00632258102396399,
+        "exit_date": "2019-11-22",
+        "match_score": 0.14014964461897775,
+        "paired_excess": 0.0009610264132514645,
+        "signal_date": "2019-11-14",
+        "symbol": "QQQ"
+      }
+    ],
+    "signal_years": [
+      2008,
+      2009,
+      2010,
+      2011,
+      2012,
+      2013,
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019
+    ]
+  }
+}

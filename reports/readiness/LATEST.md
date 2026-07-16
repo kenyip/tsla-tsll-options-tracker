@@ -1,54 +1,67 @@
 # Trader readiness — LATEST
 
-Updated: 2026-07-16T0454 RUN COMPLETE (`90f5104`); integrated/pushed/postflight-complete on `main == origin/main`
+Updated: 2026-07-16T0546 finalizer handoff; deterministic wrapper integration pending
 Phase: **BUILD**
 Authority: **research / paper-safe only; no broker, shadow, arm, or live authority**
-Integration: complete; wrapper postflight receipt confirms clean pushed main
+Integration: **pending deterministic wrapper gate; no commit/push/merge/RUN COMPLETE claim from finalizer**
 
 ## Current strategy decision
 
-`FAMILY_CLOSED`, `F0_MECHANISM -> F0_MECHANISM`, for exact `SEC_FORM4_CLUSTERED_INSIDER_BUYING_CALL_21D_V1` / `SEC_FORM4_CLUSTERED_OPEN_MARKET_BUYING_FORWARD_UPDRIFT`. Strategy advancement is false.
+`FAMILY_CLOSED`, `F0_MECHANISM -> F0_MECHANISM`, for exact `BROAD_INDEX_OVERNIGHT_ABSORPTION_BULL_CALL_21D_V1` / `BROAD_INDEX_OVERNIGHT_SELL_INTRADAY_ABSORPTION_FORWARD_UPDRIFT`. Strategy advancement is false.
 
-This is the accepted finalizer and integrated wrapper judgment. The active successor epoch reached three consecutive no-advance decisions and is burst-stopped for search-design reassessment.
+The predecessor three-no-advance epoch remained completed. A mandatory reassessment opened successor epoch `REPEATED_EXPOSURE_SPECIFICITY_DISCOVERY_V1` before this experiment. This accepted close is successor decision one: `strategy_pivot_required=false`, `strategy_burst_stop_required=false`.
 
 ## Exact evidence
 
-Canonical artifact: `reports/trader-wakes/moa/2026-07-16T0454/sec-form4-clustered-buying-train.json`
+Canonical artifact: `reports/trader-wakes/moa/2026-07-16T0546/broad-index-overnight-absorption-train.json`
 
-- Source: 48 official, persisted, SHA-cited SEC quarterly Form 3/4/5 archives, 2014q1 through 2025q4.
-- Fixed liquid single-name panel; qualified original timely direct common-share officer/director code-P accessions: **153**.
-- Frozen cluster: two distinct owners and accessions, >=$100,000, within 20 calendar days; signal at first-public filing date; feature strictly prior; entry next session; exit after ten sessions.
-- Cluster/price-complete signals: **13/13**.
-- Train eligible/matched: **7/6**; control support **85.7143%**; one XOM signal had no prior same-regime control.
-- Train coverage: **2 years** (2016, 2019), **5 symbols** (AAL, BAC, CCL, F, TSLA).
-- Event/control mean after 10 bps: **+1.482930% / +1.016569%**.
-- Paired mean/median: **+0.466362% / -1.224306%**.
-- Circular three-pair-block LB90: **-2.665298%**.
-- Positive frequency: **50.0%**.
-- Worst-decile mean: **-5.585214%**.
-- Control distance median/max: **641.5 / 1,254 sessions**.
+- Current finalizer-regenerated raw SHA-256: `29d0c6199c96ed9c91290467c748e34c5c7cd4bdced243abb84dfde93fe51b73`.
+- Normalized SHA-256 excluding only `generated_at`: `85ce2277b587135cd7394e0cce0b6e90cc5ce82e6c7f8067241042cb60a3b4a5`; persisted-cache replay is exactly equal on the normalized payload.
+- Source panel: adjusted `SPY, QQQ, IWM, DIA`, 4,832 rows each, 2007-05-01 through 2026-07-15; source hashes are in the artifact.
+- Frozen unique signal dates: 168; train cutoff 2019-11-14.
+- Train eligible/matched rows: 144/139; prior same-symbol control support 96.5278%.
+- Same-date clustered train episodes: 97 across 12 years and all four ETFs.
+- Event/control mean after 10 bps: **-0.048879% / +0.017988%**.
+- Paired event-minus-control mean/median: **-0.066867% / -0.124070%**.
+- Circular five-episode-block paired LB90: **-0.623971%**.
+- Event positive frequency: **57.7320%**.
+- Event-return worst-decile mean after 10 bps: **-5.724566%**; paired-excess worst-decile diagnostic: **-6.831920%**.
+- Control distance median/max: **268 / 735 sessions**.
 - Integrity violations: **0**.
-- Failed gates: n24 density, six years, six symbols, positive LB90, and 55% positive frequency.
-- Holdout: **6** matched identities, 2021-08-19 through 2023-11-09, SHA `dbff0318d403e9ef14c77d74e48a5b7f03a2956e07ceda020efa69134ec47791`; outcome metrics unread; simulation false; option pricing zero.
-- Raw/normalized claim SHA: `8840bfbe5817a2cccb7fcb1119063fe83ebe160f2e21a052fb6e00f35cac96a9` / `6c44d951aece846a19b638b6441494af01d327de9367d486f955200fba06624b`; persisted-cache replay equal excluding only `generated_at`.
+- Passed gates: 48 clustered episodes, ten years, three symbols, 80% control support, 55% event hits, zero integrity violations.
+- Failed gates: positive event mean, positive paired mean, positive block LB90, event-return worst-decile >=-5%.
+- Holdout: 105 matched identities on 68 signal dates, 2020-01-06 through 2026-06-29, identity SHA `8d427bb57ee199bc6fa2f1abefbd920df184650ac0a0bd1356f2e0a2c228b193`; outcomes unread, simulation false, option pricing zero.
 
-Dominant failure: the exact high-specificity clustered-buying geometry is too sparse, sign-inconsistent, and uncertainty-unbounded. Favorable n6 point estimates do not establish a discovery edge. Remote controls additionally limit local specificity.
+Dominant failure: density and hit rate were not enough. Absolute event expectancy, paired specificity, dependence-aware uncertainty, and event tail all failed.
 
-Exact-family quarantine: do not rerun the same original Form 4 / P-A-D / common-equity / officer-director / >=$10k transaction / two-owner-and-accession / >=$100k / 20-day / next-session / ten-session geometry; nearby threshold tweaks, present-panel expansion, or option-wrapper substitution are not a new evidence class.
+Exact-family quarantine: no overnight/intraday threshold nudge, horizon change, sign inversion, same-date unclustered rerun, post-hoc 3+-symbol breadth filter, or option-wrapper substitution. Reopening requires a genuinely new predeclared risk-transfer mechanism or evidence class.
+
+## Dependence / breadth / control boundaries
+
+Same-date clustering correctly reduces synchronous pseudo-replication, but it does not establish 97 independent episodes.
+
+- **28/96** consecutive episode gaps are at most seven calendar days, so five-session windows can retain shared calendar exposure.
+- Episode breadth is mostly sequential: **67×1, 20×2, 8×3, 2×4** represented ETFs.
+- Prior-control distance is **268/735 sessions** median/max, so local specificity is weak despite 96.5% support.
+- The five-episode circular block is a dependence sensitivity, not proof of independence.
+
+These limits weaken any salvage argument. They do not reverse an already-negative event/paired result and do not authorize outcome-driven filtering.
 
 ## Layered Edge Stack / capital truth
 
-Future expression only: one-lot 18–24 DTE $2-wide bull-call debit spread, long near 0.55 delta and short $2 higher.
+Measured F0 forecast: bullish direction from next completed close through the fifth subsequent completed close after the frozen overnight-sell/intraday-absorption state.
+
+Future expression only: one-lot 18–24 DTE $2-wide bull-call debit spread.
 
 - `capital_fit_usd=200`
-- planning frictionless structural `max_loss_usd=200` before debit/closing friction
-- `max_lots=1`
+- frictionless planning `max_loss_usd=200` width ceiling before debit, closing friction, assignment/exercise, or management-path validation
+- `max_lots=1`; one broad-index directional risk unit across correlated ETF signals
 - intended: positive delta, limited positive gamma/vega, defined debit
-- dangerous: theta decay, volatility crush, gap loss, capped upside, assignment/exercise and closing friction
-- future management: +50% spread value, -50% debit, or ten-session time stop; no roll/averaging
-- stand aside: filing/source ambiguity, no valid control, missing price mapping, future option illiquidity, debit >$200, or overlapping risk
+- dangerous: negative theta, volatility crush, gap loss, capped upside, correlation, debit/closing friction, assignment/exercise
+- future management only: +50% spread value, -50% debit, five-session time stop or trend invalidation; no roll/averaging
+- stand aside: under-warmed/nonfinite data, regime mismatch, absent prior control, future option illiquidity, debit above $200, overlapping broad-index risk, or source/chronology/integrity ambiguity
 
-No historical option contract, IV, spread fill, listed-expiry, assignment, management path, or actual debit was measured. The expression grants no F1, L1, paper plan, or capital seat.
+The five-session underlying result is not an 18–24 DTE option-path result. No historical contract, IV, strike, listed expiry, debit, fill, theta/vega path, management, assignment, or exercise was measured. The planning expression grants no F1, L1, paper plan, or capital seat.
 
 ## Funnel / leaders / seats
 
@@ -63,17 +76,17 @@ No historical option contract, IV, spread fill, listed-expiry, assignment, manag
 | quality leaders | 0 |
 | capital seats | 0 |
 
-Former historical references remain context only. There is no current living leader, so the executor used absolute frozen discovery gates.
+No stale historical leader is living. Absolute frozen discovery gates governed this F0 decision.
 
 ## Readiness checks
 
 | Check | State | Evidence / gap |
 |---|---|---|
-| B1 — deterministic research evidence | BUILD improvement only | Official SEC archive hashes, strict parser, stable replay, and claim artifact are green; candidate fails the complete discovery bar. |
+| B1 — deterministic research evidence | BUILD improvement only | Current-code strict JSON, source hashes, normalized replay equality, clustered train, and sealed holdout are green; the strategy fails the complete discovery conjunction. |
 | B2 — strategy hypothesis quality | NOT READY | Exact family closed; no F1 survivor. |
 | B3 — regime/path stress | NOT RUN for candidate | Inapplicable after F0 close. |
-| B4 — cost/parameter stress | NOT RUN for candidate | Underlying 10-bps hurdle only; no option proxy or observed marks. |
-| B5 — auditability / controls | BUILD improvement only | Public-date lag, prior-only controls, sealed holdout, source hashes, tests, and deterministic replay are durable; current-panel/owner-attribution/control-distance limitations remain labeled. |
+| B4 — cost/parameter stress | NOT RUN for candidate | Underlying 10-bps sensitivity only; no option proxy or observed marks. |
+| B5 — auditability / controls | BUILD improvement only | Prior-only controls, global-date partitioning, same-date clustering, residual-gap/breadth diagnostics, strict holdout seal, and tests are durable; near-date dependence, remote controls, and fixed-panel survivorship remain explicit limits. |
 | B6 — paper execution realism | NOT READY | No option path, packet, or observed paper fills. |
 | B7 — shadow | BLOCKED | Ken-only authorization; no qualifying candidate. |
 | B8 — agentic live | BLOCKED | Ken-only arming; prohibited. |
@@ -82,26 +95,27 @@ No B3/B4/B6+ state or phase advanced. No registry mutation or paper intent occur
 
 ## Verification
 
-- New focused behavior/boundary/positive/negative-control tests: **6/6**.
-- Adjacent SEC lab + train-only factory suite: **13/13**.
-- Strict compile: green.
-- Full unittest wrapper rerun: **424/424**; earlier full pytest: **432 passed + 18 subtests**.
-- `just test`: green; TSLA/TSLL both STAND ASIDE; no broker action.
-- Real-data replay: substantive equality true.
+Finalizer-owned results:
+
+- Focused behavior/boundary/positive/negative-control suite: **9/9**, `OK`.
+- New lab + compounding/completion/coverage/progress adjacent suite: **65/65**, `OK`.
+- Full required suite `.venv/bin/python -m unittest discover -s tests`: **433/433**, `OK`.
+- Deterministic persisted-cache replay: normalized payload equality true; current normalized SHA `85ce2277…`.
+- Strict JSON, source/holdout hashes, outcome `FAMILY_CLOSED`, and option-pricing count zero verified.
 - Income coverage: **21 structures / 246 hypotheses / 70 evolve artifacts / no quality leader**.
+
+Deterministic secret/path/diff/staging and integration checks remain wrapper-owned and pending.
 
 ## Active search-epoch implication
 
-Integrated `configs/search_epoch.json` records the completed three-close epoch sequence:
+`configs/search_epoch.json` preserves completed predecessor `POST_REASSESSMENT_INDEPENDENT_DEFINED_RISK_DISCOVERY_V1` (0335/0408/0454, three no-advances) and records active successor `REPEATED_EXPOSURE_SPECIFICITY_DISCOVERY_V1`:
 
-1. 2026-07-16T0335 sector-leader continuation — no advance / family close;
-2. 2026-07-16T0408 credit-risk divergence — no advance / family close;
-3. 2026-07-16T0454 Form 4 clustered buying — no advance / family close.
+1. 2026-07-16T0546 broad-index overnight absorption — no advance / family close.
 
-`consecutive_completed_no_strategy_advance=3`, `strategy_pivot_required=true`, and `strategy_burst_stop_required=true`. Do not launch a fourth strategy test before reassessment.
+Successor `counted_no_advance_decisions=1`, `strategy_pivot_required=false`, `strategy_burst_stop_required=false`.
 
 ## ONE NEXT
 
-`SEARCH_DESIGN_REASSESS_AFTER_FORM4_CLUSTER_DENSITY_UNCERTAINTY_CLOSE`: reconcile the three epoch closes, inventory genuinely independent open mechanisms/data classes, diagnose repeated sparsity/uncertainty failure, and either create a successor epoch with a revised search charter and predeclared success criterion or declare `DIMINISHING_RETURNS`. Do not inspect sealed holdouts or loosen the Form 4 geometry after seeing n6.
+`YIELD_CURVE_STEEPENING_REGIONAL_BANK_FORWARD_UPDRIFT_PREFLIGHT`: before any train outcome access, validate that a completed point-in-time steepening measure built from fixed Treasury-duration proxies can honestly support a regional-bank lending-margin mechanism without composition, futures-roll, credit-beta, or construction confounds. If proxy semantics fail, stop pre-outcome without inspecting KRE returns. Only if they pass, freeze a train-only KRE or predeclared regional-bank panel with chronology, density, prior same-regime controls, sealed holdout, labeled underlying cost, and one-lot defined-risk bull-call planning fields, then advance-or-close under frozen gates. No overnight-absorption salvage, holdout reads, L1, seat, paper, shadow, arm, broker, funding, or live claims.
 
-RUN COMPLETE: integrated/pushed/postflight-complete as `90f5104`.
+Finalizer status: `MOA_FINALIZE_READY`; integration remains pending the deterministic wrapper gate.

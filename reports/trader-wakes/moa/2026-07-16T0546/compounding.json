@@ -1,0 +1,156 @@
+{
+  "schema_version": 2,
+  "stamp": "2026-07-16T0546",
+  "loop_signature": "build|broad-index-overnight-sell-intraday-absorption|four-etf-same-date-cluster|prior-same-symbol-controls|train60|5session|family-close",
+  "economic_mechanism": "Repeated overnight selling absorbed by positive regular-session demand across liquid broad-index ETFs may be transitory risk-transfer pressure rather than durable negative information, producing short-horizon upward drift.",
+  "candidate_or_family_scope": "Exact BROAD_INDEX_OVERNIGHT_ABSORPTION_BULL_CALL_21D_V1 / BROAD_INDEX_OVERNIGHT_SELL_INTRADAY_ABSORPTION_FORWARD_UPDRIFT on adjusted SPY/QQQ/IWM/DIA daily OHLCV: close above warmed SMA100, compounded five-session overnight return <=-1%, compounded five-session intraday return >=+1%, next-close entry, fifth-subsequent-close exit, same-symbol prior-only no-reuse controls, chronological 60/40 unique-signal-date split, same-date cross-index clustering, circular five-episode block sensitivity, 10-bps underlying hurdle, sealed holdout identities, and zero option pricing. Future conditional one-lot 18-24 DTE $2-wide bull-call planning expression only: capital_fit_usd=200, frictionless planning max_loss_usd=200 before debit/closing friction/assignment/exercise/management validation, max_lots=1.",
+  "funnel_stage_before": "F0_MECHANISM",
+  "funnel_stage_after": "F0_MECHANISM",
+  "falsifier": "Close the exact family unless train has at least 48 same-date clustered episodes across at least 10 signal years and 3 ETFs, at least 80% same-symbol prior-control support, event mean after 10 bps above zero, paired excess mean above zero, circular five-episode-block LB90 above zero, event positive frequency at least 55%, event-return worst-decile mean at least -5%, and zero lag/chronology/control/partition/strict-JSON integrity violations; do not read holdout outcomes or price options.",
+  "outcome": "FAMILY_CLOSED",
+  "strategy_advancement": {
+    "advanced": false,
+    "summary": "The exact candidate remains F0 and both stable IDs are closed. Train had 144 eligible and 139 matched rows clustered to 97 date episodes across 12 years and four ETFs, but event/control means after 10 bps were -0.048879%/+0.017988%, paired mean/median -0.066867%/-0.124070%, circular five-episode-block LB90 -0.623971%, and event-return worst-decile -5.724566%. Density, years, symbols, support, hit rate, and integrity passed; absolute event center, paired specificity, uncertainty, and event tail failed. Holdout outcomes remain unread and option pricing is zero."
+  },
+  "search_information": {
+    "summary": "The wake completed the mandatory predecessor-epoch reassessment, opened REPEATED_EXPOSURE_SPECIFICITY_DISCOVERY_V1, added and exercised a reusable dependence-aware four-index train lab, and decisively falsified its first named family. Finalizer added machine-readable residual near-date and episode-breadth diagnostics plus an explicit five-session-underlying versus 18-24-DTE-unpriced-option risk boundary without changing the family decision.",
+    "delta_kinds": [
+      "capability",
+      "repair",
+      "falsification",
+      "stop_rule"
+    ]
+  },
+  "useful_deltas": [
+    {
+      "kind": "capability",
+      "summary": "Added a reusable broad-index overnight/intraday train-only lab with adjusted-cache provenance, exact per-symbol chronology, deterministic prior-only no-reuse controls, global-date partitioning, same-date cross-index clustering, dependence-aware bootstrap sensitivity, sealed holdout identities, strict JSON, and an executable positive/negative/boundary test suite.",
+      "novelty_key": "broad-index-overnight-absorption-clustered-train-lab-2026-07-16T0546-v1",
+      "artifacts": [
+        "scripts/broad_index_overnight_absorption_train_lab.py",
+        "tests/test_broad_index_overnight_absorption_train_lab.py",
+        "reports/trader-wakes/moa/2026-07-16T0546/broad-index-overnight-absorption-train.json"
+      ]
+    },
+    {
+      "kind": "repair",
+      "summary": "Finalizer made residual dependence and planning-risk semantics machine-readable: the claim now reports 28/96 near-date episode gaps <=7 calendar days, the 67x1/20x2/8x3/2x4 episode-breadth distribution, and an explicit five-session F0 horizon versus unpriced 18-24 DTE planning expression whose $200 max loss is only a frictionless planning width ceiling. Tests lock both boundaries.",
+      "novelty_key": "broad-index-dependence-and-planning-label-repair-2026-07-16T0546-v1",
+      "artifacts": [
+        "scripts/broad_index_overnight_absorption_train_lab.py",
+        "tests/test_broad_index_overnight_absorption_train_lab.py",
+        "reports/trader-wakes/moa/2026-07-16T0546/broad-index-overnight-absorption-train.json"
+      ]
+    },
+    {
+      "kind": "falsification",
+      "summary": "Closed both stable IDs for the exact four-index absorption geometry. The dense clustered train failed absolute event expectancy, paired specificity, dependence-aware LB90, and event-tail gates despite a 57.7320% hit rate. Control distance median/max 268/735 sessions and sparse simultaneous breadth further weaken salvage; 105 matched holdout identities on 68 dates remain outcome-unread.",
+      "novelty_key": "broad-index-overnight-absorption-family-close-2026-07-16T0546-v1",
+      "artifacts": [
+        "reports/trader-wakes/moa/2026-07-16T0546/broad-index-overnight-absorption-train.json",
+        "reports/trader-wakes/moa/2026-07-16T0546/executor-closeout.md",
+        "reports/trader-wakes/2026-07-16T0546-moa-merge.md",
+        "reports/readiness/LATEST.md"
+      ]
+    },
+    {
+      "kind": "stop_rule",
+      "summary": "Honored the predecessor epoch's three-no-advance burst stop by completing a reassessment before any fourth test, preserved that epoch as completed, opened successor REPEATED_EXPOSURE_SPECIFICITY_DISCOVERY_V1, and counted this accepted close as successor decision one with pivot=false and burst_stop=false. Same-family threshold, horizon, sign, clustering, or option-wrapper salvage is prohibited.",
+      "novelty_key": "repeated-exposure-successor-epoch-first-close-2026-07-16T0546-v1",
+      "artifacts": [
+        "configs/search_epoch.json",
+        "docs/SEARCH_DESIGN_REASSESSMENT_2026-07-16T0546.md",
+        "docs/SEARCH_EPOCH_2026-07-16T0546.md",
+        "reports/trader-wakes/moa/2026-07-16T0546/strategy-charter.md",
+        "reports/trader-wakes/moa/2026-07-16T0546/merged-next-seed.md"
+      ]
+    }
+  ],
+  "retest_decision": null,
+  "evidence_wake_condition": null,
+  "evidence_wait_reaffirmation": false,
+  "critic_findings": [
+    {
+      "finding": "N1: keep the five-session F0 underlying horizon distinct from the unvalidated 18-24 DTE bull-call planning expression.",
+      "status": "repaired",
+      "rationale": "The canonical runner and claim now serialize f0_underlying_horizon_sessions=5, planned_option_dte_min/max=18/24, option_path_measured=false, option_pricing_calls=0, and max_loss_semantics as a frictionless planning width ceiling before option-path risks. A focused regression locks this separation.",
+      "repair_artifacts": [
+        "scripts/broad_index_overnight_absorption_train_lab.py"
+      ],
+      "test_artifacts": [
+        "tests/test_broad_index_overnight_absorption_train_lab.py"
+      ]
+    },
+    {
+      "finding": "N2: persist residual near-date and overlapping-window dependence rather than treat 97 clustered dates as independent episodes.",
+      "status": "repaired",
+      "rationale": "The claim now serializes 28 of 96 consecutive episode gaps at <=7 calendar days and states that the circular five-episode block is a sensitivity, not proof of independence. A boundary test verifies the near-date diagnostic.",
+      "repair_artifacts": [
+        "scripts/broad_index_overnight_absorption_train_lab.py"
+      ],
+      "test_artifacts": [
+        "tests/test_broad_index_overnight_absorption_train_lab.py"
+      ]
+    },
+    {
+      "finding": "N3: expose that cross-index breadth is mostly sequential, with sparse simultaneous multi-ETF episodes, and forbid post-hoc 3+-symbol salvage.",
+      "status": "repaired",
+      "rationale": "The canonical claim now serializes the episode symbol-count distribution as 67 one-symbol, 20 two-symbol, 8 three-symbol, and 2 four-symbol episodes. The same-date clustering test locks the breadth diagnostic; living reports explicitly prohibit reopening through a post-outcome breadth filter.",
+      "repair_artifacts": [
+        "scripts/broad_index_overnight_absorption_train_lab.py"
+      ],
+      "test_artifacts": [
+        "tests/test_broad_index_overnight_absorption_train_lab.py"
+      ]
+    },
+    {
+      "finding": "N4: retain 268/735-session control-distance weakness as a local-specificity limitation.",
+      "status": "rejected",
+      "rationale": "Rejected as a missing-evidence defect because the canonical claim already serialized median/max control distances and the challenger independently reproduced them. Finalizer promotes the distances into readiness, learning, and falsification residue without widening matching tolerances or using remoteness to rescue the already-negative paired result."
+    },
+    {
+      "finding": "N5: preserve the correct event-return tail label and prevent paired-excess substitution.",
+      "status": "rejected",
+      "rationale": "Rejected as a current defect because the runner already gates on event_return_worst_decile_mean_after_10bps and the focused negative control deliberately makes event and paired tails disagree. Finalizer retained that machine field and label unchanged."
+    },
+    {
+      "finding": "N6: independently rerun focused and full verification rather than inherit executor-attested suite counts.",
+      "status": "rejected",
+      "rationale": "Rejected as a code defect because this is finalizer process ownership. learning-promotion.md records finalizer-owned 9-test focused, 65-test adjacent, and full-unittest results plus deterministic replay evidence; executor counts are not used as final proof."
+    },
+    {
+      "finding": "N7: replace predecessor Form 4/burst-stop readiness text with the accepted broad-index close and successor-epoch count one.",
+      "status": "rejected",
+      "rationale": "Rejected as a challenger-phase claim defect because predecessor readiness was intentionally authoritative until finalization. Finalizer fully rewrote the living readiness and wake surfaces to the accepted F0 close, zero living candidates/leaders/seats, successor count one, pivot=false, burst_stop=false, and deterministic integration pending."
+    },
+    {
+      "finding": "N8: make the yield-curve/regional-bank NEXT fail pre-outcome on proxy semantics rather than inspect KRE outcomes first.",
+      "status": "rejected",
+      "rationale": "Rejected as a missing-NEXT defect because merged-next-seed.md already requires a pre-outcome point-in-time proxy-semantics gate and prohibits KRE outcome access when composition, roll, credit/beta, or construction confounds fail. Finalizer preserves that exact condition as the sole NEXT."
+    }
+  ],
+  "closed_families": [
+    "BROAD_INDEX_OVERNIGHT_ABSORPTION_BULL_CALL_21D_V1",
+    "BROAD_INDEX_OVERNIGHT_SELL_INTRADAY_ABSORPTION_FORWARD_UPDRIFT"
+  ],
+  "data_dependencies": [
+    "No new data are required to preserve this exact family close. Reopening requires a genuinely new risk-transfer mechanism or predeclared evidence class, not threshold, horizon, sign, breadth-filter, clustering, or option-wrapper salvage.",
+    "Any future option expression requires actual listed contract geometry, debit and closing friction, theta/vega path, management, assignment/exercise, and observed or claim-appropriate proxy evidence; this F0 run priced zero options.",
+    "The accepted next seed must first establish that its fixed-duration Treasury proxy is point-in-time and economically specific enough for a regional-bank lending-margin mechanism before any KRE return is inspected."
+  ],
+  "no_advance_context": {
+    "epoch_id": "REPEATED_EXPOSURE_SPECIFICITY_DISCOVERY_V1",
+    "epoch_status_after_integration": "active",
+    "started_stamp": "2026-07-16T0546",
+    "record_count_before": 0,
+    "consecutive_no_strategy_advance_before": 0,
+    "record_count_after_integration": 1,
+    "consecutive_no_strategy_advance_after_integration": 1,
+    "strategy_pivot_required": false,
+    "strategy_burst_stop_required": false,
+    "prior_epoch_id": "POST_REASSESSMENT_INDEPENDENT_DEFINED_RISK_DISCOVERY_V1",
+    "prior_epoch_status": "completed",
+    "reason": "The predecessor's three closes forced reassessment before this test. This accepted family close is the first counted no-advance decision in the successor epoch."
+  },
+  "next": "YIELD_CURVE_STEEPENING_REGIONAL_BANK_FORWARD_UPDRIFT_PREFLIGHT: before any train outcomes, validate that a completed point-in-time steepening measure built from fixed Treasury-duration proxies can honestly support a regional-bank lending-margin mechanism without composition, futures-roll, credit-beta, or construction confounds. If proxy semantics fail, stop pre-outcome without inspecting KRE returns. Only if they pass, freeze chronology, density, prior same-regime controls, sealed holdout, labeled underlying cost, and future one-lot defined-risk bull-call planning fields, then advance-or-close under frozen gates. No overnight-absorption salvage, sealed holdout reads, L1, capital seat, paper, shadow, arm, broker, funding, or live claims."
+}
