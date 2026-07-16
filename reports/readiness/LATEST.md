@@ -1,14 +1,15 @@
 # Trader readiness — LATEST
 
-Updated: 2026-07-16T0454 MOA executor (partial; challenger/finalizer pending)
+Updated: 2026-07-16T0454 RUN COMPLETE (`90f5104`); integrated/pushed/postflight-complete on `main == origin/main`
 Phase: **BUILD**
 Authority: **research / paper-safe only; no broker, shadow, arm, or live authority**
+Integration: complete; wrapper postflight receipt confirms clean pushed main
 
 ## Current strategy decision
 
 `FAMILY_CLOSED`, `F0_MECHANISM -> F0_MECHANISM`, for exact `SEC_FORM4_CLUSTERED_INSIDER_BUYING_CALL_21D_V1` / `SEC_FORM4_CLUSTERED_OPEN_MARKET_BUYING_FORWARD_UPDRIFT`. Strategy advancement is false.
 
-This is an executor-phase judgment, not an integrated completion claim. If accepted, the active successor epoch reaches three consecutive no-advance decisions and must burst-stop for search-design reassessment.
+This is the accepted finalizer and integrated wrapper judgment. The active successor epoch reached three consecutive no-advance decisions and is burst-stopped for search-design reassessment.
 
 ## Exact evidence
 
@@ -84,23 +85,23 @@ No B3/B4/B6+ state or phase advanced. No registry mutation or paper intent occur
 - New focused behavior/boundary/positive/negative-control tests: **6/6**.
 - Adjacent SEC lab + train-only factory suite: **13/13**.
 - Strict compile: green.
-- Full unittest: **422/422**; full pytest: **432 passed + 18 subtests**.
+- Full unittest wrapper rerun: **424/424**; earlier full pytest: **432 passed + 18 subtests**.
 - `just test`: green; TSLA/TSLL both STAND ASIDE; no broker action.
 - Real-data replay: substantive equality true.
 - Income coverage: **21 structures / 246 hypotheses / 70 evolve artifacts / no quality leader**.
 
 ## Active search-epoch implication
 
-Current integrated `configs/search_epoch.json` still records streak 2 because this executor phase must not finalize integration state. If the challenger/finalizer accepts this close, the completed sequence is:
+Integrated `configs/search_epoch.json` records the completed three-close epoch sequence:
 
 1. 2026-07-16T0335 sector-leader continuation — no advance / family close;
 2. 2026-07-16T0408 credit-risk divergence — no advance / family close;
 3. 2026-07-16T0454 Form 4 clustered buying — no advance / family close.
 
-Then set `consecutive_completed_no_strategy_advance=3`, `strategy_pivot_required=true`, and `strategy_burst_stop_required=true`. Do not launch a fourth strategy test before reassessment.
+`consecutive_completed_no_strategy_advance=3`, `strategy_pivot_required=true`, and `strategy_burst_stop_required=true`. Do not launch a fourth strategy test before reassessment.
 
 ## ONE NEXT
 
 `SEARCH_DESIGN_REASSESS_AFTER_FORM4_CLUSTER_DENSITY_UNCERTAINTY_CLOSE`: reconcile the three epoch closes, inventory genuinely independent open mechanisms/data classes, diagnose repeated sparsity/uncertainty failure, and either create a successor epoch with a revised search charter and predeclared success criterion or declare `DIMINISHING_RETURNS`. Do not inspect sealed holdouts or loosen the Form 4 geometry after seeing n6.
 
-Executor partial only. No commit, push, merge, completion gate, or RUN COMPLETE claim.
+RUN COMPLETE: integrated/pushed/postflight-complete as `90f5104`.

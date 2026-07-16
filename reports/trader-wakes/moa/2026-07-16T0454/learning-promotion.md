@@ -8,7 +8,7 @@ Finalizer-owned evidence (not inherited from executor counts):
 - Persisted-cache canonical replay with only `generated_at` removed — canonical raw SHA `26691ba3923a9b9185173852aaa47ceb8050565870b44a9caa30e8ae91a427af`; canonical normalized SHA `a603b29b5736adc12110239ef99c44aeb57f22a9f75e0b9eb782a7e54fb53263`; replay normalized SHA `a603b29b5736adc12110239ef99c44aeb57f22a9f75e0b9eb782a7e54fb53263`; `normalized_equal=true`; `substantive_outcome=FAMILY_CLOSED`; `holdout_outcome_metrics_read=false`; `holdout_simulation_run=false`; `option_pricing_calls=0`.
 - `.venv/bin/python -m unittest discover -s tests` — `Ran 424 tests in 27.290s`, `OK`.
 
-The deterministic completion, secret-safety, clean-diff, and integration checks remain wrapper-owned. Integration is pending the deterministic wrapper gate; this report does not claim commit, merge, push, remote verification, or `RUN COMPLETE`.
+The deterministic completion, secret-safety, clean-diff, and integration checks are wrapper-owned and subsequently passed. RUN COMPLETE as `90f510497ec3c24d54b68ab74c62e3058d9fe762` with clean pushed `main == origin/main`.
 
 ## DURABLE
 
