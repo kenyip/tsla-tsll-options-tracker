@@ -1,0 +1,152 @@
+{
+  "schema_version": 2,
+  "stamp": "2026-07-15T1912",
+  "loop_signature": "build|burst-stop-reassessment|direct-tail-hazard|recent-downshock-stand-aside|train60|absolute-close-barrier-specificity|blocker-removed-family-close",
+  "economic_mechanism": "Downside volatility clusters; inside lag-safe SPY-and-symbol uptrends, refusing new bullish short-gamma exposure for five completed sessions after a close loss of at least 3% should reduce the next ten-session 5% downside close-barrier hazard.",
+  "candidate_or_family_scope": "MULTINAME_NO_RECENT_DOWNSHOCK_PCS_21D_V1 / noncollapse|recent_5d_downshock_exclusion|spy_and_symbol_sma100_uptrend|positive_60d_momentum|10_session_close_barrier_5pct|pcs_21d_2wide_planned on a present-day survivorship/listing-biased AAPL, MU, AMD, SMCI, TSLA, META, GOOGL, NVDA panel under SPY regime; future conditional one-lot 18-24 DTE $2-wide PCS only, capital_fit_usd=200, max_loss_usd=200 structural width bound before credit/closing friction, max_lots=1; zero option pricing.",
+  "funnel_stage_before": "F0_MECHANISM",
+  "funnel_stage_after": "F0_MECHANISM",
+  "falsifier": "Close the exact family if train has fewer than 120 eligible or 40 recent-shock episodes, fewer than 6 symbols in either group, eligible 5% close-barrier breach rate above 10%, recent-minus-eligible breach edge below 5 percentage points, one-sided 90% circular-block-bootstrap edge lower bound non-positive, eligible tail not milder, eligible terminal mean after labeled 20 bps sensitivity non-positive, recent edge not strictly larger than the stale six-to-ten-session diagnostic edge, or any chronology/overlap/source/strict-JSON/holdout/integrity failure.",
+  "outcome": "BLOCKER_REMOVED_AND_RETESTED",
+  "strategy_advancement": {
+    "advanced": false,
+    "summary": "The mandatory three-no-advance burst-stop blocker was removed by a written search-design reassessment and canonical active epoch, then the dependent recent-downshock stand-aside experiment was exercised in-wake to FAMILY_CLOSED. No candidate advanced beyond F0; the 412-blueprint holdout and option stage remain sealed."
+  },
+  "search_information": {
+    "summary": "The wake replaced repeated matched-control mean/pin search with a reusable direct absolute-tail hazard lab, exercised 703 train episodes across eight symbols, closed the exact recent-five-session timer on absolute-hazard and timing-specificity failures, reconciled panel/close-only/control-overlap/dependence labels, and restored a canonical orientation-readable active epoch with one no-advance wake.",
+    "delta_kinds": [
+      "capability",
+      "falsification",
+      "repair",
+      "stop_rule"
+    ]
+  },
+  "useful_deltas": [
+    {
+      "kind": "capability",
+      "summary": "Added a lag-safe train-first downside-hazard lab that freezes per-symbol non-overlapping next-session episodes, preserves a date-disjoint unread holdout, gates absolute breach/tail/relative edge/specificity before option pricing, serializes strict JSON, and labels one-lot planning risk and authority.",
+      "novelty_key": "direct-downside-hazard-train-lab-absolute-specificity-v1",
+      "artifacts": [
+        "scripts/downside_shock_stand_aside_train_lab.py",
+        "tests/test_downside_shock_stand_aside_train_lab.py",
+        "reports/trader-wakes/moa/2026-07-15T1912/downside-shock-stand-aside-train.json",
+        "docs/SEARCH_DESIGN_REASSESSMENT_2026-07-15T1912.md"
+      ]
+    },
+    {
+      "kind": "falsification",
+      "summary": "Closed the exact recent-five-session downside-shock PCS timer at F0: 703 train episodes (548 eligible/155 shock; all eight symbols), eligible breach 27.0073% versus the <=10% gate, recent edge +8.4766pp versus stale diagnostic +14.5722pp, LB90 +2.1356pp, integrity empty, holdout 412 unread, pricing calls zero.",
+      "novelty_key": "recent-five-session-downshock-pcs-hazard-family-close-v1",
+      "artifacts": [
+        "reports/trader-wakes/moa/2026-07-15T1912/downside-shock-stand-aside-train.json",
+        "reports/trader-wakes/moa/2026-07-15T1912/executor-closeout.md",
+        "reports/trader-wakes/2026-07-15T1912-moa-merge.md",
+        "reports/readiness/LATEST.md"
+      ]
+    },
+    {
+      "kind": "repair",
+      "summary": "Reconciled challenger methodology nits by making present-day-panel survivorship/listing bias, close-only barrier fidelity, overlapping recent/stale partitions, and pooled-group bootstrap dependence machine-readable and regression-tested; added an isolated negative control where every other gate passes but stale edge exceeds current edge.",
+      "novelty_key": "downshock-hazard-methodology-boundaries-specificity-negative-control-v1",
+      "artifacts": [
+        "scripts/downside_shock_stand_aside_train_lab.py",
+        "tests/test_downside_shock_stand_aside_train_lab.py",
+        "reports/trader-wakes/moa/2026-07-15T1912/downside-shock-stand-aside-train.json",
+        "reports/trader-wakes/moa/2026-07-15T1912/strategy-charter.md"
+      ]
+    },
+    {
+      "kind": "stop_rule",
+      "summary": "Completed the prior three-no-advance reassessment, opened canonical active epoch 2026-07-15-tail-hazard-discovery with one no-advance wake, cleared prior pivot/burst-stop state, preserved the exact-family quarantine, and constrained NEXT to a genuinely new downside-semivariance ETF barrier family rather than a plain-HV mean-return reopen.",
+      "novelty_key": "tail-hazard-epoch-canonical-orientation-reset-2026-07-15T1912-v1",
+      "artifacts": [
+        "configs/search_epoch.json",
+        "docs/SEARCH_DESIGN_REASSESSMENT_2026-07-15T1912.md",
+        "reports/readiness/LATEST.md",
+        "reports/trader-wakes/LATEST.md",
+        "reports/trader-wakes/INDEX.md"
+      ]
+    }
+  ],
+  "retest_decision": "FAMILY_CLOSED",
+  "evidence_wake_condition": null,
+  "critic_findings": [
+    {
+      "finding": "The claim surfaces under-labeled present-day panel survivorship and listing-history bias.",
+      "status": "repaired",
+      "rationale": "The current payload now sets panel_bias_free=false and states that the mega-cap/technology plus SMCI panel is present-day, survivorship/listing-history biased, and not point-in-time. The same boundary is explicit in the charter, reassessment, readiness, final reports, and payload regression.",
+      "repair_artifacts": [
+        "scripts/downside_shock_stand_aside_train_lab.py"
+      ],
+      "test_artifacts": [
+        "tests/test_downside_shock_stand_aside_train_lab.py"
+      ]
+    },
+    {
+      "finding": "Recent-five-session and stale-six-to-ten-session shock partitions overlap, so their edge comparison is not a pure alternative-mechanism RCT.",
+      "status": "repaired",
+      "rationale": "The payload and living prose now label both flags as independent and potentially jointly true. The stale comparison remains only a confounded timing-specificity diagnostic; it is sufficient as a predeclared failure for this hard negative but not causal timing identification.",
+      "repair_artifacts": [
+        "scripts/downside_shock_stand_aside_train_lab.py"
+      ],
+      "test_artifacts": [
+        "tests/test_downside_shock_stand_aside_train_lab.py"
+      ]
+    },
+    {
+      "finding": "The suite lacked an isolated case where otherwise favorable absolute and relative evidence still fails because stale edge exceeds current edge.",
+      "status": "repaired",
+      "rationale": "A dedicated fixture now leaves every other gate true, makes recent edge 75 percentage points and stale edge 100 percentage points, asserts that specificity is the sole failed gate, and keeps gate_pass false.",
+      "repair_artifacts": [
+        "scripts/downside_shock_stand_aside_train_lab.py"
+      ],
+      "test_artifacts": [
+        "tests/test_downside_shock_stand_aside_train_lab.py"
+      ]
+    },
+    {
+      "finding": "Close-only barrier and separate pooled-group circular-block uncertainty could be skimmed as intraday/option fidelity or multi-symbol date-blocked inference.",
+      "status": "repaired",
+      "rationale": "The payload, regression, charter, reassessment, readiness, and final reports now state that close-only paths miss intraday lows and option marks and that the L0 bootstrap retains cross-symbol/date dependence. No L1, option-PnL, or pure causal claim is made.",
+      "repair_artifacts": [
+        "scripts/downside_shock_stand_aside_train_lab.py"
+      ],
+      "test_artifacts": [
+        "tests/test_downside_shock_stand_aside_train_lab.py"
+      ]
+    },
+    {
+      "finding": "The final readiness surface may retain the obsolete 1829 outcome, burst-stop state, and partial challenger-only NEXT patch.",
+      "status": "rejected",
+      "rationale": "The final readiness surface is fully rewritten for 1912: BLOCKER_REMOVED_AND_RETESTED with FAMILY_CLOSED retest, active tail-hazard epoch streak one, pivot/burst-stop false, empty capital path, repaired methodology limits, and exactly one guarded downside-semivariance ETF NEXT."
+    },
+    {
+      "finding": "The NEXT can silently reopen the closed low-HV mean-return family under a new label.",
+      "status": "rejected",
+      "rationale": "The final NEXT requires a new family key, downside-semivariance left-tail second moment rather than plain HV, absolute barrier and worst-decile primary endpoints rather than mean return, a frozen ETF population justified by lower single-name event concentration, multi-symbol date-blocked uncertainty, and a sealed holdout."
+    },
+    {
+      "finding": "Positive relative edge, positive bootstrap lower bound, milder tail, or positive terminal mean can justify STRATEGY_ADVANCED, F1, L1, or a capital seat.",
+      "status": "rejected",
+      "rationale": "The predeclared absolute 10% ceiling and specificity gate were conjunctive. Eligible breach was 27.0073% and stale edge exceeded recent edge, so the exact family closed at F0. The holdout and option stage remain sealed and strategy_advancement.advanced is false."
+    },
+    {
+      "finding": "Nearby shock thresholds, recent-window lengths, barrier ceilings, or panel changes can reopen the exact recent-downshock timer.",
+      "status": "rejected",
+      "rationale": "The exact family is quarantined in config, readiness, final reports, and closed_families. Reopening requires a genuinely new mechanism or independent evidence class, not 2%/4%, 3/7-session, looser-barrier, or panel churn."
+    },
+    {
+      "finding": "The reassessment, lab, tests, and reports alone can serve as the final strategy outcome.",
+      "status": "rejected",
+      "rationale": "Capability and stop-rule changes are search information only. The wake uses BLOCKER_REMOVED_AND_RETESTED because the dependent strategy experiment was exercised in the same wake to retest_decision FAMILY_CLOSED."
+    }
+  ],
+  "closed_families": [
+    "noncollapse|recent_5d_downshock_exclusion|spy_and_symbol_sma100_uptrend|positive_60d_momentum|10_session_close_barrier_5pct|pcs_21d_2wide_planned"
+  ],
+  "data_dependencies": [
+    "A later option-payoff or L1 stage would require claim-appropriate listed contract grids, option marks, two-leg costs/fills, and managed-path evidence; none is required to preserve this F0 family close.",
+    "A stronger future timing inference should use multi-symbol date-blocked resampling or another dependence-aware design; the present pooled-group circular-block check remains L0 and does not overturn the hard negative."
+  ],
+  "next": "LOW_DOWNSIDE_SEMIVARIANCE_ETF_BARRIER_HAZARD_F0: open a new family key and freeze before outcomes a cross-sectional downside-semivariance rank (left-tail second moment, not plain HV) on SPY, QQQ, IWM, XLF, XLE, XLK, XLI, XLV, justified as a lower single-name-event-concentration population after the present-day mega-cap panel failed absolute hazard. Primary endpoints are ten-session 5% close-barrier survival and worst-decile path loss versus the high-semivariance rank, with multi-symbol date-blocked uncertainty and a sealed chronological holdout. Mean return is diagnostic only. Stop before option pricing unless the predeclared absolute eligible breach gate <=10% or an equally capital-protective frozen equivalent passes. Do not reopen the closed low-HV mean-return or recent-downshock timer families; no registry, paper force, shadow, arm, broker, or live action."
+}

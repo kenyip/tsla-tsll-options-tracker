@@ -1,51 +1,57 @@
 {
-  "epoch_id": "2026-07-15-time-series-breakout-payoff",
-  "status": "completed",
-  "started_stamp": "2026-07-15T1515",
+  "epoch_id": "2026-07-15-tail-hazard-discovery",
+  "status": "active",
+  "started_stamp": "2026-07-15T1912",
   "reassessment_complete": true,
-  "reassessment_doc": "docs/SEARCH_DESIGN_REASSESSMENT_2026-07-15T1515.md",
-  "post_pause_doc": "docs/CONTINUOUS_DENSIFY_POST_PAUSE.md",
-  "charter_doc": "docs/TRADER_RESTART_CHARTER.md",
+  "reassessment_doc": "docs/SEARCH_DESIGN_REASSESSMENT_2026-07-15T1912.md",
+  "charter_doc": "reports/trader-wakes/moa/2026-07-15T1912/strategy-charter.md",
   "goal_doc": "configs/build_lab_free_goal.txt",
-  "prior_epoch_id": "2026-07-15-viable-path",
-  "summary": "Successor epoch after three F0 no-advance closes in 2026-07-15-viable-path. The frozen within-symbol event-time continuation experiment advanced from F0 to pooled F1/L0, then the exact one-shot 113-pair holdout passed the unchanged pooled gate and advanced to F2_UNTOUCHED_HOLDOUT/L0. The epoch success definition is satisfied; option pricing remains absent and no L1, capital seat, paper, shadow, arm, or live authority follows.",
-  "mechanism_lane": "time-series 20-session breakout continuation with a conditional bounded positive-delta debit expression",
-  "primary_evidence_class": "within-symbol prior-only matched event study with untouched chronological holdout",
+  "prior_epoch_id": "2026-07-15-time-series-breakout-payoff",
+  "summary": "Successor epoch after three consecutive post-advance no-advance wakes. Reassessment replaced repeated matched-control mean/pin search with direct downside-barrier hazard, absolute non-collapse, tail-quality, and mechanism-specificity evidence before option pricing. The first exact recent-five-session downside-shock timer was exercised and closed at F0; the epoch remains active for materially distinct absolute-tail mechanisms.",
+  "mechanism_lane": "direct downside-tail hazard and stand-aside discovery for capital-fit defined-risk income expressions",
+  "primary_evidence_class": "lag-safe train-first direct close-barrier and worst-decile outcomes with date-blocked uncertainty, mechanism-specificity controls, and sealed chronological holdout",
   "frozen_first_experiment": {
-    "candidate_id": "MULTINAME_BREAKOUT_BULL_CALL_14D_V1",
+    "candidate_id": "MULTINAME_NO_RECENT_DOWNSHOCK_PCS_21D_V1",
+    "family_key": "noncollapse|recent_5d_downshock_exclusion|spy_and_symbol_sma100_uptrend|positive_60d_momentum|10_session_close_barrier_5pct|pcs_21d_2wide_planned",
     "symbols": [
       "AAPL",
-      "MSFT",
-      "NVDA",
-      "AMZN",
+      "MU",
+      "AMD",
+      "SMCI",
+      "TSLA",
       "META",
       "GOOGL",
-      "AMD",
-      "TSLA"
+      "NVDA"
     ],
+    "regime_proxy": "SPY",
     "history_start": "2016-01-01",
     "history_end_exclusive": "2026-07-15",
-    "breakout_lookback_sessions": 20,
-    "breakout_ratio_min": 1.02,
-    "control_breakout_ratio_bounds": [
-      0.95,
-      1.0
-    ],
     "trend_lookback_sessions": 100,
+    "momentum_lookback_sessions": 60,
+    "recent_shock_window_sessions": 5,
+    "shock_threshold": -0.03,
     "forward_sessions": 10,
+    "barrier_return": -0.05,
     "train_fraction": 0.6,
-    "minimum_train_pairs": 80,
-    "minimum_train_symbols": 6,
+    "minimum_eligible_episodes": 120,
+    "minimum_shock_episodes": 40,
+    "minimum_symbols": 6,
+    "maximum_eligible_breach_rate": 0.1,
+    "minimum_breach_rate_edge": 0.05,
     "round_trip_underlying_cost_bps": 20,
     "bootstrap_confidence": 0.9,
-    "bootstrap_block_length_pairs": 5
+    "bootstrap_block_length_episodes": 5,
+    "result": "FAMILY_CLOSED",
+    "artifact": "reports/trader-wakes/moa/2026-07-15T1912/downside-shock-stand-aside-train.json"
   },
   "discovery_bar": {
     "purpose": "Signal-only progress for F0→F1 and F1→F2 on labeled proxy or claim-appropriate data",
     "required": [
       "no future leakage / chronological integrity",
       "outcome-independent selection",
-      "labeled cost semantics and provenance",
+      "direct absolute adverse-event endpoint aligned to payoff risk",
+      "tail-quality endpoint",
+      "mechanism-specificity negative control",
       "non-vacuous predeclared population floor",
       "predeclared falsifier",
       "complete Layered Edge Stack",
@@ -53,7 +59,7 @@
     ],
     "may_use_looser_risk_thresholds": true,
     "cannot_earn_L1_or_capital_seat": true,
-    "notes": "Discovery survivors are research signals only until the capital-seat bar clears; proxy-only or underlying-only evidence cannot grant paper eligibility."
+    "notes": "Discovery survivors are L0 research signals only. Close-only barriers are lower fidelity than intraday lows or option marks. Relative hazard separation cannot substitute for an absolute non-collapse gate."
   },
   "capital_seat_bar": {
     "purpose": "L1 sim edge / paper-path eligibility for the $3k sleeve",
@@ -71,51 +77,47 @@
   },
   "ken_soft_research_prior": {
     "status": "hypothesis_class_only_not_mandate",
-    "text": "Prefer exploring small repeatable profits from time decay and price swings while preserving a positive long-term directional bias; TSLA/TSLL high-beta liquid options are welcome when capital-fit, not as a plumbing tunnel."
+    "text": "Prefer exploring small repeatable profits from time decay and price swings while preserving a positive long-term directional bias; symbols and structures remain evidence-selected and capital-fit."
   },
   "prior_epoch": {
-    "epoch_id": "2026-07-15-viable-path",
-    "started_stamp": "2026-07-15T0024",
-    "completed_wakes_without_strategy_advance": 3,
-    "disposition": "burst stopped; closed families remain quarantined"
+    "epoch_id": "2026-07-15-time-series-breakout-payoff",
+    "status": "completed",
+    "started_stamp": "2026-07-15T1515",
+    "reassessment_doc": "docs/SEARCH_DESIGN_REASSESSMENT_2026-07-15T1515.md",
+    "disposition": "The breakout underlying signal reached F2/L0, but its fixed bull-call option expression closed; two subsequent distinct mechanisms also closed, producing the three-no-advance burst stop resolved by this reassessment."
   },
-  "epoch_success_definition": "Advance MULTINAME_BREAKOUT_BULL_CALL_14D_V1 from F1_TRAIN to F2_UNTOUCHED_HOLDOUT under the unchanged pooled discovery gate, or close the exact family; no option stage or capital seat unless F2 first advances.",
-  "epoch_result": {
-    "stamp": "2026-07-15T1606",
-    "outcome": "STRATEGY_ADVANCED",
-    "funnel_stage_before": "F1_TRAIN",
-    "funnel_stage_after": "F2_UNTOUCHED_HOLDOUT",
-    "holdout_pairs": 113,
-    "holdout_symbols": 8,
-    "paired_excess_mean": 0.03725361396111984,
-    "paired_excess_bootstrap_lb90": 0.018623657692392246,
-    "gate_pass": true,
-    "pricing_calls": 0,
-    "authority": "none",
-    "summary_path": "reports/trader-wakes/moa/2026-07-15T1606/breakout-holdout-summary.json"
+  "epoch_success_definition": "Advance at least one materially distinct direct-tail candidate from F0_MECHANISM to F1_TRAIN under predeclared absolute-hazard, tail, dependence-aware uncertainty, and specificity gates, or close each exact mechanism without spending its holdout or option stage. No L1 or capital seat follows from underlying-only evidence.",
+  "epoch_progress": {
+    "completed_wakes_in_epoch": 1,
+    "consecutive_no_strategy_advance": 1,
+    "strategy_pivot_required": false,
+    "strategy_burst_stop_required": false,
+    "last_outcome": "BLOCKER_REMOVED_AND_RETESTED",
+    "last_retest_decision": "FAMILY_CLOSED",
+    "last_strategy_advance": null
   },
-  "epoch_closed_families_from_prior": [
-    "TSLL_TSLA_5D_TRACKING_SHORTFALL_REBOUND",
-    "ONE_RISK_UNIT_CADENCE_POLICY_F0: exact ONE_RISK_UNIT_CADENCE_PCS_V1 global-one-unit fixed-priority catalog-14-DTE PCS implementation across the frozen eight-symbol panel and dual cost axes",
-    "MONTHLY_OPEX_POST_EXPIRY_BROAD_INDEX_DRIFT: exact SPY/QQQ/IWM/DIA first-Friday-control next-session five-session 60/40 10-bps three-month-block-bootstrap specification"
-  ],
+  "closed_family_from_first_experiment": {
+    "candidate_id": "MULTINAME_NO_RECENT_DOWNSHOCK_PCS_21D_V1",
+    "family_key": "noncollapse|recent_5d_downshock_exclusion|spy_and_symbol_sma100_uptrend|positive_60d_momentum|10_session_close_barrier_5pct|pcs_21d_2wide_planned",
+    "reason": "Eligible close-barrier breach rate was 27.0073% versus the <=10% gate, and the stale six-to-ten-session diagnostic edge exceeded the recent-five-session edge.",
+    "reopen_requires": "A genuinely new economic mechanism or independent evidence class; do not churn nearby shock thresholds, recent-window lengths, barrier ceilings, or panels."
+  },
   "do_not": [
-    "reopen closed families without a genuinely new evidence class",
-    "retune the frozen breakout panel, signal, match bounds, horizon, split, or cost label after the one-shot holdout result",
-    "represent the opened 113-pair holdout as unread or as a new untouched option holdout",
-    "price options before freezing strike/expiry/debit/management on the original 168 development rows and labeling any holdout use as secondary stress",
+    "reopen the exact recent-five-session downside-shock timer through threshold, window, barrier, or panel churn",
+    "silently relabel a closed plain-HV or mean-return selector as downside-tail evidence",
+    "treat present-day panel history as survivorship-free or point-in-time universe selection",
+    "treat overlapping recent/stale shock partitions as a pure alternative-mechanism randomized comparison",
+    "represent a close-only barrier as an intraday low, option mark, executable stop, or managed option PnL",
     "treat capability-only completion as strategy progress",
-    "promote discovery-only survivors to the capital path",
-    "auto shadow/live/arm",
-    "force paper under failing RTH filters",
-    "densify through burst-stop without a new written reassessment"
+    "promote underlying-only or proxy-only evidence to L1, capital seat, paper force, shadow, arm, broker, or live authority"
   ],
   "notes": [
-    "Epoch opened by the 2026-07-15T1515 wake and completed by the 2026-07-15T1606 one-shot holdout wake.",
-    "The exact 113-pair holdout advanced to F2_UNTOUCHED_HOLDOUT/L0; symbol/time heterogeneity remains mandatory context.",
-    "Option pricing has not run. Any next option specification must freeze on the original 168 development rows; the opened 113 rows are secondary stress only, not a new untouched option holdout."
+    "Epoch counters are scoped to started_stamp. The prior three-wake burst stop is cleared by the completed reassessment, but the new epoch now has one no-advance wake.",
+    "The present-day mega-cap/technology panel plus SMCI has survivorship and listing-history bias.",
+    "The stale and recent shock flags can overlap; their edge comparison is a confounded timing-specificity diagnostic, not a pure RCT.",
+    "The current circular-block bootstrap resamples pooled group vectors separately; future claims should prefer multi-symbol date-blocked uncertainty.",
+    "No living L1 capital-seat leader exists."
   ],
-  "activated_at": "2026-07-15T15:15:00-07:00",
-  "activated_from": "docs/SEARCH_DESIGN_REASSESSMENT_2026-07-15T1515.md",
-  "completed_at": "2026-07-15T16:06:00-07:00"
+  "activated_at": "2026-07-15T19:12:00-07:00",
+  "activated_from": "docs/SEARCH_DESIGN_REASSESSMENT_2026-07-15T1912.md"
 }
