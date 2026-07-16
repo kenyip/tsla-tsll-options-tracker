@@ -90,14 +90,17 @@ def _epoch_started_stamp(epoch: dict[str, Any] | None) -> str | None:
 def records_for_epoch(
     records: list[dict[str, Any]], epoch: dict[str, Any] | None
 ) -> list[dict[str, Any]]:
-    """Return records at-or-after the active epoch started_stamp (exclusive prior history)."""
+    """Return only records inside the configured epoch's inclusive stamp bounds."""
     started = _epoch_started_stamp(epoch)
     if not started:
         return list(records)
+    completed = None
+    if isinstance(epoch, dict) and str(epoch.get("status") or "active").lower() == "completed":
+        completed = str(epoch.get("completed_stamp") or "").strip() or None
     scoped: list[dict[str, Any]] = []
     for row in records:
         stamp = str(row.get("stamp") or "").strip()
-        if stamp and stamp >= started:
+        if stamp and stamp >= started and (completed is None or stamp <= completed):
             scoped.append(row)
     return scoped
 

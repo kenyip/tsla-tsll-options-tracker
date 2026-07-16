@@ -1,0 +1,835 @@
+{
+  "events": [
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2013-01-16",
+      "release_at_new_york": "2013-01-16 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/beigebook/files/Beigebook_20130116.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2013-03-06",
+      "release_at_new_york": "2013-03-06 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/beigebook/files/Beigebook_20130306.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2013-04-17",
+      "release_at_new_york": "2013-04-17 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/beigebook/files/Beigebook_20130417.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2013-06-05",
+      "release_at_new_york": "2013-06-05 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/beigebook/files/Beigebook_20130605.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2013-07-17",
+      "release_at_new_york": "2013-07-17 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/beigebook/files/Beigebook_20130717.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2013-09-04",
+      "release_at_new_york": "2013-09-04 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/beigebook/files/Beigebook_20130904.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2013-10-16",
+      "release_at_new_york": "2013-10-16 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/beigebook/files/BeigeBook_20131016.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2013-12-04",
+      "release_at_new_york": "2013-12-04 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/beigebook/files/Beigebook_20131204.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2014-01-15",
+      "release_at_new_york": "2014-01-15 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/beigebook/files/Beigebook_20140115.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2014-03-05",
+      "release_at_new_york": "2014-03-05 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/beigebook/files/Beigebook_20140305.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2014-04-16",
+      "release_at_new_york": "2014-04-16 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/beigebook/files/BeigeBook_20140416.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2014-06-04",
+      "release_at_new_york": "2014-06-04 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/beigebook/files/BeigeBook_20140604.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2014-07-16",
+      "release_at_new_york": "2014-07-16 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/beigebook/files/Beigebook_20140716.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2014-09-03",
+      "release_at_new_york": "2014-09-03 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/beigebook/files/BeigeBook_20140903.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2014-10-15",
+      "release_at_new_york": "2014-10-15 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/beigebook/files/BeigeBook_20141015.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2014-12-03",
+      "release_at_new_york": "2014-12-03 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/beigebook/files/BeigeBook_20141203.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2015-01-14",
+      "release_at_new_york": "2015-01-14 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/beigebook/files/BeigeBook_20150114.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2015-03-04",
+      "release_at_new_york": "2015-03-04 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/beigebook/files/BeigeBook_20150304.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2015-04-15",
+      "release_at_new_york": "2015-04-15 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/beigebook/files/BeigeBook_20150415.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2015-06-03",
+      "release_at_new_york": "2015-06-03 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/beigebook/files/BeigeBook_20150603.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2015-07-15",
+      "release_at_new_york": "2015-07-15 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/beigebook/files/BeigeBook_20150715.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2015-09-02",
+      "release_at_new_york": "2015-09-02 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/beigebook/files/BeigeBook_20150902.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2015-10-14",
+      "release_at_new_york": "2015-10-14 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/beigebook/files/Beigebook_20151014.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2015-12-02",
+      "release_at_new_york": "2015-12-02 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/beigebook/files/Beigebook_20151202.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2016-01-13",
+      "release_at_new_york": "2016-01-13 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/beigebook/files/Beigebook_20160113.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2016-03-02",
+      "release_at_new_york": "2016-03-02 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/beigebook/files/Beigebook_20160302.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2016-04-13",
+      "release_at_new_york": "2016-04-13 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/beigebook/files/Beigebook_20160413.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2016-06-01",
+      "release_at_new_york": "2016-06-01 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/beigebook/files/Beigebook_20160601.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2016-07-13",
+      "release_at_new_york": "2016-07-13 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/beigebook/files/Beigebook_20160713.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2016-09-07",
+      "release_at_new_york": "2016-09-07 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/beigebook/files/Beigebook_20160907.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2016-10-19",
+      "release_at_new_york": "2016-10-19 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/beigebook/files/Beigebook_20161019.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2016-11-30",
+      "release_at_new_york": "2016-11-30 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/beigebook/files/Beigebook_20161130.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2017-01-18",
+      "release_at_new_york": "2017-01-18 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/beigebook/files/Beigebook_20170118.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2017-03-01",
+      "release_at_new_york": "2017-03-01 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/Beigebook_20170301.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2017-04-19",
+      "release_at_new_york": "2017-04-19 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/Beigebook_20170419.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2017-05-31",
+      "release_at_new_york": "2017-05-31 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20170531.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2017-07-12",
+      "release_at_new_york": "2017-07-12 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20170712.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2017-09-06",
+      "release_at_new_york": "2017-09-06 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/Beigebook_20170906.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2017-10-18",
+      "release_at_new_york": "2017-10-18 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20171018.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2017-11-29",
+      "release_at_new_york": "2017-11-29 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20171129.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2018-01-17",
+      "release_at_new_york": "2018-01-17 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20180117.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2018-03-07",
+      "release_at_new_york": "2018-03-07 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20180307.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2018-04-18",
+      "release_at_new_york": "2018-04-18 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20180418.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2018-05-30",
+      "release_at_new_york": "2018-05-30 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20180530.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2018-07-18",
+      "release_at_new_york": "2018-07-18 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20180718.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2018-09-12",
+      "release_at_new_york": "2018-09-12 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20180912.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2018-10-24",
+      "release_at_new_york": "2018-10-24 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20181024.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2018-12-05",
+      "release_at_new_york": "2018-12-05 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20181205.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2019-01-16",
+      "release_at_new_york": "2019-01-16 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20190116.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2019-03-06",
+      "release_at_new_york": "2019-03-06 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20190306.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2019-04-17",
+      "release_at_new_york": "2019-04-17 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20190417.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2019-06-05",
+      "release_at_new_york": "2019-06-05 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20190605.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2019-07-17",
+      "release_at_new_york": "2019-07-17 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20190717.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2019-09-04",
+      "release_at_new_york": "2019-09-04 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20190904.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2019-10-16",
+      "release_at_new_york": "2019-10-16 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20191016.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2019-11-27",
+      "release_at_new_york": "2019-11-27 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20191127.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2020-01-15",
+      "release_at_new_york": "2020-01-15 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20200115.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2020-03-04",
+      "release_at_new_york": "2020-03-04 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20200304.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2020-04-15",
+      "release_at_new_york": "2020-04-15 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20200415.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2020-05-27",
+      "release_at_new_york": "2020-05-27 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20200527.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2020-07-15",
+      "release_at_new_york": "2020-07-15 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20200715.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2020-09-02",
+      "release_at_new_york": "2020-09-02 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20200902.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2020-10-21",
+      "release_at_new_york": "2020-10-21 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20201021.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2020-12-02",
+      "release_at_new_york": "2020-12-02 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20201202.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2021-01-13",
+      "release_at_new_york": "2021-01-13 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20210113.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2021-03-03",
+      "release_at_new_york": "2021-03-03 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20210303.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2021-04-14",
+      "release_at_new_york": "2021-04-14 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20210414.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2021-06-02",
+      "release_at_new_york": "2021-06-02 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20210602.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2021-07-14",
+      "release_at_new_york": "2021-07-14 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20210714.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2021-09-08",
+      "release_at_new_york": "2021-09-08 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20210908.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2021-10-20",
+      "release_at_new_york": "2021-10-20 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20211020.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2021-12-01",
+      "release_at_new_york": "2021-12-01 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20211201.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2022-01-12",
+      "release_at_new_york": "2022-01-12 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20220112.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2022-03-02",
+      "release_at_new_york": "2022-03-02 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20220302.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2022-04-20",
+      "release_at_new_york": "2022-04-20 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20220420.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2022-06-01",
+      "release_at_new_york": "2022-06-01 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20220601.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2022-07-13",
+      "release_at_new_york": "2022-07-13 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20220713.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2022-09-07",
+      "release_at_new_york": "2022-09-07 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20220907.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2022-10-19",
+      "release_at_new_york": "2022-10-19 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20221019.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2022-11-30",
+      "release_at_new_york": "2022-11-30 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20221130.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2023-01-18",
+      "release_at_new_york": "2023-01-18 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20230118.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2023-03-08",
+      "release_at_new_york": "2023-03-08 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20230308.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2023-04-19",
+      "release_at_new_york": "2023-04-19 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20230419.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2023-05-31",
+      "release_at_new_york": "2023-05-31 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20230531.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2023-07-12",
+      "release_at_new_york": "2023-07-12 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20230712.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2023-09-06",
+      "release_at_new_york": "2023-09-06 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20230906.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2023-10-18",
+      "release_at_new_york": "2023-10-18 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20231018.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2023-11-29",
+      "release_at_new_york": "2023-11-29 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20231129.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2024-01-17",
+      "release_at_new_york": "2024-01-17 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/publications/files/BeigeBook_20240117.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2024-03-06",
+      "release_at_new_york": "2024-03-06 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20240306.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2024-04-17",
+      "release_at_new_york": "2024-04-17 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20240417.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2024-05-29",
+      "release_at_new_york": "2024-05-29 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20240529.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2024-07-17",
+      "release_at_new_york": "2024-07-17 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20240717.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2024-09-04",
+      "release_at_new_york": "2024-09-04 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20240904.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2024-10-23",
+      "release_at_new_york": "2024-10-23 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20241023.pdf"
+    },
+    {
+      "calendar_time": "",
+      "calendar_time_corroborated": false,
+      "decision_date": "2024-12-04",
+      "release_at_new_york": "2024-12-04 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20241204.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2025-01-15",
+      "release_at_new_york": "2025-01-15 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20250115.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2025-03-05",
+      "release_at_new_york": "2025-03-05 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20250305.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2025-04-23",
+      "release_at_new_york": "2025-04-23 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20250423.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2025-06-04",
+      "release_at_new_york": "2025-06-04 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20250604.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2025-07-16",
+      "release_at_new_york": "2025-07-16 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20250716.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2025-09-03",
+      "release_at_new_york": "2025-09-03 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20250903.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2025-10-15",
+      "release_at_new_york": "2025-10-15 14:00:00-04:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20251015.pdf"
+    },
+    {
+      "calendar_time": "2:00 p.m.",
+      "calendar_time_corroborated": true,
+      "decision_date": "2025-11-26",
+      "release_at_new_york": "2025-11-26 14:00:00-05:00",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20251126.pdf"
+    }
+  ],
+  "filter": {
+    "archive_pdf_regex": "BeigeBook_(\\d{8})\\.pdf$",
+    "calendar_exact_title": "Beige Book",
+    "calendar_exact_type": "Beige",
+    "calendar_release_time_new_york": "14:00:00",
+    "event_end": "2025-12-31",
+    "event_start": "2013-01-01",
+    "nonoverlap_time_semantics": "archive PDF date defines publication day; next-session entry does not depend on an intraday timestamp; official calendar rows corroborate 14:00 America/New_York wherever structured history overlaps"
+  },
+  "filter_counts": {
+    "calendar_overlap_events": 48,
+    "calendar_time_conflicts": 0,
+    "official_events": 104
+  },
+  "schema_version": 1,
+  "source": {
+    "annual_pages": {
+      "2013": {
+        "bytes": 79672,
+        "path": ".cache/platform/beige_book_range_compression/official_sources/beigebook2013.html",
+        "sha256": "adfc4183ec7147dac05576b0b82df515c4300e1644b634986c5ebf01ae0cf1eb",
+        "url": "https://www.federalreserve.gov/monetarypolicy/beigebook2013.htm"
+      },
+      "2014": {
+        "bytes": 79672,
+        "path": ".cache/platform/beige_book_range_compression/official_sources/beigebook2014.html",
+        "sha256": "0d8cde95293571b5fb7d47a7f4be884dc22d9f2a33fe07c73a7ae0f3b77fa6a6",
+        "url": "https://www.federalreserve.gov/monetarypolicy/beigebook2014.htm"
+      },
+      "2015": {
+        "bytes": 79674,
+        "path": ".cache/platform/beige_book_range_compression/official_sources/beigebook2015.html",
+        "sha256": "b9e85778e62cce3db21cf1db264154af56e43f86e7dbf30ca23f954d16134bc4",
+        "url": "https://www.federalreserve.gov/monetarypolicy/beigebook2015.htm"
+      },
+      "2016": {
+        "bytes": 79673,
+        "path": ".cache/platform/beige_book_range_compression/official_sources/beigebook2016.html",
+        "sha256": "8754e203f93d266960cac0c50ec0ded7f6a6e53bdf376843a0581b9c9f7dddf3",
+        "url": "https://www.federalreserve.gov/monetarypolicy/beigebook2016.htm"
+      },
+      "2017": {
+        "bytes": 79042,
+        "path": ".cache/platform/beige_book_range_compression/official_sources/beigebook2017.html",
+        "sha256": "05fa79b4606e69941a9a262d07b22f4ca88afdd9d410ea7f69913aa162fa9f5d",
+        "url": "https://www.federalreserve.gov/monetarypolicy/beigebook2017.htm"
+      },
+      "2018": {
+        "bytes": 78932,
+        "path": ".cache/platform/beige_book_range_compression/official_sources/beigebook2018.html",
+        "sha256": "9b1ceb614c12d511ff76c6ffb2f248cb975923b1ca1dd8ea15327625d3e4e954",
+        "url": "https://www.federalreserve.gov/monetarypolicy/beigebook2018.htm"
+      },
+      "2019": {
+        "bytes": 78932,
+        "path": ".cache/platform/beige_book_range_compression/official_sources/beigebook2019.html",
+        "sha256": "ee39f08a367d8e0cefb549a1dfbca3564872648d11ce861b5f8e4a7a9d67e300",
+        "url": "https://www.federalreserve.gov/monetarypolicy/beigebook2019.htm"
+      },
+      "2020": {
+        "bytes": 79021,
+        "path": ".cache/platform/beige_book_range_compression/official_sources/beigebook2020.html",
+        "sha256": "bd7f4794803d7190b934204c6460dba809fc45ab8769329acda565da30d4add5",
+        "url": "https://www.federalreserve.gov/monetarypolicy/beigebook2020.htm"
+      },
+      "2021": {
+        "bytes": 79178,
+        "path": ".cache/platform/beige_book_range_compression/official_sources/beigebook2021.html",
+        "sha256": "7145fa682503a41a86ed3eb4b5f343f460b50040f83a70a75a5afa7772b939ed",
+        "url": "https://www.federalreserve.gov/monetarypolicy/beigebook2021.htm"
+      },
+      "2022": {
+        "bytes": 78967,
+        "path": ".cache/platform/beige_book_range_compression/official_sources/beigebook2022.html",
+        "sha256": "38be9625d89967d03728a9ebb40453ed73cd57f34326750eef30dccac2665cd1",
+        "url": "https://www.federalreserve.gov/monetarypolicy/beigebook2022.htm"
+      },
+      "2023": {
+        "bytes": 78939,
+        "path": ".cache/platform/beige_book_range_compression/official_sources/beigebook2023.html",
+        "sha256": "3943fbd57592d05becf1105bf8508f40da351015fd4b8323e3bdc3abfe1137b6",
+        "url": "https://www.federalreserve.gov/monetarypolicy/beigebook2023.htm"
+      },
+      "2024": {
+        "bytes": 78907,
+        "path": ".cache/platform/beige_book_range_compression/official_sources/beigebook2024.html",
+        "sha256": "ea4a0b7c7a9795b69692996a778464ca34a1e7defbe371567dacb8a67aefa981",
+        "url": "https://www.federalreserve.gov/monetarypolicy/beigebook2024.htm"
+      },
+      "2025": {
+        "bytes": 78905,
+        "path": ".cache/platform/beige_book_range_compression/official_sources/beigebook2025.html",
+        "sha256": "2e2aa22ef05ba6929b8b7465af4f03296fb697623c00fa5724d1a4046d9a096c",
+        "url": "https://www.federalreserve.gov/monetarypolicy/beigebook2025.htm"
+      }
+    },
+    "calendar": {
+      "bytes": 537770,
+      "path": ".cache/platform/beige_book_range_compression/official_sources/calendar.json",
+      "sha256": "dd1a19a68fe96ecb58b64b754dce70d1090afba0ec9cae534937a15b147f6a1c",
+      "url": "https://www.federalreserve.gov/json/calendar.json"
+    }
+  }
+}

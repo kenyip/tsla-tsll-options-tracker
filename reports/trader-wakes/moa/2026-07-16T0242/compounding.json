@@ -1,0 +1,150 @@
+{
+  "schema_version": 2,
+  "stamp": "2026-07-16T0242",
+  "loop_signature": "build|scheduled-beige-book-information-resolution|spy-five-session-range-compression|prior-neutral-controls|family-close",
+  "economic_mechanism": "A scheduled Federal Reserve Beige Book release may resolve qualitative regional-growth uncertainty without changing the policy rate, so neutral pre-release SPY regimes may exhibit lower next-five-session realized range than outcome-independent prior neutral controls.",
+  "candidate_or_family_scope": "Exact BEIGE_BOOK_RANGE_COMPRESSION_SPY_IC_21D_V1 / BEIGE_BOOK_INFORMATION_RESOLUTION_RANGE_COMPRESSION: official Federal Reserve Beige Book archive dates from 2013-01-01 through 2025-12-31; prior completed HV20 <= 0.30 and absolute prior 60-session return <= 0.12; next-session-open through fifth-session range; deterministic prior-only neutral controls outside every source-covered event +/-5-session band; future conditional one-lot 18-24 DTE $2-wide SPY iron condor only. capital_fit_usd=200; planning structural max_loss_usd=200 before credit/closing friction; max_lots=1.",
+  "funnel_stage_before": "F0_MECHANISM",
+  "funnel_stage_after": "F0_MECHANISM",
+  "falsifier": "Close the exact family if the chronological first 60% has fewer than 30 matched pairs, fewer than six release years, control support below 80%, non-positive mean paired five-session range compression after a 20-bps hurdle, non-positive one-sided 90% release-year-block bootstrap lower bound, hurdle-adjusted compression positive frequency below 55%, event range p90 above 7%, or any official-source, chronology, feature-lag, event/control overlap, reuse, source-coverage, holdout-seal, option-pricing, or strict-JSON integrity violation.",
+  "outcome": "FAMILY_CLOSED",
+  "strategy_advancement": {
+    "advanced": false,
+    "summary": "The exact Beige Book information-resolution range-compression mechanism failed its frozen population-consistency gate at 27/55 positive train pairs (49.0909% versus the required 55%) and remains closed at F0. No F1, L1, living leader, capital seat, registry, paper, shadow, arm, broker, funding, or live authority was earned."
+  },
+  "search_information": {
+    "summary": "The wake froze 104 official archive events, separated partial official time corroboration from next-session availability, built a train-only prior-control lab with a sealed 38-blueprint holdout and zero option marks, exposed coarse-match and extreme-pair diagnostics, repaired completed-epoch streak scoping, and decisively closed the exact underlying mechanism without option-wrapper salvage.",
+    "delta_kinds": [
+      "capability",
+      "falsification",
+      "repair",
+      "stop_rule"
+    ]
+  },
+  "useful_deltas": [
+    {
+      "kind": "capability",
+      "summary": "Added an exact-byte Federal Reserve Beige Book archive/calendar loader, strict official-time parser, lag-safe prior-only matched-control range lab, sealed chronological holdout, deterministic replay, and positive/negative synthetic controls.",
+      "novelty_key": "beige-book-official-source-matched-range-lab-2026-07-16T0242-v1",
+      "artifacts": [
+        "scripts/beige_book_range_compression_train_lab.py",
+        "tests/test_beige_book_range_compression_train_lab.py",
+        "reports/trader-wakes/moa/2026-07-16T0242/beige-book-official-manifest.json"
+      ]
+    },
+    {
+      "kind": "falsification",
+      "summary": "The unchanged train-only decision has 55 matched pairs across eight years and 98.2143% support; mean compression after the 20-bps hurdle is +0.252727% and LB90 is +0.009919%, but only 27/55 pairs are positive (49.0909%), so the frozen >=55% consistency gate fails and the exact family closes before holdout or option pricing.",
+      "novelty_key": "beige-book-range-compression-family-close-2026-07-16T0242-v1",
+      "artifacts": [
+        "reports/trader-wakes/moa/2026-07-16T0242/beige-book-range-compression-train.json",
+        "reports/trader-wakes/moa/2026-07-16T0242/executor-closeout.md",
+        "reports/trader-wakes/2026-07-16T0242-moa-merge.md",
+        "reports/readiness/LATEST.md"
+      ]
+    },
+    {
+      "kind": "repair",
+      "summary": "Persisted count/min/median/max match-distance summaries plus explicit >252-session and absolute >5%-compression diagnostic counts, while keeping them diagnostic-only and outside the frozen gate set.",
+      "novelty_key": "beige-book-match-quality-diagnostics-2026-07-16T0242-v1",
+      "artifacts": [
+        "scripts/beige_book_range_compression_train_lab.py",
+        "tests/test_beige_book_range_compression_train_lab.py",
+        "reports/trader-wakes/moa/2026-07-16T0242/beige-book-range-compression-train.json"
+      ]
+    },
+    {
+      "kind": "repair",
+      "summary": "Bound completed search-epoch record and no-advance streak scoping inclusively through completed_stamp so later independent wakes remain visible globally but cannot be silently counted inside the completed FOMC epoch.",
+      "novelty_key": "completed-search-epoch-upper-bound-2026-07-16T0242-v1",
+      "artifacts": [
+        "scripts/trader_build_compounding.py",
+        "tests/test_trader_build_compounding.py",
+        "reports/readiness/LATEST.md"
+      ]
+    },
+    {
+      "kind": "stop_rule",
+      "summary": "Quarantined both canonical Beige Book IDs, retained the completed FOMC epoch as one-decision context, and replaced the blocked CPI-by-default seed with one explicit two-close macro-lane pivot reassessment without opening either sealed holdout or starting a successor epoch early.",
+      "novelty_key": "scheduled-macro-two-close-pivot-reassessment-2026-07-16T0242-v1",
+      "artifacts": [
+        "reports/trader-wakes/moa/2026-07-16T0242/merged-next-seed.md",
+        "reports/trader-wakes/2026-07-16T0242-moa-merge.md",
+        "reports/readiness/LATEST.md",
+        "reports/trader-wakes/INDEX.md"
+      ]
+    }
+  ],
+  "retest_decision": null,
+  "evidence_wake_condition": null,
+  "evidence_wait_reaffirmation": false,
+  "critic_findings": [
+    {
+      "finding": "Accept FAMILY_CLOSED for BEIGE_BOOK_RANGE_COMPRESSION_SPY_IC_21D_V1 / BEIGE_BOOK_INFORMATION_RESOLUTION_RANGE_COMPRESSION and quarantine both canonical IDs without post-hoc salvage.",
+      "status": "rejected",
+      "rationale": "Rejected only as a machinery-repair finding because the critic accepted the strategy decision rather than identifying broken code. The obligation is accepted in the finalizer, readiness, index, closed_families, and one NEXT; the 38-blueprint holdout remains unread and option-pricing calls remain zero."
+    },
+    {
+      "finding": "Remove alias drift and use only the claim IDs on living INDEX, merge, readiness, and closed-family surfaces.",
+      "status": "rejected",
+      "rationale": "Rejected only as a machinery defect. The naming obligation is accepted and repaired directly in living report surfaces; the deprecated prose aliases occur only inside the preserved challenger critique describing the finding, not as living identities."
+    },
+    {
+      "finding": "Surface max/median match distance and extreme-pair counts rather than relying only on within-bound integrity.",
+      "status": "repaired",
+      "rationale": "The claim now persists calendar, HV20, and return-gap count/min/median/max summaries, counts 15 pairs beyond 252 sessions and three absolute paired-compression differences beyond 5%, and labels these diagnostics outside the frozen gate set. Focused tests recompute every summary from pair rows.",
+      "repair_artifacts": [
+        "scripts/beige_book_range_compression_train_lab.py"
+      ],
+      "test_artifacts": [
+        "tests/test_beige_book_range_compression_train_lab.py"
+      ]
+    },
+    {
+      "finding": "Keep the barely positive LB90 diagnostic-only when the predeclared consistency gate fails.",
+      "status": "rejected",
+      "rationale": "Rejected as a requested repair because the executor already applied this boundary correctly. Finalizer and readiness prose preserve +0.009919% LB90 as necessary-but-insufficient context and retain FAMILY_CLOSED from the 49.0909% frequency failure."
+    },
+    {
+      "finding": "Keep the five-session underlying range screen separate from any later 18-24 DTE four-leg iron-condor monetization claim.",
+      "status": "rejected",
+      "rationale": "Rejected as a machinery defect because no option pricing occurred. All living surfaces explicitly label the $200 one-lot geometry as conditional planning only and state that the wake falsified the underlying mechanism, not a priced theta path."
+    },
+    {
+      "finding": "Do not reopen or count the completed FOMC epoch as though this independent Beige Book close were another FOMC epoch wake.",
+      "status": "repaired",
+      "rationale": "Completed epoch scoping now honors the inclusive completed_stamp upper bound. A new regression proves a later independent FAMILY_CLOSED wake remains global history while epoch_record_count and no-advance streak stay at one for the completed epoch.",
+      "repair_artifacts": [
+        "scripts/trader_build_compounding.py"
+      ],
+      "test_artifacts": [
+        "tests/test_trader_build_compounding.py"
+      ]
+    },
+    {
+      "finding": "Replace the stale readiness CPI NEXT with the accepted two-close pivot reassessment while keeping phase NOT READY.",
+      "status": "rejected",
+      "rationale": "Rejected only as a machinery finding. The stale surface is repaired directly in reports/readiness/LATEST.md and the finalizer/LATEST/index handoff; no phase, B-check, authority, leader, or capital seat changed."
+    },
+    {
+      "finding": "Finalizer must own focused, adjacent, full-suite, replay, secret, and deterministic pre-integration verification.",
+      "status": "rejected",
+      "rationale": "Rejected only as a code defect because this is process ownership. The obligation is accepted and exact finalizer commands/results are recorded in learning-promotion.md; no executor test claim is substituted for finalizer verification."
+    },
+    {
+      "finding": "Do not introduce capital-path language or revive a former proxy leader from this wake.",
+      "status": "rejected",
+      "rationale": "Rejected as an observed defect because current coverage and readiness retain zero living candidates and no quality leader. The structural $200 iron-condor width remains planning-only, with no F1, L1, capital seat, paper, shadow, arm, broker, or live authority."
+    }
+  ],
+  "closed_families": [
+    "BEIGE_BOOK_RANGE_COMPRESSION_SPY_IC_21D_V1",
+    "BEIGE_BOOK_INFORMATION_RESOLUTION_RANGE_COMPRESSION"
+  ],
+  "data_dependencies": [
+    "No new data are required to preserve this exact Beige Book family close; reopening requires a materially different mechanism or evidence class rather than threshold, horizon, neutral-regime, control, direction, or option-wrapper retuning.",
+    "A CPI successor, if chosen after reassessment, requires an accessible official prior-known release/surprise source with explicit coverage and fail-closed timestamp semantics before any outcome read; current BLS retrieval was HTTP 403 in this environment.",
+    "Any later option strategy requires a separate option-stage charter and claim-appropriate observed/calibrated quote evidence before L1 or paper authority."
+  ],
+  "next": "MACRO_INFORMATION_RESOLUTION_TWO_CLOSE_PIVOT_REASSESSMENT: reconcile the completed FOMC bullish-drift close with the independent Beige Book range-compression close; treat CPI as adjacency context rather than an order. Close exactly one decision: open a genuinely different CPI/inflation-surprise route only after freezing accessible official prior-known source, coverage, time, control, uncertainty, and no-option F0 semantics before outcomes, or pivot away from scheduled macro information-resolution to a materially different non-quarantined mechanism/evidence class. Do not inspect either sealed holdout, retune either closed family, force an option wrapper, extend the completed FOMC epoch, or claim registry/paper/shadow/arm/broker/funding/live authority."
+}

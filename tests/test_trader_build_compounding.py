@@ -756,6 +756,43 @@ class TraderBuildCompoundingTest(unittest.TestCase):
         self.assertIn("discovery_bar", result)
         self.assertIn("capital_seat_bar", result)
 
+    def test_completed_epoch_excludes_later_independent_wakes_from_streak(self):
+        for stamp in ("2026-01-01T0300", "2026-01-01T0400"):
+            run, _ = self._handoff(
+                stamp,
+                loop_signature=f"sig-{stamp}",
+                outcome="FAMILY_CLOSED",
+                next="reassess",
+            )
+            self._git("add", str(run.relative_to(self.repo)))
+            self._git("commit", "-m", stamp)
+            self._git("push", "origin", "main")
+        epoch_path = self.repo / "configs" / "search_epoch.json"
+        epoch_path.parent.mkdir(parents=True, exist_ok=True)
+        epoch_path.write_text(
+            json.dumps(
+                {
+                    "epoch_id": "completed-epoch",
+                    "status": "completed",
+                    "started_stamp": "2026-01-01T0300",
+                    "completed_stamp": "2026-01-01T0300",
+                    "reassessment_complete": True,
+                }
+            )
+            + "\n"
+        )
+
+        result = build_context(
+            self.repo,
+            "2026-01-01T0500",
+            self.repo / "reports" / "current" / "orientation.json",
+        )
+
+        self.assertEqual(result["epoch_record_count"], 1)
+        self.assertEqual(result["consecutive_no_strategy_advance"], 1)
+        self.assertFalse(result["strategy_pivot_required"])
+        self.assertFalse(result["strategy_burst_stop_required"])
+
     def test_completed_search_epoch_remains_available_to_next_wake_orientation(self):
         epoch_path = self.repo / "configs" / "search_epoch.json"
         epoch_path.parent.mkdir(parents=True, exist_ok=True)
