@@ -1,6 +1,6 @@
 # Trader platform readiness — latest
 
-Updated: 2026-07-15 — MoA stamp 2026-07-15T1912 finalizer-ready; deterministic integration pending.
+Updated: 2026-07-15 20:04 local — MoA stamp 2026-07-15T1912 integrated, pushed, and postflight-complete on `main` / `origin/main`.
 
 Phase: BUILD
 Sleeve: $3,000 Agentic research sleeve
@@ -49,7 +49,7 @@ The closed mechanism never reached option pricing. Its future conditional expres
 - required final full suite: `Ran 356 tests in 18.157s — OK`
 - current-code claim replay: exit `0`; `FAMILY_CLOSED`; train `703`; holdout `412` unread; tracked and replay payloads substantively equal with normalized SHA-256 `3d89f1ef3030729a826814bdd95ca964967587dce91ee63493e12f60d1fdc3c5`
 - canonical coverage: `21` structures / `246` hypotheses / `70` evolve artifacts / no leader; dated and LATEST byte-identical
-- schema-v2 handoff and disposable-index completion prepare: pending final verification record; integration remains the wrapper's job
+- schema-v2 handoff and disposable-index completion prepare passed under the wrapper; postflight receipt `.cache/platform/completion/2026-07-15T1912.json` recorded `integrated=true` and `pushed=true`
 
 ## Readiness blockers
 
@@ -58,7 +58,7 @@ The closed mechanism never reached option pricing. Its future conditional expres
 3. The present F0 evidence is close-only, present-day-panel, underlying-only, and dependence-limited. It cannot grant F1/F2/L1, paper, or capital authority.
 4. Broad observed historical option entry/exit joins remain unavailable for calibration. This blocks observed-option/L1 claims only, not labeled proxy/underlying discovery.
 5. Any future F3 candidate still requires live-clock paper quotes/fills before F4/shadow/live authority.
-6. Stamp `2026-07-15T1912` is finalizer-ready but not yet integrated; no execution authority changed.
+6. Stamp `2026-07-15T1912` is integrated and postflight-complete; no execution authority changed.
 
 Coverage: `reports/readiness/income-coverage-LATEST.md`
 Finalizer wake: `reports/trader-wakes/2026-07-15T1912-moa-merge.md`

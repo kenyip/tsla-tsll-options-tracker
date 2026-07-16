@@ -4,7 +4,7 @@ WAKE: 2026-07-15T1912
 PHASE: BUILD / L0 research only
 ROLE: GPT 5.6 Sol finalizer / single writer
 SLEEVE: $3,000 Agentic research sleeve
-STATUS: finalizer complete; deterministic integration pending; no `RUN COMPLETE` claim
+STATUS: `RUN COMPLETE`; integrated, pushed, and postflight-complete
 CHOSE: reconcile challenger judgment for the burst-stop reassessment and frozen recent-downshock non-collapse family, repair methodology and orientation surfaces without reopening discovery, reproduce the decision on current code, and prepare one schema-v2 handoff.
 
 ## Strategy decision
@@ -85,6 +85,6 @@ A recent-downshock exclusion can show positive relative hazard separation and a 
 
 ## Integration
 
-Integration is pending the deterministic wrapper gate. This finalizer has not committed, pushed, merged, switched branches, or claimed `RUN COMPLETE`.
+Wrapper postflight passed after deterministic integration. Commit `48b78deeee56dc8ce057f666e232c33f4951cc9e` is on `main` and `origin/main`; checkout was clean; completion receipt `.cache/platform/completion/2026-07-15T1912.json` recorded `integrated=true` and `pushed=true`.
 
-MOA_FINALIZE_READY_PENDING_VERIFICATION
+RUN COMPLETE
