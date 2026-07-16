@@ -1,6 +1,6 @@
 # Trader platform readiness — latest
 
-Updated: 2026-07-15 20:35 local — MoA stamp 2026-07-15T2007 finalizer green; deterministic integration pending.
+Updated: 2026-07-15 20:44 local — MoA stamp 2026-07-15T2007 integrated, pushed, and postflight-complete on `main` / `origin/main`.
 
 Phase: BUILD
 Sleeve: $3,000 Agentic research sleeve
@@ -60,7 +60,7 @@ The closed mechanism never reached option pricing. Its future conditional expres
 4. Present evidence is fixed-panel, concentrated, close-only, underlying-only L0. It cannot grant F1/F2/L1, paper, or capital authority.
 5. Broad observed historical option entry/exit joins remain unavailable for calibration. This blocks observed-option/L1 claims only, not labeled proxy discovery.
 6. Any future F3 candidate still requires live-clock paper quotes/fills before F4/shadow/live authority.
-7. Stamp `2026-07-15T2007` is finalizer-green but not yet deterministically integrated; no execution authority changed.
+7. Stamp `2026-07-15T2007` is integrated and postflight-complete; no execution authority changed.
 
 Coverage: `reports/readiness/income-coverage-LATEST.md`
 Finalizer wake: `reports/trader-wakes/2026-07-15T2007-moa-merge.md`

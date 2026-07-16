@@ -4,7 +4,7 @@ WAKE: 2026-07-15T2007
 PHASE: BUILD / L0 research only
 ROLE: GPT 5.6 Sol finalizer / single writer
 SLEEVE: $3,000 Agentic research sleeve
-STATUS: finalizer green; deterministic integration pending; no `RUN COMPLETE`
+STATUS: `RUN COMPLETE`; integrated, pushed, and postflight-complete
 CHOSE: reconcile the challenger `PASS WITH NITS`, repair the claim-bearing specificity label and holdout wording, preserve the exact family close, rewrite living readiness/NEXT surfaces, verify current-code evidence, and prepare one schema-v2 handoff.
 
 ## Strategy decision
@@ -85,4 +85,4 @@ A specialized downside-risk selector can pass absolute hazard, relative separati
 
 ## Integration
 
-Pending the deterministic wrapper gate. Finalizer made no commit, push, merge, branch switch, or `RUN COMPLETE` claim.
+Wrapper postflight passed after deterministic integration. Commit `4adb28e6d6e77e441dbb71ce4a46eb9313d43613` is on `main` and `origin/main`; checkout was clean; completion receipt `.cache/platform/completion/2026-07-15T2007.json` recorded `integrated=true` and `pushed=true`.
