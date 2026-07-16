@@ -1,0 +1,108 @@
+{
+  "schema_version": 2,
+  "stamp": "2026-07-16T0112",
+  "loop_signature": "build|scheduled-fomc-information-resolution|spy-bullish-five-session-drift|source-coverage-repair|family-close",
+  "economic_mechanism": "Scheduled FOMC decisions resolve a large prior-known macro information set; in an already non-bearish SPY regime, gradual interpretation and institutional repositioning might create positive five-session drift beyond ordinary same-regime drift.",
+  "candidate_or_family_scope": "Exact FOMC_INFORMATION_RESOLUTION_SPY_BULL_CALL_21D_V1 / FOMC_POLICY_INFORMATION_RESOLUTION_DRIFT: official exact-title 14:00 ET Federal Reserve statement rows from 2013-01-01 through 2025-12-31; SPY prior close above fully warmed SMA100 and prior 60-session return above zero; next-session-open through fifth-session-close outcome; one-to-one prior-only same-regime controls; future conditional one-lot 18-24 DTE $2 bull-call debit spread only. capital_fit_usd=200; frictionless planning max_loss_usd=200 before closing friction; max_lots=1.",
+  "funnel_stage_before": "F0_MECHANISM",
+  "funnel_stage_after": "F0_MECHANISM",
+  "falsifier": "Close the exact family if the chronological first 60% has fewer than 36 matched pairs, fewer than six event years, control support below 80%, non-positive event mean after 10 bps, non-positive paired mean, non-positive one-sided 90% year-block-bootstrap lower bound, paired positive frequency below 55%, event worst decile below -5%, or any source, chronology, lag, overlap, reuse, population, holdout, option-pricing, or strict-JSON integrity violation.",
+  "outcome": "BLOCKER_REMOVED_AND_RETESTED",
+  "strategy_advancement": {
+    "advanced": false,
+    "summary": "The claim-invalidating control-source-coverage defect was repaired and the unchanged dependent experiment was rerun to FAMILY_CLOSED. The exact FOMC bullish five-session drift mechanism remains at F0 closed; no F1, L1, leader, capital seat, registry, paper, shadow, arm, broker, funding, or live authority was earned."
+  },
+  "search_information": {
+    "summary": "The wake distinguished candidate-event scope from full source-covered control-exclusion scope, fail-closed controls before the first source-covered event, preserved the sealed holdout and zero option pricing, and decisively rejected a new official scheduled-macro bullish-drift mechanism after the repaired train-only retest.",
+    "delta_kinds": [
+      "falsification",
+      "repair",
+      "stop_rule"
+    ]
+  },
+  "useful_deltas": [
+    {
+      "kind": "repair",
+      "summary": "Split candidate events from the full official control-exclusion population, forbade controls before the first source-covered exact event, persisted both scopes and source-coverage integrity, and added boundaries for events outside the candidate window and pre-coverage controls.",
+      "novelty_key": "fomc-control-source-coverage-boundary-repair-2026-07-16T0112-v1",
+      "artifacts": [
+        "scripts/fomc_information_resolution_train_lab.py",
+        "tests/test_fomc_information_resolution_train_lab.py",
+        "reports/trader-wakes/moa/2026-07-16T0112/executor-closeout.md"
+      ]
+    },
+    {
+      "kind": "falsification",
+      "summary": "Reran the unchanged FOMC train-only experiment after repair: 46 pairs across eight years and 97.8723% support retained clean integrity, but event return after cost was -0.275586%, paired excess -0.453418%, paired-positive frequency 39.1304%, and year-block LB90 -0.781803%; four frozen edge gates failed and the exact family closed.",
+      "novelty_key": "fomc-policy-information-resolution-bullish-drift-family-close-2026-07-16T0112-v1",
+      "artifacts": [
+        "configs/search_epoch.json",
+        "reports/trader-wakes/moa/2026-07-16T0112/executor-closeout.md",
+        "reports/trader-wakes/2026-07-16T0112-moa-merge.md",
+        "reports/readiness/LATEST.md"
+      ]
+    },
+    {
+      "kind": "stop_rule",
+      "summary": "Completed the FOMC successor epoch with one counted no-advance decision, quarantined both stable family identifiers without opening the sealed 32-blueprint holdout or retuning sign/horizon/regime/control/option geometry, and retained exactly one context-only CPI successor seed with stricter official-source coverage rules.",
+      "novelty_key": "fomc-family-quarantine-and-cpi-context-seed-2026-07-16T0112-v1",
+      "artifacts": [
+        "configs/search_epoch.json",
+        "reports/trader-wakes/moa/2026-07-16T0112/merged-next-seed.md",
+        "reports/trader-wakes/2026-07-16T0112-moa-merge.md",
+        "reports/readiness/LATEST.md"
+      ]
+    }
+  ],
+  "retest_decision": "FAMILY_CLOSED",
+  "evidence_wake_condition": null,
+  "evidence_wait_reaffirmation": false,
+  "critic_findings": [
+    {
+      "finding": "Correct living prose that understated the pre-fix contamination as one control; the audit found eight pre-coverage control entries, 12 rematches among shared decisions, and one dropped decision date.",
+      "status": "repaired",
+      "rationale": "Executor, finalizer, readiness, and index surfaces now state the eight-window contamination and rematch breadth. The underlying machinery now enforces full source-covered event exclusion and the tests pin both out-of-candidate-window event exclusion and pre-source-coverage failure.",
+      "repair_artifacts": [
+        "scripts/fomc_information_resolution_train_lab.py"
+      ],
+      "test_artifacts": [
+        "tests/test_fomc_information_resolution_train_lab.py"
+      ]
+    },
+    {
+      "finding": "Tighten the one CPI NEXT with genuinely distinct inflation-release economics, official prior-known source coverage, no FOMC holdout or retune, predeclared signed outcome/control geometry, zero option pricing at F0, and orientation freedom to supersede.",
+      "status": "rejected",
+      "rationale": "Rejected only as a code-repair finding because no machinery defect was alleged. The design obligation is accepted in merged-next-seed.md, finalizer/readiness/learning surfaces, and the machine next value; it remains one context-only seed and not an automatic strategy assignment."
+    },
+    {
+      "finding": "Refresh readiness strategy-convergence and epoch prose to the completed FOMC close, one no-advance, zero living candidates, and no leader without inventing phase green or a capital seat.",
+      "status": "rejected",
+      "rationale": "Rejected only as a machinery finding. The stale surface obligation is accepted and repaired directly in reports/readiness/LATEST.md and the finalizer report; no phase, B-check, authority, or capital seat is promoted."
+    },
+    {
+      "finding": "Finalizer must independently rerun focused, full unittest, full pytest, compilation, deterministic replay, handoff, and completion-prepare checks.",
+      "status": "rejected",
+      "rationale": "Rejected only as a code defect because this is verification ownership rather than broken machinery. The obligation is accepted; exact finalizer commands and results are recorded in learning-promotion.md and were not inherited from executor prose."
+    },
+    {
+      "finding": "Emit the expected schema-v2 compounding and learning-promotion handoff with BLOCKER_REMOVED_AND_RETESTED, dependent FAMILY_CLOSED, false advancement, both closed IDs, useful deltas, and exactly one CPI NEXT.",
+      "status": "rejected",
+      "rationale": "Rejected as an unexpected-defect interpretation because these files are intentionally finalizer-owned and absent during the partial phases. The obligation is satisfied by this schema-v2 handoff and learning-promotion.md, then independently validated."
+    },
+    {
+      "finding": "Prefer max/median control-calendar distance and extreme paired-difference diagnostics before any near-threshold scheduled-event promotion claim.",
+      "status": "rejected",
+      "rationale": "Rejected as a blocker for this multi-gate negative close: event center, paired center, frequency, and dependence-aware lower bound are all materially adverse, so the omitted diagnostics cannot rescue or overturn the decision. The next CPI scheduled-event seed explicitly requires these match-quality diagnostics before any promote claim."
+    }
+  ],
+  "closed_families": [
+    "FOMC_INFORMATION_RESOLUTION_SPY_BULL_CALL_21D_V1",
+    "FOMC_POLICY_INFORMATION_RESOLUTION_DRIFT"
+  ],
+  "data_dependencies": [
+    "No new data are required to preserve this exact FOMC family close; reopening requires a genuinely new economic forecast or evidence mechanism rather than threshold, horizon, sign, control, DTE, width, or option-wrapper retuning.",
+    "The context-only CPI successor requires an official prior-known BLS release identity and timestamp source with explicit coverage start plus lag-safe SPY history; any later option stage requires a separate charter and claim-appropriate observed/calibrated option evidence before L1 or paper authority.",
+    "The parked TSLL observed term-carry diagonal still requires its frozen 12 weekday-RTH dates, three short-expiry cycles, 20 complete non-overlapping paths, eight frozen controls, and structural assignment/gap/exercise/liquidation max-loss evidence before evaluation."
+  ],
+  "next": "CPI_RELEASE_INFORMATION_RESOLUTION_SPY_F0 (context-only, not an order): assess a genuinely distinct official 08:30 ET CPI/inflation-surprise policy-repricing mechanism. Before outcomes freeze the official prior-known source identity, publication timestamps and coverage start; separate candidate-event from full control-exclusion scope; forbid pre-coverage controls; map ambiguous times to stand-aside; predeclare signed multi-session SPY geometry with no post-hoc sign flip; use prior-only same-regime no-reuse controls; report max/median control distance and extreme-pair counts; retain chronological train plus sealed unread holdout; require dependence-aware uncertainty, tail, density, support, and integrity gates; and run zero option marks at F0. Do not open or reuse the FOMC holdout/outcomes/controls, retune the closed FOMC family, or relabel another closed mechanism. Any future one-lot defined-risk option expression needs a separate charter with capital_fit_usd, max_loss_usd, and max_lots=1. Orientation may supersede this seed for a higher-information non-quarantined route; no registry, paper force, shadow, arm, broker, funding, or live action."
+}

@@ -82,6 +82,18 @@ class TraderBuildProgressTest(unittest.TestCase):
     def test_classify_verdicts_for_schema_v2_outcomes(self) -> None:
         self.assertEqual(
             progress.classify_strategy_verdict(
+                complete=False,
+                integration_pending=True,
+                compounding={
+                    "schema_version": 2,
+                    "outcome": "FAMILY_CLOSED",
+                    "strategy_advancement": {"advanced": False},
+                },
+            ),
+            progress.VERDICT_PENDING,
+        )
+        self.assertEqual(
+            progress.classify_strategy_verdict(
                 complete=True,
                 compounding={
                     "schema_version": 2,
@@ -145,6 +157,41 @@ class TraderBuildProgressTest(unittest.TestCase):
             progress.classify_strategy_verdict(complete=True, compounding={}),
             progress.VERDICT_THRASH,
         )
+
+    def test_role_ready_unintegrated_finalizer_is_pending_not_thrash(self) -> None:
+        stamp = "2026-07-14T0150"
+        self._write_complete_stamp(
+            stamp,
+            integrate=False,
+            compounding={
+                "schema_version": 2,
+                "outcome": "FAMILY_CLOSED",
+                "loop_signature": "new/family/close",
+                "strategy_advancement": {"advanced": False},
+                "useful_deltas": [
+                    {
+                        "kind": "falsification",
+                        "summary": "closed",
+                        "novelty_key": "pending-close-1",
+                        "artifacts": ["seed.txt"],
+                    }
+                ],
+                "closed_families": ["new-family"],
+            },
+        )
+        wake_report = self.repo / "reports" / "trader-wakes" / f"{stamp}-moa-merge.md"
+        wake_report.parent.mkdir(parents=True, exist_ok=True)
+        wake_report.write_text("# finalizer\n\nMOA_FINALIZE_READY\n")
+
+        row = progress.score_stamp(progress.MOA / stamp)
+
+        self.assertFalse(row["complete"])
+        self.assertTrue(row["integration_pending"])
+        self.assertEqual(row["strategy_verdict"], progress.VERDICT_PENDING)
+        self.assertEqual(row["research_process_score_0_5"], 3)
+        text = progress.render_scoreboard([row], all_records=[])
+        self.assertIn("INTEGRATION_PENDING: **1**", text)
+        self.assertIn("validated finalizer handoff awaiting deterministic integration", text)
 
     def test_legacy_capability_is_informative_not_better(self) -> None:
         self.assertEqual(

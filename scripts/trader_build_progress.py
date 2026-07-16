@@ -61,8 +61,9 @@ except ImportError:  # pragma: no cover
 
 VERDICT_BETTER = "BETTER"
 VERDICT_INFORMATIVE = "INFORMATIVE_BUT_NOT_CLOSER"
+VERDICT_PENDING = "INTEGRATION_PENDING"
 VERDICT_THRASH = "INVALID_THRASH"
-VALID_VERDICTS = {VERDICT_BETTER, VERDICT_INFORMATIVE, VERDICT_THRASH}
+VALID_VERDICTS = {VERDICT_BETTER, VERDICT_INFORMATIVE, VERDICT_PENDING, VERDICT_THRASH}
 
 # Legacy prose-heuristic outcomes that are informative search residue, not thrash.
 LEGACY_INFORMATIVE_OUTCOMES = {
@@ -126,6 +127,7 @@ def classify_strategy_verdict(
     *,
     complete: bool,
     compounding: dict[str, Any],
+    integration_pending: bool = False,
     prior_loop_signature: str | None = None,
     novelty_keys: list[Any] | None = None,
     prior_novelty_keys: set[str] | None = None,
@@ -135,8 +137,11 @@ def classify_strategy_verdict(
     BETTER — independently declared/valid strategy funnel advancement.
     INFORMATIVE_BUT_NOT_CLOSER — valid family closure / evidence wait /
         non-advancing retest / legacy informative non-advance.
+    INTEGRATION_PENDING — finalizer handoff is locally role-ready but not integrated.
     INVALID_THRASH — incomplete, contract-invalid, or forbidden repetition.
     """
+    if integration_pending:
+        return VERDICT_PENDING
     if not complete:
         return VERDICT_THRASH
     if not compounding:
@@ -320,13 +325,14 @@ def score_stamp(
             meta = {}
     ex = _read(d / "executor-exit.txt").strip()
     ch = _read(d / "challenger-exit.txt").strip()
-    complete = (
+    operational_complete = (
         ex == "0"
         and ch == "0"
         and (d / "executor-closeout.md").exists()
         and (d / "challenger-critique.md").exists()
         and (d / "merged-next-seed.md").exists()
     )
+    complete = operational_complete
     contract_version = int(meta.get("completion_contract_version", 1) or 1)
     if contract_version >= 2:
         learning = d / "learning-promotion.md"
@@ -341,18 +347,35 @@ def score_stamp(
             and _tracked_on_origin_main(compounding_path)
         )
 
+    finalizer_report = REPO / "reports" / "trader-wakes" / f"{d.name}-moa-merge.md"
+    learning = d / "learning-promotion.md"
+    learning_text = _read(learning)
+    integration_pending = (
+        not complete
+        and contract_version >= 3
+        and operational_complete
+        and learning.exists()
+        and compounding.get("schema_version") == SCHEMA_VERSION
+        and "MOA_FINALIZE_READY" in _read(finalizer_report)
+        and all(
+            learning_text.count(heading) == 1
+            for heading in ("## VERIFICATION", "## DURABLE", "## LESSON", "## NEXT")
+        )
+    )
+
     novelty_keys = [
         delta.get("novelty_key")
         for delta in compounding.get("useful_deltas", [])
         if isinstance(delta, dict)
     ]
     process_score, types = _research_process_score(
-        complete=complete, compounding=compounding, close_text=close
+        complete=(complete or integration_pending), compounding=compounding, close_text=close
     )
     advanced = bool(complete and compounding and strategy_advanced(compounding))
     verdict = classify_strategy_verdict(
         complete=complete,
         compounding=compounding,
+        integration_pending=integration_pending,
         prior_loop_signature=prior_loop_signature,
         novelty_keys=novelty_keys,
         prior_novelty_keys=prior_novelty_keys,
@@ -377,6 +400,7 @@ def score_stamp(
     return {
         "stamp": d.name,
         "complete": complete,
+        "integration_pending": integration_pending,
         "executor_exit": ex or None,
         "challenger_exit": ch or None,
         "executor": meta.get("executor"),
@@ -552,6 +576,7 @@ def render_scoreboard(rows: list[dict[str, Any]], *, all_records: list[dict[str,
     complete = [r for r in rows if r["complete"]]
     better = [r for r in complete if r["strategy_verdict"] == VERDICT_BETTER]
     informative = [r for r in complete if r["strategy_verdict"] == VERDICT_INFORMATIVE]
+    pending = [r for r in rows if r["strategy_verdict"] == VERDICT_PENDING]
     thrash = [r for r in rows if r["strategy_verdict"] == VERDICT_THRASH]
     advance_count = sum(1 for r in complete if r["strategy_advanced"])
     advance_rate = (advance_count / len(complete)) if complete else 0.0
@@ -585,7 +610,8 @@ def render_scoreboard(rows: list[dict[str, Any]], *, all_records: list[dict[str,
         f"- Search epoch: **{epoch_id}** (status `{epoch_status}`, started_stamp `{epoch_started}`)",
         f"- Stamps scored: **{len(rows)}** (complete **{len(complete)}**)",
         f"- Strategy advances (BETTER): **{advance_count}** · rate **{advance_rate:.0%}** of complete",
-        f"- INFORMATIVE_BUT_NOT_CLOSER: **{len(informative)}** · INVALID_THRASH: **{len(thrash)}**",
+        f"- INFORMATIVE_BUT_NOT_CLOSER: **{len(informative)}** · "
+        f"INTEGRATION_PENDING: **{len(pending)}** · INVALID_THRASH: **{len(thrash)}**",
         f"- Living candidates: **{living['living_candidate_count']}**"
         + (
             f" (`{', '.join(living['living_candidates'])}`)"
@@ -627,6 +653,8 @@ def render_scoreboard(rows: list[dict[str, Any]], *, all_records: list[dict[str,
         f"- **{VERDICT_INFORMATIVE}** — valid family closure, evidence wait, non-advancing",
         "  retest, or legacy informative non-advance (capability/repair/falsify). Search",
         "  information only — **not closer to a living strategy seat**.",
+        f"- **{VERDICT_PENDING}** — validated finalizer handoff awaiting deterministic integration;",
+        "  excluded from completed-run, living-candidate, and streak counts until origin/main proves it.",
         f"- **{VERDICT_THRASH}** — incomplete, contract-invalid, or forbidden loop repetition",
         "  without new novelty.",
         "",

@@ -1,130 +1,100 @@
 {
   "schema_version": 1,
-  "epoch_id": "TSLL_OBSERVED_TERM_CARRY_DIAGONAL_V1",
+  "epoch_id": "FOMC_POLICY_INFORMATION_RESOLUTION_DRIFT_V1",
   "status": "completed",
-  "started_stamp": "2026-07-15T2152",
-  "completed_stamp": "2026-07-16T0029",
+  "started_stamp": "2026-07-16T0112",
+  "completed_stamp": "2026-07-16T0112",
   "reassessment_complete": true,
   "reassessment_doc": "docs/SEARCH_DESIGN_REASSESSMENT_2026-07-16T0029.md",
-  "charter_doc": "reports/trader-wakes/moa/2026-07-15T2152/strategy-charter.md",
-  "successor_seed_doc": "reports/trader-wakes/moa/2026-07-16T0029/merged-next-seed.md",
-  "completion_reason": "Three counted no-advance decisions triggered burst-stop reassessment. The 0029 lifecycle repair removed a false living seat without advancing a strategy; the epoch remains closed and the next strategy wake must open a distinct FOMC policy-information-resolution epoch before inspecting outcomes.",
+  "charter_doc": "reports/trader-wakes/moa/2026-07-16T0112/strategy-charter.md",
   "goal_doc": "configs/build_lab_free_goal.txt",
-  "economic_mechanism": "Observed TSLL short-front relative extrinsic-per-day richness may compensate a bullish call diagonal for front gamma, package friction, and path risk when the TSLA/TSLL driver regime is non-bearish.",
-  "forecast_type": "term-structure carry with conditional mild bullish direction",
-  "candidate_or_family_scope": "One-lot TSLL bullish call diagonals using observed listed contracts and executable bid/ask marks; TSLA is context only, not a second traded underlying.",
-  "funnel_stage": "F0_MECHANISM",
-  "falsifier": "At the first completed frozen population, close the family if the candidate has fewer than 20 non-overlapping eligible paths or fewer than 8 one-to-one controls, if median net package return fails to exceed its matched control by at least 5 percentage points, or if fewer than 55% of controlled paths outperform their controls. No threshold may be changed after outcomes are visible.",
+  "economic_mechanism": "Scheduled FOMC decisions resolve a large prior-known macro information set; in an already non-bearish SPY regime, gradual interpretation and institutional repositioning may create positive five-session drift beyond ordinary same-regime drift.",
+  "forecast_type": "conditional direction up after scheduled policy-information resolution",
+  "candidate_or_family_scope": "FOMC_INFORMATION_RESOLUTION_SPY_BULL_CALL_21D_V1 / FOMC_POLICY_INFORMATION_RESOLUTION_DRIFT on SPY; official exact-title 14:00 ET FOMC statements from 2013-01-01 through 2025-12-31; non-bearish prior regime; next-session-open through fifth-session-close underlying outcome; prior-only same-regime controls; future conditional 18-24 DTE $2 bull-call only.",
+  "funnel_stage": "F0_MECHANISM_CLOSED",
+  "falsifier": "Close the exact family if the chronological first 60% has fewer than 36 one-to-one matched pairs, fewer than 6 event years, control support below 80%, non-positive event mean after 10 bps, non-positive paired mean or one-sided 90% year-block-bootstrap lower bound, paired positive frequency below 55%, worst-decile event return below -5%, or any source/chronology/lag/overlap/reuse/population/strict-JSON violation.",
   "candidate_geometry": {
-    "underlying": "TSLL",
-    "structure": "bullish_call_diagonal",
-    "long_call_dte": [60, 90],
-    "long_call_delta": [0.6, 0.75],
-    "short_call_dte": [14, 21],
-    "short_call_delta": [0.2, 0.35],
-    "short_strike_must_exceed_long_strike": true,
-    "entry_window_new_york": ["10:30", "14:30"],
-    "richness_metric": "short_leg_extrinsic_per_day / long_leg_extrinsic_per_day",
-    "richness_minimum": 1.25,
-    "computed_delta_source": "Black-Scholes delta computed from same-snapshot observed underlying spot and listed-contract implied volatility; delta is model-derived selection metadata, not an observed quote",
-    "quote_requirements": {
-      "positive_bid_each_leg": true,
-      "max_half_spread_usd_each_leg": 0.1,
-      "same_snapshot": true,
-      "observed_listed_contracts_only": true
-    },
-    "regime_and_event_gates": {
-      "tsla_and_tsll_prior_completed_close_above_sma100": true,
-      "tsla_and_tsll_prior_completed_return_60d_positive": true,
-      "no_tsla_earnings_during_planned_hold": true,
-      "no_tsll_ex_dividend_before_short_exit": true
-    },
-    "candidate_selection_tie_breaks": [
-      "highest richness metric",
-      "lowest summed package half-spread",
-      "lowest package debit",
-      "lexicographically smallest contract-symbol pair"
-    ]
+    "underlying": "SPY",
+    "structure": "future_conditional_bull_call_debit_spread_not_priced_at_f0",
+    "event_source": "https://www.federalreserve.gov/json/ne-press.json",
+    "event_title": "Federal Reserve issues FOMC statement",
+    "press_type": "Monetary Policy",
+    "event_start": "2013-01-01",
+    "event_end": "2025-12-31",
+    "release_time_new_york": "14:00:00",
+    "statement_url_pattern": "/newsevents/pressreleases/monetaryYYYYMMDDa.htm",
+    "regime": "prior completed close > fully warmed SMA100 and trailing 60-session return > 0",
+    "entry": "next completed regular session open after the 14:00 ET statement",
+    "exit": "close of the fifth session including entry",
+    "forward_sessions": 5,
+    "train_fraction": 0.6,
+    "round_trip_cost_bps": 10.0,
+    "future_option_dte_range": [18, 24],
+    "future_option_width_usd": 2.0
   },
   "control_geometry": {
-    "frozen_before_outcome_evaluation": true,
-    "same_snapshot": true,
-    "pairing": "one_to_one",
-    "reuse_candidate_long_leg": true,
-    "control_ratio_band": [0.8, 1.1],
-    "control_must_pass_all_candidate_gates_except_richness": true,
-    "candidate_selection_tie_breaks": [
-      "smallest absolute distance from candidate short delta",
-      "smallest absolute distance from candidate short DTE",
-      "smallest absolute distance from candidate short strike as percent of same-snapshot spot",
-      "lowest summed package half-spread",
-      "lexicographically smallest short contract symbol"
-    ],
-    "match_order": [
-      "same candidate long leg",
-      "short delta",
-      "short DTE",
-      "short strike distance from spot",
-      "package friction"
-    ],
-    "no_control_policy": "exclude_path_no_reuse_or_substitution",
-    "outcome_independence": "Controls are selected from entry-snapshot fields only. Future package returns, exits, and assignment outcomes are forbidden inputs."
-  },
-  "path_and_exit_rules": {
-    "non_overlapping_paths": true,
-    "entry_mark": "candidate and control package debit from same-snapshot executable leg marks",
-    "exit_mark": "first executable package mark satisfying a frozen exit; no interpolation or Black-Scholes substitute",
-    "exit_stack": [
-      "+25% of entry package debit",
-      "-25% of entry package debit",
-      "five completed sessions",
-      "short leg at or below 7 DTE",
-      "regime invalidation",
-      "earnings or ex-dividend approach",
-      "assignment guard"
-    ],
-    "management_bans": [
-      "roll",
-      "average down",
-      "same-session re-entry",
-      "overlapping candidate exposure"
+    "prior_only": true,
+    "same_regime": true,
+    "max_distance_sessions": 756,
+    "max_hv20_gap": 0.1,
+    "max_ret60_gap": 0.1,
+    "event_exclusion_sessions_each_side": 5,
+    "event_exclusion_source": "Federal Reserve exact-title 14:00 ET statement rows",
+    "source_coverage_start": "2013-03-20",
+    "controls_before_source_coverage_forbidden": true,
+    "full_control_outcome_before_event": true,
+    "one_to_one": true,
+    "reuse": false,
+    "substitution_after_failure": false,
+    "outcome_visible_matching": false,
+    "tie_breaks": [
+      "lowest normalized hv20 plus ret60 feature distance",
+      "shortest prior calendar distance",
+      "earliest control date"
     ]
   },
-  "population_floor": {
-    "distinct_weekday_rth_dates": 12,
-    "distinct_short_expiry_cycles": 3,
-    "non_overlapping_eligible_paths": 20,
-    "one_to_one_control_paths": 8
+  "discovery_gates": {
+    "minimum_train_pairs": 36,
+    "minimum_event_years": 6,
+    "minimum_control_support": 0.8,
+    "event_mean_after_10bps_positive": true,
+    "paired_excess_mean_positive": true,
+    "paired_excess_year_block_bootstrap_lb90_positive": true,
+    "paired_excess_positive_frequency_min": 0.55,
+    "event_return_worst_decile_min": -0.05,
+    "zero_integrity_violations": true
   },
   "capital_rules": {
     "sleeve_usd": 3000,
-    "capital_fit_usd": 300,
-    "admission_cap_usd_one_lot": 300,
-    "admission_formula": "observed entry debit plus $50 operational reserve must be <= $300",
-    "max_loss_usd_one_lot": null,
-    "max_loss_status": "unproven under early assignment, gap, exercise, and liquidation mechanics; the $300 admission cap is not a structural max-loss proof",
+    "capital_fit_usd": 200,
+    "max_loss_usd_one_lot": 200,
+    "max_loss_semantics": "future frictionless $2 width bound before closing friction; no option pricing in F0",
     "max_lots": 1,
-    "capital_fit_status": "research admission only; no L1 capital seat, paper promotion, shadow, arm, broker, or live authority until structural worst-case loss is proved within sleeve"
+    "portfolio_overlap_rule": "one global policy-event risk unit; no overlapping candidate exposure"
   },
-  "data_dependencies": [
-    "future TSLL weekday RTH snapshots with observed underlying spot, bid/ask, implied volatility, contract identity, strike, and expiration",
-    "chronological TSLA earnings and TSLL ex-dividend joins available at each decision time",
-    "executable follow-up package marks sufficient to resolve frozen exits and assignment guards",
-    "assignment/exercise/liquidation scenario evidence sufficient to state structural one-lot max_loss_usd"
-  ],
-  "evidence_wake_condition": "Re-evaluate only after the archive reaches 12 distinct weekday RTH dates, 3 short-expiry cycles, 20 non-overlapping candidate paths, and 8 frozen one-to-one controls. Before those floors, append provenance-safe data and report path eligibility/admission/control support counters only.",
-  "epoch_success_definition": "Advance the exact observed term-carry mechanism from F0 only after the frozen 12-date, 3-cycle, 20-path, 8-control population passes both control-relative gates with clean chronology and executable marks; otherwise close it without changing geometry or opening the final 40% reserve.",
-  "epoch_progress": {
-    "completed_strategy_decisions": 3,
-    "consecutive_no_strategy_advance": 3,
-    "strategy_pivot_required": true,
-    "strategy_burst_stop_required": true,
-    "last_outcome": "FAMILY_CLOSED",
-    "last_strategy_advance": null,
-    "last_decision_candidate": "CROSS_SECTION_RESIDUAL_REVERSAL_BULL_CALL_21D_V1",
-    "last_decision_stamp": "2026-07-15T2344",
-    "pure_append_reaffirmations_count_toward_streak": false
+  "evidence_rules": {
+    "holdout_fraction": 0.4,
+    "holdout_outcomes_unread": true,
+    "option_pricing_calls": 0,
+    "bar": "discovery",
+    "authority": "F0/F1 L0 research only; no L1, capital seat, registry, paper, shadow, arm, broker, funding, or live authority"
   },
-  "pure_append_streak_policy": "A schema-v2 EVIDENCE_WAIT handoff with evidence_wait_reaffirmation=true is a pure data-collection reaffirmation and does not increment the strategy no-advance pivot/burst-stop streak.",
-  "authority_limit": "F0 observed-path mechanism research only; no Black-Scholes substitution for the observed claim, registry insertion, paper force, shadow, arm, broker, or live action."
+  "epoch_success_definition": "Advance the exact candidate from F0 to F1 only if every frozen train discovery gate passes with the sealed 40% holdout unread and zero option pricing; otherwise close the exact policy-information-resolution family without threshold, sign, regime, control, horizon, or option-structure retuning.",
+  "outcome": "FAMILY_CLOSED",
+  "strategy_advance_count": 0,
+  "counted_no_advance_decisions": 1,
+  "dominant_failure_mechanism": "After fail-closing controls to the Federal Reserve press-index source-coverage boundary, 46 train pairs across 8 event years remained. Five-session SPY event return after 10 bps was -0.275586%, paired excess versus prior-only same-regime controls was -0.453418%, positive frequency was 39.1304%, and the one-sided 90% year-block lower bound was -0.781803%; the stated bullish drift was absent and directionally adverse.",
+  "evidence_artifact": ".cache/platform/fomc_information_resolution_train_2026-07-16T0112.json",
+  "evidence_sha256": "f53d8e5a2d6f39bd1f7b57e7923414439a045b59f3ead5fdf50681f4c8d9c2af",
+  "event_manifest": ".cache/platform/fomc_information_resolution_events_2026-07-16T0112.json",
+  "event_manifest_sha256": "9cf4a9efd580769405c75846ff5e3b55378c4a7937db336a0a9df137fae59806",
+  "closed_family_quarantine": "Do not rerun the same SPY non-bearish exact-14:00 FOMC next-open/five-session bullish-drift geometry by changing thresholds, horizon, control match, DTE, or option wrapper. Reopening requires a genuinely new forecast/evidence mechanism, not retuning.",
+  "next_seed": "CPI_RELEASE_INFORMATION_RESOLUTION_SPY_F0: context-only proposal for a materially distinct official 08:30 ET inflation-surprise/policy-repricing mechanism; do not open the FOMC holdout or retune the closed FOMC family, and supersede if next orientation finds a higher-information route.",
+  "prior_epoch": {
+    "epoch_id": "TSLL_OBSERVED_TERM_CARRY_DIAGONAL_V1",
+    "status": "completed",
+    "completed_stamp": "2026-07-16T0029",
+    "counted_no_advance_decisions": 3,
+    "reassessment_doc": "docs/SEARCH_DESIGN_REASSESSMENT_2026-07-16T0029.md"
+  }
 }

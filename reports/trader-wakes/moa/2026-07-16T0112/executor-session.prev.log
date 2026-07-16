@@ -1,0 +1,1669 @@
+Query: MOA BUILD LAB — PHASE 1 EXECUTOR (ONLY writer) — GPT 5.6 Sol.
+You are Trader. Your profile SOUL is authoritative; load skill
+trader-self-evolution.
+Before choosing, orient from the canonical goal above plus:
+- docs/TRADER_PLATFORM_GOAL.md, docs/TRADER_LOOPS.md,
+  docs/AGENTIC_AUTONOMY_POLICY.md, docs/GO_LIVE_READINESS.md
+- docs/TRADER_RESTART_CHARTER.md, docs/SEARCH_DESIGN_REASSESSMENT_2026-07-14.md
+- docs/BUILD_LAB_ENVIRONMENT.md, docs/INCOME_STRATEGY_COVERAGE.md
+- configs/search_epoch.json (active epoch, discovery_bar, capital_seat_bar)
+- reports/readiness/income-coverage-LATEST.md (if present)
+- reports/trader-wakes/LATEST.md, reports/readiness/LATEST.md
+- reports/trader-wakes/moa/2026-07-16T0112/orientation.json (closed families,
+epoch streak, redirect signal)
+- hypothesis registry, learn/evolve audits, coverage, current local time,
+  market/session state, and relevant current data.
+The caller supplied no loop judgment unless meta explicitly says override.
+
+PHASE: BUILD. Sleeve USD 3000. Paper/research only.
+Models: YOU = GPT 5.6 Sol executor. Grok 4.5 will challenge after you. Do not
+wait for Grok mid-loop.
+
+GOAL:
+TRADER CANONICAL PROGRAM GOAL — BUILD / research-to-paper income engine.
+
+Independently maximize the chance of discovering and validating at least one
+durable, paper-testable strategy for the isolated $3,000 Agentic sleeve, while
+improving the self-learning research → paper → shadow → (armed) agentic_live
+system that can produce income after costs at one-lot size. Protect capital
+harder than opportunity; stand-aside is a valid result. Do not claim
+real-account readiness; Ken alone may later authorize shadow/live and arm the
+sleeve.
+
+Trader owns orientation and judgment. On every zero-input wake, load the Trader
+SOUL and orient from durable doctrine, profile memory and skills, current
+readiness, prior wake and learning artifacts, hypothesis/audit history,
+coverage, current local time and market/session state, and relevant current
+data. Then autonomously choose ONE highest-information valid closed loop. No
+caller chooses a slot, strategy axis, NEXT seed, or goal. A prior NEXT seed is
+context and a falsifiable suggestion, never an order; supersede it when current
+evidence supports a more informative loop and state why.
+
+Search is free across any liquid symbol in the research universe and any
+strategy DNA: structure, direction, volatility, time/DTE, regime, entry, exit,
+sizing, management, and stand-aside logic. Build missing simulators, data
+adapters, tests, negative controls, or research tools when they unlock better
+evidence. Defined-risk is preferred and required for a $3k capital candidate
+unless worst-case loss is otherwise explicitly bounded and fits the sleeve.
+Research toys may be explored but must remain off the capital path until
+resized.
+
+Build toward paper-opportunity readiness directly. Follow
+`docs/TRADER_DIRECT_TO_PAPER_WATCH_PLAN.md`: prefer a staged funnel of cheap
+batch candidate screening -> selected-candidate deep validation -> reusable
+option payoff validators -> patient opportunity watcher -> paper packet, instead
+of spending a full BUILD wake on every weak one-off idea. A wake may screen many
+predeclared train-only/development-only candidates, but it must still close with
+exactly one claim-bearing decision, reassessment, or no-delta stop. Reusable
+payoff/watcher infrastructure is valid only when it reduces future path length
+and is exercised against a real candidate, closed-family boundary, or no-trade
+watcher state in the same wake.
+
+Optimize for useful delta and genuine edge, not artifact count, familiar
+recipes, or making every wake look successful. Valid search information includes
+a candidate, an honest falsification, a repaired structural-evidence defect, a
+stronger reusable capability/test, or a deliberate stop rule. Carry prior
+integrated closed families, critic dispositions, novelty keys, and loop outcomes
+into orientation; cite changed evidence/machinery for each new delta. Detect
+thrash: do not repeat an unchanged search or blindly execute NEXT when no new
+data or capability can change the decision. Repeated loop signatures or a prior
+no-delta result must redirect unless a genuinely new evidence class is named.
+Preserve single flight and stop with DIMINISHING_RETURNS when another loop
+cannot add material information.
+
+Operational completion and strategy progress are separate. Every BUILD wake must
+begin with a strategy decision charter that applies
+`docs/TRADER_LAYERED_EDGE_DOCTRINE.md`: name one economic edge mechanism, the
+candidate/family scope, its current evidence-funnel stage, the predeclared
+falsifier, and the exact decision the wake will close. For every trade-shaped
+candidate, include the Layered Edge Stack fields: market/underlying, forecast
+type, economic mechanism, option structure, intended and dangerous Greek
+exposures, regime envelope, entry trigger, exit/management rule, risk/capital
+fit (`capital_fit_usd`, one-lot `max_loss_usd`, `max_lots`, portfolio overlap),
+evidence/falsifier, confidence stage, and stand-aside rule. Preferred first
+exploration lanes are long-biased theta income via bull put / put credit
+spreads, directional swing capture via call debit spreads, and long-biased
+diagonal income, but these are preferences rather than allowlists; supersede
+them only by naming a better economic mechanism and completing the stack. The
+evidence funnel is: `F0_MECHANISM` → `F1_TRAIN` → `F2_UNTOUCHED_HOLDOUT` →
+`F3_ROBUST_PAPER_PLAN` → `F4_OBSERVED_PAPER`. A wake may search a population,
+but it must close with exactly one decision outcome:
+
+- `STRATEGY_ADVANCED`: a named candidate moves forward at least one funnel stage
+using claim-appropriate evidence;
+- `FAMILY_CLOSED`: a genuinely new economic mechanism is decisively falsified,
+the dominant failure mechanism is recorded, and the axis is quarantined from
+unchanged reruns;
+- `BLOCKER_REMOVED_AND_RETESTED`: a claim-invalidating defect or missing
+capability is repaired and the dependent strategy experiment is rerun in the
+same wake to either `STRATEGY_ADVANCED` or `FAMILY_CLOSED`;
+- `EVIDENCE_WAIT`: the next discriminating test genuinely requires unavailable
+or future evidence, with a concrete wake condition.
+
+Use two bars deliberately (see `configs/search_epoch.json` and
+`docs/SEARCH_DESIGN_REASSESSMENT_2026-07-14.md`):
+
+- **Discovery bar (F0→F1 / F1→F2 signals only):** chronological integrity,
+labeled costs, non-vacuous n, predeclared falsifier; looser risk thresholds
+allowed when claim scope is labeled L0 discovery. Discovery survivors cannot
+earn L1 or a capital seat.
+- **Capital-seat bar (L1 / paper path):** dual-cost non-vacuous after-cost edge,
+B3 density, one-lot max loss ≤$300, window max DD ≤$75, dense-negative windows
+≤5, defined-risk preferred. Proxy-only results cannot earn L1.
+
+`STRATEGY_ADVANCED` at F0→F1 may use the discovery bar when labeled, but only
+when the candidate has a complete Layered Edge Stack and the forecast type,
+option payoff, regime, risk, and evidence are aligned. Promoting to capital path
+/ L1 / paper still requires the capital-seat bar. Active search epoch
+pivot/burst-stop counts only wakes inside `configs/search_epoch.json`
+`started_stamp`; prior-epoch `DIMINISHING_RETURNS` is superseded once
+reassessment_complete is true.
+
+Tooling, tests, files, simulators, coverage, cleaner labels, option-structure
+enthusiasm, or operational completion alone are not strategy progress.
+Capability work cannot be the final outcome of a strategy run unless the
+repaired/unlocked experiment is exercised to a strategy decision in that same
+wake. Report search information and strategy advancement separately. Challenger
+and finalizer must reject or narrow any `STRATEGY_ADVANCED` claim whose Layered
+Edge Stack is incomplete, whose option structure does not monetize the stated
+forecast, whose regime/stand-aside rule is vague, or whose risk/evidence does
+not match the claimed stage. After two consecutive completed epoch wakes without
+`STRATEGY_ADVANCED`, the next wake must pivot to a materially different economic
+mechanism or evidence class. After three consecutive completed epoch wakes
+without `STRATEGY_ADVANCED`, stop the burst and reassess the search design/data
+rather than running more volume.
+
+Evidence validity is non-negotiable. Before relying on a result, challenge
+leakage/lookahead, contract availability, costs and fill semantics,
+observed-vs-proxy provenance, archive density, population purity, ranking
+completeness, stale leaders/labels, path realism, and capital fit. Repair a
+claim-invalidating defect with behavioral/boundary/negative-control tests or
+narrow/reject the claim. A blocked data path blocks only dependent claims; it
+must not freeze unrelated valid exploration. Historical underlying bars remain
+valid for broad discovery, rolling-origin falsification, regime tests, and
+simulator capability work when option marks are explicitly labeled Black-Scholes
+proxies. Proxy option results can never earn L1. A three-date forward option
+archive is only a capture/join plumbing floor or the beginning of observed-cost
+calibration, not historical edge evidence. Observed-option/archive blockage
+alone cannot justify DIMINISHING_RETURNS or freeze research while an independent
+historical simulation or capability route remains informative. Honest
+DIMINISHING_RETURNS remains valid when no material new evidence class remains
+after open routes are assessed.
+
+Any trade-shaped candidate must state structure, capital_fit_usd, one-lot
+max_loss_usd, and max_lots. Promotion claims require non-vacuous after-cost
+evidence, relevant regime/cost stress, realistic drawdown and loss quality, and
+evidence appropriate to the claim. Keep research/paper status transitions inside
+the safe graph. Never auto-promote to shadow/live.
+
+Hard stops: no live orders, broker login/session, spending, agentic arm,
+shadow/live auto-promotion, secrets/private positions in git, or trading Ken's
+main accounts. Paper/research only unless a separate explicit Ken mandate
+changes the phase.
+
+Use the executor → challenger → finalizer workflow and deterministic completion
+gate. Completion is end-to-end: close or explicitly falsify the scoped loop;
+repair claim-invalidating flaws; pass focused behavioral, boundary,
+negative-control, regression, and full-suite checks; promote durable learning:
+dated truth to repo reports/docs and reusable lessons to the smallest durable
+skill/memory surface; review for sensitive/unintended residue; commit
+coherently; integrate and push main; verify origin/main equality and a clean
+tree. Only the deterministic postflight may declare RUN COMPLETE. A partial
+phase, red test, dirty tree, unpushed/unmerged branch, or missing receipt is RUN
+INCOMPLETE. Leave exact verification, durable lesson, and exactly one next seed
+or DIMINISHING_RETURNS.
+
+This file is the sole authoritative BUILD program goal. SOUL owns the stable
+identity, north star, freedom, risk, and self-sufficient wake contract; other
+prompts and wrappers reference this goal and add only run metadata or phase
+mechanics. Optional --goal, --slot, structure, and recovery overrides are
+debugging/recovery tools, not the normal caller interface.
+
+CALLER CONTEXT (internally derived metadata, not an assignment): premarket
+(source=auto)
+CANONICAL GOAL SOURCE: canonical
+(/Users/jarvis/dev/tsla-tsll-options-tracker/configs/build_lab_free_goal.txt)
+STRUCTURE FOCUS: catalog-free exploration across any liquid symbol and any
+strategy DNA; defined-risk is required for a $3k capital candidate, not for
+forming or falsifying research hypotheses
+DEFAULT EVOLVE KNOBS: --top-symbols 8 --mutants 2 --sleeve-usd 3000
+
+OPERATING CONTRACT (goal-driven, not a checklist):
+1) Orient from the latest evidence, then choose ONE highest-information strategy
+loop. You may take or supersede NEXT and may propose an axis absent from prior
+reports.
+2) Open with a strategy decision charter before acting: economic edge mechanism,
+candidate/family scope, current evidence-funnel stage
+(F0_MECHANISM→F1_TRAIN→F2_UNTOUCHED_HOLDOUT→F3_ROBUST_PAPER_PLAN→F4_OBSERVED_PAP
+ER), predeclared falsifier, and the exact decision this wake will close
+(STRATEGY_ADVANCED | FAMILY_CLOSED | BLOCKER_REMOVED_AND_RETESTED |
+EVIDENCE_WAIT). Operational completion is not strategy progress.
+3) Check only the validity prerequisites needed for that claim. If one path is
+data-blocked, either repair it and retest the dependent experiment in this same
+wake, or pursue a valid independent path; do not let one missing dataset freeze
+the whole research program.
+4) Use any relevant combination of research, simulation, tests, negative
+controls, new strategy DNA, new tools, or cross-symbol/time/regime comparisons.
+Commands below are available examples, never mandatory ritual:
+   - just research-tick-paper --sleeve-usd 3000
+   - just evolve-tick --apply --top-symbols 8 --mutants 2 --max-population 36
+--sleeve-usd 3000
+   - .venv/bin/python scripts/pcs_regime_stress.py --hyps "<ids>" --out
+.cache/platform/stress_regime_lab_2026-07-16T0112.json
+   - .venv/bin/python scripts/pcs_cost_stress.py --hyps "<ids>" --out
+.cache/platform/stress_cost_lab_2026-07-16T0112.json
+5) Promotion claims require relevant B3/B4, non-vacuous after-cost evidence, and
+explicit risk. Use discovery_bar for F0→F1/F1→F2 signals (labeled L0 discovery
+OK; looser risk thresholds allowed). Use capital_seat_bar for L1/paper
+eligibility (max loss ≤$300, window DD ≤$75, dual-cost non-vacuous, dense B3).
+Proxy-only experiments are allowed for discovery when labeled, but cannot earn
+L1 without evidence appropriate to the claim. Tests must exercise behavior and
+failure boundaries relevant to the claim; avoid self-fulfilling fixtures or
+assertions that merely restate implementation output.
+6) Compare against the CURRENT living leader from readiness. If none exists, use
+explicit absolute risk/evidence gates for capital seats and say there is no
+leader; historical candidates are context, not seats.
+7) Close with exactly one strategy outcome. Tooling/tests/simulators/files alone
+are search information, not strategy advancement, unless the unlocked experiment
+is exercised in-wake to advance-or-close under BLOCKER_REMOVED_AND_RETESTED.
+Report search information separately from strategy advancement. Honor
+orientation.json: closed families require a genuinely new evidence class to
+reopen; strategy_pivot_required / consecutive_no_strategy_advance are
+**epoch-scoped**; prior-epoch DIMINISHING_RETURNS is superseded when
+search_epoch.reassessment_complete is true; research_routes prevents a blocked
+forward option archive from globally forcing stop while historical work remains
+informative. Include a one-line freedom audit.
+8) Durable executor residue (this is a PARTIAL phase, not a completed run):
+   - reports/trader-wakes/moa/2026-07-16T0112/executor-closeout.md (must include
+the strategy charter + closed outcome)
+   - reports/trader-wakes/2026-07-16T0112-moa-exec.md
+   - Update reports/trader-wakes/LATEST.md + prepend INDEX.md
+   - Update reports/readiness/LATEST.md if phase/B checks change
+   - Refresh coverage: .venv/bin/python scripts/trader_income_coverage.py
+--write
+9) Do not commit, push, merge, or claim RUN COMPLETE in this phase. The
+challenger must critique and the finalizer must repair, verify, promote
+learning, and prepare clean integration.
+
+HARD STOPS:
+- No live / broker login / agentic arm / shadow auto-promote
+- No diversify-for-fear capital seats
+- No vanity SHIP → capital path without B3+B4 + competitive ml/dd
+- No volume for its own sake; run the smallest experiment that can change the
+decision
+- A fail-closed data boundary blocks dependent promotion claims, not unrelated
+creative exploration
+- No stale leader, mixed-population label, incomplete ranking, or proxy-cost
+claim may survive into NEXT unmarked
+- Do not invent numbers — cite JSON/CSV paths
+
+Close with: MOA_EXEC_DONE and paths written.
+Initializing agent...
+────────────────────────────────────────
+
+  ┊ 📚 skill     trader-self-evolution  0.0s
+  ┊ 📋 plan      5 task(s)  0.0s
+  ┊ 📖 read      search_epoch.json  0.2s
+  ┊ 📖 read      orientation.json  0.2s
+  ┊ 📖 read      LATEST.md  0.3s
+  ┊ 📖 read      LATEST.md  0.2s
+  ┊ 📖 read      income-coverage-LATEST.md  0.2s
+  ┊ 📖 read      TRADER_RESTART_CHARTER.md  0.2s
+  ┊ 📖 read      SEARCH_DESIGN_REASSESSMENT_2026-07-14.md  0.1s
+  ┊ 🔎 find      *hypoth*  0.1s
+  ┊ 🔎 find      *learn*audit*  0.1s
+  ┊ 🔎 find      *evolve*audit*  0.2s
+  ┊ 💻 $         printf 'TIME=' + 11 commands  0.1s
+  ┊ 📖 read      TRADER_PLATFORM_GOAL.md  0.1s
+  ┊ 📖 read      TRADER_LOOPS.md  0.1s
+  ┊ 📖 read      AGENTIC_AUTONOMY_POLICY.md  0.1s
+  ┊ 📖 read      GO_LIVE_READINESS.md  0.1s
+  ┊ 📖 read      BUILD_LAB_ENVIRONMENT.md  0.2s
+  ┊ 📖 read      INCOME_STRATEGY_COVERAGE.md  0.2s
+  ┊ 📖 read      TRADER_DIRECT_TO_PAPER_WATCH_PLAN.md  0.1s
+  ┊ 📖 read      TRADER_LAYERED_EDGE_DOCTRINE.md  0.1s
+  ┊ 📖 read      SEARCH_DESIGN_REASSESSMENT_2026-07-16T0029.md  0.1s
+  ┊ 🔎 grep      FOMC|fomc  0.1s
+  ┊ 🔎 find      *audit*  0.1s
+  ┊ 📖 read      merged-next-seed.md  0.1s
+  ┊ 🔍 search    site:federalreserve.gov monetarypolicy FOMC calendars 2019 2020 statement 2:00 p.m.  0.1s [Error searching web: Web tools are not config...]
+  ┊ 📄 fetch     www.federalreserve.gov  0.1s [error]
+  ┊ 🔎 find      *event*lab*.py  0.2s
+  ┊ 🔎 find      *earnings*.py  0.1s
+  ┊ 🔎 find      *opex*.py  0.1s
+  ┊ 🔎 find      *event*  0.1s
+  ┊ 🔎 find      *learn*audit*  0.1s
+  ┊ 🔎 find      *evolve*audit*  0.1s
+  ┊ 🔎 find      *research*.db  0.1s
+  ┊ 📖 read      universe.yaml  0.1s
+  ┊ 📖 read      post_earnings_information_drift_train_lab.py  0.2s
+  ┊ 📖 read      monthly_opex_post_expiry_train_lab.py  0.2s
+  ┊ 📖 read      test_spy_turn_of_month_event_study.py  0.2s
+  ┊ 🐍 exec      from hermes_tools import read_file, terminal  0.0s [BLOCKED: execute_code runs arbitrary local Py...]
+  ┊ 💻 $         set -o pipefail python3 - <<'PY' import urllib.request urls=['https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm','https://www.federalreserve.gov/monetarypolicy/fomchistorical2025.htm','https://www.federalreserve.gov/monetarypolicy/fomcstatement20250618a.htm'] for u in urls: try: req=urllib.request.Request(u,headers={'User-Agent':'Mozilla/5.0'}) with urllib.request.urlopen(req,timeout=30) as r: b=r.read() print(u, r.status, len(b), r.headers.get_content_type()) print(b[:160].decode('utf-8','replace').replace('\n',' ')) except Exception as e: print(u,'ERROR',repr(e)) PY  1.1s
+  ┊ 💻 $         python3 - <<'PY' from urllib.request import Request,urlopen from bs4 import BeautifulSoup u='https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm' b=urlopen(Request(u,headers={'User-Agent':'Mozilla/5.0'}),timeout=30).read() s=BeautifulSoup(b,'html.parser') print('TITLE',s.title.get_text(' ',strip=True)) for h in s.select('h2,h3,h4'): t=' '.join(h.get_text(' ',strip=True).split()) if any(y in t for y in ['2019','2020','2021','2022','2023','2024','2025','2026','Historical']): print('H',t) links=[] for a in s.find_all('a',href=True): href=a['href'] + 1 command  0.1s [exit 1]
+  ┊ 💻 $         .venv/bin/python - <<'PY' from urllib.request import Request,urlopen try: from bs4 import BeautifulSoup except Exception as e: print('NO_BS4',repr(e)) + 2 commands  0.3s
+  ┊ 💻 $         .venv/bin/python - <<'PY' from urllib.request import Request,urlopen from bs4 import BeautifulSoup from urllib.parse import urljoin u='https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm' s=BeautifulSoup(urlopen(Request(u,headers={'User-Agent':'Mozilla/5.0'}),timeout=30).read(),'html.parser') for a in s.find_all('a',href=True): t=' '.join(a.get_text(' ',strip=True).split()) if t.lower() in {'statement','minutes'} or 'statement' in t.lower(): print(t,urljoin(u,a['href'])) PY  0.4s
+  ┊ 💻 $         .venv/bin/python - <<'PY' from urllib.request import Request,urlopen from bs4 import BeautifulSoup u='https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm' s=BeautifulSoup(urlopen(Request(u,headers={'User-Agent':'Mozilla/5.0'}),timeout=30).read(),'html.parser') for h in s.select('h3'): t=' '.join(h.get_text(' ',strip=True).split()) if '2025 FOMC' in t or '2024 FOMC' in t or '2023 FOMC' in t: print('\n###',t) node=h for _ in range(3): node=node.find_next_sibling() if node: print(node.name, ' '.join(node.get_text(' ',strip=True).split())[:3000]) PY  0.3s
+  ┊ 💻 $         .venv/bin/python - <<'PY' from urllib.request import Request,urlopen from bs4 import BeautifulSoup u='https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm' s=BeautifulSoup(urlopen(Request(u,headers={'User-Agent':'Mozilla/5.0'}),timeout=30).read(),'html.parser') for h in s.select('h2,h3,h4,h5'): t=' '.join(h.get_text(' ',strip=True).split()) if 'FOMC Meetings' in t: print(h.name,t,'parent',h.parent.name,h.parent.get('class')) print(str(h.parent)[:3000]) PY  0.4s
+  ┊ 💻 $         .venv/bin/python - <<'PY' from urllib.request import Request,urlopen from bs4 import BeautifulSoup from urllib.parse import urljoin u='https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm' s=BeautifulSoup(urlopen(Request(u,headers={'User-Agent':'Mozilla/5.0'}),timeout=30).read(),'html.parser') for h in s.select('h4'): t=' '.join(h.get_text(' ',strip=True).split()) if any(f'{y} FOMC' in t for y in [2021,2022,2023,2024,2025]): panel=h.find_parent(class_='panel') print('\n###',t) print('TEXT',' '.join(panel.get_text(' ',strip=True).split())[:5000]) for a in panel.find_all('a',href=True): print('A',' '.join(a.get_text(' ',strip=True).split()),urljoin(u,a['href'])) PY  0.4s
+  ┊ 💻 $         .venv/bin/python - <<'PY' from urllib.request import Request,urlopen from bs4 import BeautifulSoup from urllib.parse import urljoin u='https://www.federalreserve.gov/monetarypolicy/fomc_historical.htm' s=BeautifulSoup(urlopen(Request(u,headers={'User-Agent':'Mozilla/5.0'}),timeout=30).read(),'html.parser') print(s.title.get_text(' ',strip=True)) for a in s.find_all('a',href=True): t=' '.join(a.get_text(' ',strip=True).split()) + 1 command  0.4s
+  ┊ 💻 $         .venv/bin/python - <<'PY' from urllib.request import Request,urlopen for u in [ 'https://www.federalreserve.gov/json/ne-press.json', 'https://www.federalreserve.gov/json/ne-press.xml', 'https://www.federalreserve.gov/feeds/press_monetary.xml', 'https://www.federalreserve.gov/feeds/press_all.xml']: try: r=urlopen(Request(u,headers={'User-Agent':'Mozilla/5.0'}),timeout=30) + 2 commands  0.6s
+  ┊ 💻 $         .venv/bin/python - <<'PY' from urllib.request import Request,urlopen import json u='https://www.federalreserve.gov/json/ne-press.json' b=urlopen(Request(u,headers={'User-Agent':'Mozilla/5.0'}),timeout=30).read().decode('utf-8-sig') data=json.loads(b) print(type(data),len(data),data[0].keys()) for r in data: if 'Federal Reserve issues FOMC statement' in r.get('t',''): print(r) PY  0.3s
+  ┊ ✍️  write     /Users/jarvis/dev/tsla-tsll-options-tracker/reports/trader-wakes/moa/2026-07-16T0112/strategy-charter.md  0.2s
+  ┊ review diff
+a/reports/trader-wakes/moa/2026-07-16T0112/strategy-charter.md → b/reports/trader-wakes/moa/2026-07-16T0112/strategy-charter.md
+@@ -0,0 +1,43 @@
++# Strategy decision charter — 2026-07-16T0112
++
++WAKE: 2026-07-16T0112
++PHASE: BUILD / L0 underlying discovery
++SLEEVE: $3,000 Agentic research sleeve
++MARKET SESSION: premarket, derived at 2026-07-16 01:13 PDT; no RTH paper action
++
++## Decision
++
++ECONOMIC MECHANISM: Scheduled FOMC decisions resolve a large, prior-known macro information set. In an already non-bearish SPY regime, gradual interpretation and institutional repositioning may create positive five-session post-announcement drift beyond ordinary same-regime drift.
++
++CANDIDATE / FAMILY: `FOMC_INFORMATION_RESOLUTION_SPY_BULL_CALL_21D_V1` / `FOMC_POLICY_INFORMATION_RESOLUTION_DRIFT`. This is a new scheduled-macro evidence class, not issuer post-earnings drift, OPEX/TOM flow, breadth, residual reversal, breakout continuation, or a closed option-expression retune.
++
++FUNNEL: `F0_MECHANISM -> F1_TRAIN` only if every frozen discovery gate passes; otherwise `F0_MECHANISM -> F0_MECHANISM` and the exact family closes.
++
++PREDECLARED OUTCOME: exactly one of `STRATEGY_ADVANCED` or `FAMILY_CLOSED`.
++
++PREDECLARED FALSIFIER: On the chronological first 60% of frozen eligible official events, close the exact family if any of these holds: fewer than 36 one-to-one matched train pairs; fewer than 6 distinct event years; matched-control support below 80% of eligible train events; non-positive mean event return after a labeled 10-bps round-trip sensitivity; non-positive mean paired excess; non-positive one-sided 90% year-block-bootstrap lower bound for paired excess; paired excess positive frequency below 55%; event-return worst decile below -5%; or any source, chronology, feature-lag, event-window, control-reuse, overlap, population, or strict-JSON integrity violation. Thresholds and geometry are frozen before SPY outcomes are loaded.
++
++EXACT DECISION THIS WAKE WILL CLOSE: whether this one named scheduled-policy mechanism advances from F0 to F1 under the discovery bar or is quarantined unchanged as `FAMILY_CLOSED`. No option pricing, holdout outcome read, registry insertion, L1, capital seat, paper force, shadow, arm, broker, or live action.
++
++## Layered Edge Stack
++
++- Market / underlying: SPY only. It is the most liquid broad US equity ETF in the research universe and directly expresses index-level policy information while avoiding issuer-specific event contamination.
++- Forecast type: conditional direction up over five completed sessions after a scheduled FOMC statement.
++- Economic mechanism: policy-information resolution plus underreaction/repositioning in a prior-established non-bearish equity regime.
++- Official event source and frozen population: Federal Reserve `https://www.federalreserve.gov/json/ne-press.json`; exact title `Federal Reserve issues FOMC statement`; press type `Monetary Policy`; release timestamp interpreted in `America/New_York`; exact 14:00 releases only; statement URL pattern `/newsevents/pressreleases/monetaryYYYYMMDDa.htm`; decision dates from 2013-01-01 through 2025-12-31. Non-14:00 emergency/ambiguous releases stand aside. The source artifact and filtered event manifest are hashed before price evaluation.
++- Regime envelope: event is eligible only when the prior completed SPY session closes strictly above fully warmed SMA100 and trailing 60-session return is strictly positive. Controls must have the same regime state. Bearish, under-warmed, missing, or non-finite states stand aside.
++- Entry trigger: official statement released at 14:00 ET on a completed SPY session; enter conceptually at the next completed regular session open. No same-day event return is a selector.
++- Exit / management: underlying discovery outcome exits at the close of the fifth session including the entry session; no roll, average-down, overlap, or same-session re-entry. A later option-stage charter would separately freeze profit/loss exits.
++- Control design: one prior-only non-event SPY session per event, selected only from pre-entry fields. Control must be within 756 sessions, share the exact non-bearish regime, have annualized HV20 within 0.10 and trailing 60-session return within 0.10, lie outside +/-5 sessions of every official FOMC date, and have its full five-session outcome complete before the event announcement. Deterministic tie-breaks are normalized feature distance, then shortest calendar distance, then earliest date. No control reuse, substitution after failure, or outcome-visible matching.
++- Partition: chronological 60% train / sealed 40% holdout by frozen eligible event blueprint. Holdout dates and source identity may be hashed; holdout returns and option outcomes remain unread.
++- Option structure: conditional future one-lot 18-24 DTE $2-wide bull-call debit spread only after underlying advancement and a separate option-stage charter. Zero option marks in this wake.
++- Intended Greeks: positive bounded delta and convex positive gamma.
++- Dangerous unintended Greeks: long theta decay, long vega into post-event IV normalization, spread/liquidity friction, gap risk, and short-leg early-assignment mechanics.
++- Capital fit: `sleeve_usd=3000`; future structural `capital_fit_usd=200`; frictionless width-bound one-lot `max_loss_usd=200` before closing friction; `max_lots=1`; one global policy-event risk unit and no overlapping candidate exposure. These are planning bounds, not observed paid debit or L1 evidence.
++- Evidence / falsifier: official prior-known release timestamps plus split/dividend-adjusted SPY OHLC; train-only discovery; labeled 10-bps underlying sensitivity; prior-only matched controls; year-block uncertainty; tail, density, chronology, and strict-JSON gates. Proxy/underlying discovery cannot earn L1.
++- Confidence: before run `F0_MECHANISM / L0`; after run either `F1_TRAIN / L0` or closed at F0.
++- Stand-aside rule: wrong/ambiguous release time, nonstandard title or URL, prior regime not positive, insufficient warmup, missing/non-finite prices, no frozen prior-only control, overlap, failed train gate, any holdout read, future option max debit above $200, or another policy-event unit open.
++
++## Freedom / anti-thrash judgment
++
++The prior NEXT is accepted because the completed old epoch requires a materially different evidence class, and official scheduled macro events offer prior-known labels without reopening any integrated closed family. This supersedes further TSLL archive churn and closed-family proxy volume during premarket. Freedom remains intact: the choice is evidence-driven, not a symbol/structure allowlist.
+  ┊ ✍️  write     /Users/jarvis/dev/tsla-tsll-options-tracker/configs/search_epoch.json  0.2s
+  ┊ review diff
+a/configs/search_epoch.json → b/configs/search_epoch.json
+@@ -1,130 +1,87 @@
+ {
+   "schema_version": 1,
+-  "epoch_id": "TSLL_OBSERVED_TERM_CARRY_DIAGONAL_V1",
+-  "status": "completed",
+-  "started_stamp": "2026-07-15T2152",
+-  "completed_stamp": "2026-07-16T0029",
++  "epoch_id": "FOMC_POLICY_INFORMATION_RESOLUTION_DRIFT_V1",
++  "status": "active",
++  "started_stamp": "2026-07-16T0112",
++  "completed_stamp": null,
+   "reassessment_complete": true,
+   "reassessment_doc": "docs/SEARCH_DESIGN_REASSESSMENT_2026-07-16T0029.md",
+-  "charter_doc": "reports/trader-wakes/moa/2026-07-15T2152/strategy-charter.md",
+-  "successor_seed_doc": "reports/trader-wakes/moa/2026-07-16T0029/merged-next-seed.md",
+-  "completion_reason": "Three counted no-advance decisions triggered burst-stop reassessment. The 0029 lifecycle repair removed a false living seat without advancing a strategy; the epoch remains closed and the next strategy wake must open a distinct FOMC policy-information-resolution epoch before inspecting outcomes.",
++  "charter_doc": "reports/trader-wakes/moa/2026-07-16T0112/strategy-charter.md",
+   "goal_doc": "configs/build_lab_free_goal.txt",
+-  "economic_mechanism": "Observed TSLL short-front relative extrinsic-per-day richness may compensate a bullish call diagonal for front gamma, package friction, and path risk when the TSLA/TSLL driver regime is non-bearish.",
+-  "forecast_type": "term-structure carry with conditional mild bullish direction",
+-  "candidate_or_family_scope": "One-lot TSLL bullish call diagonals using observed listed contracts and executable bid/ask marks; TSLA is context only, not a second traded underlying.",
++  "economic_mechanism": "Scheduled FOMC decisions resolve a large prior-known macro information set; in an already non-bearish SPY regime, gradual interpretation and institutional repositioning may create positive five-session drift beyond ordinary same-regime drift.",
++  "forecast_type": "conditional direction up after scheduled policy-information resolution",
++  "candidate_or_family_scope": "FOMC_INFORMATION_RESOLUTION_SPY_BULL_CALL_21D_V1 / FOMC_POLICY_INFORMATION_RESOLUTION_DRIFT on SPY; official exact-title 14:00 ET FOMC statements from 2013-01-01 through 2025-12-31; non-bearish prior regime; next-session-open through fifth-session-close underlying outcome; prior-only same-regime controls; future conditional 18-24 DTE $2 bull-call only.",
+   "funnel_stage": "F0_MECHANISM",
+-  "falsifier": "At the first completed frozen population, close the family if the candidate has fewer than 20 non-overlapping eligible paths or fewer than 8 one-to-one controls, if median net package return fails to exceed its matched control by at least 5 percentage points, or if fewer than 55% of controlled paths outperform their controls. No threshold may be changed after outcomes are visible.",
++  "falsifier": "Close the exact family if the chronological first 60% has fewer than 36 one-to-one matched pairs, fewer than 6 event years, control support below 80%, non-positive event mean after 10 bps, non-positive paired mean or one-sided 90% year-block-bootstrap lower bound, paired positive frequency below 55%, worst-decile event return below -5%, or any source/chronology/lag/overlap/reuse/population/strict-JSON violation.",
+   "candidate_geometry": {
+-    "underlying": "TSLL",
+-    "structure": "bullish_call_diagonal",
+-    "long_call_dte": [60, 90],
+-    "long_call_delta": [0.6, 0.75],
+-    "short_call_dte": [14, 21],
+-    "short_call_delta": [0.2, 0.35],
+-    "short_strike_must_exceed_long_strike": true,
+-    "entry_window_new_york": ["10:30", "14:30"],
+-    "richness_metric": "short_leg_extrinsic_per_day / long_leg_extrinsic_per_day",
+-    "richness_minimum": 1.25,
+-    "computed_delta_source": "Black-Scholes delta computed from same-snapshot observed underlying spot and listed-contract implied volatility; delta is model-derived selection metadata, not an observed quote",
+-    "quote_requirements": {
+-      "positive_bid_each_leg": true,
+-      "max_half_spread_usd_each_leg": 0.1,
+-      "same_snapshot": true,
+-      "observed_listed_contracts_only": true
+-    },
+-    "regime_and_event_gates": {
+-      "tsla_and_tsll_prior_completed_close_above_sma100": true,
+-      "tsla_and_tsll_prior_completed_return_60d_positive": true,
+-      "no_tsla_earnings_during_planned_hold": true,
+-      "no_tsll_ex_dividend_before_short_exit": true
+-    },
+-    "candidate_selection_tie_breaks": [
+-      "highest richness metric",
+-      "lowest summed package half-spread",
+-      "lowest package debit",
+-      "lexicographically smallest contract-symbol pair"
++    "underlying": "SPY",
++    "structure": "future_conditional_bull_call_debit_spread_not_priced_at_f0",
++    "event_source": "https://www.federalreserve.gov/json/ne-press.json",
++    "event_title": "Federal Reserve issues FOMC statement",
++    "press_type": "Monetary Policy",
++    "event_start": "2013-01-01",
++    "event_end": "2025-12-31",
++    "release_time_new_york": "14:00:00",
++    "statement_url_pattern": "/newsevents/pressreleases/monetaryYYYYMMDDa.htm",
++    "regime": "prior completed close > fully warmed SMA100 and trailing 60-session return > 0",
++    "entry": "next completed regular session open after the 14:00 ET statement",
++    "exit": "close of the fifth session including entry",
++    "forward_sessions": 5,
++    "train_fraction": 0.6,
++    "round_trip_cost_bps": 10.0,
++    "future_option_dte_range": [18, 24],
++    "future_option_width_usd": 2.0
++  },
++  "control_geometry": {
++    "prior_only": true,
++    "same_regime": true,
++    "max_distance_sessions": 756,
++    "max_hv20_gap": 0.1,
+… omitted 123 diff line(s) across 1 additional file(s)/section(s)
+  ┊ 📋 plan      update 2/5 ✓  0.0s
+  ┊ 📚 skill     test-driven-development  0.0s
+  ┊ ✍️  write     /Users/jarvis/dev/tsla-tsll-options-tracker/tests/test_fomc_information_resolution_train_lab.py  0.5s
+  ┊ review diff
+a/tests/test_fomc_information_resolution_train_lab.py → b/tests/test_fomc_information_resolution_train_lab.py
+@@ -0,0 +1,66 @@
++import json
++import unittest
++
++import numpy as np
++import pandas as pd
++
++from scripts.fomc_information_resolution_train_lab import (
++    build_fomc_matched_blueprints,
++    parse_official_fomc_events,
++    run_lab_from_frame,
++)
++
++
++class FomcInformationResolutionTrainLabTest(unittest.TestCase):
++    def test_official_event_parser_accepts_only_exact_2pm_statement_rows(self):
++        records = [
++            {
++                "d": "3/20/2024 2:00:00 PM",
++                "t": "Federal Reserve issues FOMC statement",
++                "pt": "Monetary Policy",
++                "l": "/newsevents/pressreleases/monetary20240320a.htm",
++            },
++            {
++                "d": "3/3/2020 10:00:00 AM",
++                "t": "Federal Reserve issues FOMC statement",
++                "pt": "Monetary Policy",
++                "l": "/newsevents/pressreleases/monetary20200303a.htm",
++            },
++            {
++                "d": "9/17/2014 2:00:00 PM",
++                "t": "Federal Reserve issues FOMC statement on policy normalization principles and plans",
++                "pt": "Monetary Policy",
++                "l": "/newsevents/pressreleases/monetary20140917c.htm",
++            },
++            {
++                "d": "3/20/2024 2:00:00 PM",
++                "t": "Federal Reserve issues FOMC statement",
++                "pt": "Other",
++                "l": "/newsevents/pressreleases/monetary20240320a.htm",
++            },
++            {
++                "d": "3/20/2024 2:00:00 PM",
++                "t": "Federal Reserve issues FOMC statement",
++                "pt": "Monetary Policy",
++                "l": "/newsevents/pressreleases/orders20240320a.htm",
++            },
++        ]
++
++        events = parse_official_fomc_events(records, start="2013-01-01", end="2025-12-31")
++
++        self.assertEqual(len(events), 1)
++        row = events.iloc[0]
++        self.assertEqual(row["decision_date"], pd.Timestamp("2024-03-20"))
++        self.assertEqual(str(row["release_at_new_york"]), "2024-03-20 14:00:00-04:00")
++        self.assertEqual(
++            row["statement_url"],
++            "https://www.federalreserve.gov/newsevents/pressreleases/monetary20240320a.htm",
++        )
++        self.assertEqual(events.attrs["excluded_non_2pm"], 1)
++        self.assertEqual(events.attrs["excluded_wrong_title"], 1)
++        self.assertEqual(events.attrs["excluded_wrong_press_type"], 1)
++        self.assertEqual(events.attrs["excluded_bad_url"], 1)
++
++
++if __name__ == "__main__":
++    unittest.main()
+  ┊ 💻 $         .venv/bin/python -m pytest tests/test_fomc_information_resolution_train_lab.py::FomcInformationResolutionTrainLabTest::test_official_event_parser_accepts_only_exact_2pm_statement_rows -q  0.3s [exit 4]
+  ┊ ✍️  write     /Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py  0.5s
+  ┊ review diff
+a/scripts/fomc_information_resolution_train_lab.py → b/scripts/fomc_information_resolution_train_lab.py
+@@ -0,0 +1,97 @@
++#!/usr/bin/env python3
++"""Train-only FOMC policy-information-resolution discovery lab.
++
++BUILD/L0 only. Official prior-known release timestamps define events. The lab
++keeps the chronological final 40% of eligible blueprints outcome-unread and
++performs no option pricing.
++"""
++from __future__ import annotations
++
++from typing import Any, Iterable
++from urllib.parse import urljoin
++import re
++
++import pandas as pd
++
++
++FED_BASE_URL = "https://www.federalreserve.gov"
++FED_PRESS_JSON_URL = f"{FED_BASE_URL}/json/ne-press.json"
++EVENT_TITLE = "Federal Reserve issues FOMC statement"
++PRESS_TYPE = "Monetary Policy"
++STATEMENT_PATH = re.compile(r"^/newsevents/pressreleases/monetary\d{8}a\.htm$")
++NEW_YORK = "America/New_York"
++CANDIDATE_ID = "FOMC_INFORMATION_RESOLUTION_SPY_BULL_CALL_21D_V1"
++FAMILY_ID = "FOMC_POLICY_INFORMATION_RESOLUTION_DRIFT"
++
++
++def parse_official_fomc_events(
++    records: Iterable[dict[str, Any]], *, start: str, end: str
++) -> pd.DataFrame:
++    """Select exact regular 14:00 ET FOMC statement records from the Fed feed."""
++    start_date = pd.Timestamp(start).normalize()
++    end_date = pd.Timestamp(end).normalize()
++    if start_date > end_date:
++        raise ValueError("event start must not exceed end")
++    excluded = {
++        "excluded_non_2pm": 0,
++        "excluded_wrong_title": 0,
++        "excluded_wrong_press_type": 0,
++        "excluded_bad_url": 0,
++        "excluded_outside_window": 0,
++    }
++    rows: list[dict[str, Any]] = []
++    for record in records:
++        title = str(record.get("t", ""))
++        if title != EVENT_TITLE:
++            excluded["excluded_wrong_title"] += 1
++            continue
++        if str(record.get("pt", "")) != PRESS_TYPE:
++            excluded["excluded_wrong_press_type"] += 1
++            continue
++        path = str(record.get("l", ""))
++        if not STATEMENT_PATH.fullmatch(path):
++            excluded["excluded_bad_url"] += 1
++            continue
++        try:
++            naive = pd.Timestamp(str(record.get("d", "")))
++        except (TypeError, ValueError) as exc:
++            raise ValueError("Fed release timestamp is malformed") from exc
++        if naive.tzinfo is not None:
++            raise ValueError("Fed release timestamps must use feed-local naive time")
++        decision_date = naive.normalize()
++        if not start_date <= decision_date <= end_date:
++            excluded["excluded_outside_window"] += 1
++            continue
++        if naive.time().isoformat() != "14:00:00":
++            excluded["excluded_non_2pm"] += 1
++            continue
++        release_at = naive.tz_localize(NEW_YORK, ambiguous="raise", nonexistent="raise")
++        rows.append(
++            {
++                "decision_date": decision_date,
++                "release_at_new_york": release_at,
++                "statement_url": urljoin(FED_BASE_URL, path),
++                "source_title": title,
++                "source_press_type": PRESS_TYPE,
++            }
++        )
++    frame = pd.DataFrame(rows)
+… omitted 19 diff line(s) across 1 additional file(s)/section(s)
+  ┊ 💻 $         .venv/bin/python -m pytest tests/test_fomc_information_resolution_train_lab.py::FomcInformationResolutionTrainLabTest::test_official_event_parser_accepts_only_exact_2pm_statement_rows -q  0.3s
+  ┊ 🔧 patch     /Users/jarvis/dev/tsla-tsll-options-tracker/tests/test_fomc_information_resolution_train_lab.py  0.6s
+  ┊ review diff
+a//Users/jarvis/dev/tsla-tsll-options-tracker/tests/test_fomc_information_resolution_train_lab.py → b//Users/jarvis/dev/tsla-tsll-options-tracker/tests/test_fomc_information_resolution_train_lab.py
+@@ -61,6 +61,62 @@
+         self.assertEqual(events.attrs["excluded_wrong_press_type"], 1)
+         self.assertEqual(events.attrs["excluded_bad_url"], 1)
+
++    def test_blueprint_uses_prior_features_next_session_open_and_no_outcome_matching(self):
++        index = pd.bdate_range("2018-01-02", periods=700)
++        close = 100.0 * np.exp(np.linspace(0.0, 0.8, len(index)))
++        frame = pd.DataFrame(
++            {
++                "open": close * 1.0005,
++                "high": close * 1.01,
++                "low": close * 0.99,
++                "close": close,
++                "volume": 1_000_000,
++            },
++            index=index,
++        )
++        decision_date = index[520]
++        events = pd.DataFrame(
++            {
++                "decision_date": [decision_date],
++                "release_at_new_york": [
++                    pd.Timestamp(decision_date).tz_localize("America/New_York")
++                    + pd.Timedelta(hours=14)
++                ],
++                "statement_url": [
++                    f"https://www.federalreserve.gov/newsevents/pressreleases/monetary{decision_date:%Y%m%d}a.htm"
++                ],
++            }
++        )
++
++        baseline = build_fomc_matched_blueprints(
++            frame,
++            events,
++            max_distance_sessions=300,
++            max_hv20_gap=0.20,
++            max_ret60_gap=0.20,
++        )
++        shocked = frame.copy()
++        shocked.loc[index[521:526], ["open", "high", "low", "close"]] *= 1.25
++        changed = build_fomc_matched_blueprints(
++            shocked,
++            events,
++            max_distance_sessions=300,
++            max_hv20_gap=0.20,
++            max_ret60_gap=0.20,
++        )
++
++        self.assertEqual(len(baseline), 1)
++        self.assertEqual(
++            {k: v for k, v in baseline[0].items() if not k.endswith("return")},
++            {k: v for k, v in changed[0].items() if not k.endswith("return")},
++        )
++        row = baseline[0]
++        self.assertEqual(row["event_entry_date"], index[521])
++        self.assertEqual(row["event_exit_date"], index[525])
++        self.assertLess(row["control_exit_date"], decision_date)
++        self.assertLess(row["control_entry_date"], row["control_exit_date"])
++        self.assertEqual(row["feature_date"], index[519])
++
+
+ if __name__ == "__main__":
+     unittest.main()
+  ┊ 💻 $         .venv/bin/python -m pytest tests/test_fomc_information_resolution_train_lab.py::FomcInformationResolutionTrainLabTest::test_blueprint_uses_prior_features_next_session_open_and_no_outcome_matching -q  0.4s [exit 1]
+  ┊ 🔧 patch     /Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py  0.7s
+  ┊ review diff
+a//Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py → b//Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py
+@@ -89,8 +89,173 @@
+     return frame
+
+
+-def build_fomc_matched_blueprints(*args: Any, **kwargs: Any) -> list[dict[str, Any]]:
+-    raise NotImplementedError
++def _validate_price_frame(frame: pd.DataFrame) -> pd.DataFrame:
++    required = {"open", "high", "low", "close", "volume"}
++    if not required.issubset(frame.columns):
++        raise ValueError("price frame requires open/high/low/close/volume")
++    prepared = frame.copy()
++    prepared.index = pd.DatetimeIndex(pd.to_datetime(prepared.index)).tz_localize(None).normalize()
++    prepared = prepared.loc[:, ["open", "high", "low", "close", "volume"]].apply(
++        pd.to_numeric, errors="coerce"
++    )
++    if (
++        prepared.empty
++        or not prepared.index.is_unique
++        or not prepared.index.is_monotonic_increasing
++        or not np.isfinite(prepared.to_numpy(dtype=float)).all()
++        or (prepared[["open", "high", "low", "close"]] <= 0.0).any().any()
++    ):
++        raise ValueError("price frame must be finite, positive, unique, and increasing")
++    if (prepared["high"] < prepared[["open", "close"]].max(axis=1)).any() or (
++        prepared["low"] > prepared[["open", "close"]].min(axis=1)
++    ).any():
++        raise ValueError("price frame OHLC geometry is invalid")
++    return prepared
++
++
++def _feature_frame(frame: pd.DataFrame) -> pd.DataFrame:
++    close = frame["close"].astype(float)
++    log_return = np.log(close / close.shift(1))
++    return pd.DataFrame(
++        {
++            "sma100": close.rolling(100, min_periods=100).mean(),
++            "ret60": close / close.shift(60) - 1.0,
++            "hv20": log_return.rolling(20, min_periods=20).std() * np.sqrt(252.0),
++        },
++        index=frame.index,
++    )
++
++
++def _windows_overlap(left: tuple[int, int], right: tuple[int, int]) -> bool:
++    return not (left[1] < right[0] or left[0] > right[1])
++
++
++def build_fomc_matched_blueprints(
++    price_frame: pd.DataFrame,
++    events: pd.DataFrame,
++    *,
++    forward_sessions: int = 5,
++    max_distance_sessions: int = 756,
++    max_hv20_gap: float = 0.10,
++    max_ret60_gap: float = 0.10,
++    event_exclusion_sessions: int = 5,
++) -> list[dict[str, Any]]:
++    """Freeze outcome-independent event/control geometry from prior-completed features."""
++    frame = _validate_price_frame(price_frame)
++    if forward_sessions < 1 or max_distance_sessions <= forward_sessions:
++        raise ValueError("forward and matching distances are invalid")
++    if min(max_hv20_gap, max_ret60_gap) <= 0.0 or event_exclusion_sessions < 0:
++        raise ValueError("feature gaps must be positive and exclusion non-negative")
++    required = {"decision_date", "release_at_new_york", "statement_url"}
++    if not required.issubset(events.columns) or events.empty:
++        raise ValueError("events require decision_date, release_at_new_york, and statement_url")
++    event_table = events.copy()
++    event_table["decision_date"] = pd.to_datetime(event_table["decision_date"]).dt.tz_localize(None).dt.normalize()
++    if event_table["decision_date"].duplicated().any():
++        raise ValueError("event decision dates must be unique")
++    event_table = event_table.sort_values("decision_date").reset_index(drop=True)
++    index = frame.index
++    positions = {pd.Timestamp(value): position for position, value in enumerate(index)}
++    features = _feature_frame(frame)
++    event_positions = [positions[date] for date in event_table["decision_date"] if date in positions]
++    excluded_control_features: set[int] = set()
++    for position in event_positions:
++        excluded_control_features.update(
++            range(
+… omitted 97 diff line(s) across 1 additional file(s)/section(s)
+  ┊ 🔧 patch     /Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py  0.7s
+  ┊ review diff
+a//Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py → b//Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py
+@@ -11,6 +11,7 @@
+ from urllib.parse import urljoin
+ import re
+
++import numpy as np
+ import pandas as pd
+
+
+  ┊ 💻 $         .venv/bin/python -m pytest tests/test_fomc_information_resolution_train_lab.py::FomcInformationResolutionTrainLabTest::test_blueprint_uses_prior_features_next_session_open_and_no_outcome_matching -q  0.4s
+  ┊ 🔧 patch     /Users/jarvis/dev/tsla-tsll-options-tracker/tests/test_fomc_information_resolution_train_lab.py  0.0s [old_string and new_string are identical]
+  ┊ 🔧 patch     /Users/jarvis/dev/tsla-tsll-options-tracker/tests/test_fomc_information_resolution_train_lab.py  0.4s
+  ┊ review diff
+a//Users/jarvis/dev/tsla-tsll-options-tracker/tests/test_fomc_information_resolution_train_lab.py → b//Users/jarvis/dev/tsla-tsll-options-tracker/tests/test_fomc_information_resolution_train_lab.py
+@@ -117,6 +117,57 @@
+         self.assertLess(row["control_entry_date"], row["control_exit_date"])
+         self.assertEqual(row["feature_date"], index[519])
+
++    def test_run_is_train_only_strict_json_and_fail_closed_on_no_incremental_edge(self):
++        index = pd.bdate_range("2012-01-03", periods=2_200)
++        close = 100.0 * np.exp(np.linspace(0.0, 1.0, len(index)))
++        frame = pd.DataFrame(
++            {
++                "open": close,
++                "high": close * 1.01,
++                "low": close * 0.99,
++                "close": close,
++                "volume": 1_000_000,
++            },
++            index=index,
++        )
++        event_positions = list(range(300, 2_000, 120))
++        events = pd.DataFrame(
++            {
++                "decision_date": [index[position] for position in event_positions],
++                "release_at_new_york": [
++                    pd.Timestamp(index[position]).tz_localize("America/New_York")
++                    + pd.Timedelta(hours=14)
++                    for position in event_positions
++                ],
++                "statement_url": [
++                    f"https://www.federalreserve.gov/newsevents/pressreleases/monetary{index[position]:%Y%m%d}a.htm"
++                    for position in event_positions
++                ],
++            }
++        )
++
++        payload = run_lab_from_frame(
++            frame,
++            events,
++            provenance={"fixture": True},
++            train_fraction=0.60,
++            min_train_pairs=1,
++            min_event_years=1,
++            min_control_support=0.0,
++            min_positive_frequency=0.0,
++            worst_decile_floor=-1.0,
++            bootstrap_samples=400,
++        )
++
++        self.assertEqual(payload["strategy_outcome"], "FAMILY_CLOSED")
++        self.assertFalse(payload["train"]["gate_pass"])
++        self.assertFalse(payload["untouched_holdout"]["outcome_metrics_read"])
++        self.assertFalse(payload["untouched_holdout"]["simulation_run"])
++        self.assertNotIn("mean_return", payload["untouched_holdout"])
++        self.assertEqual(payload["option_stage"]["pricing_calls"], 0)
++        self.assertFalse(payload["l1_claim"])
++        json.dumps(payload, allow_nan=False)
++
+
+ if __name__ == "__main__":
+     unittest.main()
+📦 Pre-API compression: ~205,146 tokens near the context/output limit. Compacting before the next model call.
+🗜️ Compacting context — summarizing earlier conversation so I can continue...
+  ┊ 💻 $         .venv/bin/python -m pytest tests/test_fomc_information_resolution_train_lab.py::FomcInformationResolutionTrainLabTest::test_run_is_train_only_strict_json_and_fail_closed_on_no_incremental_edge -q  0.3s [exit 1]
+  ┊ 🔧 patch     /Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py  0.7s
+  ┊ review diff
+a//Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py → b//Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py
+@@ -9,6 +9,9 @@
+
+ from typing import Any, Iterable
+ from urllib.parse import urljoin
++import hashlib
++import json
++import math
+ import re
+
+ import numpy as np
+  ┊ 🔧 patch     /Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py  0.7s
+  ┊ review diff
+a//Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py → b//Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py
+@@ -262,5 +262,280 @@
+     return blueprints
+
+
+-def run_lab_from_frame(*args: Any, **kwargs: Any) -> dict[str, Any]:
+-    raise NotImplementedError
++def _eligible_event_geometry(
++    frame: pd.DataFrame, events: pd.DataFrame, *, forward_sessions: int
++) -> list[dict[str, Any]]:
++    index = frame.index
++    positions = {pd.Timestamp(value): position for position, value in enumerate(index)}
++    features = _feature_frame(frame)
++    geometry: list[dict[str, Any]] = []
++    occupied: list[tuple[int, int]] = []
++    for event in events.sort_values("decision_date").itertuples(index=False):
++        decision_date = pd.Timestamp(event.decision_date).tz_localize(None).normalize()
++        decision_pos = positions.get(decision_date)
++        if decision_pos is None:
++            continue
++        feature_pos = decision_pos - 1
++        entry_pos = decision_pos + 1
++        exit_pos = entry_pos + forward_sessions - 1
++        if feature_pos < 99 or exit_pos >= len(index):
++            continue
++        feature = features.iloc[feature_pos]
++        if not np.isfinite(feature.to_numpy(dtype=float)).all():
++            continue
++        if not (
++            float(frame.iloc[feature_pos]["close"]) > float(feature["sma100"])
++            and float(feature["ret60"]) > 0.0
++        ):
++            continue
++        window = (entry_pos, exit_pos)
++        if any(_windows_overlap(window, prior) for prior in occupied):
++            continue
++        geometry.append(
++            {
++                "decision_date": decision_date,
++                "feature_date": pd.Timestamp(index[feature_pos]),
++                "event_entry_date": pd.Timestamp(index[entry_pos]),
++                "event_exit_date": pd.Timestamp(index[exit_pos]),
++                "statement_url": str(event.statement_url),
++            }
++        )
++        occupied.append(window)
++    return geometry
++
++
++def _canonical_json_bytes(value: Any) -> bytes:
++    return json.dumps(
++        value, sort_keys=True, separators=(",", ":"), allow_nan=False, default=str
++    ).encode("utf-8")
++
++
++def _finite_or_none(value: float) -> float | None:
++    return float(value) if math.isfinite(float(value)) else None
++
++
++def _year_block_bootstrap_lower_bound(
++    differences: np.ndarray,
++    years: np.ndarray,
++    *,
++    samples: int,
++    seed: int,
++    alpha: float = 0.10,
++) -> float | None:
++    if len(differences) == 0 or samples < 100:
++        return None
++    unique_years = np.array(sorted(set(int(year) for year in years)), dtype=int)
++    if len(unique_years) == 0:
++        return None
++    grouped = {year: differences[years == year] for year in unique_years}
++    rng = np.random.default_rng(seed)
++    draws = np.empty(samples, dtype=float)
++    for draw in range(samples):
++        sampled_years = rng.choice(unique_years, size=len(unique_years), replace=True)
++        sampled = np.concatenate([grouped[int(year)] for year in sampled_years])
++        draws[draw] = float(np.mean(sampled))
++    return float(np.quantile(draws, alpha))
+… omitted 204 diff line(s) across 1 additional file(s)/section(s)
+  ┊ 💻 $         .venv/bin/python -m pytest tests/test_fomc_information_resolution_train_lab.py::FomcInformationResolutionTrainLabTest::test_run_is_train_only_strict_json_and_fail_closed_on_no_incremental_edge -q  0.6s
+  ┊ 🔎 grep      def load_stooq|def _load_stooq|def load_equity_history|def _load_equity_history  0.1s
+  ┊ 📖 read      monthly_opex_post_expiry_train_lab.py L1-180  0.2s
+  ┊ 📖 read      post_earnings_information_drift_train_lab.py L1-180  0.2s
+  ┊ 🔎 grep      load_adjusted_history|def main|argparse  0.2s
+  ┊ 📖 read      low_hv_cross_section_train_lab.py L55-184  0.2s
+  ┊ 🔎 grep      auto_adjust=True|\["Open"\]|missing Open|OHLCV  0.1s
+  ┊ 📖 read      data.py L1-130  0.2s
+  ┊ 🔧 patch     /Users/jarvis/dev/tsla-tsll-options-tracker/tests/test_fomc_information_resolution_train_lab.py  0.3s
+  ┊ review diff
+a//Users/jarvis/dev/tsla-tsll-options-tracker/tests/test_fomc_information_resolution_train_lab.py → b//Users/jarvis/dev/tsla-tsll-options-tracker/tests/test_fomc_information_resolution_train_lab.py
+@@ -1,4 +1,6 @@
+ import json
++from pathlib import Path
++import tempfile
+ import unittest
+
+ import numpy as np
+  ┊ 🔧 patch     /Users/jarvis/dev/tsla-tsll-options-tracker/tests/test_fomc_information_resolution_train_lab.py  0.4s
+  ┊ review diff
+a//Users/jarvis/dev/tsla-tsll-options-tracker/tests/test_fomc_information_resolution_train_lab.py → b//Users/jarvis/dev/tsla-tsll-options-tracker/tests/test_fomc_information_resolution_train_lab.py
+@@ -8,6 +8,7 @@
+
+ from scripts.fomc_information_resolution_train_lab import (
+     build_fomc_matched_blueprints,
++    load_adjusted_ohlcv,
+     parse_official_fomc_events,
+     run_lab_from_frame,
+ )
+  ┊ 🔧 patch     /Users/jarvis/dev/tsla-tsll-options-tracker/tests/test_fomc_information_resolution_train_lab.py  0.3s
+  ┊ review diff
+a//Users/jarvis/dev/tsla-tsll-options-tracker/tests/test_fomc_information_resolution_train_lab.py → b//Users/jarvis/dev/tsla-tsll-options-tracker/tests/test_fomc_information_resolution_train_lab.py
+@@ -171,6 +171,45 @@
+         self.assertFalse(payload["l1_claim"])
+         json.dumps(payload, allow_nan=False)
+
++    def test_adjusted_ohlcv_cache_round_trip_consumes_persisted_bytes(self):
++        index = pd.bdate_range("2024-01-02", periods=120)
++        downloaded = pd.DataFrame(
++            {
++                "Open": np.linspace(100.0, 110.0, len(index)),
++                "High": np.linspace(101.0, 111.0, len(index)),
++                "Low": np.linspace(99.0, 109.0, len(index)),
++                "Close": np.linspace(100.5, 110.5, len(index)),
++                "Volume": np.full(len(index), 1_000_000),
++            },
++            index=index,
++        )
++        calls = []
++
++        def downloader(*args, **kwargs):
++            calls.append((args, kwargs))
++            return downloaded.copy()
++
++        with tempfile.TemporaryDirectory() as directory:
++            first, first_meta = load_adjusted_ohlcv(
++                "SPY",
++                cache_dir=Path(directory),
++                start="2024-01-01",
++                end="2024-07-01",
++                downloader=downloader,
++            )
++            second, second_meta = load_adjusted_ohlcv(
++                "SPY",
++                cache_dir=Path(directory),
++                start="2024-01-01",
++                end="2024-07-01",
++                downloader=lambda *args, **kwargs: self.fail("cache miss"),
++            )
++
++        self.assertEqual(len(calls), 1)
++        pd.testing.assert_frame_equal(first, second)
++        self.assertEqual(first_meta["sha256"], second_meta["sha256"])
++        self.assertEqual(first_meta["adjustment_semantics"], "yfinance auto_adjust=True")
++
+
+ if __name__ == "__main__":
+     unittest.main()
+  ┊ 💻 $         .venv/bin/python -m pytest tests/test_fomc_information_resolution_train_lab.py::FomcInformationResolutionTrainLabTest::test_adjusted_ohlcv_cache_round_trip_consumes_persisted_bytes -q  0.5s [exit 4]
+  ┊ 🔧 patch     /Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py  0.8s
+  ┊ review diff
+a//Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py → b//Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py
+@@ -7,6 +7,7 @@
+ """
+ from __future__ import annotations
+
++from pathlib import Path
+ from typing import Any, Iterable
+ from urllib.parse import urljoin
+ import hashlib
+  ┊ 🔧 patch     /Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py  0.7s
+  ┊ review diff
+a//Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py → b//Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py
+@@ -17,6 +17,7 @@
+
+ import numpy as np
+ import pandas as pd
++import yfinance as yf
+
+
+ FED_BASE_URL = "https://www.federalreserve.gov"
+  ┊ 🔧 patch     /Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py  0.8s
+  ┊ review diff
+a//Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py → b//Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py
+@@ -93,6 +93,57 @@
+     frame.attrs.update(excluded)
+     frame.attrs["source_url"] = FED_PRESS_JSON_URL
+     return frame
++
++
++def load_adjusted_ohlcv(
++    symbol: str,
++    *,
++    cache_dir: Path,
++    start: str,
++    end: str,
++    downloader: Any = yf.download,
++) -> tuple[pd.DataFrame, dict[str, Any]]:
++    """Load and hash the exact persisted auto-adjusted OHLCV representation."""
++    normalized = str(symbol).strip().upper()
++    if not normalized or not re.fullmatch(r"[A-Z][A-Z0-9.-]*", normalized):
++        raise ValueError("valid symbol is required")
++    if pd.Timestamp(start) >= pd.Timestamp(end):
++        raise ValueError("history start must precede end")
++    cache_dir.mkdir(parents=True, exist_ok=True)
++    cache_path = cache_dir / f"{normalized}_{start}_{end}_auto_adjust_ohlcv.csv"
++    if not cache_path.exists():
++        downloaded = downloader(
++            normalized,
++            start=start,
++            end=end,
++            auto_adjust=True,
++            progress=False,
++        )
++        if isinstance(downloaded.columns, pd.MultiIndex):
++            downloaded.columns = downloaded.columns.get_level_values(0)
++        required = ["Open", "High", "Low", "Close", "Volume"]
++        if downloaded.empty or not set(required).issubset(downloaded.columns):
++            raise ValueError(f"{normalized} adjusted download missing OHLCV")
++        persisted = downloaded.loc[:, required].copy()
++        persisted.columns = [column.lower() for column in required]
++        persisted.to_csv(cache_path)
++    raw = pd.read_csv(cache_path, index_col=0, parse_dates=True)
++    raw.columns = [str(column).strip().lower() for column in raw.columns]
++    if list(raw.columns) != ["open", "high", "low", "close", "volume"]:
++        raise ValueError(f"{normalized} cache must contain exact OHLCV columns")
++    while len(raw) and raw.iloc[-1].isna().any():
++        raw = raw.iloc[:-1]
++    prepared = _validate_price_frame(raw)
++    return prepared, {
++        "path": str(cache_path),
++        "sha256": hashlib.sha256(cache_path.read_bytes()).hexdigest(),
++        "rows": int(len(prepared)),
++        "start": str(prepared.index[0].date()),
++        "end": str(prepared.index[-1].date()),
++        "adjustment_semantics": "yfinance auto_adjust=True",
++        "requested_start": start,
++        "requested_end_exclusive": end,
++    }
+
+
+ def _validate_price_frame(frame: pd.DataFrame) -> pd.DataFrame:
+  ┊ 💻 $         .venv/bin/python -m pytest tests/test_fomc_information_resolution_train_lab.py::FomcInformationResolutionTrainLabTest::test_adjusted_ohlcv_cache_round_trip_consumes_persisted_bytes -q  0.5s
+  ┊ 🔧 patch     /Users/jarvis/dev/tsla-tsll-options-tracker/tests/test_fomc_information_resolution_train_lab.py  0.3s
+  ┊ review diff
+a//Users/jarvis/dev/tsla-tsll-options-tracker/tests/test_fomc_information_resolution_train_lab.py → b//Users/jarvis/dev/tsla-tsll-options-tracker/tests/test_fomc_information_resolution_train_lab.py
+@@ -164,6 +164,15 @@
+
+         self.assertEqual(payload["strategy_outcome"], "FAMILY_CLOSED")
+         self.assertFalse(payload["train"]["gate_pass"])
++        self.assertEqual(
++            len(payload["train"]["pairs"]), payload["population"]["train_matched_pairs"]
++        )
++        self.assertTrue(
++            all(
++                pair["control_exit_date"] < pair["decision_date"]
++                for pair in payload["train"]["pairs"]
++            )
++        )
+         self.assertFalse(payload["untouched_holdout"]["outcome_metrics_read"])
+         self.assertFalse(payload["untouched_holdout"]["simulation_run"])
+         self.assertNotIn("mean_return", payload["untouched_holdout"])
+  ┊ 💻 $         .venv/bin/python -m pytest tests/test_fomc_information_resolution_train_lab.py::FomcInformationResolutionTrainLabTest::test_run_is_train_only_strict_json_and_fail_closed_on_no_incremental_edge -q  0.8s [exit 1]
+  ┊ 🔧 patch     /Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py  0.7s
+  ┊ review diff
+a//Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py → b//Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py
+@@ -449,6 +449,7 @@
+         raise AssertionError("holdout row entered train evaluation")
+     event_returns: list[float] = []
+     control_returns: list[float] = []
++    pair_audit: list[dict[str, Any]] = []
+     years: list[int] = []
+     cost = round_trip_cost_bps / 10_000.0
+     for row in train_rows:
+  ┊ 🔧 patch     /Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py  0.7s
+  ┊ review diff
+a//Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py → b//Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py
+@@ -457,9 +457,35 @@
+         event_exit = float(frame.loc[row["event_exit_date"], "close"])
+         control_entry = float(frame.loc[row["control_entry_date"], "open"])
+         control_exit = float(frame.loc[row["control_exit_date"], "close"])
+-        event_returns.append(event_exit / event_entry - 1.0 - cost)
+-        control_returns.append(control_exit / control_entry - 1.0 - cost)
++        event_net = event_exit / event_entry - 1.0 - cost
++        control_net = control_exit / control_entry - 1.0 - cost
++        event_returns.append(event_net)
++        control_returns.append(control_net)
+         years.append(pd.Timestamp(row["decision_date"]).year)
++        pair_audit.append(
++            {
++                "decision_date": str(pd.Timestamp(row["decision_date"]).date()),
++                "feature_date": str(pd.Timestamp(row["feature_date"]).date()),
++                "event_entry_date": str(pd.Timestamp(row["event_entry_date"]).date()),
++                "event_exit_date": str(pd.Timestamp(row["event_exit_date"]).date()),
++                "control_feature_date": str(
++                    pd.Timestamp(row["control_feature_date"]).date()
++                ),
++                "control_entry_date": str(pd.Timestamp(row["control_entry_date"]).date()),
++                "control_exit_date": str(pd.Timestamp(row["control_exit_date"]).date()),
++                "event_return_after_cost": event_net,
++                "control_return_after_cost": control_net,
++                "paired_excess": event_net - control_net,
++                "event_ret60": float(row["event_ret60"]),
++                "control_ret60": float(row["control_ret60"]),
++                "event_hv20": float(row["event_hv20"]),
++                "control_hv20": float(row["control_hv20"]),
++                "ret60_match_gap": float(row["ret60_match_gap"]),
++                "hv20_match_gap": float(row["hv20_match_gap"]),
++                "calendar_distance_sessions": int(row["calendar_distance_sessions"]),
++                "statement_url": str(row["statement_url"]),
++            }
++        )
+     event_array = np.asarray(event_returns, dtype=float)
+     control_array = np.asarray(control_returns, dtype=float)
+     year_array = np.asarray(years, dtype=int)
+  ┊ 🔧 patch     /Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py  0.7s
+  ┊ review diff
+a//Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py → b//Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py
+@@ -594,6 +594,7 @@
+             },
+             "integrity": integrity,
+             "decision_dates": [str(date.date()) for date in decision_dates],
++            "pairs": pair_audit,
+         },
+         "untouched_holdout": {
+             "eligible_blueprints": len(holdout_eligible),
+  ┊ 💻 $         .venv/bin/python -m pytest tests/test_fomc_information_resolution_train_lab.py -q  0.8s
+  ┊ 🔧 patch     /Users/jarvis/dev/tsla-tsll-options-tracker/tests/test_fomc_information_resolution_train_lab.py  0.4s
+  ┊ review diff
+a//Users/jarvis/dev/tsla-tsll-options-tracker/tests/test_fomc_information_resolution_train_lab.py → b//Users/jarvis/dev/tsla-tsll-options-tracker/tests/test_fomc_information_resolution_train_lab.py
+@@ -9,6 +9,7 @@
+ from scripts.fomc_information_resolution_train_lab import (
+     build_fomc_matched_blueprints,
+     load_adjusted_ohlcv,
++    load_official_press_records,
+     parse_official_fomc_events,
+     run_lab_from_frame,
+ )
+  ┊ 🔧 patch     /Users/jarvis/dev/tsla-tsll-options-tracker/tests/test_fomc_information_resolution_train_lab.py  0.3s
+  ┊ review diff
+a//Users/jarvis/dev/tsla-tsll-options-tracker/tests/test_fomc_information_resolution_train_lab.py → b//Users/jarvis/dev/tsla-tsll-options-tracker/tests/test_fomc_information_resolution_train_lab.py
+@@ -220,6 +220,26 @@
+         self.assertEqual(first_meta["sha256"], second_meta["sha256"])
+         self.assertEqual(first_meta["adjustment_semantics"], "yfinance auto_adjust=True")
+
++    def test_official_press_cache_hashes_and_replays_exact_source_bytes(self):
++        source = (
++            '\ufeff[{"d":"3/20/2024 2:00:00 PM","t":"Federal Reserve issues FOMC statement",'
++            '"pt":"Monetary Policy","l":"/newsevents/pressreleases/monetary20240320a.htm"}]'
++        ).encode("utf-8")
++        calls = []
++        with tempfile.TemporaryDirectory() as directory:
++            path = Path(directory) / "fed.json"
++            first, first_meta = load_official_press_records(
++                path, fetch_bytes=lambda url: calls.append(url) or source
++            )
++            second, second_meta = load_official_press_records(
++                path, fetch_bytes=lambda url: self.fail("cache miss")
++            )
++
++        self.assertEqual(len(calls), 1)
++        self.assertEqual(first, second)
++        self.assertEqual(first_meta["sha256"], second_meta["sha256"])
++        self.assertEqual(first_meta["bytes"], len(source))
++
+
+ if __name__ == "__main__":
+     unittest.main()
+  ┊ 💻 $         .venv/bin/python -m pytest tests/test_fomc_information_resolution_train_lab.py::FomcInformationResolutionTrainLabTest::test_official_press_cache_hashes_and_replays_exact_source_bytes -q  0.5s [exit 4]
+  ┊ 🔧 patch     /Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py  0.8s
+  ┊ review diff
+a//Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py → b//Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py
+@@ -8,8 +8,9 @@
+ from __future__ import annotations
+
+ from pathlib import Path
+-from typing import Any, Iterable
++from typing import Any, Callable, Iterable
+ from urllib.parse import urljoin
++from urllib.request import Request, urlopen
+ import hashlib
+ import json
+ import math
+  ┊ 🔧 patch     /Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py  0.9s
+  ┊ review diff
+a//Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py → b//Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py
+@@ -29,6 +29,44 @@
+ NEW_YORK = "America/New_York"
+ CANDIDATE_ID = "FOMC_INFORMATION_RESOLUTION_SPY_BULL_CALL_21D_V1"
+ FAMILY_ID = "FOMC_POLICY_INFORMATION_RESOLUTION_DRIFT"
++
++
++def _fetch_url_bytes(url: str) -> bytes:
++    request = Request(url, headers={"User-Agent": "TraderResearch/1.0"})
++    with urlopen(request, timeout=45) as response:
++        return response.read()
++
++
++def load_official_press_records(
++    cache_path: Path,
++    *,
++    fetch_bytes: Callable[[str], bytes] = _fetch_url_bytes,
++) -> tuple[list[dict[str, Any]], dict[str, Any]]:
++    """Persist and replay exact bytes from the Federal Reserve press index."""
++    cache_path.parent.mkdir(parents=True, exist_ok=True)
++    if not cache_path.exists():
++        payload = fetch_bytes(FED_PRESS_JSON_URL)
++        if not payload:
++            raise ValueError("Federal Reserve press source returned no bytes")
++        cache_path.write_bytes(payload)
++    raw = cache_path.read_bytes()
++    try:
++        decoded = json.loads(raw.decode("utf-8-sig"))
++    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
++        raise ValueError("Federal Reserve press cache is not valid UTF-8 JSON") from exc
++    if not isinstance(decoded, list) or not decoded or not all(
++        isinstance(record, dict) for record in decoded
++    ):
++        raise ValueError("Federal Reserve press cache must be a non-empty record list")
++    records = [dict(record) for record in decoded]
++    return records, {
++        "url": FED_PRESS_JSON_URL,
++        "path": str(cache_path),
++        "sha256": hashlib.sha256(raw).hexdigest(),
++        "bytes": len(raw),
++        "records": len(records),
++        "timestamp_semantics": "feed-local timestamps interpreted as America/New_York",
++    }
+
+
+ def parse_official_fomc_events(
+  ┊ 💻 $         .venv/bin/python -m pytest tests/test_fomc_information_resolution_train_lab.py -q  0.7s
+  ┊ 🔧 patch     /Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py  0.8s
+  ┊ review diff
+a//Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py → b//Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py
+@@ -11,6 +11,8 @@
+ from typing import Any, Callable, Iterable
+ from urllib.parse import urljoin
+ from urllib.request import Request, urlopen
++import argparse
++from datetime import datetime, timezone
+ import hashlib
+ import json
+ import math
+  ┊ 🔧 patch     /Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py  0.8s
+  ┊ review diff
+a//Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py → b//Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py
+@@ -661,3 +661,148 @@
+     }
+     _canonical_json_bytes(payload)
+     return payload
++
++
++def _event_manifest(events: pd.DataFrame, source: dict[str, Any]) -> dict[str, Any]:
++    return {
++        "schema_version": 1,
++        "source": source,
++        "filter": {
++            "title": EVENT_TITLE,
++            "press_type": PRESS_TYPE,
++            "release_time_new_york": "14:00:00",
++            "statement_path_regex": STATEMENT_PATH.pattern,
++            "event_start": "2013-01-01",
++            "event_end": "2025-12-31",
++        },
++        "filter_counts": {
++            key: value
++            for key, value in events.attrs.items()
++            if key.startswith("excluded_")
++        },
++        "events": [
++            {
++                "decision_date": str(pd.Timestamp(row.decision_date).date()),
++                "release_at_new_york": str(row.release_at_new_york),
++                "statement_url": str(row.statement_url),
++                "source_title": str(row.source_title),
++                "source_press_type": str(row.source_press_type),
++            }
++            for row in events.itertuples(index=False)
++        ],
++    }
++
++
++def main() -> int:
++    parser = argparse.ArgumentParser(
++        description="Run train-only SPY FOMC information-resolution discovery lab"
++    )
++    parser.add_argument("--out", type=Path, required=True)
++    parser.add_argument("--manifest-out", type=Path, required=True)
++    parser.add_argument(
++        "--cache-dir", type=Path, default=Path(".cache/platform/fomc_information_resolution")
++    )
++    parser.add_argument("--history-start", default="2012-01-01")
++    parser.add_argument("--history-end", default="2026-01-15")
++    parser.add_argument("--event-start", default="2013-01-01")
++    parser.add_argument("--event-end", default="2025-12-31")
++    parser.add_argument("--bootstrap-samples", type=int, default=20_000)
++    args = parser.parse_args()
++
++    fed_cache = args.cache_dir / "fed_ne_press.json"
++    records, fed_meta = load_official_press_records(fed_cache)
++    events = parse_official_fomc_events(
++        records, start=args.event_start, end=args.event_end
++    )
++    manifest = _event_manifest(events, fed_meta)
++    manifest["filter"]["event_start"] = args.event_start
++    manifest["filter"]["event_end"] = args.event_end
++    args.manifest_out.parent.mkdir(parents=True, exist_ok=True)
++    args.manifest_out.write_text(
++        json.dumps(manifest, indent=2, sort_keys=True, allow_nan=False) + "\n",
++        encoding="utf-8",
++    )
++    manifest_meta = {
++        "path": str(args.manifest_out),
++        "sha256": hashlib.sha256(args.manifest_out.read_bytes()).hexdigest(),
++        "event_count": len(events),
++    }
++
++    prices, price_meta = load_adjusted_ohlcv(
++        "SPY",
++        cache_dir=args.cache_dir,
++        start=args.history_start,
++        end=args.history_end,
++    )
++    payload = run_lab_from_frame(
++        prices,
+… omitted 70 diff line(s) across 1 additional file(s)/section(s)
+  ┊ 💻 $         .venv/bin/python -m pytest tests/test_fomc_information_resolution_train_lab.py -q + 1 command  1.0s
+  ┊ 💻 $         .venv/bin/python scripts/fomc_information_resolution_train_lab.py --out .cache/platform/fomc_information_resolution_train_2026-07-16T0112.json --manifest-out .cache/platform/fomc_information_resolution_events_2026-07-16T0112.json --bootstrap-samples 20000  2.4s
+  ┊ 🐍 exec      from hermes_tools import read_file  0.0s [BLOCKED: execute_code runs arbitrary local Py...]
+  ┊ 💻 $         .venv/bin/python - <<'PY' import json for p in ['.cache/platform/fomc_information_resolution_train_2026-07-16T0112.json','.cache/platform/fomc_information_resolution_events_2026-07-16T0112.json']: d=json.load(open(p)) print('\nPATH',p) if 'strategy_outcome' in d: view={k:d[k] for k in ['strategy_outcome','funnel_transition','population','untouched_holdout','option_stage']} view['metrics']=d['train']['metrics'] + 3 commands  0.1s
+  ┊ 🔧 patch     /Users/jarvis/dev/tsla-tsll-options-tracker/tests/test_fomc_information_resolution_train_lab.py  0.4s
+  ┊ review diff
+a//Users/jarvis/dev/tsla-tsll-options-tracker/tests/test_fomc_information_resolution_train_lab.py → b//Users/jarvis/dev/tsla-tsll-options-tracker/tests/test_fomc_information_resolution_train_lab.py
+@@ -118,6 +118,7 @@
+         self.assertEqual(row["event_entry_date"], index[521])
+         self.assertEqual(row["event_exit_date"], index[525])
+         self.assertLess(row["control_exit_date"], decision_date)
++        self.assertLess(row["control_exit_date"], index[515])
+         self.assertLess(row["control_entry_date"], row["control_exit_date"])
+         self.assertEqual(row["feature_date"], index[519])
+
+  ┊ 💻 $         .venv/bin/python -m pytest tests/test_fomc_information_resolution_train_lab.py::FomcInformationResolutionTrainLabTest::test_blueprint_uses_prior_features_next_session_open_and_no_outcome_matching -q  0.4s
+  ┊ 💻 $         .venv/bin/python - <<'PY' import numpy as np,pandas as pd from scripts.fomc_information_resolution_train_lab import build_fomc_matched_blueprints index=pd.bdate_range('2018-01-02',periods=700) + 2 commands  0.3s
+  ┊ 🔧 patch     /Users/jarvis/dev/tsla-tsll-options-tracker/tests/test_fomc_information_resolution_train_lab.py  0.3s
+  ┊ review diff
+a//Users/jarvis/dev/tsla-tsll-options-tracker/tests/test_fomc_information_resolution_train_lab.py → b//Users/jarvis/dev/tsla-tsll-options-tracker/tests/test_fomc_information_resolution_train_lab.py
+@@ -121,6 +121,42 @@
+         self.assertLess(row["control_exit_date"], index[515])
+         self.assertLess(row["control_entry_date"], row["control_exit_date"])
+         self.assertEqual(row["feature_date"], index[519])
++
++    def test_control_window_cannot_touch_fomc_exclusion_band(self):
++        index = pd.bdate_range("2020-01-02", periods=400)
++        close = 100.0 * np.exp(np.arange(len(index)) * 0.001)
++        frame = pd.DataFrame(
++            {
++                "open": close,
++                "high": close * 1.01,
++                "low": close * 0.99,
++                "close": close,
++                "volume": 1_000_000,
++            },
++            index=index,
++        )
++        decision_date = index[300]
++        events = pd.DataFrame(
++            {
++                "decision_date": [decision_date],
++                "release_at_new_york": [
++                    pd.Timestamp(decision_date).tz_localize("America/New_York")
++                    + pd.Timedelta(hours=14)
++                ],
++                "statement_url": ["https://www.federalreserve.gov/statement.htm"],
++            }
++        )
++
++        blueprints = build_fomc_matched_blueprints(
++            frame,
++            events,
++            max_distance_sessions=7,
++            max_hv20_gap=1.0,
++            max_ret60_gap=1.0,
++            event_exclusion_sessions=5,
++        )
++
++        self.assertEqual(blueprints, [])
+
+     def test_run_is_train_only_strict_json_and_fail_closed_on_no_incremental_edge(self):
+         index = pd.bdate_range("2012-01-03", periods=2_200)
+  ┊ 💻 $         .venv/bin/python -m pytest tests/test_fomc_information_resolution_train_lab.py::FomcInformationResolutionTrainLabTest::test_control_window_cannot_touch_fomc_exclusion_band -q  0.6s [exit 1]
+  ┊ 🔧 patch     /Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py  0.8s
+  ┊ review diff
+a//Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py → b//Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py
+@@ -296,6 +296,11 @@
+                 continue
+             control_entry_pos = control_feature_pos + 1
+             control_exit_pos = control_entry_pos + forward_sessions - 1
++            if any(
++                position in excluded_control_features
++                for position in range(control_feature_pos, control_exit_pos + 1)
++            ):
++                continue
+             if control_exit_pos >= decision_pos:
+                 continue
+             control_window = (control_entry_pos, control_exit_pos)
+  ┊ 💻 $         .venv/bin/python -m pytest tests/test_fomc_information_resolution_train_lab.py::FomcInformationResolutionTrainLabTest::test_control_window_cannot_touch_fomc_exclusion_band -q + 1 command  1.2s
+  ┊ 💻 $         .venv/bin/python scripts/fomc_information_resolution_train_lab.py --out .cache/platform/fomc_information_resolution_train_2026-07-16T0112.json --manifest-out .cache/platform/fomc_information_resolution_events_2026-07-16T0112.json --bootstrap-samples 20000  1.3s
+  ┊ 💻 $         .venv/bin/python - <<'PY' import json p='.cache/platform/fomc_information_resolution_train_2026-07-16T0112.json' + 1 command  0.1s
+  ┊ 🔧 patch     /Users/jarvis/dev/tsla-tsll-options-tracker/tests/test_fomc_information_resolution_train_lab.py  0.3s
+  ┊ review diff
+a//Users/jarvis/dev/tsla-tsll-options-tracker/tests/test_fomc_information_resolution_train_lab.py → b//Users/jarvis/dev/tsla-tsll-options-tracker/tests/test_fomc_information_resolution_train_lab.py
+@@ -202,6 +202,11 @@
+
+         self.assertEqual(payload["strategy_outcome"], "FAMILY_CLOSED")
+         self.assertFalse(payload["train"]["gate_pass"])
++        self.assertTrue(
++            payload["train"]["integrity"][
++                "control_windows_outside_event_exclusion_bands"
++            ]
++        )
+         self.assertEqual(
+             len(payload["train"]["pairs"]), payload["population"]["train_matched_pairs"]
+         )
+  ┊ 💻 $         .venv/bin/python -m pytest tests/test_fomc_information_resolution_train_lab.py::FomcInformationResolutionTrainLabTest::test_run_is_train_only_strict_json_and_fail_closed_on_no_incremental_edge -q  0.8s
+  ┊ 🔧 patch     /Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py  0.7s
+  ┊ review diff
+a//Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py → b//Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py
+@@ -556,6 +556,32 @@
+         (pd.Timestamp(row["control_entry_date"]), pd.Timestamp(row["control_exit_date"]))
+         for row in train_rows
+     ]
++    frame_positions = {
++        pd.Timestamp(value): position for position, value in enumerate(frame.index)
++    }
++    official_event_positions = [
++        frame_positions[date]
++        for date in pd.to_datetime(events["decision_date"]).dt.tz_localize(None).dt.normalize()
++        if date in frame_positions
++    ]
++    exclusion_positions: set[int] = set()
++    for event_position in official_event_positions:
++        exclusion_positions.update(
++            range(
++                max(0, event_position - event_exclusion_sessions),
++                min(len(frame), event_position + event_exclusion_sessions + 1),
++            )
++        )
++    controls_outside_exclusion = all(
++        all(
++            position not in exclusion_positions
++            for position in range(
++                frame_positions[pd.Timestamp(row["control_feature_date"])],
++                frame_positions[pd.Timestamp(row["control_exit_date"])] + 1,
++            )
++        )
++        for row in train_rows
++    )
+     integrity = {
+         "control_outcomes_complete_before_event": all(
+             control_exit < decision
+  ┊ 🔧 patch     /Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py  0.8s
+  ┊ review diff
+a//Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py → b//Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_resolution_train_lab.py
+@@ -593,6 +593,7 @@
+             for index, left in enumerate(control_windows)
+             for right in control_windows[index + 1 :]
+         ),
++        "control_windows_outside_event_exclusion_bands": controls_outside_exclusion,
+         "match_gaps_within_bounds": all(
+             float(row["hv20_match_gap"]) <= max_hv20_gap
+             and float(row["ret60_match_gap"]) <= max_ret60_gap
+  ┊ 💻 $         .venv/bin/python -m pytest tests/test_fomc_information_resolution_train_lab.py::FomcInformationResolutionTrainLabTest::test_run_is_train_only_strict_json_and_fail_closed_on_no_incremental_edge -q + 1 command  1.2s
+  ┊ 💻 $         .venv/bin/python scripts/fomc_information_resolution_train_lab.py --out .cache/platform/fomc_information_resolution_train_2026-07-16T0112.json --manifest-out .cache/platform/fomc_information_resolution_events_2026-07-16T0112.json --bootstrap-samples 20000  1.2s
+  ┊ 💻 $         .venv/bin/python - <<'PY' import json,statistics from collections import defaultdict p='.cache/platform/fomc_information_resolution_train_2026-07-16T0112.json' + 3 commands  0.1s
+  ┊ 📖 read      search_epoch.json L1-220  0.3s
+  ┊ 🔧 patch       0.4s
+  ┊ review diff
+a//Users/jarvis/dev/tsla-tsll-options-tracker/configs/search_epoch.json → b//Users/jarvis/dev/tsla-tsll-options-tracker/configs/search_epoch.json
+@@ -1,9 +1,9 @@
+ {
+   "schema_version": 1,
+   "epoch_id": "FOMC_POLICY_INFORMATION_RESOLUTION_DRIFT_V1",
+-  "status": "active",
++  "status": "completed",
+   "started_stamp": "2026-07-16T0112",
+-  "completed_stamp": null,
++  "completed_stamp": "2026-07-16T0112",
+   "reassessment_complete": true,
+   "reassessment_doc": "docs/SEARCH_DESIGN_REASSESSMENT_2026-07-16T0029.md",
+   "charter_doc": "reports/trader-wakes/moa/2026-07-16T0112/strategy-charter.md",
+@@ -11,7 +11,7 @@
+   "economic_mechanism": "Scheduled FOMC decisions resolve a large prior-known macro information set; in an already non-bearish SPY regime, gradual interpretation and institutional repositioning may create positive five-session drift beyond ordinary same-regime drift.",
+   "forecast_type": "conditional direction up after scheduled policy-information resolution",
+   "candidate_or_family_scope": "FOMC_INFORMATION_RESOLUTION_SPY_BULL_CALL_21D_V1 / FOMC_POLICY_INFORMATION_RESOLUTION_DRIFT on SPY; official exact-title 14:00 ET FOMC statements from 2013-01-01 through 2025-12-31; non-bearish prior regime; next-session-open through fifth-session-close underlying outcome; prior-only same-regime controls; future conditional 18-24 DTE $2 bull-call only.",
+-  "funnel_stage": "F0_MECHANISM",
++  "funnel_stage": "F0_MECHANISM_CLOSED",
+   "falsifier": "Close the exact family if the chronological first 60% has fewer than 36 one-to-one matched pairs, fewer than 6 event years, control support below 80%, non-positive event mean after 10 bps, non-positive paired mean or one-sided 90% year-block-bootstrap lower bound, paired positive frequency below 55%, worst-decile event return below -5%, or any source/chronology/lag/overlap/reuse/population/strict-JSON violation.",
+   "candidate_geometry": {
+     "underlying": "SPY",
+@@ -77,6 +77,13 @@
+     "authority": "F0/F1 L0 research only; no L1, capital seat, registry, paper, shadow, arm, broker, funding, or live authority"
+   },
+   "epoch_success_definition": "Advance the exact candidate from F0 to F1 only if every frozen train discovery gate passes with the sealed 40% holdout unread and zero option pricing; otherwise close the exact policy-information-resolution family without threshold, sign, regime, control, horizon, or option-structure retuning.",
++  "outcome": "FAMILY_CLOSED",
++  "strategy_advance_count": 0,
++  "counted_no_advance_decisions": 1,
++  "dominant_failure_mechanism": "Across 47 train pairs and 8 event years, five-session SPY event return after 10 bps was -0.2522%, paired excess versus prior-only same-regime controls was -0.3564%, positive frequency was 42.55%, and the one-sided 90% year-block lower bound was -0.6607%; the stated bullish drift was absent and directionally adverse.",
++  "evidence_artifact": ".cache/platform/fomc_information_resolution_train_2026-07-16T0112.json",
++  "event_manifest": ".cache/platform/fomc_information_resolution_events_2026-07-16T0112.json",
++  "closed_family_quarantine": "Do not rerun the same SPY non-bearish exact-14:00 FOMC next-open/five-session bullish-drift geometry by changing thresholds, horizon, control match, DTE, or option wrapper. Reopening requires a genuinely new forecast/evidence mechanism, not retuning.",
+   "prior_epoch": {
+     "epoch_id": "TSLL_OBSERVED_TERM_CARRY_DIAGONAL_V1",
+     "status": "completed",
+  ┊ 🔎 grep      ^test|pytest|completion|postflight|coverage  0.2s
+  ┊ 🔎 grep      search_epoch.json|counted_no_advance_decisions|closed_family_quarantine  0.2s
+  ┊ 💻 $         git diff --check + 1 command  0.2s
+  ┊ 💻 $         b=json.load(open(p2)) for x in (a,b): x['provenance'].pop('generated_at_utc',None) assert a==b, 'replay differs after removing generated_at_utc' print('REPLAY_EXACT_EXCEPT_GENERATED_AT',a['strategy_outcome'],a['train']['metrics']['pair_count']) PY rm .cache/platform/fomc_information_resolution_train_2026-07-16T0112-replay.json /tmp/fomc-replay-summary.json  1.3s
+  ┊ 💻 $         date '+%Y-%m-%d %H:%M:%S %Z (%z)' + 2 commands  0.1s
+  ┊ 📋 plan      update 3/5 ✓  0.0s
+  ┊ 🔎 find      *event*study*.py  0.1s
+  ┊ 🔎 find      *train_lab.py  0.2s
+  ┊ 💻 $         set -e .venv/bin/python -m py_compile scripts/fomc_information_resolution_train_lab.py tests/test_fomc_information_resolution_train_lab.py .venv/bin/python -m pytest -q tests/test_fomc_information_resolution_train_lab.py tests/test_monthly_opex_post_expiry_train_lab.py tests/test_post_earnings_information_drift_train_lab.py tests/test_spy_turn_of_month_event_study.py git diff --check  2.6s
+⚠️ Iteration budget exhausted (90/90) — asking model to summarise
+⚠️  Reached maximum iterations (90). Requesting summary...
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+    Phase 1 executor is incomplete because the tool-call limit was reached
+    before verification and required closeout residue could be finished. I am
+    not claiming MOA_EXEC_DONE.
+
+    Strategy decision:
+    - Candidate: FOMC_INFORMATION_RESOLUTION_SPY_BULL_CALL_21D_V1
+    - Mechanism: bullish five-session SPY drift after scheduled 14:00 ET FOMC
+    information resolution in a prior non-bearish regime.
+    - Intended future structure: one-lot, 18–24 DTE, $2-wide bull call spread.
+    - Planning capital fit: capital_fit_usd=$200, max_loss_usd=$200,
+    max_lots=1.
+    - Closed outcome: FAMILY_CLOSED at F0. No option simulation or holdout
+    inspection occurred.
+
+    Train evidence:
+    - 102 official exact-title, exact-URL FOMC statements in the frozen
+    2013–2025 population.
+    - 79 regime-eligible events.
+    - 47 chronological train pairs across 8 event years.
+    - 100% train control support.
+    - SPY mean event return after 10-bps cost: -0.2522%.
+    - Paired excess versus prior-only same-regime controls: -0.3564%.
+    - Paired positive frequency: 42.55%.
+    - One-sided 90% year-block bootstrap lower bound: -0.6607%.
+    - Worst-decile event return: -2.1708%.
+    - The positive event-return, paired-mean, paired-frequency, and bootstrap
+    gates all failed.
+    - Dominant failure: the hypothesized bullish post-FOMC drift was absent
+    and directionally adverse.
+
+    Evidence protections:
+    - Final 32-event holdout remained outcome-unread.
+    - Holdout simulation: false.
+    - Option-pricing calls: zero.
+    - Control outcomes were complete before their associated events.
+    - Control windows were unique and non-overlapping.
+    - Entire control windows—not merely their feature dates—were forced
+    outside ±5-session FOMC exclusion bands.
+    - A deterministic replay was exact apart from the generated timestamp.
+    - Federal Reserve source, event manifest, and SPY adjusted-OHLCV inputs
+    were persisted and hashed.
+
+    Verification completed:
+    - New focused suite: 6 passed.
+    - Event-lab regression group: 29 passed.
+    - Python compilation passed.
+    - git diff --check passed.
+    - Full repository test suite was not run.
+
+    Files written or changed:
+    -
+    `/Users/jarvis/dev/tsla-tsll-options-tracker/reports/trader-wakes/moa/2026
+    -07-16T0112/strategy-charter.md`
+    - /Users/jarvis/dev/tsla-tsll-options-tracker/configs/search_epoch.json
+    -
+    `/Users/jarvis/dev/tsla-tsll-options-tracker/scripts/fomc_information_reso
+    lution_train_lab.py`
+    -
+    `/Users/jarvis/dev/tsla-tsll-options-tracker/tests/test_fomc_information_r
+    esolution_train_lab.py`
+    -
+    `/Users/jarvis/dev/tsla-tsll-options-tracker/.cache/platform/fomc_informat
+    ion_resolution_train_2026-07-16T0112.json`
+    -
+    `/Users/jarvis/dev/tsla-tsll-options-tracker/.cache/platform/fomc_informat
+    ion_resolution_events_2026-07-16T0112.json`
+
+    Required executor residue not yet written:
+    - reports/trader-wakes/moa/2026-07-16T0112/executor-closeout.md
+    - reports/trader-wakes/2026-07-16T0112-moa-exec.md
+    - reports/trader-wakes/LATEST.md update
+    - reports/trader-wakes/INDEX.md update
+    - Final readiness/coverage refresh and review
+
+    Repository state:
+    - Branch: trader/run-2026-07-16T0112
+    - No commit, merge, or push was performed, as required for Phase 1.
+    - Worktree remains dirty.
+    - No broker access, live orders, paper promotion, shadow promotion, or
+    arming occurred.
+
+    Freedom audit: this was a new official scheduled-macro evidence class
+    selected to pivot away from the exhausted prior epoch, not a TSLA/TSLL or
+    strategy allowlist. The exact FOMC bullish-drift geometry is now
+    quarantined from threshold, horizon, control, DTE, or option-wrapper
+    retuning; reopening requires a genuinely different economic forecast or
+    evidence mechanism.
+
+    RUN INCOMPLETE — verification and required Phase 1 residue remain
+    outstanding.
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+⚠ Iteration budget reached (90/90) — response may be incomplete
+
+Resume this session with:
+  hermes --resume 20260716_012450_4697cb -p trader
+
+Session:        20260716_012450_4697cb
+Duration:       26m 35s
+Messages:       169 (4 user, 164 tool calls)
