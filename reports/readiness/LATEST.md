@@ -119,3 +119,12 @@ Successor `counted_no_advance_decisions=1`, `strategy_pivot_required=false`, `st
 `YIELD_CURVE_STEEPENING_REGIONAL_BANK_FORWARD_UPDRIFT_PREFLIGHT`: before any train outcome access, validate that a completed point-in-time steepening measure built from fixed Treasury-duration proxies can honestly support a regional-bank lending-margin mechanism without composition, futures-roll, credit-beta, or construction confounds. If proxy semantics fail, stop pre-outcome without inspecting KRE returns. Only if they pass, freeze a train-only KRE or predeclared regional-bank panel with chronology, density, prior same-regime controls, sealed holdout, labeled underlying cost, and one-lot defined-risk bull-call planning fields, then advance-or-close under frozen gates. No overnight-absorption salvage, holdout reads, L1, seat, paper, shadow, arm, broker, funding, or live claims.
 
 Finalizer status: `MOA_FINALIZE_READY`; integration remains pending the deterministic wrapper gate.
+
+## RTH opportunity reconfirm
+
+Updated: 2026-07-16T1030 mid-session RTH.
+
+| Check | State | Evidence |
+|---|---|---|
+| C — live condition / paper opportunity | STAND_ASIDE (reconfirm) | Scout 14/0/14; autonomy 0 proposals; PCS b195f5fe+ bear_dte=0; real open_risk=0; same class as 0630 open. Optional TSLL archive densify n_market_dates=3 / provider_backtest_eligible=true (plumbing only). No B6 advance. |
+
