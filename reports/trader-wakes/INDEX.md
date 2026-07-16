@@ -1,5 +1,7 @@
 # Trader wake index (newest first)
 
+- 2026-07-16T1130-rth — Mid-session RTH STAND_ASIDE reconfirm (success). Freshness pass session-day 2026-07-16; scout 14/0/14; autonomy 0 proposals; real paper open_risk=0. Same bearish TSLL/TSLA/SMCI class as open 0630 + mid 1030 + 2026-07-15. No densify (already 3/3 RTH dates); no paper place, no evolve. NEXT: wait non-bear capital-fit defined-risk; BUILD context YIELD_CURVE_STEEPENING preflight.
+
 - 2026-07-16T1030-rth — Mid-session RTH STAND_ASIDE reconfirm (success). Freshness pass session-day 2026-07-16; scout 14/0/14; autonomy 0 proposals; real paper open_risk=0. Same bearish TSLL/TSLA/SMCI class as open 0630 + 2026-07-15. Optional TSLL quote densify → n_market_dates=3 / provider_backtest_eligible=true (13 exps/date); no paper place, no evolve. NEXT: wait non-bear capital-fit defined-risk; BUILD context YIELD_CURVE_STEEPENING preflight.
 
 - 2026-07-16T0630-rth — RTH open STAND_ASIDE (success). Freshness pass session-day 2026-07-16; scout 14/0/14; autonomy 0 proposals; real paper open_risk=0 (smoke ignored). TSLL/TSLA/SMCI bearish; PCS b195f5fe + testing PCS DNA bear_dte=0 stand-aside; PLTR neutral thin/filter. Capital path empty; no OPEN_PCS/CCS/IC; no evolve. Concurrent BUILD branch `trader/run-2026-07-16T0546` has since integrated cleanly as `317384d`; the RTH result itself was reports-only/STAND_ASIDE. RTH NEXT: wait non-bear capital-fit defined-risk. BUILD context: YIELD_CURVE_STEEPENING preflight after MoA integrate.
