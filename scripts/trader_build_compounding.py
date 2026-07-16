@@ -7,7 +7,7 @@ import hashlib
 import json
 import subprocess
 import sys
-from datetime import datetime, timezone
+from datetime import datetime, time, timezone
 from zoneinfo import ZoneInfo
 from pathlib import Path
 from typing import Any
@@ -189,6 +189,15 @@ def strategy_advanced(row: dict[str, Any]) -> bool:
     return False
 
 
+def counts_toward_no_advance_streak(row: dict[str, Any]) -> bool:
+    """Exclude pure data-collection reaffirmations from strategy failure streaks."""
+    return not (
+        row.get("schema_version") == SCHEMA_VERSION
+        and row.get("outcome") == "EVIDENCE_WAIT"
+        and row.get("evidence_wait_reaffirmation") is True
+    )
+
+
 def assess_research_routes(repo: Path) -> dict[str, Any]:
     """Describe independent BUILD evidence routes without selecting strategy DNA.
 
@@ -205,22 +214,29 @@ def assess_research_routes(repo: Path) -> dict[str, Any]:
 
     archive_root = repo / ".cache" / "platform" / "option_quotes"
     archive_dates: dict[str, int] = {}
+    archive_date_labels: dict[str, int] = {}
     if archive_root.is_dir():
         import csv
 
         for archive_path in sorted(archive_root.glob("*_archive.csv")):
             try:
                 with archive_path.open(newline="", encoding="utf-8") as handle:
-                    archive_dates[archive_path.stem.removesuffix("_archive")] = len(
-                        {
-                            datetime.fromisoformat(str(row["observed_at"]).replace("Z", "+00:00"))
-                            .astimezone(ZoneInfo("America/New_York"))
-                            .date()
-                            .isoformat()
-                            for row in csv.DictReader(handle)
-                            if row.get("observed_at")
-                        }
-                    )
+                    localized = [
+                        datetime.fromisoformat(str(row["observed_at"]).replace("Z", "+00:00"))
+                        .astimezone(ZoneInfo("America/New_York"))
+                        for row in csv.DictReader(handle)
+                        if row.get("observed_at")
+                    ]
+                symbol = archive_path.stem.removesuffix("_archive")
+                archive_date_labels[symbol] = len({value.date() for value in localized})
+                archive_dates[symbol] = len(
+                    {
+                        value.date()
+                        for value in localized
+                        if value.weekday() < 5
+                        and time(9, 30) <= value.time() <= time(16, 0)
+                    }
+                )
             except (OSError, ValueError):
                 continue
     observed_market_dates = max(archive_dates.values(), default=0)
@@ -237,6 +253,7 @@ def assess_research_routes(repo: Path) -> dict[str, Any]:
         "observed_historical_option_replay": {
             "executable": False,
             "archive_market_dates_by_symbol": archive_dates,
+            "archive_date_labels_by_symbol": archive_date_labels,
             "maximum_observed_market_dates": observed_market_dates,
             "minimum_plumbing_dates": 3,
             "plumbing_gate_met": plumbing_gate_met,
@@ -322,6 +339,8 @@ def build_context(repo: Path, stamp: str, out: Path) -> dict[str, Any]:
     for row in reversed(epoch_records):
         if strategy_advanced(row):
             break
+        if not counts_toward_no_advance_streak(row):
+            continue
         consecutive_no_advance += 1
     strategy_pivot_required = consecutive_no_advance >= 2
     strategy_burst_stop_required = consecutive_no_advance >= 3
@@ -629,6 +648,11 @@ def _validate_strategy_contract(
     data_dependencies = handoff.get("data_dependencies", [])
     if not isinstance(data_dependencies, list):
         raise CompoundingError("data_dependencies must be a list")
+    evidence_wait_reaffirmation = handoff.get("evidence_wait_reaffirmation", False)
+    if evidence_wait_reaffirmation is not True and evidence_wait_reaffirmation is not False:
+        raise CompoundingError("evidence_wait_reaffirmation must be boolean when provided")
+    if evidence_wait_reaffirmation and outcome != "EVIDENCE_WAIT":
+        raise CompoundingError("evidence_wait_reaffirmation is valid only for EVIDENCE_WAIT")
 
     if capability_only and outcome != "BLOCKER_REMOVED_AND_RETESTED":
         raise CompoundingError(
@@ -708,6 +732,58 @@ def _validate_strategy_contract(
     }
 
 
+def _validate_search_epoch_contract(repo: Path, handoff: dict[str, Any]) -> None:
+    """Fail closed when a handoff claims a frozen matched-control search epoch."""
+    epoch_id = str(handoff.get("search_epoch_id") or "").strip()
+    if not epoch_id:
+        return
+    epoch = load_search_epoch(repo)
+    if not epoch or str(epoch.get("epoch_id") or "").strip() != epoch_id:
+        raise CompoundingError("search_epoch_id does not match configs/search_epoch.json")
+    if not str(epoch.get("economic_mechanism") or "").strip():
+        raise CompoundingError("search epoch requires an economic_mechanism")
+    forecast_type = str(epoch.get("forecast_type") or "").strip().lower()
+    if "term-structure" not in forecast_type:
+        raise CompoundingError("search epoch forecast_type must name term-structure carry")
+    if not str(epoch.get("falsifier") or "").strip():
+        raise CompoundingError("search epoch requires a predeclared falsifier")
+
+    control = epoch.get("control_geometry")
+    required_control = (
+        isinstance(control, dict)
+        and control.get("frozen_before_outcome_evaluation") is True
+        and control.get("same_snapshot") is True
+        and control.get("pairing") == "one_to_one"
+        and isinstance(control.get("candidate_selection_tie_breaks"), list)
+        and bool(control.get("candidate_selection_tie_breaks"))
+        and isinstance(control.get("match_order"), list)
+        and bool(control.get("match_order"))
+        and control.get("no_control_policy") == "exclude_path_no_reuse_or_substitution"
+    )
+    ratio_band = control.get("control_ratio_band") if isinstance(control, dict) else None
+    if not (
+        required_control
+        and isinstance(ratio_band, list)
+        and len(ratio_band) == 2
+        and all(isinstance(value, (int, float)) for value in ratio_band)
+        and ratio_band[0] < ratio_band[1]
+    ):
+        raise CompoundingError("search epoch requires frozen control geometry before outcome evaluation")
+
+    capital = epoch.get("capital_rules")
+    if not isinstance(capital, dict):
+        raise CompoundingError("search epoch requires capital_rules")
+    admission = capital.get("admission_cap_usd_one_lot")
+    if not isinstance(admission, (int, float)) or admission <= 0:
+        raise CompoundingError("capital_rules requires a positive admission cap")
+    if capital.get("max_loss_usd_one_lot") is not None:
+        raise CompoundingError("unproved structural max loss must be null, not the admission cap")
+    if "unproven" not in str(capital.get("max_loss_status") or "").lower():
+        raise CompoundingError("capital_rules must label structural max loss unproven")
+    if capital.get("max_lots") != 1:
+        raise CompoundingError("search epoch is limited to max_lots=1")
+
+
 def validate(repo: Path, stamp: str, base_head: str, baseline: Path | None) -> dict[str, Any]:
     run = repo / "reports" / "trader-wakes" / "moa" / stamp
     handoff_path = run / "compounding.json"
@@ -747,6 +823,7 @@ def validate(repo: Path, stamp: str, base_head: str, baseline: Path | None) -> d
         pass
 
     contract = _validate_strategy_contract(handoff, kinds=kinds)
+    _validate_search_epoch_contract(repo, handoff)
     findings_count = _validate_critic_findings(repo, handoff.get("critic_findings", []), changed)
 
     previous = _previous_records(repo, stamp)

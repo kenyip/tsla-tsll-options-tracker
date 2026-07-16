@@ -40,6 +40,7 @@ try:
         LEGACY_SCHEMA_VERSION,
         SCHEMA_VERSION,
         STRATEGY_OUTCOMES,
+        counts_toward_no_advance_streak,
         load_search_epoch,
         records_for_epoch,
         strategy_advanced,
@@ -52,6 +53,7 @@ except ImportError:  # pragma: no cover
         LEGACY_SCHEMA_VERSION,
         SCHEMA_VERSION,
         STRATEGY_OUTCOMES,
+        counts_toward_no_advance_streak,
         load_search_epoch,
         records_for_epoch,
         strategy_advanced,
@@ -473,6 +475,8 @@ def consecutive_no_strategy_advance(
     for row in reversed(rows):
         if strategy_advanced(row):
             break
+        if not counts_toward_no_advance_streak(row):
+            continue
         streak += 1
     return streak
 

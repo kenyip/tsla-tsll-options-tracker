@@ -209,6 +209,68 @@ class TraderBuildCompoundingTest(unittest.TestCase):
         self.assertTrue(result["routes"]["historical_underlying_proxy_discovery"]["executable"])
         self.assertFalse(result["archive_density_alone_can_justify_diminishing_returns"])
 
+    def test_archive_route_counts_only_weekday_rth_market_dates(self):
+        archive = self.repo / ".cache" / "platform" / "option_quotes" / "TSLL_archive.csv"
+        archive.parent.mkdir(parents=True)
+        archive.write_text(
+            "observed_at\n"
+            "2026-07-12T03:36:00+00:00\n"  # Saturday 23:36 New York
+            "2026-07-13T13:32:00+00:00\n"
+            "2026-07-14T14:31:00+00:00\n"
+            "2026-07-14T22:00:00+00:00\n"
+        )
+
+        result = assess_research_routes(self.repo)
+        observed = result["routes"]["observed_historical_option_replay"]
+
+        self.assertEqual(observed["archive_market_dates_by_symbol"], {"TSLL": 2})
+        self.assertEqual(observed["archive_date_labels_by_symbol"], {"TSLL": 3})
+        self.assertFalse(observed["plumbing_gate_met"])
+
+    def test_pure_evidence_wait_reaffirmations_do_not_trigger_epoch_pivot(self):
+        epoch_path = self.repo / "configs" / "search_epoch.json"
+        epoch_path.parent.mkdir(parents=True, exist_ok=True)
+        epoch_path.write_text(
+            json.dumps(
+                {
+                    "epoch_id": "wait-epoch",
+                    "status": "active",
+                    "started_stamp": "2026-01-01T0000",
+                    "reassessment_complete": True,
+                }
+            )
+            + "\n"
+        )
+        for stamp, reaffirmation in (
+            ("2026-01-01T0000", False),
+            ("2026-01-01T0100", True),
+            ("2026-01-01T0200", True),
+        ):
+            run, _ = self._handoff(
+                stamp,
+                outcome="EVIDENCE_WAIT",
+                evidence_wait_reaffirmation=reaffirmation,
+                useful_deltas=[],
+                search_information={"summary": "waiting on future evidence", "delta_kinds": []},
+                strategy_advancement={"advanced": False, "summary": "no stage movement"},
+                closed_families=[],
+                data_dependencies=["future distinct RTH observations"],
+                evidence_wake_condition="resume when the frozen population floor is met",
+            )
+            self._git("add", str(run.relative_to(self.repo)))
+            self._git("commit", "-m", stamp)
+            self._git("push", "origin", "main")
+
+        result = build_context(
+            self.repo,
+            "2026-01-01T0300",
+            self.repo / "reports" / "current" / "orientation.json",
+        )
+
+        self.assertEqual(result["consecutive_no_strategy_advance"], 1)
+        self.assertFalse(result["strategy_pivot_required"])
+        self.assertFalse(result["strategy_burst_stop_required"])
+
     def test_no_executable_research_route_is_globally_blocked(self):
         result = assess_research_routes(self.repo)
         self.assertTrue(result["global_build_blocked"])
@@ -451,6 +513,49 @@ class TraderBuildCompoundingTest(unittest.TestCase):
         (self.repo / "tests" / "test_existing.py").write_text("# changed again\n")
         with self.assertRaisesRegex(CompoundingError, "capability-only"):
             validate(self.repo, stamp, self.base, None)
+
+    def test_search_epoch_contract_requires_frozen_control_and_honest_loss_label(self):
+        stamp = "2026-01-01T0201-contract"
+        self._handoff(stamp, search_epoch_id="epoch-contract")
+        config = self.repo / "configs" / "search_epoch.json"
+        config.parent.mkdir(parents=True)
+        config.write_text(
+            json.dumps(
+                {
+                    "epoch_id": "epoch-contract",
+                    "economic_mechanism": "observed short-front relative extrinsic carry",
+                    "forecast_type": "term-structure carry with mild bullish direction",
+                    "falsifier": "close when frozen matched controls erase the edge",
+                    "control_geometry": {"frozen_before_outcome_evaluation": False},
+                    "capital_rules": {
+                        "admission_cap_usd_one_lot": 300,
+                        "max_loss_usd_one_lot": 300,
+                        "max_loss_status": "unproven",
+                        "max_lots": 1,
+                    },
+                }
+            )
+            + "\n"
+        )
+
+        with self.assertRaisesRegex(CompoundingError, "frozen control geometry"):
+            validate(self.repo, stamp, self.base, None)
+
+        row = json.loads(config.read_text())
+        row["control_geometry"] = {
+            "frozen_before_outcome_evaluation": True,
+            "same_snapshot": True,
+            "pairing": "one_to_one",
+            "candidate_selection_tie_breaks": ["highest richness", "lowest friction"],
+            "control_ratio_band": [0.8, 1.1],
+            "match_order": ["short delta", "short DTE", "strike distance"],
+            "no_control_policy": "exclude_path_no_reuse_or_substitution",
+        }
+        row["capital_rules"]["max_loss_usd_one_lot"] = None
+        config.write_text(json.dumps(row) + "\n")
+
+        result = validate(self.repo, stamp, self.base, None)
+        self.assertTrue(result["role_ready"])
 
     def test_repaired_critic_finding_requires_existing_changed_machinery_and_tests(self):
         stamp = "2026-01-01T0201c"

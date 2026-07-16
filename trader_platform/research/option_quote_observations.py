@@ -5,7 +5,7 @@ from __future__ import annotations
 import csv
 import tempfile
 from dataclasses import asdict, dataclass
-from datetime import date, datetime, timedelta, timezone
+from datetime import date, datetime, time, timedelta, timezone
 from pathlib import Path
 from statistics import median
 from typing import Any, Iterable
@@ -182,20 +182,33 @@ def summarize_archive_density(
     minimum_market_dates: int = 3,
     market_timezone: str = "America/New_York",
 ) -> dict[str, Any]:
-    """Report whether an observed archive clears the historical replay floor."""
+    """Report whether observed weekday RTH quotes clear the historical replay floor."""
     observations = list(rows)
     if not observations:
         raise ValueError("cannot summarize an empty quote archive")
     timezone_info = ZoneInfo(market_timezone)
-    market_dates = sorted(
-        {row.observed_at.astimezone(timezone_info).date() for row in observations}
+    localized = [(row, row.observed_at.astimezone(timezone_info)) for row in observations]
+    archive_dates = sorted({local.date() for _, local in localized})
+    rth_observations = [
+        (row, local)
+        for row, local in localized
+        if local.weekday() < 5 and time(9, 30) <= local.time() <= time(16, 0)
+    ]
+    market_dates = sorted({local.date() for _, local in rth_observations})
+    dates_with_non_rth_quotes = sorted(
+        {
+            local.date()
+            for _, local in localized
+            if local.weekday() >= 5 or not time(9, 30) <= local.time() <= time(16, 0)
+        }
     )
+    fully_excluded_dates = sorted(set(archive_dates) - set(market_dates))
     expirations_by_date = {
         market_date.isoformat(): sorted(
             {
                 row.expiration.isoformat()
-                for row in observations
-                if row.observed_at.astimezone(timezone_info).date() == market_date
+                for row, local in rth_observations
+                if local.date() == market_date
             }
         )
         for market_date in market_dates
@@ -207,10 +220,18 @@ def summarize_archive_density(
         rejection_reasons.append("insufficient_market_date_density")
     return {
         "n_quotes": len(observations),
+        "n_rth_quotes": len(rth_observations),
+        "n_non_rth_quotes": len(observations) - len(rth_observations),
+        "n_archive_dates": len(archive_dates),
+        "archive_dates": [value.isoformat() for value in archive_dates],
         "n_market_dates": len(market_dates),
         "market_dates": [value.isoformat() for value in market_dates],
+        "dates_with_non_rth_quotes": [
+            value.isoformat() for value in dates_with_non_rth_quotes
+        ],
+        "fully_excluded_dates": [value.isoformat() for value in fully_excluded_dates],
         "minimum_market_dates": minimum_market_dates,
-        "n_expirations": len({row.expiration for row in observations}),
+        "n_expirations": len({row.expiration for row, _ in rth_observations}),
         "expirations_by_market_date": expirations_by_date,
         "market_timezone": market_timezone,
         "provider_backtest_eligible": not rejection_reasons,

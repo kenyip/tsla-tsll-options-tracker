@@ -209,11 +209,11 @@ class OptionQuoteObservationsTest(unittest.TestCase):
     def test_archive_density_fails_closed_below_three_market_dates(self):
         rows = [
             self._quote(
-                observed_at=datetime(2026, 7, day, 20, 0, tzinfo=timezone.utc),
+                observed_at=datetime(2026, 7, day, 14, 0, tzinfo=timezone.utc),
                 expiration=date(2026, 7, 24),
                 strike=float(day),
             )
-            for day in (11, 12)
+            for day in (13, 14)
         ]
 
         summary = summarize_archive_density(rows, minimum_market_dates=3)
@@ -222,6 +222,46 @@ class OptionQuoteObservationsTest(unittest.TestCase):
         self.assertEqual(summary["minimum_market_dates"], 3)
         self.assertFalse(summary["provider_backtest_eligible"])
         self.assertEqual(summary["rejection_reasons"], ["insufficient_market_date_density"])
+
+    def test_archive_density_excludes_weekend_and_outside_rth_date_labels(self):
+        rows = [
+            self._quote(
+                observed_at=datetime(2026, 7, 12, 3, 36, tzinfo=timezone.utc),
+                expiration=date(2026, 7, 24),
+                strike=11.0,
+            ),
+            self._quote(
+                observed_at=datetime(2026, 7, 13, 13, 32, tzinfo=timezone.utc),
+                expiration=date(2026, 7, 24),
+                strike=13.0,
+            ),
+            self._quote(
+                observed_at=datetime(2026, 7, 14, 14, 31, tzinfo=timezone.utc),
+                expiration=date(2026, 7, 24),
+                strike=14.0,
+            ),
+            self._quote(
+                observed_at=datetime(2026, 7, 14, 22, 0, tzinfo=timezone.utc),
+                expiration=date(2026, 7, 24),
+                strike=15.0,
+            ),
+        ]
+
+        summary = summarize_archive_density(rows, minimum_market_dates=3)
+
+        self.assertEqual(summary["archive_dates"], ["2026-07-11", "2026-07-13", "2026-07-14"])
+        self.assertEqual(summary["market_dates"], ["2026-07-13", "2026-07-14"])
+        self.assertEqual(summary["n_archive_dates"], 3)
+        self.assertEqual(summary["n_market_dates"], 2)
+        self.assertEqual(summary["n_rth_quotes"], 2)
+        self.assertEqual(summary["n_non_rth_quotes"], 2)
+        self.assertEqual(
+            summary["dates_with_non_rth_quotes"], ["2026-07-11", "2026-07-14"]
+        )
+        self.assertEqual(summary["fully_excluded_dates"], ["2026-07-11"])
+        self.assertNotIn("excluded_non_rth_dates", summary)
+        self.assertFalse(summary["provider_backtest_eligible"])
+        self.assertIn("insufficient_market_date_density", summary["rejection_reasons"])
 
 
 if __name__ == "__main__":

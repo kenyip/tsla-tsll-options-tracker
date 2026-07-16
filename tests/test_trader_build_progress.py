@@ -295,6 +295,35 @@ class TraderBuildProgressTest(unittest.TestCase):
         self.assertEqual(progress.pivot_stop_state(2)["pivot_stop_state"], "strategy_pivot_required")
         self.assertEqual(progress.pivot_stop_state(3)["pivot_stop_state"], "strategy_burst_stop_required")
 
+    def test_pure_evidence_wait_reaffirmations_do_not_increment_streak(self) -> None:
+        records = [
+            {
+                "schema_version": 2,
+                "stamp": "a",
+                "outcome": "EVIDENCE_WAIT",
+                "strategy_advancement": {"advanced": False},
+            },
+            {
+                "schema_version": 2,
+                "stamp": "b",
+                "outcome": "EVIDENCE_WAIT",
+                "evidence_wait_reaffirmation": True,
+                "strategy_advancement": {"advanced": False},
+            },
+            {
+                "schema_version": 2,
+                "stamp": "c",
+                "outcome": "EVIDENCE_WAIT",
+                "evidence_wait_reaffirmation": True,
+                "strategy_advancement": {"advanced": False},
+            },
+        ]
+
+        self.assertEqual(
+            progress.consecutive_no_strategy_advance(records, epoch_scope=False), 1
+        )
+        self.assertEqual(progress.pivot_stop_state(1)["pivot_stop_state"], "none")
+
     def test_better_advance_from_schema_v2_row(self) -> None:
         stamp = "2026-07-14T0400"
         self._write_complete_stamp(

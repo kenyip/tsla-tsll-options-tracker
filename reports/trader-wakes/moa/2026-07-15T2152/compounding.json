@@ -1,0 +1,125 @@
+{
+  "schema_version": 2,
+  "stamp": "2026-07-15T2152",
+  "loop_signature": "build|observed-term-structure-carry|tsll-diagonal|frozen-control-geometry|evidence-wait",
+  "search_epoch_id": "TSLL_OBSERVED_TERM_CARRY_DIAGONAL_V1",
+  "economic_mechanism": "In lag-safe non-bearish TSLA/TSLL regimes, observed TSLL front-expiry call extrinsic may decay faster per day than a farther-dated call, allowing a one-lot bullish diagonal to harvest relative term-structure carry after executable two-leg costs.",
+  "candidate_or_family_scope": "Exact TSLL_OBSERVED_TERM_CARRY_DIAGONAL_V1: buy one observed listed TSLL 60-90 DTE call with model-derived delta 0.60-0.75 and sell one higher-strike 14-21 DTE call with delta 0.20-0.35; require front/back extrinsic-per-day ratio >=1.25, each leg half-spread <=$0.10, same-snapshot observed marks, lag-safe bullish regime/event gates, one-position cadence, +25%/-25% package exits, five-session/short<=7 DTE/event/assignment exits, no roll or same-session re-entry; capital_fit_usd=$300 is a research admission budget, structural max_loss_usd is UNPROVEN, and max_lots=1.",
+  "funnel_stage_before": "F0_MECHANISM",
+  "funnel_stage_after": "F0_MECHANISM",
+  "falsifier": "After the frozen evidence-wake floor is met, close the exact family unless the chronological development 60% has at least 20 complete non-overlapping observed paths across at least 12 weekday-RTH dates and 3 distinct eligible short-expiry cycles, at least 8 frozen same-snapshot one-to-one non-rich controls, zero chronology/freshness/identity failures, positive total and mean executable-NBBO PnL after an additional $0.01 per leg, PF>=1.10, DD<=$75, ES90>=-$75, at least 55% candidate-over-control path wins, and candidate median net return at least 5 percentage points above control; retain the final 40% unread for later F1-to-F2.",
+  "outcome": "EVIDENCE_WAIT",
+  "strategy_advancement": {
+    "advanced": false,
+    "summary": "The exact observed term-carry diagonal remains at F0. Current TSLL data have 1,990 rows but only 2 distinct weekday-RTH dates, 1 eligible 14-21 DTE short-expiry cycle, 0 complete observed package paths, and 0 frozen controls; no option-path PnL or outcome was evaluated and no F1/F2/L1/capital-seat authority was earned."
+  },
+  "search_information": {
+    "summary": "The wake completed a burst-stop search-design reassessment, opened a distinct option-native observed term-structure carry epoch with frozen control/capital/wake contracts, corrected RTH archive-density semantics, and added an anti-thrash rule so pure future data-append reaffirmations do not masquerade as repeated failed strategy decisions.",
+    "delta_kinds": [
+      "evidence",
+      "repair",
+      "stop_rule"
+    ]
+  },
+  "useful_deltas": [
+    {
+      "kind": "evidence",
+      "summary": "Opened the exact TSLL observed term-structure carry diagonal as a falsifiable F0 candidate with a frozen Layered Edge charter, one-to-one non-rich controls, explicit observed-data dependencies, sealed development/holdout split, and an honest EVIDENCE_WAIT after auditing the current archive population.",
+      "novelty_key": "tsll-observed-term-carry-diagonal-frozen-control-evidence-wait-2026-07-15T2152-v1",
+      "artifacts": [
+        "reports/trader-wakes/moa/2026-07-15T2152/strategy-charter.md",
+        "docs/SEARCH_DESIGN_REASSESSMENT_2026-07-15T2152.md",
+        "configs/search_epoch.json",
+        "reports/trader-wakes/moa/2026-07-15T2152/executor-closeout.md"
+      ]
+    },
+    {
+      "kind": "repair",
+      "summary": "Repaired archive density and route orientation so market-date evidence means distinct New York weekday-RTH sessions, while separately preserving archive date labels, dates containing non-RTH rows, fully excluded dates, and RTH/non-RTH quote counts.",
+      "novelty_key": "weekday-rth-observed-archive-density-semantics-2026-07-15T2152-v1",
+      "artifacts": [
+        "trader_platform/research/option_quote_observations.py",
+        "scripts/trader_build_compounding.py",
+        "tests/test_option_quote_observations.py",
+        "tests/test_trader_build_compounding.py",
+        "reports/readiness/income-coverage-2026-07-15T2152.md"
+      ]
+    },
+    {
+      "kind": "repair",
+      "summary": "Added fail-closed schema-v2 checks for the active search epoch's economic mechanism, term-structure forecast label, frozen control geometry, one-lot admission semantics, unproven structural max loss, and max-lot cap; added the explicit EVIDENCE_WAIT reaffirmation marker to compounding and readiness streak machinery.",
+      "novelty_key": "frozen-search-epoch-and-pure-wait-streak-contract-2026-07-15T2152-v1",
+      "artifacts": [
+        "scripts/trader_build_compounding.py",
+        "scripts/trader_build_progress.py",
+        "tests/test_trader_build_compounding.py",
+        "tests/test_trader_build_progress.py",
+        "docs/BUILD_LAB_ENVIRONMENT.md",
+        "configs/search_epoch.json"
+      ]
+    },
+    {
+      "kind": "stop_rule",
+      "summary": "Converted the candidate-scoped observed-data wait into a conditional NEXT: one append on a distinct RTH date, free independent L0 discovery off-hours, or exact-candidate evaluation only after the frozen population floor; pure append reaffirmations do not increment pivot/burst-stop streaks.",
+      "novelty_key": "candidate-scoped-wait-conditional-routing-with-independent-l0-freedom-2026-07-15T2152-v1",
+      "artifacts": [
+        "reports/trader-wakes/moa/2026-07-15T2152/merged-next-seed.md",
+        "configs/search_epoch.json",
+        "docs/BUILD_LAB_ENVIRONMENT.md",
+        "scripts/trader_build_progress.py",
+        "tests/test_trader_build_progress.py"
+      ]
+    }
+  ],
+  "retest_decision": null,
+  "evidence_wake_condition": "Resume exact TSLL_OBSERVED_TERM_CARRY_DIAGONAL_V1 outcome evaluation only after at least 12 distinct weekday-RTH session dates, 3 distinct eligible 14-21 DTE short-expiry cycles, 20 complete non-overlapping observed candidate paths, and 8 frozen same-snapshot one-to-one non-rich controls; keep the final chronological 40% unread.",
+  "evidence_wait_reaffirmation": false,
+  "critic_findings": [
+    {
+      "finding": "R1-R3: control construction was underspecified, the $300 admission budget was mislabeled as structural max loss, and forecast_type conflated realized-vs-implied volatility with term-structure carry.",
+      "status": "repaired",
+      "rationale": "The charter and active search epoch now freeze same-snapshot one-to-one control selection, ratio band, match order, no-reuse/exclusion policy, and outcome-independent tie-breaks; max_loss_usd is null/UNPROVEN while the $300 figure is only an admission budget; forecast_type is term-structure extrinsic carry with mild bullish direction. The handoff validator and focused tests fail closed on missing geometry or dishonest capital labels, and Layered Edge doctrine now names the forecast class.",
+      "repair_artifacts": [
+        "scripts/trader_build_compounding.py"
+      ],
+      "test_artifacts": [
+        "tests/test_trader_build_compounding.py"
+      ]
+    },
+    {
+      "finding": "R4: the density report called a date excluded when only some rows on that otherwise eligible RTH date were outside regular hours.",
+      "status": "repaired",
+      "rationale": "Density now separates dates_with_non_rth_quotes from fully_excluded_dates, counts only weekday-RTH rows toward market-date and expiration density, and reports 3 archive labels, 2 eligible market dates, 1,390 RTH rows, and 600 non-RTH rows without the misleading excluded_non_rth_dates field.",
+      "repair_artifacts": [
+        "trader_platform/research/option_quote_observations.py",
+        "scripts/trader_build_compounding.py"
+      ],
+      "test_artifacts": [
+        "tests/test_option_quote_observations.py",
+        "tests/test_trader_build_compounding.py"
+      ]
+    },
+    {
+      "finding": "R5-R6: pure append-only EVIDENCE_WAIT reaffirmations could trigger false pivot/burst-stop pressure, and an RTH-only NEXT could turn a candidate-scoped data wait into a global off-hours BUILD freeze.",
+      "status": "repaired",
+      "rationale": "Schema-v2 accepts evidence_wait_reaffirmation only for EVIDENCE_WAIT and both compounding orientation and progress streaks skip marked pure append reaffirmations. Tests cover multiple reaffirmations without pivot. The merged NEXT now has mutually exclusive distinct-RTH append, off-hours independent L0, and wake-condition-met evaluation branches while preserving the parked candidate's frozen geometry.",
+      "repair_artifacts": [
+        "scripts/trader_build_compounding.py",
+        "scripts/trader_build_progress.py"
+      ],
+      "test_artifacts": [
+        "tests/test_trader_build_compounding.py",
+        "tests/test_trader_build_progress.py"
+      ]
+    }
+  ],
+  "closed_families": [],
+  "data_dependencies": [
+    "At least 10 additional distinct weekday-RTH TSLL observation dates are needed to reach the 12-date floor; current evidence has 2 eligible dates.",
+    "At least 2 additional distinct eligible 14-21 DTE short-expiry cycles are needed; current RTH archive has only the 2026-07-31 cycle.",
+    "At least 20 complete non-overlapping observed entry-to-exit package paths and at least 8 frozen same-snapshot one-to-one non-rich controls are needed; current counts are both zero.",
+    "Forward rows must retain same-snapshot underlying spot, listed-contract identity, bid/ask, IV, strike, expiration and timestamp; lag-safe TSLA earnings and TSLL ex-dividend joins, executable exit marks, and assignment/exercise/liquidation evidence remain required.",
+    "The final chronological 40% and previously sealed downside-semivariance/SPY holdouts remain unread until their predeclared stages."
+  ],
+  "next": "TSLL_OBSERVED_TERM_CARRY_DATA_OR_INDEPENDENT_L0: if a new weekday-RTH date arrives and the frozen population floor is unmet, append one all-expiration TSLL snapshot and report density/path/admission/control counters only; off-hours while unmet, pursue a genuinely independent non-quarantined L0 mechanism without proxy-satisfying or mutating the parked diagonal; once 12 RTH dates, 3 cycles, 20 complete paths, and 8 frozen controls exist, evaluate the exact predeclared development falsifier while preserving the final 40% unread. Pure append reaffirmations set evidence_wait_reaffirmation=true and do not increment pivot/burst-stop streaks; no registry, paper force, shadow, arm, broker, funding, or live action."
+}

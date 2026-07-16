@@ -21,7 +21,7 @@ Every trade-shaped BUILD candidate must carry this stack in its strategy decisio
 | Layer | Required question | Examples / notes |
 |---|---|---|
 | 1. Market / underlying | Why this market, symbol set, or index? | Liquidity, options chain depth, spread cost, borrow/dividend/assignment risk, event calendar, sufficient history. |
-| 2. Forecast type | What exactly can Trader predict? | Direction up/down, non-collapse, range, realized-vs-implied volatility, timing, skew, convexity, cross-sectional relative strength. |
+| 2. Forecast type | What exactly can Trader predict? | Direction up/down, non-collapse, range, realized-vs-implied volatility, term-structure extrinsic carry, timing, skew, convexity, cross-sectional relative strength. |
 | 3. Economic mechanism | Why should the forecast be repeatable after costs? | Behavioral overreaction, structural hedging flow, volatility risk premium, post-event drift, underreaction, risk-transfer premium. |
 | 4. Option structure | Which payoff shape monetizes that forecast? | Put credit spread, call debit spread, diagonal, calendar, iron condor, butterfly, stock/option hybrid. |
 | 5. Greek exposures | What is being bought or sold? | Delta, theta, vega, gamma, skew, term structure; name the intended exposure and the dangerous unintended one. |
@@ -41,7 +41,7 @@ A BUILD wake may explore a population, but its chosen decision candidate must be
 ```yaml
 candidate_id:
 structure_family:
-forecast_type: direction_up | direction_down | non_collapse | range_bound | realized_vs_implied_vol | timing | skew | convexity | relative_value
+forecast_type: direction_up | direction_down | non_collapse | range_bound | realized_vs_implied_vol | term_structure_extrinsic_carry | timing | skew | convexity | relative_value
 underlying_universe:
 economic_mechanism:
 regime_hypothesis:

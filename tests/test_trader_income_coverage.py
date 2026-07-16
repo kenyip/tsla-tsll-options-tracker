@@ -14,7 +14,7 @@ class TraderIncomeCoverageTest(unittest.TestCase):
             archive = Path(temp_dir) / "quotes.csv"
             archive.write_text(
                 "observed_at,symbol,expiration,option_type,strike,bid,ask,source,is_observed\n"
-                "2026-07-11T15:00:00-04:00,TSLL,2026-07-17,put,10,0.10,0.12,test,true\n"
+                "2026-07-10T15:00:00-04:00,TSLL,2026-07-17,put,10,0.10,0.12,test,true\n"
                 "2026-07-13T15:00:00-04:00,TSLL,2026-07-24,put,10,0.11,0.13,test,true\n"
                 "2026-07-14T09:31:00-04:00,TSLL,2027-01-15,put,10,0.12,0.14,test,true\n"
                 "2026-07-14T09:31:00-04:00,TSLL,2028-01-21,put,10,0.13,0.15,test,true\n",
