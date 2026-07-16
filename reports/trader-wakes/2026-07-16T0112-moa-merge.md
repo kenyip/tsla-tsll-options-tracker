@@ -1,6 +1,6 @@
 # Trader wake — 2026-07-16T0112 MoA finalizer
 
-Phase: BUILD · MoA phase 3 single writer · finalizer GPT 5.6 Sol · challenger Grok 4.5 · integration pending deterministic wrapper gate
+Phase: BUILD · MoA phase 3 finalizer accepted · deterministic wrapper RUN COMPLETE as `2821c5e`
 
 ## Finalizer verdict
 
@@ -8,7 +8,7 @@ Phase: BUILD · MoA phase 3 single writer · finalizer GPT 5.6 Sol · challenger
 
 Accepted overall outcome `BLOCKER_REMOVED_AND_RETESTED` with dependent retest `FAMILY_CLOSED` for exact `FOMC_INFORMATION_RESOLUTION_SPY_BULL_CALL_21D_V1` / `FOMC_POLICY_INFORMATION_RESOLUTION_DRIFT` (`F0_MECHANISM→F0_MECHANISM`). Strategy advancement is false. Living candidates remain zero. Authority remains L0 discovery only. No F1, L1, leader, capital seat, registry, paper, shadow, arm, broker, funding, or live authority was earned.
 
-This is a green finalizer handoff, not a completion receipt. Integration, push, remote verification, clean-tree postflight, and `RUN COMPLETE` remain exclusively pending the deterministic wrapper gate.
+Finalizer handoff was accepted and deterministic wrapper integration is now complete: pushed to `origin/main`, postflight receipt written, and clean-tree verification passed as `2821c5e6f9aacb96ccdcbdf28b3550b027dc83c5`.
 
 ## Strategy charter and economic decision
 
