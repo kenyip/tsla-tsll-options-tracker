@@ -4,7 +4,7 @@ WAKE: 2026-07-15T2152
 PHASE: BUILD / F0 observed-path research
 ROLE: GPT 5.6 Sol finalizer / single writer
 SLEEVE: $3,000 Agentic research sleeve
-STATUS: finalizer green handoff pending deterministic wrapper integration; no commit/push/merge or `RUN COMPLETE` claim.
+STATUS: `RUN COMPLETE`; integrated/pushed/postflight-complete as `fe0943f`.
 CHOSE: reconcile the executor's observed term-carry `EVIDENCE_WAIT` against all challenger findings, freeze claim-bearing controls and risk semantics, repair RTH density and anti-thrash machinery, preserve global BUILD freedom, regenerate living surfaces, and verify a schema-v2 handoff.
 
 ## Strategy decision
@@ -78,4 +78,4 @@ Compounding: `reports/trader-wakes/moa/2026-07-15T2152/compounding.json`
 
 ## Integration
 
-Pending deterministic wrapper gate. Finalizer has not committed, pushed, merged, switched branches, edited `.gitignore`, or claimed `RUN COMPLETE`.
+Deterministic wrapper gate passed. The run committed, pushed, merged to `main`, verified `main == origin/main`, deleted the run branch, and wrote the postflight receipt as `fe0943f4ebcf57b9f228df9bd268149e1c865081`.

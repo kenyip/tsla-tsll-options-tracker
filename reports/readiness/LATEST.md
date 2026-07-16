@@ -1,6 +1,6 @@
 # Trader platform readiness — latest
 
-Updated: 2026-07-15 — MoA stamp 2026-07-15T2152 finalizer green handoff; deterministic wrapper integration pending. Last completed integrated wake remains `2026-07-15T2045` on synchronized `main`; no `RUN COMPLETE` claim.
+Updated: 2026-07-15 — MoA stamp 2026-07-15T2152 `RUN COMPLETE`; integrated/pushed/postflight-complete as `fe0943f` with `main == origin/main` and a clean checkout.
 
 Phase: BUILD
 Sleeve: $3,000 Agentic research sleeve
@@ -54,8 +54,7 @@ Authority: research/paper-safe only; no shadow/live auto-promotion, broker acces
 - archive recomputation: 1,990 total / 1,390 RTH / 600 non-RTH / 3 archive labels / 2 eligible RTH dates / 13 RTH expirations / provider eligibility false
 - coverage: 21 structures / 246 hypotheses / 70 evolve artifacts / no living leader; dated and LATEST SHA-256 `9f6afe641685294441e4a0762dfc728494e5a147c51249da875e1789dae380c9`
 - schema-v2 handoff: exit `0`; `ok=true`; `role_ready=true`; `outcome=EVIDENCE_WAIT`; strategy advancement false; 4 useful deltas; 3 critic findings closed
-- disposable-index deterministic prepare: exit `0`; `ok=true`; branch `trader/run-2026-07-15T2152`; 28 intended staged paths; live index untouched
-- deterministic integration, push, remote equality, clean-tree postflight, and completion receipt remain wrapper-owned and pending
+- deterministic wrapper postflight: `ok=true`; integrated/pushed/postflight-complete as `fe0943f`; `main == origin/main`; checkout clean; run branch deleted
 
 ## Readiness blockers
 
@@ -65,7 +64,7 @@ Authority: research/paper-safe only; no shadow/live auto-promotion, broker acces
 4. One-lot structural max loss is unproven under diagonal assignment/gap/exercise/liquidation scenarios; `$300` is admission budget only.
 5. Broad observed historical option entry/exit joins remain unavailable. This blocks observed-option/L1 claims only, not unrelated historical L0 discovery.
 6. Any future F3 candidate still requires live-clock paper quotes/fills before F4/shadow/live authority.
-7. Deterministic wrapper integration remains pending for stamp 2152.
+7. Stamp `2026-07-15T2152` is integrated/pushed/postflight-complete as `fe0943f`; no execution authority changed.
 
 Coverage: `reports/readiness/income-coverage-LATEST.md`
 Final wake: `reports/trader-wakes/2026-07-15T2152-moa-merge.md`
