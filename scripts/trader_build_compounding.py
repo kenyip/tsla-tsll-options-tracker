@@ -59,7 +59,12 @@ SEARCH_EPOCH_PATH = Path("configs/search_epoch.json")
 
 
 def load_search_epoch(repo: Path) -> dict[str, Any] | None:
-    """Load optional active search epoch (anti-drift + streak scoping)."""
+    """Load the current active or completed search epoch for orientation.
+
+    A completed epoch remains authoritative context until a successor epoch is
+    written. Dropping it would erase the charter/result boundary and make the
+    next zero-input wake orient from null fields.
+    """
     path = repo / SEARCH_EPOCH_PATH
     if not path.is_file():
         return None
@@ -70,7 +75,7 @@ def load_search_epoch(repo: Path) -> dict[str, Any] | None:
     if not isinstance(value, dict):
         return None
     status = str(value.get("status") or "active").strip().lower()
-    if status != "active":
+    if status not in {"active", "completed"}:
         return None
     return value
 
@@ -373,6 +378,7 @@ def build_context(repo: Path, stamp: str, out: Path) -> dict[str, Any]:
         "prior_record_count": len(records),
         "epoch_record_count": len(epoch_records),
         "search_epoch": {
+            "status": (epoch or {}).get("status") if isinstance(epoch, dict) else None,
             "epoch_id": (epoch or {}).get("epoch_id") if isinstance(epoch, dict) else None,
             "started_stamp": epoch_started,
             "reassessment_complete": bool(
@@ -382,6 +388,7 @@ def build_context(repo: Path, stamp: str, out: Path) -> dict[str, Any]:
             if isinstance(epoch, dict)
             else None,
             "charter_doc": (epoch or {}).get("charter_doc") if isinstance(epoch, dict) else None,
+            "goal_doc": (epoch or {}).get("goal_doc") if isinstance(epoch, dict) else None,
             "epoch_success_definition": (epoch or {}).get("epoch_success_definition")
             if isinstance(epoch, dict)
             else None,

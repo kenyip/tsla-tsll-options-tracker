@@ -1,0 +1,104 @@
+{
+  "schema_version": 2,
+  "stamp": "2026-07-15T1648",
+  "loop_signature": "build|breakout-f2|bull-call-fixed-dna|dual-cost|development-secondary|family-close",
+  "economic_mechanism": "Gradual information diffusion and trend-following demand can produce underlying continuation after a completed 20-session breakout above a fully warmed lagged SMA100, but the fixed 14-DTE one-dollar bull-call expression must retain that edge after adverse multi-leg costs and one-global-unit portfolio management.",
+  "candidate_or_family_scope": "MULTINAME_BREAKOUT_BULL_CALL_14D_V1 on frozen AAPL, MSFT, NVDA, AMZN, META, GOOGL, AMD, and TSLA blueprints; 168 original development entries are the primary decision population and the previously opened 113-row holdout is labeled secondary stress only; exact one-dollar width, listed-expiry proxy selection, next-session entry, contract-expiration precedence, 50%-of-max-value harvest, pre-breakout-high invalidation, hard ten-session stop, no same-bar reentry, dual percentage/fixed-dollar cost axes, one global open unit, capital_fit_usd=92.56501618263479, max_loss_usd=246.90032488027197, max_lots=1.",
+  "funnel_stage_before": "F2_UNTOUCHED_HOLDOUT",
+  "funnel_stage_after": "F2_UNTOUCHED_HOLDOUT",
+  "falsifier": "Close the exact option-expression family unless every primary development and labeled secondary-stress gate passes conjunctively: minimum event/portfolio populations and symbol breadth, positive event and portfolio total PnL after each adverse cost axis, one-lot max loss no greater than 300 USD, rolling-window max drawdown no greater than 75 USD, and no more than five dense negative windows; no retuning or subset salvage after inspection.",
+  "outcome": "FAMILY_CLOSED",
+  "strategy_advancement": {
+    "advanced": false,
+    "summary": "The fixed bull-call expression failed 16 predeclared conjunctive checks and remains at F2; the exact family is closed rather than promoted to F3/L1/paper eligibility."
+  },
+  "search_information": {
+    "summary": "The wake translated a previously successful underlying continuation signal into an explicit one-lot option payoff path and learned that the frozen bull-call expression does not survive realistic cost, drawdown, density, and secondary-stress gates. It also hardened replay evidence and preserved completed-epoch orientation for the successor wake.",
+    "delta_kinds": [
+      "falsification",
+      "capability",
+      "repair"
+    ]
+  },
+  "useful_deltas": [
+    {
+      "kind": "falsification",
+      "summary": "Closed the exact MULTINAME_BREAKOUT_BULL_CALL_14D_V1 expression after a deterministic v7 retest reproduced FAMILY_CLOSED with 16 failed checks, capital_fit_usd 92.56501618263479, max_loss_usd 246.90032488027197, and unchanged substantive evidence apart from the repaired management label.",
+      "novelty_key": "multiname-breakout-bull-call-14d-fixed-option-expression-family-close-v1",
+      "artifacts": [
+        "scripts/breakout_bull_call_option_lab.py",
+        "tests/test_breakout_bull_call_option_lab.py",
+        "reports/trader-wakes/moa/2026-07-15T1648/executor-closeout.md",
+        "reports/trader-wakes/moa/2026-07-15T1648/strategy-decision-charter.md",
+        "reports/readiness/LATEST.md"
+      ]
+    },
+    {
+      "kind": "capability",
+      "summary": "Added a reusable frozen bull-call payoff lab with exact-width/listed-expiry proxy selection, signed adverse closing friction, expiration and management precedence, one-global-unit admission, dual-cost conjunctive gates, strict JSON, overwrite refusal, and deterministic normalized evidence hashing; behavioral, boundary, and negative-control tests exercise the machinery.",
+      "novelty_key": "breakout-bull-call-option-payoff-lab-and-replay-guards-v1",
+      "artifacts": [
+        "scripts/breakout_bull_call_option_lab.py",
+        "tests/test_breakout_bull_call_option_lab.py"
+      ]
+    },
+    {
+      "kind": "repair",
+      "summary": "Repaired BUILD orientation so a completed search epoch remains authoritative context until replaced, including status, epoch identity, reassessment, charter, goal, and success-definition fields; a regression test proves completed-epoch preservation.",
+      "novelty_key": "completed-search-epoch-orientation-preservation-v1",
+      "artifacts": [
+        "scripts/trader_build_compounding.py",
+        "tests/test_trader_build_compounding.py",
+        "reports/trader-wakes/moa/2026-07-15T1648/orientation.json"
+      ]
+    }
+  ],
+  "critic_findings": [
+    {
+      "finding": "The charter and emitted payload omitted contract-expiration precedence even though the implementation enforced it before other exits.",
+      "status": "repaired",
+      "rationale": "The charter and emitted exit_management label now state expiration-session precedence explicitly; the sparse-calendar boundary test proves the behavior, and the v7 retest preserved the FAMILY_CLOSED decision.",
+      "repair_artifacts": [
+        "scripts/breakout_bull_call_option_lab.py"
+      ],
+      "test_artifacts": [
+        "tests/test_breakout_bull_call_option_lab.py"
+      ]
+    },
+    {
+      "finding": "Orientation parsed the completed current search epoch as null, losing successor-wake context.",
+      "status": "repaired",
+      "rationale": "Completed epochs now remain loadable context until a successor epoch replaces them, and the regenerated orientation carries the completed breakout-payoff epoch fields.",
+      "repair_artifacts": [
+        "scripts/trader_build_compounding.py"
+      ],
+      "test_artifacts": [
+        "tests/test_trader_build_compounding.py"
+      ]
+    },
+    {
+      "finding": "Overwrite refusal and normalized replay hashing were demonstrated manually but lacked durable unit coverage.",
+      "status": "repaired",
+      "rationale": "A normalized_evidence_sha256 helper excludes only generated_at, a negative control proves substantive changes alter the hash, and a CLI test proves overwrite refusal preserves existing bytes even when input paths are invalid.",
+      "repair_artifacts": [
+        "scripts/breakout_bull_call_option_lab.py"
+      ],
+      "test_artifacts": [
+        "tests/test_breakout_bull_call_option_lab.py"
+      ]
+    },
+    {
+      "finding": "The successor NEXT should require one genuinely new candidate and one F0 mechanism test rather than merely one experiment.",
+      "status": "rejected",
+      "rationale": "No additional repair was required: merged-next-seed.md already uses the challenger-strengthened wording, explicitly requiring one genuinely new candidate and one predeclared F0 mechanism test while quarantining the closed bull-call DNA. The same single seed is propagated to final wake/readiness surfaces."
+    }
+  ],
+  "closed_families": [
+    "MULTINAME_BREAKOUT_BULL_CALL_14D_V1: exact frozen 14-DTE one-dollar-width listed-expiry proxy bull-call expression with dual adverse cost axes and one-global-unit management"
+  ],
+  "data_dependencies": [
+    "Broad observed historical option contract, quote, IV-path, and complete entry/exit join coverage is required before any future related candidate may claim L1 calibration rather than labeled Black-Scholes proxy evidence.",
+    "Fresh live-clock paper quotes and fills are required after a distinct capital-seat candidate reaches F3 before any F4 or authority discussion."
+  ],
+  "next": "THETA_EXPRESSIONS_NONMONOTONIC_PAYOFF_F0: in the next zero-input BUILD wake, use the current full-universe rank to select where risk belongs, then search a non-monotonic theta-led payoff class that is not the closed bull-call expression: broken-wing/iron butterfly, asymmetric iron condor, or calendar/diagonal chosen from current regime, liquidity, and capital fit. Freeze symbol(s), exact legs, DTE, delta/width, debit-or-credit bounds, entry timing, profit/stop/time exits, assignment/dividend handling, and one-lot capital_fit_usd/max_loss_usd/max_lots before outcomes; require one genuinely new candidate and one predeclared F0 mechanism test using labeled Black-Scholes/listed-expiry proxy over historical underlying paths with chronology, dual multi-leg costs, overlap/concentration controls, negative controls, and no subset salvage. Reuse the option payoff lab when useful but do not retune or reopen MULTINAME_BREAKOUT_BULL_CALL_14D_V1. Discovery bar only: no L1, registry auto-promote, paper force, shadow, arm, broker, or live action."
+}

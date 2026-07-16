@@ -1,4 +1,4 @@
-# Income strategy coverage — 2026-07-15T1746
+# Income strategy coverage — 2026-07-15T1648
 
 Source: `scripts/trader_income_coverage.py` · doctrine: `docs/INCOME_STRATEGY_COVERAGE.md`
 

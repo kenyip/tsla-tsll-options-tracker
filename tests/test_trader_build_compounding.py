@@ -651,6 +651,51 @@ class TraderBuildCompoundingTest(unittest.TestCase):
         self.assertIn("discovery_bar", result)
         self.assertIn("capital_seat_bar", result)
 
+    def test_completed_search_epoch_remains_available_to_next_wake_orientation(self):
+        epoch_path = self.repo / "configs" / "search_epoch.json"
+        epoch_path.parent.mkdir(parents=True, exist_ok=True)
+        epoch_path.write_text(
+            json.dumps(
+                {
+                    "epoch_id": "completed-epoch",
+                    "status": "completed",
+                    "started_stamp": "2026-01-01T0300",
+                    "reassessment_complete": True,
+                    "reassessment_doc": "docs/reassessment.md",
+                    "charter_doc": "docs/charter.md",
+                    "goal_doc": "configs/goal.txt",
+                    "epoch_success_definition": "advance or close the frozen family",
+                    "discovery_bar": {
+                        "purpose": "signal",
+                        "cannot_earn_L1_or_capital_seat": True,
+                    },
+                    "capital_seat_bar": {
+                        "max_loss_usd_one_lot": 300,
+                        "window_max_dd_usd": 75,
+                    },
+                }
+            )
+            + "\n"
+        )
+
+        result = build_context(
+            self.repo,
+            "2026-01-01T0400",
+            self.repo / "reports" / "current" / "orientation.json",
+        )
+
+        self.assertEqual(result["search_epoch"]["status"], "completed")
+        self.assertEqual(result["search_epoch"]["epoch_id"], "completed-epoch")
+        self.assertEqual(result["search_epoch"]["started_stamp"], "2026-01-01T0300")
+        self.assertEqual(result["search_epoch"]["reassessment_doc"], "docs/reassessment.md")
+        self.assertEqual(result["search_epoch"]["charter_doc"], "docs/charter.md")
+        self.assertEqual(result["search_epoch"]["goal_doc"], "configs/goal.txt")
+        self.assertEqual(
+            result["search_epoch"]["epoch_success_definition"],
+            "advance or close the frozen family",
+        )
+        self.assertTrue(result["search_epoch"]["reassessment_complete"])
+
 
 if __name__ == "__main__":
     unittest.main()
