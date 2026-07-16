@@ -1,10 +1,10 @@
 # Agentic go-live readiness — LATEST
 
-As-of: 2026-07-16T0335 RUN COMPLETE (`168cb50`); integrated/pushed/postflight-complete on `main == origin/main`
+As-of: 2026-07-16T0408 MOA finalizer ready; deterministic integration pending
 Phase: BUILD
 Status: NOT READY
 Authority: research-only; no broker session, funding, shadow promotion, arming, or live orders
-Integration: complete; wrapper postflight receipt confirms clean pushed main
+Integration: pending deterministic wrapper gate; finalizer has not committed, pushed, merged, switched branches, or claimed RUN COMPLETE
 
 ## Current strategy-convergence state
 
@@ -13,72 +13,91 @@ Integration: complete; wrapper postflight receipt confirms clean pushed main
 - L1 sim-edge candidates: **0**
 - Quality leader: **none**; the former TSLL PCS proxy reference remains disqualified
 - Capital seats: **0**
-- Completed configured search epoch: `FOMC_POLICY_INFORMATION_RESOLUTION_DRIFT_V1`, exactly **1** counted no-advance decision, outcome `FAMILY_CLOSED`
-- The independent Beige Book and current sector-leader wakes are global history outside that completed epoch; neither inflates its streak
-- Historical global no-advance history remains search-design context, not readiness evidence
+- Active successor search epoch: `POST_REASSESSMENT_INDEPENDENT_DEFINED_RISK_DISCOVERY_V1`, formally registered at `2026-07-16T0335`; the prior FOMC epoch remains completed historical context.
+- Consecutive no-strategy-advance decisions in the active epoch: **2** (`0335`, `0408`).
+- `strategy_pivot_required=true`; `strategy_burst_stop_required=false`. The next wake must use a materially different mechanism/evidence class and cannot retune this wake's credit or overnight screens.
 
-## Latest strategy decision
+## Accepted strategy decision
 
-`MONTHLY_SECTOR_LEADER_CONTINUATION_BULL_CALL_35D_V1` / `SECTOR_ALLOCATION_RELATIVE_STRENGTH_CONTINUATION` is **FAMILY_CLOSED at F0** after challenger acceptance and finalizer verification.
+`CREDIT_RISK_OFF_SPY_BEAR_PUT_21D_V1` / `HIGH_YIELD_CREDIT_DIVERGENCE_FORWARD_DOWNSIDE` is **FAMILY_CLOSED at F0**. Strategy advancement is false.
 
-Frozen train-only evidence:
+Frozen train-only evidence from the run-local canonical factory claim JSON:
 
-- fixed nine-original sector SPDR adjusted-close panel; common history 1998-12-22 through 2026-07-15
-- 171 frozen eligible month-end signals
-- train: 102 signals across 17 years; holdout: 69 identity-sealed signals
-- leader mean after 10 bps: **-0.130819%**
-- same-date equal-weight nonleader mean: **+0.732793%**
-- paired excess mean: **-0.863612%** versus required >=+0.30%
-- paired median: **-1.105473%**
-- paired positive frequency: **36.2745%**
-- circular three-signal-date LB90: **-1.455459%** versus required >0
-- leader positive frequency: **48.0392%** versus required >=55%
-- leader worst-decile mean: **-9.375157%** versus required >=-8%
-- integrity violations: zero
-- untouched holdout: 69 signals, identity SHA `2691ebb857fc6552890c9b559535e6ed30cb49007410ca957d06d794f11fb464`; outcomes unread; simulation false; option pricing absent
+- exact-date adjusted SPY/HYG/IEF panel: **4,832** sessions, 2007-05-01 through 2026-07-15; source CSVs hash-cited; no forward fill;
+- train eligible/matched: 42/41 across ten signal years; prior-control support 97.6190%;
+- signed bearish event mean after 10 bps: **-0.909825%**;
+- signed bearish prior-control mean after 10 bps: **-0.201659%**;
+- signed paired excess: **-0.708167%**;
+- circular three-pair-block LB90: **-1.360006%**;
+- signed positive frequency: **29.2683%**;
+- signed worst-decile mean: **-4.015427%**;
+- failed gates: event expectancy, paired specificity, uncertainty lower bound, and positive frequency;
+- passed-but-nonrescuing gates: n36 density, eight-year floor, 80% support, -5% tail floor, and zero integrity violations;
+- prior-control distance diagnostic: median **153** sessions, maximum **680** sessions. This is a long-lookback generalization limit, not a post-hoc invitation to widen or retune matching;
+- untouched holdout: 28 matched identities, SHA `83fc5c0fe69de6801d440970c53edc8c098d09bd3edf0cdbe7728a41707c1c23`; outcomes unread, simulation false, option pricing zero.
 
-The exact family fails six frozen economic/risk gates. The leader underperformed contemporaneous nonleaders in both point estimate and dependence-aware uncertainty, so a bullish option wrapper would monetize the wrong signed forecast. Do not retune formation horizon, separation threshold, SMA, hold, top-two/rank-weight logic, or option geometry on the same panel.
+The signed forecast is wrong in train: SPY rose after the trigger and the bearish result was worse than matched prior same-regime controls. A bear-put wrapper cannot rescue the F0 anti-edge.
 
-Conditional geometry was planning-only: future 30-45 DTE $2-wide bull call debit spread on the selected sector ETF, structural one-lot `capital_fit_usd=200`, `max_loss_usd=200` before debit slippage/closing friction, `max_lots=1`. No option marks means no debit, IV, fill, path, assignment, or L1 claim.
+Conditional future geometry was planning-only: one-lot 18–24 DTE $2-wide SPY bear-put debit spread, `capital_fit_usd=200`, frictionless planning `max_loss_usd=200` before debit slippage/closing friction, `max_lots=1`. No historical option contract, debit, IV, fill, path, assignment, management, L1, or capital-seat claim exists.
+
+## Secondary factory screen — no advancement
+
+`OVERNIGHT_SELL_INTRADAY_RECOVERY_SPY_BULL_CALL_21D_V1` / `OVERNIGHT_INTRADAY_DISAGREEMENT_FORWARD_UPDRIFT` remains F0/L0 search information only:
+
+- train eligible/matched 34/32, support 94.1176%, ten signal years;
+- signed event mean +0.511192%, paired excess +0.739330%, positive frequency 71.875%, worst-decile -4.699177%;
+- required density failed at n32 <36 and paired LB90 failed at -0.200722% <=0;
+- prior-control distance diagnostic: median **155.5** sessions and maximum **723** sessions (direct recomputation from the 32 persisted pair rows; the challenger prose median 165 was not reproducible);
+- holdout 24 matched identities, SHA `40113d833d3e6d360a7230015a5dfffdd3f53a3267ad3d569ea41089874492c8`; outcomes unread, simulation false, option pricing zero.
+
+Positive point centers are diagnostic only. Do not open the holdout, retune thresholds, claim F1/L1/paper eligibility, or turn the secondary screen into a second family-close outcome.
 
 ## Readiness checks
 
 | Check | Status | Current evidence / blocker |
 |---|---|---|
-| B0 Policy/config safety | PASS for BUILD | Research-only wake; no broker or live action attempted. |
-| B1 Data integrity | BUILD-PASS / live-NOT-READY | Adjusted source files are hashed, strict JSON and deterministic replay pass; observed historical option surfaces remain unavailable. |
-| B2 Risk checks | PARTIAL | $3k sleeve and one-lot planning bounds are explicit; no candidate earned a capital seat. |
-| B3 Backtest density | NOT READY | Latest mechanism closed at F0 before option simulation; no living strategy has dense after-cost L1 evidence. |
-| B4 Stress/tails | NOT READY | Underlying worst-decile and block-bootstrap diagnostics failed; no surviving priced option path exists. |
-| B5 Logging/audit | BUILD-PASS | Charter, canonical claim, executor/challenger/finalizer judgments, schema-v2 compounding, learning promotion, source hashes, and finalizer-owned test/replay evidence are durable; deterministic integration is complete. |
-| B6 Paper path | NOT READY | No capital-fit intent fired and no strategy is eligible for paper promotion. |
+| B0 Policy/config safety | PASS for BUILD | Research-only; no broker, order, funding, shadow, arm, or live action. |
+| B1 Data integrity | BUILD-PASS / live-NOT-READY | Exact persisted source hashes, lagged signals, prior-only controls, sealed holdouts, deterministic replay, bounded ULP CSV validation, and exact failed-gate machine labels are green. Observed historical option surfaces remain unavailable. |
+| B2 Risk checks | PARTIAL | $3k sleeve, one-lot cap, and frictionless planning debit bounds are explicit; no candidate earned a capital seat and actual option debit/path loss is unmeasured. |
+| B3 Backtest density | NOT READY | Primary mechanism is closed at F0; secondary fails frozen n36. No living strategy has dense after-cost L1 evidence. |
+| B4 Stress/tails | NOT READY | Primary expectancy/specificity/uncertainty fail; secondary uncertainty fails. No surviving priced option path exists. |
+| B5 Logging/audit | BUILD-PASS | Charter, canonical claim, executor/challenger/finalizer judgments, schema-v2 compounding, learning promotion, epoch record, source hashes, sealed identities, and finalizer-owned replay/tests are durable; deterministic integration remains pending. |
+| B6 Paper path | NOT READY | No capital-fit living candidate or paper intent exists. |
 | B7 Shadow path | NOT READY | No propose->risk_check->log window exists. |
 | B8 Arming/funding | HARD STOP | Ken mandate, funding, explicit arm, and accepted live packet are absent. |
 
 ## Data and claim boundaries
 
-- Features stop at the completed month-end close; entry is the next completed close, and the 20-session windows are non-overlapping.
-- Same-date nonleader controls are selected without outcome access; all nine names must be finite.
-- Every source reports `yfinance auto_adjust=True`, 6,931 rows, and a SHA-256 in the claim artifact.
-- The fixed panel is present-day-survivor biased and does not reconstruct historical sector composition.
-- `XLC` and `XLRE` are excluded because their later listings would truncate the common history; no claim is made about an all-current-sector universe.
-- The 69-signal holdout remains sealed; zero option pricing occurred.
-- Underlying 10-bps friction is not option-spread friction. The strongly negative result is sufficient for closure, not advancement.
-- Observed-option archive plumbing remains too sparse for historical edge or L1 claims.
+- Features end at a completed session; entry is next close and exit is the fifth subsequent close.
+- Signals are non-overlapping. Controls are deterministic, prior-only, no-reuse, base-regime matched, non-trigger at the control feature date, and fully realized before each signal.
+- No later control-path pattern label is used to select controls.
+- Control matching can reach 680/723 sessions; that weakens local comparability/generalization but does not salvage either failed frozen decision.
+- The present-day ETF panel and evolving HYG/IEF composition limit generalization; these are not point-in-time credit spreads.
+- The 10-bps hurdle is underlying sensitivity, not option spread/fill friction.
+- Both chronological holdouts remain identity-only and outcome unread; zero option pricing occurred.
+- Finalizer-regenerated claim raw SHA is `2eb3e4c7ebf502de0ac533edcf8a986eb95253189a46922f6f3b7bb75b13f14c`; replay-normalized SHA is `a4fd731d931185297648b7bde28350c9b17022cf8062b9fc06fa0e76762d30b3`. The challenger independently verified the pre-wording-repair SHA `31278399…`; economic rows and decisions are unchanged.
+- Proxy underlying evidence can close exact F0 mechanisms but cannot earn L1 or paper authority.
 
 ## Closed-family quarantine
 
-Do not rerun or salvage:
+Add both stable IDs:
 
-- `MONTHLY_SECTOR_LEADER_CONTINUATION_BULL_CALL_35D_V1`
-- `SECTOR_ALLOCATION_RELATIVE_STRENGTH_CONTINUATION`
-- `BEIGE_BOOK_RANGE_COMPRESSION_SPY_IC_21D_V1`
-- `BEIGE_BOOK_INFORMATION_RESOLUTION_RANGE_COMPRESSION`
-- `FOMC_INFORMATION_RESOLUTION_SPY_BULL_CALL_21D_V1`
-- `FOMC_POLICY_INFORMATION_RESOLUTION_DRIFT`
+- `CREDIT_RISK_OFF_SPY_BEAR_PUT_21D_V1`
+- `HIGH_YIELD_CREDIT_DIVERGENCE_FORWARD_DOWNSIDE`
 
-For the sector-leader family, quarantine includes 42-126-session formation nudges, 3-8-point separation retunes, 10-30-session holds, SMA100-SMA150 filters, and top-two/rank-weight variants on the same panel. Reopening requires an independent panel construction, observed option-flow evidence, or another materially new mechanism/evidence class.
+Quarantine scope: SPY above SMA100, ten-session HYG-minus-IEF <=-1.5 percentage points, SPY five-session return <=0, next-close entry, five-session hold, nearby threshold nudges, and option-wrapper substitutions on the same panel. Reopening requires a materially different credit-state construction/economic horizon justified before outcomes, point-in-time credit-spread evidence, or another independent evidence class.
+
+Do not retune or open the sealed holdout for `OVERNIGHT_SELL_INTRADAY_RECOVERY_SPY_BULL_CALL_21D_V1`. Existing sector-leader, Beige Book, FOMC, and earlier compounding quarantines remain in force.
+
+## Verification
+
+- Focused behavioral/boundary/positive/negative/leakage plus shared OHLCV/FOMC and schema-v2/epoch regressions: `Ran 47 tests in 9.389s`, `OK`.
+- Mandated full suite `.venv/bin/python -m unittest discover -s tests`: `Ran 416 tests in 26.777s`, `OK`.
+- Strict compile plus `just test`: exit 0; TSLA and TSLL both `STAND ASIDE`; no broker action.
+- Exact-cache replay: substantive equality true after excluding only `generated_at`; common panel 4,832; normalized SHA above; control-distance diagnostics reproduced.
+- Income coverage regenerated at `2026-07-16T0420`: 21 structures / 246 hypotheses / 70 evolve artifacts / no quality leader; dated and LATEST surfaces byte-identical.
+- Schema-v2 handoff and isolated temporary-index deterministic prepare gate are finalizer-owned pre-integration checks; exact results are recorded in `learning-promotion.md` before handoff.
 
 ## NEXT
 
-NEXT: `TRAIN_ONLY_DEFINED_RISK_CANDIDATE_FACTORY_V1` — predeclare at least two genuinely independent, non-quarantined mechanisms with complete Layered Edge Stacks and frozen specificity controls, exercise the cheap train-only factory in the same wake, and close exactly one named survivor as `STRATEGY_ADVANCED` F0->F1 or one named mechanism as `FAMILY_CLOSED`. The factory itself is not strategy progress. Do not retune this sector-leader family, inspect sealed holdouts, or claim L1/capital-seat/paper/shadow/arm/broker/funding/live authority.
+NEXT: `SEC_FORM4_CLUSTERED_INSIDER_BUYING_DIRECTION_F0` — pivot to official point-in-time corporate-information evidence. Before outcome access freeze a fixed liquid panel, Form 4 open-market transaction-code/direct-indirect ownership/amendment/issuer/timestamp rules, cluster threshold, prior-only same-symbol no-reuse controls with distance diagnostics, signed five- or ten-session horizon, and a complete one-lot 18–24 DTE $2-wide call-debit Layered Edge Stack (`capital_fit_usd=200`, planning `max_loss_usd=200` before debit/closing friction, `max_lots=1`). Exercise exactly one named F0→F1 `STRATEGY_ADVANCED` or `FAMILY_CLOSED` decision in the same wake; capability-only EDGAR scaffolding fails closed. Do not inspect this wake's sealed holdouts or retune its credit/overnight screens.

@@ -204,9 +204,18 @@ def _validate_price_frame(frame: pd.DataFrame) -> pd.DataFrame:
         or (prepared[["open", "high", "low", "close"]] <= 0.0).any().any()
     ):
         raise ValueError("price frame must be finite, positive, unique, and increasing")
-    if (prepared["high"] < prepared[["open", "close"]].max(axis=1)).any() or (
-        prepared["low"] > prepared[["open", "close"]].min(axis=1)
-    ).any():
+    max_open_close = prepared[["open", "close"]].max(axis=1)
+    min_open_close = prepared[["open", "close"]].min(axis=1)
+    # CSV round trips can move mathematically equal adjusted OHLC values by one
+    # floating-point ULP. Accept only machine-close equality; material geometry
+    # violations still fail closed.
+    high_invalid = (prepared["high"] < max_open_close) & ~np.isclose(
+        prepared["high"], max_open_close, rtol=1e-12, atol=1e-12
+    )
+    low_invalid = (prepared["low"] > min_open_close) & ~np.isclose(
+        prepared["low"], min_open_close, rtol=1e-12, atol=1e-12
+    )
+    if high_invalid.any() or low_invalid.any():
         raise ValueError("price frame OHLC geometry is invalid")
     return prepared
 

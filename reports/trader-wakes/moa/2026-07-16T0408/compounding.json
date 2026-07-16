@@ -1,0 +1,169 @@
+{
+  "schema_version": 2,
+  "stamp": "2026-07-16T0408",
+  "loop_signature": "build|train-only-defined-risk\u002dcandidate-factory|credit-risk\u002doff-primary|overnight-intraday-secondary|prior-controls|train60|5session|family-close",
+  "economic_mechanism": "High-yield credit may reprice deteriorating risk appetite and financing conditions before large-cap equities fully adjust; the primary test asked whether a ten-session HYG-minus-IEF risk\u002doff divergence inside a still-positive SPY long trend leads five-session SPY downside.",
+  "candidate_or_family_scope": "Exact claim-bearing CREDIT_RISK_OFF_SPY_BEAR_PUT_21D_V1 / HIGH_YIELD_CREDIT_DIVERGENCE_FORWARD_DOWNSIDE on the exact-date adjusted SPY/HYG/IEF panel: SPY above warmed SMA100, ten-session HYG-minus-IEF return <= -1.5 percentage points, SPY five-session return <= 0, next-close entry, fifth-subsequent-close exit, prior-only same-regime controls, chronological 60/40 train/sealed holdout, and zero option pricing. Future conditional one-lot 18-24 DTE $2-wide SPY bear-put debit spread only: capital_fit_usd=200, frictionless planning max_loss_usd=200 before debit/closing friction, max_lots=1. Independent OVERNIGHT_SELL_INTRADAY_RECOVERY_SPY_BULL_CALL_21D_V1 is search information only.",
+  "funnel_stage_before": "F0_MECHANISM",
+  "funnel_stage_after": "F0_MECHANISM",
+  "falsifier": "Close the primary exact family unless train has at least 36 matched pairs across at least eight signal years, prior-control support at least 80%, signed event mean after 10 bps > 0, signed paired excess > 0, circular three-pair-block LB90 > 0, signed positive frequency at least 55%, signed worst-decile mean at least -5%, and zero chronology, lag, reuse, population, or nonfinite violations; holdout outcomes and option pricing must remain unopened.",
+  "outcome": "FAMILY_CLOSED",
+  "strategy_advancement": {
+    "advanced": false,
+    "summary": "The exact credit-risk\u002doff primary remains F0 and is closed. In 41 matched train pairs across ten years, signed bearish event mean after 10 bps was -0.909825%, signed prior-control mean -0.201659%, paired excess -0.708167%, LB90 -1.360006%, and signed hit rate 29.2683%; four frozen gates failed. No F1/F2/L1, living candidate, quality leader, capital seat, registry, paper, shadow, arm, broker, funding, or live authority was earned."
+  },
+  "search_information": {
+    "summary": "The wake added and exercised a reusable two-mechanism train-only candidate factory, repaired machine-close adjusted-OHLCV cache geometry validation, preserved sealed holdouts and zero option pricing, found a strong wrong-sign credit anti-edge, and left the overnight/intraday screen unadvanced because n32<36 and LB90=-0.200722%. Long prior-control distances are explicit diagnostics: primary median/max 153/680 sessions; secondary 155.5/723 sessions. The successor search epoch now has two counted no-advance decisions and requires a materially different evidence-class pivot.",
+    "delta_kinds": [
+      "capability",
+      "repair",
+      "falsification",
+      "stop_rule"
+    ]
+  },
+  "useful_deltas": [
+    {
+      "kind": "capability",
+      "summary": "Added an executable train-only multi-mechanism factory with completed-session features, next-close/five-session chronology, non-overlapping signals, deterministic prior-only no-reuse controls, frozen gate/ranking logic, strict JSON, identity-only holdouts, and explicit one-lot planning bounds; tests cover lag, prior controls, positive and wrong-sign outcomes, sealed holdouts, and failure-label boundaries.",
+      "novelty_key": "train-only-defined-risk\u002dcandidate-factory-2026-07-16T0408-v1",
+      "artifacts": [
+        "scripts/train_only_defined_risk_candidate_factory.py",
+        "tests/test_train_only_defined_risk_candidate_factory.py",
+        "reports/trader-wakes/moa/2026-07-16T0408/train-only-defined-risk\u002dcandidate-factory.json"
+      ]
+    },
+    {
+      "kind": "repair",
+      "summary": "Adjusted-OHLCV validation now accepts only machine-close CSV round-trip equality at rtol=atol=1e-12 while material high/open/close or low/open/close violations still fail closed; the dependent factory was rerun unchanged and its machine dominant-failure text now names only the four actual failed gates.",
+      "novelty_key": "adjusted-ohlcv-ulp-and-dominant-failure-integrity-repair-2026-07-16T0408-v1",
+      "artifacts": [
+        "scripts/fomc_information_resolution_train_lab.py",
+        "scripts/train_only_defined_risk_candidate_factory.py",
+        "tests/test_train_only_defined_risk_candidate_factory.py",
+        "reports/trader-wakes/moa/2026-07-16T0408/train-only-defined-risk\u002dcandidate-factory.json"
+      ]
+    },
+    {
+      "kind": "falsification",
+      "summary": "Closed both stable IDs for the exact credit-risk\u002doff geometry after four frozen train failures: wrong signed event expectancy, negative paired specificity, non-positive dependence-aware LB90, and 29.2683% signed hit rate. Density, years, support, tail, and integrity passed but cannot rescue the anti-edge; the 28-pair holdout remains unread and pricing stays zero.",
+      "novelty_key": "credit-risk\u002doff-spy-forward-downside-family-close-2026-07-16T0408-v1",
+      "artifacts": [
+        "reports/trader-wakes/moa/2026-07-16T0408/train-only-defined-risk\u002dcandidate-factory.json",
+        "reports/trader-wakes/moa/2026-07-16T0408/executor-closeout.md",
+        "reports/trader-wakes/2026-07-16T0408-moa-merge.md",
+        "reports/readiness/LATEST.md"
+      ]
+    },
+    {
+      "kind": "stop_rule",
+      "summary": "Registered the post-reassessment successor epoch beginning at 0335, counted the 0335 and 0408 closes as two consecutive no-advance decisions, set strategy_pivot_required=true and burst-stop=false, quarantined credit and overnight same-panel salvage, and constrained the sole Form 4 NEXT to an exercised same-wake F0 advance-or-close rather than capability-only EDGAR scaffolding.",
+      "novelty_key": "post-reassessment-epoch-streak2-form4-pivot-2026-07-16T0408-v1",
+      "artifacts": [
+        "configs/search_epoch.json",
+        "docs/SEARCH_EPOCH_2026-07-16T0335.md",
+        "reports/trader-wakes/moa/2026-07-16T0408/merged-next-seed.md",
+        "reports/readiness/LATEST.md",
+        "reports/trader-wakes/moa/2026-07-16T0408/compounding.json"
+      ]
+    }
+  ],
+  "retest_decision": null,
+  "evidence_wake_condition": null,
+  "evidence_wait_reaffirmation": false,
+  "critic_findings": [
+    {
+      "finding": "Accept exact FAMILY_CLOSED at F0 for CREDIT_RISK_OFF_SPY_BEAR_PUT_21D_V1 / HIGH_YIELD_CREDIT_DIVERGENCE_FORWARD_DOWNSIDE with strategy advancement false.",
+      "status": "rejected",
+      "rationale": "Rejected only as a defect finding because independent challenger recomputation and finalizer reproduction support the executor judgment. The substantive obligation is accepted in outcome, closed_families, readiness, finalizer report, and quarantine; no economic claim was rejected."
+    },
+    {
+      "finding": "Keep the overnight/intraday disagreement screen as search information only: no F1, no second family-close claim, no holdout open, and no retune.",
+      "status": "rejected",
+      "rationale": "Rejected as an observed defect because the claim already keeps the screen at F0/L0 with n32 below the frozen n36 floor and LB90 -0.200722%; its 24-pair holdout remains unread, option pricing is zero, and the sole NEXT forbids retuning."
+    },
+    {
+      "finding": "Preserve unread holdouts, zero option pricing, dual-ID credit quarantine, zero living candidates/leaders/seats, and no registry/paper/shadow/arm/live authority.",
+      "status": "rejected",
+      "rationale": "Rejected as a defect because all boundaries were already true and were independently reconfirmed. They remain explicit in the canonical claim, compounding, readiness, finalizer report, and merged NEXT."
+    },
+    {
+      "finding": "Keep the shared adjusted-OHLCV ULP validator repair while retaining material geometry rejection.",
+      "status": "rejected",
+      "rationale": "Rejected as a new finalizer defect because executor machinery already implemented the bounded tolerance and the focused ULP/material-violation regression passes. The repair is retained as search/integrity information, not strategy advancement."
+    },
+    {
+      "finding": "Write the missing schema-version-2 compounding handoff with FAMILY_CLOSED, both closed IDs, unique novelty keys, useful deltas, critic dispositions, and no-advance context.",
+      "status": "rejected",
+      "rationale": "Rejected as a machinery defect because this is a required finalizer role artifact. The obligation is completed by this schema-version-2 handoff and is independently validated before integration."
+    },
+    {
+      "finding": "Reconcile the epoch/streak surfaces so two accepted no-advance decisions require a pivot without falsely extending the completed FOMC epoch or claiming an unregistered 0335 epoch.",
+      "status": "rejected",
+      "rationale": "Rejected as a compounding-code defect because active/completed epoch scoping already has regression coverage. The project-state mismatch is repaired by registering POST_REASSESSMENT_INDEPENDENT_DEFINED_RISK_DISCOVERY_V1 at started_stamp 2026-07-16T0335, preserving the FOMC epoch as prior completed context, and setting counted_no_advance_decisions=2, pivot=true, burst=false in config, compounding, readiness, and the epoch charter."
+    },
+    {
+      "finding": "Normalize living panel-count prose from 4,833 to the canonical 4,832 exact-date rows.",
+      "status": "rejected",
+      "rationale": "Rejected as a machinery defect because the claim machine field was already correct. The reporting defect is corrected on executor closeout, executor wake, readiness, finalizer/LATEST, and INDEX living surfaces; the challenger quote remains historical evidence of the pre-finalizer discrepancy."
+    },
+    {
+      "finding": "Tighten the machine dominant-failure string to the four actual failed gates and the wrong-sign/negative-specificity anti-edge.",
+      "status": "repaired",
+      "rationale": "The generic possible-failure laundry list could misstate passed density/support/tail/integrity gates. The factory now builds the string from the selected candidate's actual failed_gates and reports signed event and paired means; a new negative-control test proves passed dimensions are absent.",
+      "repair_artifacts": [
+        "scripts/train_only_defined_risk_candidate_factory.py"
+      ],
+      "test_artifacts": [
+        "tests/test_train_only_defined_risk_candidate_factory.py"
+      ]
+    },
+    {
+      "finding": "Persist max/median prior-control distances and the extreme long-lookback limitation without widening match tolerances post hoc.",
+      "status": "rejected",
+      "rationale": "Rejected as a missing-machine-field defect because the canonical train payload already contains primary median/max 153/680 sessions and secondary 155.5/723 sessions. The finalizer promotes those diagnostics to compounding/readiness and explicitly treats them as generalization limits, not salvage or a retune invitation. Challenger prose stating secondary median 165 is rejected in favor of direct recomputation from the 32 persisted pair rows (155.5)."
+    },
+    {
+      "finding": "Reconfirm focused factory tests, shared OHLCV/FOMC regressions, and the full unittest suite rather than inherit executor counts.",
+      "status": "rejected",
+      "rationale": "Rejected as a code defect because verification is finalizer process ownership. Exact independent commands and results are recorded in learning-promotion.md; no executor full-suite count is inherited without rerun."
+    },
+    {
+      "finding": "Review foreign/unintended residue and ship only intended factory, shared validator, tests, claim, role reports, readiness, coverage, epoch, and handoff surfaces with no secrets or hidden debris.",
+      "status": "rejected",
+      "rationale": "Rejected as an observed defect after complete base-diff, untracked-file, ignored-log, sensitive-path, raw-secret, and generated-surface review. Session logs and coverage-preflight stderr remain ignored; no private positions, credentials, tokens, caches, binaries, broker state, or .gitignore change is included."
+    },
+    {
+      "finding": "Keep FAMILY_CLOSED rather than relabeling the wake BLOCKER_REMOVED_AND_RETESTED, while recording the ULP repair separately from strategy progress.",
+      "status": "rejected",
+      "rationale": "Rejected as a taxonomy defect. FAMILY_CLOSED is the frozen factory's single claim-bearing outcome; the ULP repair is separately recorded as a repair useful delta and the unchanged dependent experiment was exercised in the same wake."
+    },
+    {
+      "finding": "Harden the Form 4 NEXT so the next wake freezes PIT rules and exercises one named train advance-or-close instead of ending as EDGAR scaffolding.",
+      "status": "rejected",
+      "rationale": "Rejected as a current machinery defect because this is the next-wake charter. The obligation is accepted in merged-next-seed, epoch config/charter, compounding, readiness, finalizer/LATEST, and INDEX; credit/overnight retuning and sealed-holdout inspection remain forbidden."
+    }
+  ],
+  "closed_families": [
+    "CREDIT_RISK_OFF_SPY_BEAR_PUT_21D_V1",
+    "HIGH_YIELD_CREDIT_DIVERGENCE_FORWARD_DOWNSIDE"
+  ],
+  "data_dependencies": [
+    "No new data are required to preserve the exact credit-family close. Reopening requires a materially different credit-state construction or horizon justified before outcomes, point-in-time credit-spread evidence, or another independent evidence class rather than same-panel threshold/option-wrapper salvage.",
+    "The parked overnight/intraday screen requires a new predeclared mechanism or materially stronger independent evidence design; its sealed holdout cannot be opened and its current thresholds cannot be tuned from inspected train outcomes.",
+    "The Form 4 pivot requires official SEC filing timestamps, transaction/amendment/ownership fields, issuer mapping, and enough cross-symbol/year density to exercise a named F0 train decision; capability-only collection is insufficient."
+  ],
+  "no_advance_context": {
+    "epoch_id": "POST_REASSESSMENT_INDEPENDENT_DEFINED_RISK_DISCOVERY_V1",
+    "epoch_status": "active",
+    "started_stamp": "2026-07-16T0335",
+    "record_count_before": 1,
+    "consecutive_no_strategy_advance_before": 1,
+    "record_count_after_integration": 2,
+    "consecutive_no_strategy_advance_after_integration": 2,
+    "strategy_pivot_required": true,
+    "strategy_burst_stop_required": false,
+    "prior_completed_epoch_id": "FOMC_POLICY_INFORMATION_RESOLUTION_DRIFT_V1",
+    "reason": "The 0335 sector-leader close and 0408 credit-risk\u002doff close are the two counted decisions in the registered successor search epoch; the completed 0112 FOMC epoch remains bounded historical context."
+  },
+  "next": "SEC_FORM4_CLUSTERED_INSIDER_BUYING_DIRECTION_F0: pivot to official point-in-time corporate-information evidence. Before outcome access freeze a fixed liquid multi-symbol panel, open-market Form 4 transaction-code/direct-indirect ownership/amendment/issuer/timestamp rules, cluster threshold, prior-only same-symbol no-reuse controls with max/median distance diagnostics, signed five- or ten-session horizon, complete one-lot 18-24 DTE $2-wide call-debit Layered Edge Stack with capital_fit_usd=200, planning max_loss_usd=200 before debit/closing friction, max_lots=1, and exact train advance-or-close gates. Exercise one named F0->F1 STRATEGY_ADVANCED or FAMILY_CLOSED decision in the same wake; fail closed on derivatives, late/non-PIT filings, issuer mapping, reversing amendments, or insufficient cross-symbol/year density. Do not inspect this wake's sealed holdouts or retune its credit/overnight screens."
+}
