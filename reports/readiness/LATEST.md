@@ -1,6 +1,6 @@
 # Trader platform readiness — latest
 
-Updated: 2026-07-15 — MoA stamp 2026-07-15T2254 finalizer handoff `MOA_FINALIZE_READY`; deterministic integration pending. Last completed integrated main remains 2026-07-15T2152 at `fe0943f`.
+Updated: 2026-07-15 — MoA stamp 2026-07-15T2254 `RUN COMPLETE`; integrated/pushed/postflight-complete as `c96c2ed` with `main == origin/main` and a clean checkout.
 
 Phase: BUILD
 Sleeve: $3,000 Agentic research sleeve
@@ -56,7 +56,7 @@ Authority: research/paper-safe only; no shadow/live auto-promotion, broker acces
 - Full pytest: 383 passed, 18 subtests passed in 21.78s.
 - Deterministic canonical regeneration: same economic metrics, failed gates, train pairs, and sealed holdout; finalizer artifact SHA-256 `0180dfe59ec20a8b6699116edc21ae20d57953520f5ebf03b1a7716df49252cf`.
 - Coverage: 21 structures / 246 hypotheses / 70 evolve artifacts / no living leader; dated report `reports/readiness/income-coverage-2026-07-15T2334.md` and LATEST agree.
-- Schema-v2 handoff, compile/JSON/diff/secret audit, and deterministic prepare readiness are finalizer close gates; commit/push/merge/postflight remain wrapper-owned.
+- Deterministic wrapper postflight: `ok=true`; integrated/pushed/postflight-complete as `c96c2ed`; `main == origin/main`; checkout clean; run branch deleted.
 
 ## Readiness blockers
 
@@ -65,7 +65,7 @@ Authority: research/paper-safe only; no shadow/live auto-promotion, broker acces
 3. The observed TSLL diagonal has 0 complete paths/controls and unproven structural max loss.
 4. Broad observed historical option entry/exit joins remain unavailable; this blocks observed-option/L1 claims only, not unrelated L0 discovery.
 5. Any future F3 candidate still requires live-clock paper quotes/fills before F4/shadow/live authority.
-6. Stamp 2026-07-15T2254 is finalizer-ready but not integrated; deterministic wrapper commit/push/fast-forward/postflight is still required before `RUN COMPLETE`.
+6. Stamp `2026-07-15T2254` is integrated/pushed/postflight-complete as `c96c2ed`; no execution authority changed.
 
 Coverage: `reports/readiness/income-coverage-LATEST.md`
 Finalizer wake: `reports/trader-wakes/2026-07-15T2254-moa-merge.md`

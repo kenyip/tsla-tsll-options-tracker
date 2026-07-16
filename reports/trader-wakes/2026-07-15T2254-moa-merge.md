@@ -4,7 +4,7 @@ WAKE: 2026-07-15T2254
 PHASE: BUILD / L0 underlying discovery only
 ROLE: GPT 5.6 Sol finalizer / single writer
 SLEEVE: $3,000 Agentic research sleeve
-STATUS: `MOA_FINALIZE_READY`; finalizer handoff green, deterministic wrapper integration pending; no `RUN COMPLETE` claim.
+STATUS: `RUN COMPLETE`; integrated/pushed/postflight-complete as `c96c2ed`.
 CHOSE: reconcile Grok 4.5 `PASS WITH NITS`, repair machine evidence and anti-retune boundaries, independently re-verify the exact family close, promote learning, and prepare a schema-v2 handoff without opening holdout or pricing options.
 
 ## Strategy decision
@@ -80,6 +80,6 @@ Readiness: `reports/readiness/LATEST.md`
 
 `TSLL_OBSERVED_TERM_CARRY_DATA_OR_MATERIALLY_DIFFERENT_L0_PIVOT`: use exactly one branch per wake—distinct weekday-RTH and frozen 12-date/3-cycle/20-path/8-control floor unmet -> append one provenance-safe all-expiration TSLL snapshot and report counters only (`EVIDENCE_WAIT`, reaffirmation streak-exempt); off-hours -> pivot to a materially different non-quarantined mechanism/evidence class outside sector-breadth directional continuation and all integrated closed families; observed floor met -> evaluate exact parked `TSLL_OBSERVED_TERM_CARRY_DIAGONAL_V1` development 60% and keep final 40% unread. No same-date churn, same-panel breadth retune, holdout salvage, registry/paper force, shadow, arm, broker, funding, or live action.
 
-Integration is pending the deterministic wrapper gate. No commit, push, merge, branch switch, or `RUN COMPLETE` claim was made by the finalizer.
+Deterministic wrapper gate passed. The run committed, pushed, merged to `main`, verified `main == origin/main`, deleted the run branch, and wrote the postflight receipt as `c96c2ed84d70106e77f491c2c109c078a37afb28`.
 
-MOA_FINALIZE_READY
+RUN COMPLETE
