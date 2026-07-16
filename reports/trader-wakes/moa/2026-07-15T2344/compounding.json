@@ -1,0 +1,100 @@
+{
+  "schema_version": 2,
+  "stamp": "2026-07-15T2344",
+  "loop_signature": "build|cross-section-peer-residual-reversal|bottom3-vs-neutral3|train60|5session|tail-gate-family-close-burst-stop",
+  "economic_mechanism": "Temporary issuer-specific liquidity, attention, or positioning pressure may push liquid stocks materially below their same-date peer basket; if the move is overreaction rather than persistent information, the bottom residual laggards should rebound absolutely and outperform contemporaneous neutral-residual peers over the next five completed sessions.",
+  "candidate_or_family_scope": "Exact CROSS_SECTION_RESIDUAL_REVERSAL_BULL_CALL_21D_V1 / CROSS_SECTION_FIVE_SESSION_RESIDUAL_REVERSAL on the fixed present-day AAPL, MSFT, NVDA, AMZN, META, GOOGL, AMD, NFLX, TSLA, AVGO, MU, JPM, XOM, BAC panel; bottom-three five-session residual laggards when their mean residual is <=-4% versus same-date neutral-three controls; future conditional one-lot 18-24 DTE $2-wide bull-call debit spread only, capital_fit_usd=200, future frictionless debit/max-loss ceiling=200 before unmodeled closing friction, max_lots=1; zero option pricing and no capital seat.",
+  "funnel_stage_before": "F0_MECHANISM",
+  "funnel_stage_after": "F0_MECHANISM",
+  "falsifier": "Close the exact family if train has fewer than 40 episodes or eight signal years; chronology/group/overlap/ranking integrity fails; treated mean after labeled 20 bps is not positive or does not beat control; paired excess is below +0.25%; one-sided 90% circular three-episode block-bootstrap lower bound is non-positive; treated positive frequency is below 55%; or treated worst-decile mean is below -5%.",
+  "outcome": "FAMILY_CLOSED",
+  "strategy_advancement": {
+    "advanced": false,
+    "summary": "No funnel movement: the exact residual-reversal mechanism and nearby same-panel threshold/group/horizon retunes closed at F0 on the predeclared continuation-tail gate; no holdout opening, option stage, F1/F2/L1, capital seat, registry, paper, shadow, arm, broker, funding, or live authority."
+  },
+  "search_information": {
+    "summary": "The wake falsified a new average-positive but tail-unsafe cross-sectional reversal mechanism, added a tested chronology-safe residual lab with paired neutral controls and sealed holdout identity, made capital/authority boundaries machine-readable, and triggered the active epoch's three-no-advance burst stop.",
+    "delta_kinds": [
+      "capability",
+      "falsification",
+      "stop_rule"
+    ]
+  },
+  "useful_deltas": [
+    {
+      "kind": "falsification",
+      "summary": "Train n144 across ten signal years had treated/control means +1.340640%/+0.763662%, paired +0.576978%, LB90 +0.142252%, and treated hit 66.6667%, but failed the frozen worst-decile gate at -6.119049% across 15 episodes; holdout96 remained unread.",
+      "novelty_key": "cross-section-residual-reversal-tail-gate-family-close-2026-07-15T2344-v1",
+      "artifacts": [
+        "scripts/cross_section_residual_reversal_train_lab.py",
+        "tests/test_cross_section_residual_reversal_train_lab.py",
+        "reports/trader-wakes/2026-07-15T2344-moa-merge.md",
+        "reports/trader-wakes/moa/2026-07-15T2344/learning-promotion.md"
+      ]
+    },
+    {
+      "kind": "capability",
+      "summary": "Residual-reversal evidence now emits split F2/L1 labels, explicit unmeasured option-path loss, frictionless planned debit context, exact family/panel/group/threshold/horizon quarantine, and prior-known-event/no-train-salvage rules under behavioral and negative-control tests.",
+      "novelty_key": "residual-reversal-quarantine-capital-authority-boundaries-2026-07-15T2344-v1",
+      "artifacts": [
+        "scripts/cross_section_residual_reversal_train_lab.py",
+        "tests/test_cross_section_residual_reversal_train_lab.py"
+      ]
+    },
+    {
+      "kind": "stop_rule",
+      "summary": "The third counted no-advance decision in the active successor epoch is now orientation-facing: pivot remains required, burst-stop is true, and a fourth strategy-volume search is blocked pending dated search-design/data reassessment.",
+      "novelty_key": "residual-reversal-third-no-advance-burst-stop-2026-07-15T2344-v1",
+      "artifacts": [
+        "configs/search_epoch.json",
+        "reports/readiness/LATEST.md",
+        "reports/trader-wakes/moa/2026-07-15T2344/merged-next-seed.md"
+      ]
+    }
+  ],
+  "retest_decision": null,
+  "evidence_wake_condition": "",
+  "evidence_wait_reaffirmation": false,
+  "critic_findings": [
+    {
+      "finding": "F1/F2 required a schema-v2 orientation source of record and durable exact-family/candidate/panel/group/threshold/horizon quarantine rather than relying on schema-v1 local evidence or prose alone.",
+      "status": "repaired",
+      "rationale": "This compounding handoff is schema-v2, registers the full closure surface, and configs/search_epoch.json records the third decision/burst stop; the lab now emits the same exact quarantine and tests assert it. The schema-v1 lab artifact remains local evidence only.",
+      "repair_artifacts": [
+        "scripts/cross_section_residual_reversal_train_lab.py"
+      ],
+      "test_artifacts": [
+        "tests/test_cross_section_residual_reversal_train_lab.py"
+      ]
+    },
+    {
+      "finding": "F3/F4/F5 required any future event-risk route to use independently prior-known frozen labels, the $200 option figure to remain future frictionless admission/debit context rather than measured path loss, and the favorable center to remain diagnostic only.",
+      "status": "repaired",
+      "rationale": "The lab bans post-inspection symbol deletion, gate loosening, holdout opening, and outcome-derived event exclusions; reopening requires prior-known labels frozen before outcomes. It emits observed_or_simulated_option_path_max_loss_usd=null and split authority labels while retaining FAMILY_CLOSED on the tail gate; unit tests assert these boundaries.",
+      "repair_artifacts": [
+        "scripts/cross_section_residual_reversal_train_lab.py"
+      ],
+      "test_artifacts": [
+        "tests/test_cross_section_residual_reversal_train_lab.py"
+      ]
+    },
+    {
+      "finding": "F6/F7 required independent finalizer verification and readiness/next-state reconciliation before deterministic integration.",
+      "status": "repaired",
+      "rationale": "Finalizer reran focused 37/37, full unittest 379/379, full pytest 389 plus 18 subtests, compile, canonical replay, and coverage regeneration; readiness and wake surfaces now agree on FAMILY_CLOSED, sealed holdout, no authority change, three-no-advance burst stop, and one reassessment NEXT.",
+      "repair_artifacts": [
+        "scripts/cross_section_residual_reversal_train_lab.py"
+      ],
+      "test_artifacts": [
+        "tests/test_cross_section_residual_reversal_train_lab.py"
+      ]
+    }
+  ],
+  "closed_families": [
+    "CROSS_SECTION_FIVE_SESSION_RESIDUAL_REVERSAL",
+    "CROSS_SECTION_RESIDUAL_REVERSAL_BULL_CALL_21D_V1",
+    "CROSS_SECTION_FIVE_SESSION_RESIDUAL_REVERSAL: same fixed 14-name present-day panel, bottom-three residual laggards versus neutral-three controls, nearby treated mean residual threshold around -4%, and nearby five-session feature/forward-horizon retunes; reopening requires a materially new mechanism or genuinely prior-known event labels frozen before outcomes"
+  ],
+  "data_dependencies": [],
+  "next": "SEARCH_DESIGN_REASSESS_AFTER_RESIDUAL_REVERSAL_TAIL_CLOSE: stop strategy-volume search; reconcile the three active-epoch no-advance outcomes, assess whether favorable centers with failed tails indicate a genuinely new prior-known event-risk evidence route or a broader data/design limitation, carry forward the parked observed-diagonal data floor without same-date churn, and start a successor epoch only after a dated reassessment names a non-quarantined mechanism or evidence class. Do not open the sealed 96-blueprint holdout, delete high-beta symbols post hoc, loosen the -5% tail gate, force registry/paper, or enter shadow/arm/broker/live paths."
+}
