@@ -10,15 +10,25 @@ The separate `kenyip/trader-strategy-engine` repo performs cheap, bounded strate
 
 ```text
 Strategy Discovery Engine route manifest + panel
+  -> scripts/trader_strategy_engine_handoff.py runs the separate engine
   -> pre-outcome feasibility preflight
   -> train-only F0 screen
   -> sealed holdout identity packet
-  -> report copied to .cache/strategy-engine/latest.json
-  -> scripts/trader_strategy_engine_gate.py validates NEXT_SURVIVOR
+  -> provenance-stamped report at .cache/strategy-engine/latest.json
+  -> scripts/trader_strategy_engine_gate.py validates freshness + NEXT_SURVIVOR
   -> scripts/trader_build_lab_moa.sh launches MoA BUILD with strategy-engine-handoff.md
 ```
 
-If the report is missing, malformed, unsafe, authority-positive, or leaks holdout outcomes, the gate blocks the new BUILD before a run branch is created and exits nonzero.
+If the report is missing, malformed, unsafe, stale, authority-positive, or leaks holdout outcomes, the gate blocks the new BUILD before a run branch is created and exits nonzero.
+
+A handoff report must include provenance:
+
+- `schema_version` matching the checked-in handoff config;
+- `generated_at` with timezone, no older than `max_report_age_seconds`;
+- `engine_git_sha` and `trader_git_sha`;
+- `manifest_sha256`, `panel_sha256`, and positive `route_count`.
+
+`NO_QUALIFIED_STRATEGY` must also be current/provenanced. A stale no-strategy report is a hard gate failure, not a reason to suppress search forever.
 
 If the report is `NO_QUALIFIED_STRATEGY`, Trader writes `NO_STRATEGY_STATUS`, exits cleanly before branch/model launch, and leaves strategy search paused. That is an expected no-strategy no-op, not `RUN INCOMPLETE`.
 

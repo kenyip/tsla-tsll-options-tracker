@@ -4,5 +4,9 @@
   "engine_repo": "../trader-strategy-engine",
   "report_path": ".cache/strategy-engine/latest.json",
   "allowed_statuses": ["NEXT_SURVIVOR"],
-  "block_statuses": ["NO_QUALIFIED_STRATEGY"]
+  "block_statuses": ["NO_QUALIFIED_STRATEGY"],
+  "report_schema_version": 1,
+  "require_provenance": true,
+  "max_report_age_seconds": 21600,
+  "max_report_future_skew_seconds": 300
 }

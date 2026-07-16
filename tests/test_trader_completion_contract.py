@@ -31,6 +31,14 @@ class TraderCompletionContractSurfaceTest(unittest.TestCase):
             "NO_QUALIFIED_STRATEGY",
         ):
             self.assertIn(token, goal)
+        handoff_doc = (REPO / "docs" / "STRATEGY_ENGINE_HANDOFF.md").read_text()
+        for token in (
+            "trader_strategy_engine_handoff.py",
+            "generated_at",
+            "manifest_sha256",
+            "max_report_age_seconds",
+        ):
+            self.assertIn(token, handoff_doc)
         for token in (
             "cheap batch screen → selected candidate deep validation → reusable payoff map → patient watcher → paper packet",
             "NO_QUALIFIED_STRATEGY",
@@ -62,6 +70,7 @@ class TraderCompletionContractSurfaceTest(unittest.TestCase):
         self.assertIn("STRATEGY_ENGINE_CONTEXT_FILE", build)
         self.assertIn("strategy-engine-handoff.md", build)
         self.assertIn("TRADER_STRATEGY_ENGINE_GATE_BYPASS", build)
+        self.assertTrue((REPO / "scripts" / "trader_strategy_engine_handoff.py").exists())
 
     def test_bootstrap_does_not_overwrite_evolved_profile_contract(self) -> None:
         bootstrap = (REPO / "scripts" / "bootstrap_trader_profile.sh").read_text()

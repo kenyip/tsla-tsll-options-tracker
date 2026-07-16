@@ -5,6 +5,7 @@ import shutil
 import subprocess
 import tempfile
 import unittest
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from scripts.trader_strategy_engine_gate import run_gate, StrategyEngineGateError
@@ -38,6 +39,13 @@ def _report(**overrides):
         "promotion_blocked": ["l1", "shadow", "broker", "funding", "arm", "live"],
     }
     report = {
+        "schema_version": 1,
+        "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+        "engine_git_sha": "a" * 40,
+        "trader_git_sha": "b" * 40,
+        "manifest_sha256": "c" * 64,
+        "panel_sha256": "d" * 64,
+        "route_count": 1,
         "status": "NEXT_SURVIVOR",
         "engine_version": "0.1.0",
         "authority": {
@@ -68,6 +76,9 @@ class StrategyEngineHandoffGateTest(unittest.TestCase):
             "report_path": ".cache/strategy-engine/latest.json",
             "allowed_statuses": ["NEXT_SURVIVOR"],
             "block_statuses": ["NO_QUALIFIED_STRATEGY"],
+            "report_schema_version": 1,
+            "require_provenance": True,
+            "max_report_age_seconds": 21600,
         }
         (root / "configs" / "strategy_engine_handoff.json").write_text(json.dumps(cfg), encoding="utf-8")
         if report is not None:
@@ -94,6 +105,25 @@ class StrategyEngineHandoffGateTest(unittest.TestCase):
         with td:
             with self.assertRaises(StrategyEngineGateError):
                 run_gate(root, "stamp", None, None, None)
+
+
+    def test_missing_provenance_fails_closed(self):
+        r = _report()
+        del r["generated_at"]
+        td, root = self._repo_with_config(r)
+        with td:
+            with self.assertRaises(StrategyEngineGateError) as ctx:
+                run_gate(root, "stamp", None, None, None)
+            self.assertIn("generated_at", str(ctx.exception))
+
+    def test_stale_report_fails_closed_before_no_strategy_noop(self):
+        r = _report(status="NO_QUALIFIED_STRATEGY", survivors=[])
+        r["generated_at"] = (datetime.now(timezone.utc) - timedelta(days=2)).isoformat().replace("+00:00", "Z")
+        td, root = self._repo_with_config(r)
+        with td:
+            with self.assertRaises(StrategyEngineGateError) as ctx:
+                run_gate(root, "stamp", None, None, None)
+            self.assertIn("stale", str(ctx.exception))
 
     def test_no_qualified_strategy_blocks_launch(self):
         td, root = self._repo_with_config({**_report(), "status": "NO_QUALIFIED_STRATEGY", "survivors": []})
@@ -167,6 +197,13 @@ class StrategyEngineHandoffGateTest(unittest.TestCase):
                 "block_statuses": ["NO_QUALIFIED_STRATEGY"],
             }), encoding="utf-8")
             (root / ".cache" / "strategy-engine" / "latest.json").write_text(json.dumps({
+                "schema_version": 1,
+                "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+                "engine_git_sha": "a" * 40,
+                "trader_git_sha": "b" * 40,
+                "manifest_sha256": "c" * 64,
+                "panel_sha256": "d" * 64,
+                "route_count": 1,
                 "status": "NO_QUALIFIED_STRATEGY",
                 "engine_version": "0.1.0",
                 "authority": {

@@ -11,12 +11,18 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 EXPECTED_AUTHORITY_FALSE = ("paper", "shadow", "broker", "funding", "arm", "live", "l1")
 FORBIDDEN_HOLDOUT_KEYS = {"event_return", "control_return", "metrics", "pnl", "return", "returns"}
+HEX64_RE = re.compile(r"^[0-9a-f]{64}$")
+GIT_SHA_RE = re.compile(r"^[0-9a-f]{7,40}$")
+DEFAULT_MAX_REPORT_AGE_SECONDS = 6 * 60 * 60
+DEFAULT_MAX_REPORT_FUTURE_SKEW_SECONDS = 5 * 60
 
 
 class StrategyEngineGateError(RuntimeError):
@@ -53,8 +59,70 @@ def load_config(repo: Path, config_path: str | None = None) -> dict[str, Any]:
     cfg.setdefault("required_for_new_build", True)
     cfg.setdefault("allowed_statuses", ["NEXT_SURVIVOR"])
     cfg.setdefault("block_statuses", ["NO_QUALIFIED_STRATEGY"])
+    cfg.setdefault("report_schema_version", 1)
+    cfg.setdefault("require_provenance", True)
+    cfg.setdefault("max_report_age_seconds", DEFAULT_MAX_REPORT_AGE_SECONDS)
+    cfg.setdefault("max_report_future_skew_seconds", DEFAULT_MAX_REPORT_FUTURE_SKEW_SECONDS)
     cfg["_config_path"] = str(path)
     return cfg
+
+
+def _parse_generated_at(value: Any) -> datetime:
+    if not isinstance(value, str) or not value.strip():
+        raise StrategyEngineGateError("strategy engine report missing generated_at timestamp")
+    raw = value.strip()
+    text = raw[:-1] + "+00:00" if raw.endswith("Z") else raw
+    try:
+        dt = datetime.fromisoformat(text)
+    except ValueError as exc:
+        raise StrategyEngineGateError(f"generated_at is not ISO-8601: {raw!r}") from exc
+    if dt.tzinfo is None:
+        raise StrategyEngineGateError("generated_at must include timezone")
+    return dt.astimezone(timezone.utc)
+
+
+def _require_hex64(report: dict[str, Any], key: str) -> None:
+    value = report.get(key)
+    if not isinstance(value, str) or not HEX64_RE.fullmatch(value):
+        raise StrategyEngineGateError(f"strategy engine report {key} must be sha256 hex")
+
+
+def _require_git_sha(report: dict[str, Any], key: str) -> None:
+    value = report.get(key)
+    if not isinstance(value, str) or not GIT_SHA_RE.fullmatch(value):
+        raise StrategyEngineGateError(f"strategy engine report {key} must be git sha")
+
+
+def validate_report_provenance(report: dict[str, Any], cfg: dict[str, Any], *, now: datetime | None = None) -> None:
+    """Reject stale or untraceable handoff reports before status handling."""
+    if not cfg.get("require_provenance", True):
+        return
+    expected_schema = int(cfg.get("report_schema_version", 1))
+    if report.get("schema_version") != expected_schema:
+        raise StrategyEngineGateError(
+            f"strategy engine report schema_version {report.get('schema_version')!r} != {expected_schema}"
+        )
+    generated_at = _parse_generated_at(report.get("generated_at"))
+    now = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
+    age = (now - generated_at).total_seconds()
+    max_age = int(cfg.get("max_report_age_seconds", DEFAULT_MAX_REPORT_AGE_SECONDS))
+    if age > max_age:
+        raise StrategyEngineGateError(
+            f"strategy engine report stale: age_seconds={int(age)} max={max_age}"
+        )
+    future_skew = (generated_at - now).total_seconds()
+    max_future = int(cfg.get("max_report_future_skew_seconds", DEFAULT_MAX_REPORT_FUTURE_SKEW_SECONDS))
+    if future_skew > max_future:
+        raise StrategyEngineGateError(
+            f"strategy engine report generated_at is in the future: skew_seconds={int(future_skew)} max={max_future}"
+        )
+    _require_git_sha(report, "engine_git_sha")
+    _require_git_sha(report, "trader_git_sha")
+    _require_hex64(report, "manifest_sha256")
+    _require_hex64(report, "panel_sha256")
+    route_count = report.get("route_count")
+    if not isinstance(route_count, int) or route_count < 1:
+        raise StrategyEngineGateError("strategy engine report route_count must be positive integer")
 
 
 def _walk_holdout_forbidden(value: Any, path: str = "holdout") -> list[str]:
@@ -231,6 +299,7 @@ def run_gate(repo: Path, stamp: str, config_path: str | None, out_context: Path 
     report = json.loads(report_bytes.decode("utf-8"))
     if not isinstance(report, dict):
         raise StrategyEngineGateError("strategy engine report root must be object")
+    validate_report_provenance(report, cfg)
     selected = validate_report(report, cfg)
     receipt = build_receipt(
         repo=repo,
