@@ -1,0 +1,119 @@
+{
+  "schema_version": 2,
+  "stamp": "2026-07-15T2045",
+  "loop_signature": "build|tail-hazard-epoch|spy-index-theta-carry-pcs21|anchored-regime-contrast|blocker-repair-family-close-burst-stop",
+  "economic_mechanism": "Broad-index downside-insurance demand may create an equity-risk-premium and theta carry that a lag-safe non-bearish SPY trend/VIX regime can harvest while standing aside during bearish states.",
+  "candidate_or_family_scope": "Exact SPY_INDEX_THETA_CARRY_PCS_21D_V1 / SPY_INDEX_THETA_CARRY_REGIME_GATED_21D on SPY: one-lot Black-Scholes/listed-Friday proxy 21-DTE put credit spread, 0.20-delta short put, $2 protective wing, minimum $0.30 credit on both adverse cost axes, expiration precedence, 50% profit target, 70% structural-loss exit, short-put delta 0.45 exit, 10-session stop, no roll or same-bar re-entry; capital_fit_usd=200 structural planning bound, max_loss_usd=200 width bound before credit/friction, observed modeled one-trade loss <=169.998609, max_lots=1.",
+  "funnel_stage_before": "F0_MECHANISM",
+  "funnel_stage_after": "F0_MECHANISM",
+  "falsifier": "Fail unless both adverse cost axes have at least 20 chronological candidate trades with positive total and average after-cost PnL, PF >=1.05, max DD <=$150, ES90 >=-$125, modeled one-trade loss <=$300, zero integrity violations, sealed unread holdout identity, and an outcome-independent 11-session anchored contrast with at least eight completed non-bearish and eight bearish trades on each cost axis plus a strictly better non-bearish worst-axis average.",
+  "outcome": "BLOCKER_REMOVED_AND_RETESTED",
+  "strategy_advancement": {
+    "advanced": false,
+    "summary": "The repaired dependent experiment closed exact SPY_INDEX_THETA_CARRY_PCS_21D_V1 at F0. Absolute proxy PnL passed on 23 early-window entries per axis, but the mechanism contrast had only five tradeable non-bearish anchors and zero bearish anchors versus eight required per regime/axis; no F1, F2, L1, leader, capital seat, registry, or paper authority was earned."
+  },
+  "search_information": {
+    "summary": "The wake repaired a claim-invalidating low-density path comparator with fixed-cadence regime anchors, retested unchanged DNA to a decisive family close, added machine-readable entry-window coverage so train-period language cannot imply stationarity, and enforced the third-no-advance epoch burst stop.",
+    "delta_kinds": [
+      "capability",
+      "falsification",
+      "repair",
+      "stop_rule"
+    ]
+  },
+  "useful_deltas": [
+    {
+      "kind": "capability",
+      "summary": "Added and exercised a frozen SPY theta-carry lab with lagged features, adverse percentage and fixed-dollar two-leg costs, exact ledgers, one-position cadence, sealed chronological holdout identity, and an outcome-independent anchored non-bearish/bearish contrast with non-vacuity controls.",
+      "novelty_key": "spy-index-theta-carry-anchored-regime-contrast-v1",
+      "artifacts": [
+        "scripts/spy_index_theta_carry_lab.py",
+        "tests/test_spy_index_theta_carry_lab.py",
+        "reports/trader-wakes/moa/2026-07-15T2045/spy-index-theta-carry-train.json"
+      ]
+    },
+    {
+      "kind": "repair",
+      "summary": "Persisted candidate/control first and last entry dates, per-year counts, enclosing train dates, cost-axis identity, and an explicit no-full-train-compatibility claim boundary; tests pin the full exit stack and ES90 ceiling as well as the temporal coverage surface.",
+      "novelty_key": "train-entry-window-coverage-claim-boundary-v1",
+      "artifacts": [
+        "scripts/spy_index_theta_carry_lab.py",
+        "tests/test_spy_index_theta_carry_lab.py",
+        "reports/trader-wakes/moa/2026-07-15T2045/spy-index-theta-carry-train.json",
+        "reports/trader-wakes/moa/2026-07-15T2045/executor-closeout.md"
+      ]
+    },
+    {
+      "kind": "falsification",
+      "summary": "Closed the exact SPY regime-gated 21-DTE PCS family at F0: candidate n=23/axis and positive proxy totals did not identify the mechanism because 137 anchored opportunities yielded only five tradeable non-bearish blueprints and zero bearish support; the holdout remained unread.",
+      "novelty_key": "spy-index-theta-carry-comparator-support-family-close-2026-07-15T2045-v1",
+      "artifacts": [
+        "reports/trader-wakes/moa/2026-07-15T2045/spy-index-theta-carry-train.json",
+        "reports/trader-wakes/moa/2026-07-15T2045/executor-closeout.md",
+        "reports/trader-wakes/2026-07-15T2045-moa-merge.md",
+        "reports/readiness/LATEST.md"
+      ]
+    },
+    {
+      "kind": "stop_rule",
+      "summary": "Recorded three consecutive no-advance wakes in active epoch 2026-07-15-tail-hazard-discovery, set strategy_burst_stop_required=true, preserved all named quarantines and sealed holdouts, and selected one reassessment-only NEXT rather than a fourth strategy experiment.",
+      "novelty_key": "tail-hazard-epoch-third-close-burst-stop-reassessment-2026-07-15T2045-v1",
+      "artifacts": [
+        "reports/trader-wakes/moa/2026-07-15T2045/merged-next-seed.md",
+        "reports/trader-wakes/2026-07-15T2045-moa-merge.md",
+        "reports/trader-wakes/LATEST.md",
+        "reports/trader-wakes/INDEX.md",
+        "reports/readiness/LATEST.md"
+      ]
+    }
+  ],
+  "retest_decision": "FAMILY_CLOSED",
+  "evidence_wake_condition": null,
+  "critic_findings": [
+    {
+      "finding": "Executor prose misstated the ES90 ceiling as -$75, omitted the frozen 70% defined-loss and 0.45-delta exits, and used a noncanonical epoch id.",
+      "status": "repaired",
+      "rationale": "Living and dated reports now use the artifact's -$125 discovery ceiling, complete expiration/profit/defined-loss/delta/time/end-of-partition exit stack, and canonical epoch 2026-07-15-tail-hazard-discovery. The changed lab and focused test pin the underlying config and gate values.",
+      "repair_artifacts": [
+        "scripts/spy_index_theta_carry_lab.py"
+      ],
+      "test_artifacts": [
+        "tests/test_spy_index_theta_carry_lab.py"
+      ]
+    },
+    {
+      "finding": "All candidate/control path entries cluster from 2016-07 through 2018-01 inside a train partition ending 2022-07-11, so an unqualified train pass would overstate temporal coverage.",
+      "status": "repaired",
+      "rationale": "The current claim JSON serializes first/last entry, year counts, enclosing train dates, and an explicit entry-window-only boundary. Reports call the absolute pass an early-entry-window diagnostic, and the focused test requires the coverage surface and wording.",
+      "repair_artifacts": [
+        "scripts/spy_index_theta_carry_lab.py"
+      ],
+      "test_artifacts": [
+        "tests/test_spy_index_theta_carry_lab.py"
+      ]
+    },
+    {
+      "finding": "Readiness could remain a challenger-partial NEXT-only patch rather than a complete finalizer decision surface.",
+      "status": "rejected",
+      "rationale": "Readiness is fully rewritten for finalizer handoff with the closed family, corrected evidence labels and current hashes, sealed holdouts, no authority change, consecutive no-advance count three, strategy_burst_stop_required=true, final verification, and exactly one reassessment NEXT. Integration remains explicitly pending."
+    },
+    {
+      "finding": "Positive absolute dual-cost proxy PnL could be read as F1, L1, a capital seat, registry eligibility, or an almost-advance.",
+      "status": "rejected",
+      "rationale": "Mechanism identification was conjunctive and failed on non-vacuous bearish support. Funnel remains F0, strategy advancement is false, the entry window is narrow, the holdout is unread, and all living surfaces deny F1/F2/L1/capital/registry/paper/shadow/arm/live authority."
+    },
+    {
+      "finding": "The next wake could retune the same SPY DTE/delta/credit/regime panel or continue strategy volume after the third epoch no-advance.",
+      "status": "rejected",
+      "rationale": "The exact family and nearby same-panel retunes are quarantined. Exactly one NEXT is TAIL_HAZARD_EPOCH_BURST_STOP_REASSESSMENT, whose default is no new experiment volume and whose purpose is search-design/data reassessment."
+    }
+  ],
+  "closed_families": [
+    "SPY_INDEX_THETA_CARRY_REGIME_GATED_21D|spy|21dte|0.20delta|2wide|0.30credit|10session|bs-train-panel"
+  ],
+  "data_dependencies": [
+    "No new data are required to preserve this exact F0 family close; reopening requires a genuinely new predeclared evidence class or control design with non-vacuous bearish and non-bearish support, not nearby same-panel DNA retuning.",
+    "Any future L1 or paper authority requires claim-appropriate observed option grids, entry/exit marks, two-leg costs/fills, and live-clock paper evidence; the sealed SPY 2022-07-12..2026-07-13 option outcomes and semivariance holdout 72a6d184... must remain unread during the reassessment."
+  ],
+  "next": "TAIL_HAZARD_EPOCH_BURST_STOP_REASSESSMENT: stop strategy-experiment volume in active epoch 2026-07-15-tail-hazard-discovery after three no-advance wakes; write a dated search-design/data reassessment of the recent-downshock, downside-semivariance, and SPY theta-carry failures, inventory informative versus thrash-prone evidence classes, preserve both sealed holdouts, and decide whether to close the lane or reopen only under one named new evidence class. Default to no new strategy experiment in that wake; no SPY same-panel retune, F1/L1 laundering, registry, paper force, shadow, arm, broker, or live action."
+}
