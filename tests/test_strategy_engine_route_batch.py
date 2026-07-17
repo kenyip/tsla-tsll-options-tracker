@@ -64,7 +64,7 @@ class StrategyEngineRouteBatchTests(unittest.TestCase):
                 repo / ".cache" / "strategy-engine" / "panel.csv",
             )
             self.assertTrue(result["ok"])
-            self.assertEqual(result["route_count"], 9)
+            self.assertEqual(result["route_count"], 10)
             manifest = json.loads((repo / ".cache" / "strategy-engine" / "routes.json").read_text())
             self.assertIn({"family": "CLOSED_FAMILY_V1", "fingerprint": ""}, manifest["quarantine"])
             gap_reversal = next(
@@ -95,6 +95,16 @@ class StrategyEngineRouteBatchTests(unittest.TestCase):
             self.assertEqual(bearish["planned_structure"]["expression"], "debit_put_spread")
             self.assertEqual(bearish["risk_management"]["type"], "terminal_close")
             self.assertEqual(bearish["search_budget"]["max_variants"], 1)
+            relative_weakness = next(
+                route
+                for route in manifest["routes"]
+                if route["id"] == "cached_single_name_relative_weakness_put_debit_5d_v1"
+            )
+            self.assertEqual(relative_weakness["direction"], "short")
+            self.assertEqual(relative_weakness["controls"]["population"], "same_date_qqq_return")
+            self.assertEqual(relative_weakness["planned_structure"]["expression"], "debit_put_spread")
+            self.assertEqual(relative_weakness["search_budget"]["max_variants"], 1)
+            self.assertIn("benchmark_closes", relative_weakness["trigger"]["source_semantics"])
             self.assertGreater(result["panel_rows"], 0)
             panel_text = (repo / ".cache" / "strategy-engine" / "panel.csv").read_text()
             self.assertIn("event_return", panel_text)
@@ -155,6 +165,40 @@ class StrategyEngineRouteBatchTests(unittest.TestCase):
 
         assert terminal_return is not None
         self.assertAlmostEqual(float(terminal_return), -0.10)
+
+    def test_relative_weakness_trigger_is_point_in_time_and_uses_qqq_control(self) -> None:
+        dates = pd.bdate_range("2023-01-03", periods=150)
+        benchmark_close = pd.Series([100.0 + idx * 0.10 for idx in range(len(dates))], index=dates)
+        stock_close = benchmark_close.copy()
+        for idx in range(80, len(dates)):
+            stock_close.iloc[idx] = stock_close.iloc[79] - (idx - 79) * 0.70
+
+        def frame(close: pd.Series) -> pd.DataFrame:
+            return pd.DataFrame(
+                {
+                    "open": close,
+                    "high": close * 1.01,
+                    "low": close * 0.99,
+                    "close": close,
+                },
+                index=dates,
+            )
+
+        specs = {spec.route_id: spec for spec in _route_specs()}
+        spec = specs["cached_single_name_relative_weakness_put_debit_5d_v1"]
+        signal = dates[100]
+        frames = {"AAPL": frame(stock_close), "QQQ": frame(benchmark_close), "SPY": frame(benchmark_close)}
+
+        original_events = _candidate_events(spec, frames)
+        future_changed = frames["QQQ"].copy()
+        future_changed.loc[dates[101]:, ["open", "high", "low", "close"]] *= 3.0
+        changed_events = _candidate_events(spec, {**frames, "QQQ": future_changed})
+
+        original_signal = next(event for event in original_events if event["date"] == signal)
+        self.assertTrue(any(event["date"] == signal for event in changed_events))
+        rows = _panel_rows(spec, [original_signal], frames)
+        control_rows = [row for row in rows if row["is_control"] == 1]
+        self.assertEqual([row["symbol"] for row in control_rows], ["QQQ"])
 
     def test_downside_gap_reversal_trigger_uses_current_day_ohlc_only(self) -> None:
         dates = pd.bdate_range("2024-01-02", periods=130)

@@ -57,6 +57,7 @@ class RouteSpec:
     min_tail: float
     cost_per_event: float
     predicate: Callable[[pd.DataFrame], pd.Series]
+    benchmark_symbol: str | None = None
     stop_loss_pct: float | None = None
     time_exit_sessions: int | None = None
 
@@ -100,6 +101,22 @@ def _features(frame: pd.DataFrame, horizon: int) -> pd.DataFrame:
     df["hv20"] = df["ret1"].rolling(20).std() * math.sqrt(252)
     df["future_return"] = df["close"].shift(-horizon) / df["close"] - 1.0
     return df
+
+
+def _add_benchmark_relative_features(
+    features: pd.DataFrame,
+    benchmark_frame: pd.DataFrame,
+    horizon: int,
+) -> pd.DataFrame:
+    """Add same-date benchmark-relative inputs computed only from known closes."""
+    out = features.copy()
+    benchmark = _features(benchmark_frame, horizon).reindex(out.index)
+    out["benchmark_ret5"] = benchmark["ret5"]
+    out["benchmark_ret20"] = benchmark["ret20"]
+    out["benchmark_above_sma100"] = benchmark["close"] > benchmark["sma100"]
+    out["relative_ret5"] = out["ret5"] - out["benchmark_ret5"]
+    out["relative_ret20"] = out["ret20"] - out["benchmark_ret20"]
+    return out
 
 
 def _route_specs() -> list[RouteSpec]:
@@ -258,6 +275,37 @@ def _route_specs() -> list[RouteSpec]:
                 & (f["hv20"] > f["hv20"].rolling(252, min_periods=60).quantile(0.65))
             ),
         ),
+        RouteSpec(
+            route_id="cached_single_name_relative_weakness_put_debit_5d_v1",
+            family="CACHED_SINGLE_NAME_RELATIVE_WEAKNESS_CONTINUATION",
+            mechanism="single_name_relative_weakness_continuation_versus_qqq_uptrend",
+            symbols=("AAPL", "MSFT", "META", "GOOGL", "AMZN", "NVDA", "AMD", "TSLA"),
+            direction="short",
+            horizon_sessions=5,
+            trigger_name="qqq_above_sma100_stock_below_sma50_relative_20d_below_minus8pct_relative_5d_below_minus3pct",
+            controls_population="same_date_qqq_return",
+            planned_expression="debit_put_spread",
+            max_loss_usd=200,
+            drawdown_budget_usd=75,
+            hard_stop_sessions=5,
+            min_train_events=20,
+            min_train_years=2,
+            min_controls=20,
+            min_event_mean_after_cost=0.0,
+            min_paired_excess_mean=0.0,
+            min_lower_bound=0.0,
+            min_hit_rate=0.52,
+            min_tail=-0.08,
+            cost_per_event=0.0020,
+            predicate=lambda f: (
+                f["benchmark_above_sma100"]
+                & (f["close"] < f["sma50"])
+                & (f["ret5"] < 0.0)
+                & (f["relative_ret20"] < -0.08)
+                & (f["relative_ret5"] < -0.03)
+            ),
+            benchmark_symbol="QQQ",
+        ),
     ]
     high_beta = next(spec for spec in specs if spec.route_id == "cached_high_beta_momentum_call_debit_10d_v1")
     specs.extend(
@@ -313,7 +361,11 @@ def _route_dict(spec: RouteSpec) -> dict[str, Any]:
         "horizon_sessions": spec.horizon_sessions,
         "trigger": {
             "name": spec.trigger_name,
-            "source_semantics": "cached_daily_ohlcv_close_known_at_signal_close",
+            "source_semantics": (
+                "cached_daily_ohlcv_same_date_stock_and_benchmark_closes_known_at_signal_close"
+                if spec.benchmark_symbol
+                else "cached_daily_ohlcv_close_known_at_signal_close"
+            ),
         },
         "controls": {
             "population": spec.controls_population,
@@ -400,6 +452,11 @@ def _candidate_events(spec: RouteSpec, frames: dict[str, pd.DataFrame]) -> list[
         if symbol not in frames:
             continue
         f = _features(frames[symbol], spec.horizon_sessions)
+        if spec.benchmark_symbol is not None:
+            benchmark_frame = frames.get(spec.benchmark_symbol)
+            if benchmark_frame is None:
+                raise ValueError(f"missing benchmark {spec.benchmark_symbol} for {spec.route_id}")
+            f = _add_benchmark_relative_features(f, benchmark_frame, spec.horizon_sessions)
         mask = spec.predicate(f).fillna(False) & f["future_return"].notna()
         for date in f.index[mask]:
             managed_return = _managed_forward_return(frames[symbol], pd.Timestamp(date), spec)
@@ -416,7 +473,9 @@ def _panel_rows(spec: RouteSpec, events: list[dict[str, Any]], frames: dict[str,
     for event in events:
         symbol = str(event["symbol"])
         date = pd.Timestamp(event["date"])
-        control_symbol = _control_symbol(symbol, available)
+        control_symbol = spec.benchmark_symbol or _control_symbol(symbol, available)
+        if control_symbol not in available:
+            raise ValueError(f"missing control {control_symbol} for {spec.route_id}")
         control_return = _managed_forward_return(frames[control_symbol], date, spec)
         if control_return is not None:
             eligible.append((event, control_symbol, control_return))
