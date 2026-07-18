@@ -64,7 +64,7 @@ class StrategyEngineRouteBatchTests(unittest.TestCase):
                 repo / ".cache" / "strategy-engine" / "panel.csv",
             )
             self.assertTrue(result["ok"])
-            self.assertEqual(result["route_count"], 10)
+            self.assertEqual(result["route_count"], 11)
             manifest = json.loads((repo / ".cache" / "strategy-engine" / "routes.json").read_text())
             self.assertIn({"family": "CLOSED_FAMILY_V1", "fingerprint": ""}, manifest["quarantine"])
             gap_reversal = next(
@@ -105,6 +105,16 @@ class StrategyEngineRouteBatchTests(unittest.TestCase):
             self.assertEqual(relative_weakness["planned_structure"]["expression"], "debit_put_spread")
             self.assertEqual(relative_weakness["search_budget"]["max_variants"], 1)
             self.assertIn("benchmark_closes", relative_weakness["trigger"]["source_semantics"])
+            volume_pressure = next(
+                route
+                for route in manifest["routes"]
+                if route["id"] == "cached_broad_index_volume_pressure_call_debit_5d_v1"
+            )
+            self.assertEqual(volume_pressure["family"], "CACHED_BROAD_INDEX_VOLUME_PRESSURE_CONTINUATION")
+            self.assertEqual(volume_pressure["controls"]["population"], "same_date_spy_qqq_peer_return")
+            self.assertEqual(volume_pressure["planned_structure"]["expression"], "debit_call_spread")
+            self.assertEqual(volume_pressure["search_budget"]["max_variants"], 1)
+            self.assertIn("raw_volume", volume_pressure["trigger"]["source_semantics"])
             self.assertGreater(result["panel_rows"], 0)
             panel_text = (repo / ".cache" / "strategy-engine" / "panel.csv").read_text()
             self.assertIn("event_return", panel_text)
@@ -219,6 +229,37 @@ class StrategyEngineRouteBatchTests(unittest.TestCase):
         events = _candidate_events(spec, {"TSLA": frame})
 
         self.assertEqual([(event["date"], event["symbol"]) for event in events], [(signal, "TSLA")])
+
+    def test_volume_pressure_trigger_is_completed_close_point_in_time(self) -> None:
+        dates = pd.bdate_range("2024-01-02", periods=130)
+        frame = pd.DataFrame(
+            {
+                "open": [100.0] * len(dates),
+                "high": [101.0] * len(dates),
+                "low": [99.0] * len(dates),
+                "close": [100.0] * len(dates),
+                "volume": [1_000_000] * len(dates),
+            },
+            index=dates,
+        )
+        signal = dates[80]
+        frame.loc[signal, ["open", "high", "low", "close", "volume"]] = [
+            100.0,
+            102.0,
+            99.0,
+            101.5,
+            2_000_000,
+        ]
+        specs = {spec.route_id: spec for spec in _route_specs()}
+        spec = specs["cached_broad_index_volume_pressure_call_debit_5d_v1"]
+
+        original_events = _candidate_events(spec, {"SPY": frame})
+        future_changed = frame.copy()
+        future_changed.loc[dates[81] :, "volume"] = 10_000_000
+        changed_events = _candidate_events(spec, {"SPY": future_changed})
+
+        self.assertTrue(any(event["date"] == signal for event in original_events))
+        self.assertTrue(any(event["date"] == signal for event in changed_events))
 
     def test_chronological_split_never_bisects_same_date_events(self) -> None:
         dates = pd.bdate_range("2024-01-02", periods=20)

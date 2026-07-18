@@ -60,6 +60,7 @@ class RouteSpec:
     benchmark_symbol: str | None = None
     stop_loss_pct: float | None = None
     time_exit_sessions: int | None = None
+    uses_volume: bool = False
 
 
 def _load_cached_ohlc(repo: Path, symbol: str) -> pd.DataFrame:
@@ -72,13 +73,13 @@ def _load_cached_ohlc(repo: Path, symbol: str) -> pd.DataFrame:
     df = pd.read_csv(path, parse_dates=[0])
     date_col = df.columns[0]
     df = df.rename(columns={date_col: "date"})
-    required = {"date", "open", "high", "low", "close"}
+    required = {"date", "open", "high", "low", "close", "volume"}
     missing = required - set(df.columns)
     if missing:
         raise ValueError(f"{path} missing columns: {sorted(missing)}")
-    out = df.loc[:, ["date", "open", "high", "low", "close"]].copy()
+    out = df.loc[:, ["date", "open", "high", "low", "close", "volume"]].copy()
     out["date"] = pd.to_datetime(out["date"]).dt.normalize()
-    for column in ("open", "high", "low", "close"):
+    for column in ("open", "high", "low", "close", "volume"):
         out[column] = pd.to_numeric(out[column], errors="coerce")
     out = out.dropna().drop_duplicates("date").sort_values("date").set_index("date")
     if len(out) < 300:
@@ -88,6 +89,7 @@ def _load_cached_ohlc(repo: Path, symbol: str) -> pd.DataFrame:
 
 def _features(frame: pd.DataFrame, horizon: int) -> pd.DataFrame:
     df = frame.loc[:, ["open", "high", "low", "close"]].astype(float).copy()
+    df["volume"] = pd.to_numeric(frame.get("volume"), errors="coerce")
     df["previous_close"] = df["close"].shift(1)
     df["open_gap"] = df["open"] / df["previous_close"] - 1.0
     df["intraday_return"] = df["close"] / df["open"] - 1.0
@@ -99,6 +101,7 @@ def _features(frame: pd.DataFrame, horizon: int) -> pd.DataFrame:
     df["sma50"] = df["close"].rolling(50).mean()
     df["sma100"] = df["close"].rolling(100).mean()
     df["hv20"] = df["ret1"].rolling(20).std() * math.sqrt(252)
+    df["relative_volume_20"] = df["volume"] / df["volume"].shift(1).rolling(20, min_periods=20).median()
     df["future_return"] = df["close"].shift(-horizon) / df["close"] - 1.0
     return df
 
@@ -276,6 +279,35 @@ def _route_specs() -> list[RouteSpec]:
             ),
         ),
         RouteSpec(
+            route_id="cached_broad_index_volume_pressure_call_debit_5d_v1",
+            family="CACHED_BROAD_INDEX_VOLUME_PRESSURE_CONTINUATION",
+            mechanism="completed_close_high_relative_volume_accumulation_forward_updrift",
+            symbols=("SPY", "QQQ", "IWM"),
+            direction="long",
+            horizon_sessions=5,
+            trigger_name="positive_intraday_upper_quartile_close_relative_volume_1p5x_lagged20_median",
+            controls_population="same_date_spy_qqq_peer_return",
+            planned_expression="debit_call_spread",
+            max_loss_usd=200,
+            drawdown_budget_usd=75,
+            hard_stop_sessions=5,
+            min_train_events=20,
+            min_train_years=2,
+            min_controls=20,
+            min_event_mean_after_cost=0.0,
+            min_paired_excess_mean=0.0,
+            min_lower_bound=0.0,
+            min_hit_rate=0.52,
+            min_tail=-0.05,
+            cost_per_event=0.0015,
+            predicate=lambda f: (
+                (f["intraday_return"] > 0.0)
+                & (f["close_location"] >= 0.75)
+                & (f["relative_volume_20"] >= 1.50)
+            ),
+            uses_volume=True,
+        ),
+        RouteSpec(
             route_id="cached_single_name_relative_weakness_put_debit_5d_v1",
             family="CACHED_SINGLE_NAME_RELATIVE_WEAKNESS_CONTINUATION",
             mechanism="single_name_relative_weakness_continuation_versus_qqq_uptrend",
@@ -352,6 +384,12 @@ def _closed_family_quarantine(repo: Path) -> list[dict[str, str]]:
 
 def _route_dict(spec: RouteSpec) -> dict[str, Any]:
     path_aware = spec.stop_loss_pct is not None or spec.time_exit_sessions is not None
+    if spec.uses_volume:
+        source_semantics = "cached_daily_unadjusted_ohlc_price_and_raw_volume_known_at_signal_close"
+    elif spec.benchmark_symbol:
+        source_semantics = "cached_daily_ohlcv_same_date_stock_and_benchmark_closes_known_at_signal_close"
+    else:
+        source_semantics = "cached_daily_ohlcv_close_known_at_signal_close"
     return {
         "id": spec.route_id,
         "family": spec.family,
@@ -361,11 +399,7 @@ def _route_dict(spec: RouteSpec) -> dict[str, Any]:
         "horizon_sessions": spec.horizon_sessions,
         "trigger": {
             "name": spec.trigger_name,
-            "source_semantics": (
-                "cached_daily_ohlcv_same_date_stock_and_benchmark_closes_known_at_signal_close"
-                if spec.benchmark_symbol
-                else "cached_daily_ohlcv_close_known_at_signal_close"
-            ),
+            "source_semantics": source_semantics,
         },
         "controls": {
             "population": spec.controls_population,

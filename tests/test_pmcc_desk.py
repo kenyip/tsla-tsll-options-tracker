@@ -178,9 +178,13 @@ class AssemblePmccDeskIntegrationTest(unittest.TestCase):
         self.assertTrue(any("STYLED HTML background-color: present" in line for line in lines))
         self.assertTrue(any("background-color:" in line for line in lines))
         patience = bundle.situation["patience_expires"]
-        date.fromisoformat(patience["date"])
-        self.assertTrue(any(line.startswith(f"PATIENCE EXPIRES: {patience['date']}") for line in lines))
-        self.assertTrue(any(line.startswith(f"PATIENCE SOURCE: {patience['explanation']}") for line in lines))
+        if patience["date"] is not None:
+            date.fromisoformat(patience["date"])
+            self.assertTrue(any(line.startswith(f"PATIENCE EXPIRES: {patience['date']}") for line in lines))
+            self.assertTrue(any(line.startswith(f"PATIENCE SOURCE: {patience['explanation']}") for line in lines))
+        else:
+            self.assertEqual(patience["explanation"], "no deadline computed")
+            self.assertFalse(any(line.startswith("PATIENCE EXPIRES:") for line in lines))
 
     def test_position_record_key_distinguishes_same_strike_lots(self) -> None:
         a = {
