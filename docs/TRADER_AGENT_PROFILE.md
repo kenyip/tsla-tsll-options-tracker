@@ -10,17 +10,23 @@ Dedicated **self-evolving** Hermes profile for Ken's research → paper → shad
 | Evolution = `just evolve-tick` finished | Evolution = agent orients, chooses, builds, validates, leaves residue |
 | Fixed strategy box (PMCC/short-premium only) | Seed sleeves are hypotheses; free search across DNA/structures |
 | LaunchAgents as primary loop | Hermes **trader** gateway + agent crons |
+| Dense cartesian bag = progress | Dual-cost F2 + path stress + densify winners only |
+| StrategyDNA scout first | **StrategySpec spine** first (`TRADER_BUILD.md`) |
 
-Optional instruments (agent may choose):
+**Doctrine:** `docs/TRADER_BUILD.md` · **Handoff:** `reports/bootstrap/ENGINE_PROVE_HANDOFF.md`
+
+Default instruments (agent may choose):
 
 ```bash
-just research-tick-paper
-just evolve-tick
-just learn-tick -- --apply
-just platform-scout
-just desk-brief
+just trader-progress
+just trader-opportunity
+just trader-paper-loop
+just trader-bootstrap
+just trader-path-stress --spec … --symbols …
+just trader-paper-handoff
+# optional: just trader-discover   # Wave A only — not dense bag
+just desk-brief                   # Desk A personal book
 ```
-
 ## Current local profile
 
 ```text

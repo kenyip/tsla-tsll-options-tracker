@@ -28,11 +28,28 @@ from trader_platform.research.strategy_spec import (
 _REPO = Path(__file__).resolve().parents[2]
 DEFAULT_BOOTSTRAP_CONFIG = _REPO / "configs" / "bootstrap_strategies.json"
 DEFAULT_BOOTSTRAP_REPORT = _REPO / "reports" / "bootstrap" / "LATEST.json"
+DEFAULT_QUALITY_BARS = _REPO / "configs" / "quality_bars.json"
+DEFAULT_MULTI_SYMBOL_REPORT = _REPO / "reports" / "bootstrap" / "MULTI_SYMBOL_REPROVE.json"
+
+# Default book for multi-symbol DNA stress (liquid / capital-fit core+growth)
+DEFAULT_MULTI_SYMBOL_BOOK = ("BAC", "KO", "IWM", "AMZN", "AAPL", "QQQ", "INTC")
 
 
 def _now() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 
+
+def load_quality_bars(path: str | Path | None = None) -> dict[str, Any]:
+    p = Path(path) if path else DEFAULT_QUALITY_BARS
+    if not p.exists():
+        return {
+            "bootstrap": {
+                "min_trades_per_passing_axis": 12,
+                "min_symbols_with_f2": 2,
+            }
+        }
+    raw = json.loads(p.read_text(encoding="utf-8"))
+    return dict(raw) if isinstance(raw, Mapping) else {}
 
 @dataclass
 class BootstrapCandidate:
@@ -304,7 +321,160 @@ def re_prove_candidates(
         "results": results,
         "trading_authority": False,
         "live_authority": False,
+        "discovery_policy": "densify_winners_only_wave_A_default",
     }
+    return payload
+
+
+def multi_symbol_reprove(
+    *,
+    spec_path: str | Path,
+    symbols: Sequence[str],
+    evaluate_fn: Any = None,
+    run_holdout: bool = True,
+    quality_bars: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Re-prove one DNA across many symbols — kill single-name luck.
+
+    Returns per-symbol dual-cost decisions plus quality_pass when enough
+    symbols independently clear F2 under quality bars.
+    """
+    if evaluate_fn is None:
+        from trader_platform.research.evaluate_proxy import evaluate_proxy
+
+        evaluate_fn = evaluate_proxy
+
+    bars = dict((quality_bars or load_quality_bars()).get("bootstrap") or {})
+    min_syms = int(bars.get("min_symbols_with_f2") or 2)
+    min_trades = int(bars.get("min_trades_per_passing_axis") or 12)
+
+    spec = load_strategy_spec(spec_path)
+    per_symbol: list[dict[str, Any]] = []
+    f2_symbols: list[str] = []
+
+    for sym in [str(s).upper() for s in symbols if str(s).strip()]:
+        raw = spec.to_dict()
+        raw["symbols"] = [sym]
+        try:
+            narrowed = strategy_spec_from_mapping(raw)
+            report = evaluate_fn(narrowed, run_holdout_on_train_pass=run_holdout)
+            decision = str(report.get("decision") or "")
+            is_f2 = decision == "STRATEGY_ADVANCED_F2"
+            # Extract worst-axis holdout n_trades when present
+            n_trades_hold = None
+            for hrow in report.get("holdout_rows") or []:
+                if hrow.get("symbol") != sym:
+                    continue
+                axes = hrow.get("holdout") or {}
+                ns = [
+                    int((axes.get(a) or {}).get("n_trades") or 0)
+                    for a in ("slip_5pct", "fixed_0p01")
+                ]
+                if ns:
+                    n_trades_hold = min(ns)
+            thick = n_trades_hold is not None and n_trades_hold >= min_trades
+            row = {
+                "symbol": sym,
+                "decision": decision,
+                "f2": is_f2,
+                "n_train_pass": report.get("n_train_pass"),
+                "n_holdout_pass": report.get("n_holdout_pass"),
+                "n_trades_holdout_worst_axis": n_trades_hold,
+                "thick_enough": thick,
+            }
+            if is_f2:
+                f2_symbols.append(sym)
+            per_symbol.append(row)
+        except Exception as exc:  # noqa: BLE001
+            per_symbol.append(
+                {
+                    "symbol": sym,
+                    "decision": "EVAL_ERROR",
+                    "f2": False,
+                    "reason": str(exc),
+                }
+            )
+
+    multi_f2 = len(f2_symbols) >= min_syms
+    thick_f2 = [
+        r["symbol"]
+        for r in per_symbol
+        if r.get("f2") and r.get("thick_enough")
+    ]
+    quality_pass = multi_f2 and len(thick_f2) >= min_syms
+
+    return {
+        "generated_at": _now(),
+        "mode": "multi_symbol_reprove",
+        "candidate_id": spec.candidate_id,
+        "family_id": spec.family_id,
+        "spec_path": str(spec_path),
+        "symbols_tested": [str(s).upper() for s in symbols],
+        "per_symbol": per_symbol,
+        "f2_symbols": f2_symbols,
+        "n_f2_symbols": len(f2_symbols),
+        "thick_f2_symbols": thick_f2,
+        "min_symbols_with_f2": min_syms,
+        "min_trades_per_passing_axis": min_trades,
+        "multi_symbol_f2": multi_f2,
+        "quality_pass": quality_pass,
+        "option_mark_provenance": "black_scholes_proxy",
+        "trading_authority": False,
+        "live_authority": False,
+        "honesty": (
+            "Per-symbol dual-cost re-prove. quality_pass requires ≥min_symbols "
+            "independent F2 with holdout n_trades ≥ bar on worst cost axis."
+        ),
+    }
+
+
+def run_multi_symbol_pack(
+    *,
+    shortlist: Sequence[Mapping[str, Any]] | None = None,
+    symbols: Sequence[str] | None = None,
+    report_path: str | Path | None = None,
+    evaluate_fn: Any = None,
+) -> dict[str, Any]:
+    """Multi-symbol re-prove each bootstrap shortlist DNA."""
+    if shortlist is None:
+        boot = json.loads(DEFAULT_BOOTSTRAP_REPORT.read_text(encoding="utf-8"))
+        shortlist = list(boot.get("shortlist") or [])
+    book = list(symbols or DEFAULT_MULTI_SYMBOL_BOOK)
+    rows: list[dict[str, Any]] = []
+    for item in shortlist:
+        sp = item.get("spec_path")
+        if not sp or not Path(str(sp)).exists():
+            rows.append(
+                {
+                    "candidate_id": item.get("candidate_id"),
+                    "ok": False,
+                    "reason": "missing_spec",
+                }
+            )
+            continue
+        # Include original symbol first
+        orig = [str(s).upper() for s in (item.get("symbols_proved") or item.get("symbols") or [])]
+        test_syms = list(dict.fromkeys(orig + book))
+        rows.append(
+            multi_symbol_reprove(
+                spec_path=sp,
+                symbols=test_syms,
+                evaluate_fn=evaluate_fn,
+            )
+        )
+    payload = {
+        "generated_at": _now(),
+        "mode": "multi_symbol_pack",
+        "n_dna": len(rows),
+        "n_quality_pass": sum(1 for r in rows if r.get("quality_pass")),
+        "n_multi_f2": sum(1 for r in rows if r.get("multi_symbol_f2")),
+        "results": rows,
+        "trading_authority": False,
+        "live_authority": False,
+        "honesty": "Multi-symbol densify DNA stress — single-name F2 alone is not pack-grade.",
+    }
+    path = write_bootstrap_report(payload, report_path or DEFAULT_MULTI_SYMBOL_REPORT)
+    payload["report_path"] = str(path)
     return payload
 
 

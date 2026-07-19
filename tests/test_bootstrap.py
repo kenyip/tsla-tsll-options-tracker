@@ -108,6 +108,51 @@ class BootstrapToolingTest(unittest.TestCase):
         self.assertTrue(by_id["bull_neutral_pcs_45d"].symbols)
         self.assertIn("BAC", by_id["bull_neutral_pcs_45d"].symbols)
 
+    def test_multi_symbol_reprove_mocked(self):
+        from trader_platform.research.bootstrap import multi_symbol_reprove
+
+        seed = Path("configs/strategy_specs/pcs_bull_neutral_income_45d_v1.json")
+
+        def fake_eval(spec, **kwargs):
+            # F2 only on BAC and IWM with thick trades
+            sym = list(spec.symbols)[0]
+            if sym in {"BAC", "IWM"}:
+                return {
+                    "decision": "STRATEGY_ADVANCED_F2",
+                    "n_train_pass": 1,
+                    "n_holdout_pass": 1,
+                    "holdout_rows": [
+                        {
+                            "symbol": sym,
+                            "holdout": {
+                                "slip_5pct": {"n_trades": 15},
+                                "fixed_0p01": {"n_trades": 14},
+                            },
+                        }
+                    ],
+                }
+            return {
+                "decision": "FAMILY_CLOSED",
+                "n_train_pass": 0,
+                "n_holdout_pass": 0,
+                "holdout_rows": [],
+            }
+
+        rep = multi_symbol_reprove(
+            spec_path=seed,
+            symbols=["BAC", "KO", "IWM"],
+            evaluate_fn=fake_eval,
+            quality_bars={
+                "bootstrap": {
+                    "min_trades_per_passing_axis": 12,
+                    "min_symbols_with_f2": 2,
+                }
+            },
+        )
+        self.assertTrue(rep["multi_symbol_f2"])
+        self.assertTrue(rep["quality_pass"])
+        self.assertEqual(set(rep["f2_symbols"]), {"BAC", "IWM"})
+
 
 if __name__ == "__main__":
     unittest.main()

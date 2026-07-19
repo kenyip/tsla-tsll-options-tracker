@@ -464,6 +464,18 @@ trader-bootstrap *ARGS:
 trader-path-stress *ARGS:
     {{py}} scripts/trader_path_stress.py {{ARGS}}
 
+# Paper residual loop for starter seats (watch + dry handoff; optional --execute-paper)
+#   just trader-paper-loop
+#   just trader-paper-loop --plumbing-smoke
+trader-paper-loop *ARGS:
+    {{py}} scripts/trader_paper_loop.py {{ARGS}}
+
+# Multi-symbol re-prove densify DNA (kill single-name luck)
+#   just trader-multi-symbol-reprove
+#   just trader-multi-symbol-reprove --symbols BAC,KO,IWM,AMZN
+trader-multi-symbol-reprove *ARGS:
+    {{py}} scripts/trader_multi_symbol_reprove.py {{ARGS}}
+
 # Paper handoff (dry-run default; plumbing-smoke forces one ledger order)
 #   just trader-paper-handoff
 #   just trader-paper-handoff --plumbing-smoke

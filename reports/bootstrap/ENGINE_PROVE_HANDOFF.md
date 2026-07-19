@@ -64,23 +64,46 @@ just trader-promote-paper --top 5
 5. **Never** agentic_live without Ken arm.  
 6. Paper execute only with explicit paper_eligible + RiskGovernor allow.
 
-## Known gaps / next steps (decide with Ken)
+## Next steps — DONE (2026-07-19)
 
-| Priority | Item | Why |
+| # | Item | Status |
 |---|---|---|
-| P0 | Hermes SOUL/skill pin to TRADER_BUILD + this handoff | Trader alignment |
-| P1 | Multi-symbol re-prove of densify DNA (not one ticker) | Reduce single-name luck |
-| P1 | Thicker trade-count bar or multi-window path stress | Thin n_trades F2 |
-| P2 | Auto path-stress in bootstrap report | One command prove |
-| P2 | F4 observed paper residual after real manage/close | Confidence ladder |
-| Later | Live arm packet | Ken only |
+| 1 | Hermes SOUL / AGENTS / skill / MEMORY pin to BUILD + handoff | **Done** |
+| 2 | `just trader-paper-loop` for starter seats | **Done** (ops recipe) |
+| 3 | Multi-symbol re-prove densify DNA | **Done** — see below |
+| 4 | Stronger quality bars | **Done** — `configs/quality_bars.json` (min 12 trades, ≥2 symbols F2, path min 3 windows) |
+| 5 | Densify-winners-only policy | **Done** — BUILD + discovery policy; dense grid not default |
+
+### Multi-symbol re-prove result (`MULTI_SYMBOL_REPROVE.json`)
+
+| DNA | F2 symbols | Thick (≥12 holdout trades) | quality_pass |
+|---|---|---|---|
+| AMZN densify 7d | **AMZN only** (n=9) | none | **false** |
+| IWM densify 14d | **IWM only** (n=9) | none | **false** |
+
+**Honest conclusion:** Starter seats remain **paper plumbing pack**, not pack-grade edge. Trader should exercise paper ops and invent/re-prove **new multi-symbol DNA** rather than promote these to “edge found.”
+
+## Trader first-week loop
+
+```bash
+# RTH / daily ops
+just trader-paper-loop
+just trader-opportunity
+
+# Off-hours research (not dense marathon)
+just trader-bootstrap --candidates-only
+just trader-multi-symbol-reprove
+just trader-path-stress --spec <survivor.json> --symbols SYM
+# optional: just trader-discover   # Wave A densify only
+```
 
 ## Engine health patches this prove cycle
 
-- Paper handoff data period fallback (`3mo→1y→2y→5y`) — fixed IWM dry intent after watch ready.
-- Path stress DTE-aware windows.
-- Staged quick→full path stress.
+- Paper handoff data period fallback (`3mo→1y→2y→5y`)
+- Path stress DTE-aware windows + staged quick→full
+- Multi-symbol re-prove + quality bars
+- Hermes profile pin
 
 ---
 
-**Bottom line for Ken:** The engine runs end-to-end and can feed Trader a **paper-ready starter pack of 2 L0 densify survivors**. Ready for Trader **ops ownership**. Not ready to claim edge or go live.
+**Bottom line for Ken:** Engine **ops-ready** for Hermes Trader. Starter pack is **thin single-name L0 densify** — use for paper residual, not edge claims. Multi-symbol quality bar correctly rejects pack-grade promotion.

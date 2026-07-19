@@ -40,7 +40,7 @@
     "require_integrity": true,
     "require_positive_pnl": false,
     "allow_zero_trades": true,
-    "min_available_regimes": 2,
+    "min_available_regimes": 3,
     "notes": "Path stress is management/tail prep — zero trades (stand-aside) and losing windows can still pass if risk bounds hold. Pack fails if too few windows available."
   },
   "window": {

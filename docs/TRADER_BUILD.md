@@ -263,6 +263,17 @@ May become score, manage rule, or optional gate **after** evidence — never a s
 
 **Search policy that worked operationally:** coarse bag + core symbols screen + prove on growth names + densify winners — **not** drain a 300k product.
 
+**Hard default for Trader (2026-07-19):**
+
+| Do | Do not |
+|---|---|
+| Wave A `configs/discovery_grid.json` | Use `discovery_grid_dense.json` as default progress |
+| Densify neighbors of **F1/F2 only** | Restart full dense marathon for vanity bag % |
+| Multi-symbol re-prove densify DNA | Trust single-name thin F2 as pack-grade |
+| `just trader-opportunity` / paper loop | Confuse discover CPU burn with edge |
+
+Quality bars: `configs/quality_bars.json` (bootstrap multi-symbol + trade thickness).
+
 Self-learning may **propose** signals, dimensions, or thesis kills; **promotion** into catalog/gates is deliberate.
 
 ---
@@ -300,6 +311,8 @@ just trader-bootstrap             # re-prove shortlist → reports/bootstrap/
 just trader-bootstrap --candidates-only
 just trader-path-stress --spec … --symbols BAC   # quick→full path stress
 just trader-path-stress --spec … --quick-only
+just trader-paper-loop            # watch + dry handoff residue (Trader ops)
+just trader-multi-symbol-reprove  # densify DNA across many symbols
 just trader-paper-handoff         # dry handoff
 just trader-paper-handoff --plumbing-smoke
 just trader-opportunity           # watch + handoff (no evolve)
@@ -387,6 +400,7 @@ Agents invent and measure on the **primary** path first. Secondary DNA is option
 | 2026-07-19 | Engine phases 1–4: `signal_catalog`, thesis files, shared opportunity emitter (watcher wired), premium/day score, coarse DNA diversify, `just trader-bootstrap`. |
 | 2026-07-19 | Staged **path stress** after F2: quick pack then full regime suite (`path_stress.py`, `just trader-path-stress`). |
 | 2026-07-19 | Path-stress **window length DTE-aware** (`long_dte + pad`, not fixed 21d). |
+| 2026-07-19 | Trader handoff: Hermes SOUL/AGENTS pin; paper loop; multi-symbol re-prove; quality_bars; densify-only policy. |
 
 ---
 

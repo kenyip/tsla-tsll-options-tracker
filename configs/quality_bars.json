@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "description": "Post-F0 quality bars for bootstrap shortlist and Trader promotion. Discovery may still use seed discovery_gates; these bars filter what enters the starter pack / paper ops focus.",
+  "bootstrap": {
+    "min_trades_per_passing_axis": 12,
+    "min_symbols_with_f2": 2,
+    "require_path_stress_staged_pass": true,
+    "max_single_symbol_pack_share": 0.5,
+    "notes": "Thin dual-cost F2 (n=8–9) is plumbing-valid but not pack-grade without multi-symbol or thicker trades."
+  },
+  "path_stress": {
+    "min_available_regimes": 3,
+    "notes": "Synced with path_stress.json gates when raised."
+  },
+  "discovery_policy": {
+    "default_grid": "configs/discovery_grid.json",
+    "dense_grid_archive": "configs/discovery_grid_dense.json",
+    "dense_as_default": false,
+    "densify_only_f1_f2_survivors": true,
+    "forbid_marathon_as_progress_metric": true,
+    "notes": "Never treat draining the dense cartesian bag as progress. Wave A screen → prove → densify winners only."
+  }
+}
