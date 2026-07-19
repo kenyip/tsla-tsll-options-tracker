@@ -92,6 +92,17 @@ Management (DTE, profit target, stops) lives in StrategySpec `management`. Stand
 | `regime_router_income_v1.json` (21D full router) | FAMILY_CLOSED | No |
 | `regime_router_income_45d_v1.json` (45D full router) | FAMILY_CLOSED | No |
 | `pcs_bull_neutral_income_45d_v1.json` (45D PCS non-bear) | FAMILY_CLOSED | No |
+| `pcs_iv_rich_noncollapse_21d_v1.json` (IV-rich non-collapse PCS) | seed for Desk B loop | evaluate via loop |
+
+### Operator loop (Desk B)
+
+```bash
+just trader-desk-b-loop          # evolve → living → watch → paper handoff
+just trader-paper-handoff        # watch → intent → risk (dry-run)
+just trader-eval-iv-rich         # evaluate IV-rich seed alone
+```
+
+Hermes cron: `trader-desk-b-loop` every 360m (script-only, research/paper).
 
 Scoreboard: `.cache/platform/spine/scoreboard_2026-07-19.json`.
 

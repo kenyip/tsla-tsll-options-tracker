@@ -20,12 +20,11 @@ just test                             # Desk A: TSLA/TSLL live recommendation
 just run                              # Streamlit dashboard
 
 # Desk B — self-sufficient loop (research/paper only; no live place)
-.venv/bin/python scripts/evaluate_strategy_spec.py \
-  --spec configs/strategy_specs/regime_router_income_v1.json \
-  --out .cache/platform/spine/eval_LATEST.json
-.venv/bin/python scripts/trader_evolve_specs.py --seed configs/strategy_specs/regime_router_income_v1.json --max-mutants 2
-.venv/bin/python scripts/trader_living_status.py
-.venv/bin/python scripts/trader_watcher.py          # NO_QUALIFIED_STRATEGY until F2 living seats
+just trader-desk-b-loop               # evolve → living → watch → paper handoff
+just trader-eval-iv-rich              # evaluate IV-rich non-collapse seed
+just trader-living                    # living seats
+just trader-watch                     # wait for setups
+just trader-paper-handoff             # dry-run paper intent when setup exists
 
 just backtest && just scenarios       # classic engine validation
 just analyze                          # critic loop (Desk A methods research)

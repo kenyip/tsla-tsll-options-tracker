@@ -1,0 +1,65 @@
+{
+  "candidate_id": "PCS_IV_RICH_NONCOLLAPSE_21D_PT50_V1",
+  "family_id": "IV_RICH_NONCOLLAPSE_PCS_INCOME",
+  "evaluation_mode": "regime_router",
+  "router_policy": "pcs_non_bear",
+  "forecast_type": "realized_vs_implied_vol_non_collapse",
+  "economic_mechanism": "When implied-vol rank is elevated and the trend stack is non-broken (bullish or neutral regime), short put credit spreads monetize a volatility-risk-premium / non-collapse forecast with defined max loss. Stand aside pure bear and low-IV bars. 50% profit targets harvest mean-reversion swings without holding into late gamma.",
+  "regime_envelope": "bullish|neutral + iv_rank>=30 → PCS; bearish|low IV → stand_aside",
+  "stand_aside_rule": "Stand aside when regime is bearish/unknown, iv_rank below 30, credit/max-loss filters fail, or the one-lot sleeve slot is occupied.",
+  "greek_intended": "short put vertical; positive theta; limited negative vega; mild long delta",
+  "greek_dangerous": "gap down through short put; IV crush after entry reduces credit opportunity but defined loss remains; prolonged bear after entry",
+  "symbols": [
+    "BAC",
+    "F",
+    "SOFI",
+    "KO",
+    "INTC",
+    "XOM",
+    "PLTR",
+    "AAPL",
+    "IWM",
+    "TSLL",
+    "SMCI",
+    "NFLX"
+  ],
+  "period": "5y",
+  "train_fraction": 0.6,
+  "sleeve_usd": 3000.0,
+  "open_risk_budget_usd": 750.0,
+  "max_loss_budget_usd": 300.0,
+  "option_mark_provenance": "black_scholes_proxy",
+  "control_mode": "unconditional_same_management",
+  "management": {
+    "long_dte": 21,
+    "long_target_delta": 0.18,
+    "spread_width": 1.0,
+    "min_credit_pct": 0.1,
+    "profit_target": 0.5,
+    "defined_loss_exit_frac": 0.7,
+    "delta_breach": 0.4,
+    "dte_stop": 7,
+    "regime_flip_exit_enabled": true,
+    "iv_rank_min": 30.0,
+    "max_loss_budget_usd": 300.0
+  },
+  "entry": {
+    "entry_signal_lag_bars": 1,
+    "entry_ema_stack_min": 0.0
+  },
+  "structure_overrides": {
+    "put_credit_spread": {
+      "bear_dte": 0,
+      "iv_rank_min": 30.0
+    }
+  },
+  "discovery_gates": {
+    "min_trades": 8,
+    "max_loss_usd": 300.0,
+    "max_dd_discovery_usd": 150.0,
+    "require_integrity": true,
+    "require_positive_pnl": true,
+    "require_control_beat": true
+  },
+  "notes": "Stronger forecast seed: IV-rich non-collapse PCS (not DTE polish of closed router families). Proxy L0 only. Control is unconditional same management without IV/regime stand-aside advantage."
+}

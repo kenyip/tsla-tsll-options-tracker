@@ -428,3 +428,23 @@ trader-watch *ARGS:
 trader-loop-status:
     {{py}} scripts/trader_living_status.py
     {{py}} scripts/trader_watcher.py
+
+# Paper handoff from watcher (dry-run default; --execute-paper only if paper_eligible)
+#   just trader-paper-handoff
+#   just trader-paper-handoff -- --execute-paper
+trader-paper-handoff *ARGS:
+    {{py}} scripts/trader_paper_handoff.py {{ARGS}}
+
+# Full Desk B cycle: evolve → living → watch → paper handoff
+#   just trader-desk-b-loop
+#   just trader-desk-b-loop -- --skip-evolve --quiet-if-searching
+#   just trader-desk-b-loop -- --max-mutants 1 --symbols BAC,KO --train-only
+trader-desk-b-loop *ARGS:
+    {{py}} scripts/trader_desk_b_loop.py \
+      --seed configs/strategy_specs/pcs_iv_rich_noncollapse_21d_v1.json {{ARGS}}
+
+# Evaluate the IV-rich non-collapse seed
+trader-eval-iv-rich *ARGS:
+    {{py}} scripts/evaluate_strategy_spec.py \
+      --spec configs/strategy_specs/pcs_iv_rich_noncollapse_21d_v1.json \
+      --out .cache/platform/spine/pcs_iv_rich_noncollapse_21d_v1_LATEST.json {{ARGS}}
