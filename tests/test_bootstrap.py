@@ -103,6 +103,10 @@ class BootstrapToolingTest(unittest.TestCase):
         ids = {c.thesis_id for c in cands}
         self.assertIn("bull_neutral_pcs_45d", ids)
         self.assertIn("iv_rich_noncollapse_pcs_21d", ids)
+        # Theses inherit symbols from linked StrategySpec seeds
+        by_id = {c.thesis_id: c for c in cands}
+        self.assertTrue(by_id["bull_neutral_pcs_45d"].symbols)
+        self.assertIn("BAC", by_id["bull_neutral_pcs_45d"].symbols)
 
 
 if __name__ == "__main__":

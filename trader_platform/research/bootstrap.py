@@ -96,12 +96,30 @@ def collect_bootstrap_candidates(
             else:
                 sp = Path(source_spec) if source_spec else Path()
             mgmt = dict(thesis.management or {})
+            # Prefer explicit thesis symbols; else inherit from linked StrategySpec seed.
+            symbols = [str(s).upper() for s in (thesis.symbols or []) if str(s).strip()]
+            if not symbols and sp.exists():
+                try:
+                    seed = load_strategy_spec(sp)
+                    symbols = [str(s).upper() for s in seed.symbols]
+                    if not mgmt:
+                        mgmt = dict(seed.management or {})
+                except Exception:
+                    symbols = []
+            # Prefer liquid core names for bootstrap speed / capital fit.
+            core_prefer = ["BAC", "KO", "IWM", "AAPL", "QQQ", "INTC", "XOM"]
+            if symbols:
+                ranked = [s for s in core_prefer if s in symbols] + [
+                    s for s in symbols if s not in core_prefer
+                ]
+                symbols = ranked
             out.append(
                 BootstrapCandidate(
                     thesis_id=thesis.thesis_id,
                     candidate_id=thesis.thesis_id,
                     family_id=thesis.family_id or thesis.thesis_id,
-                    symbols=list(thesis.symbols) if thesis.symbols else [],
+                    symbols=symbols,
+                    seat_id=f"thesis:{thesis.thesis_id}",
                     spec_path=str(sp) if sp.exists() else str(path),
                     source="thesis_file",
                     coarse_dna_key=coarse_dna_key(
@@ -114,11 +132,12 @@ def collect_bootstrap_candidates(
                 )
             )
     if include_f2:
+        reg = load_living_registry(registry_path or DEFAULT_REGISTRY_PATH)
+        by_id = {s.seat_id: s for s in reg.seats}
         snap = collect_progress(registry_path=registry_path or DEFAULT_REGISTRY_PATH)
         for row in list(snap.f2_seats)[: max(0, int(max_f2))]:
             seat_id = str(row.get("seat_id") or "")
-            reg = load_living_registry(registry_path)
-            seat = next((s for s in reg.seats if s.seat_id == seat_id), None)
+            seat = by_id.get(seat_id)
             mgmt: dict[str, Any] = {}
             evaluation_mode = ""
             structure = ""
@@ -216,7 +235,9 @@ def re_prove_candidates(
         if not symbols:
             symbols = list(spec.symbols)
         # Narrow to first symbol for bootstrap speed if many
-        prove_symbols = symbols[:3] if symbols else list(spec.symbols)[:1]
+        # Bootstrap proves a small symbol slice for wall-time; full multi-name
+        # claims remain a discovery concern.
+        prove_symbols = symbols[:2] if symbols else list(spec.symbols)[:1]
         raw = spec.to_dict()
         raw["symbols"] = prove_symbols
         try:
@@ -227,6 +248,8 @@ def re_prove_candidates(
             decision = str(report.get("decision") or "")
             n_hold = int(report.get("n_holdout_pass") or 0)
             n_train = int(report.get("n_train_pass") or 0)
+            # F2 only on sealed dual-cost holdout advance — not train-only.
+            is_f2 = decision == "STRATEGY_ADVANCED_F2"
             results.append(
                 {
                     **c,
@@ -234,11 +257,13 @@ def re_prove_candidates(
                     "decision": decision,
                     "n_train_pass": n_train,
                     "n_holdout_pass": n_hold,
-                    "f2": decision == "STRATEGY_ADVANCED_F2" or n_hold > 0,
+                    "f2": is_f2,
                     "symbols_proved": prove_symbols,
                     "option_mark_provenance": report.get(
                         "option_mark_provenance", "black_scholes_proxy"
                     ),
+                    "l1_eligible": report.get("l1_eligible", False),
+                    "control_mode": getattr(narrowed, "control_mode", ""),
                 }
             )
         except Exception as exc:  # noqa: BLE001
@@ -253,7 +278,17 @@ def re_prove_candidates(
 
     passed = [r for r in results if r.get("f2")]
     failed = [r for r in results if not r.get("f2")]
-    shortlist = select_shortlist(passed, top_n=5) if passed else []
+    # Final pack: diversify symbols + DNA among dual-cost F2 survivors only.
+    shortlist = (
+        select_shortlist(
+            passed,
+            top_n=5,
+            diversify_symbols=True,
+            diversify_dna=True,
+        )
+        if passed
+        else []
+    )
     payload = {
         "generated_at": _now(),
         "mode": "bootstrap_reprove",
@@ -311,10 +346,12 @@ def run_bootstrap_prove(
                 max_f2=max_f2,
             )
         ]
+        # Pre-prove pool: diversify by DNA so multi-thesis same-symbol seeds
+        # both get re-proved. Symbol diversify applies to the post-prove pack.
         candidates = select_shortlist(
             candidates,
             top_n=max(top_n * 3, 10),
-            diversify_symbols=bool(selection.get("diversify_symbols", True)),
+            diversify_symbols=False,
             diversify_dna=bool(selection.get("diversify_dna", True)),
         )
 
