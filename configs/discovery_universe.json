@@ -1,144 +1,164 @@
 {
-  "description": "Managed Desk B discovery universe. Edit status to include/exclude names without touching strategy seeds. Discovery uses status=active by default.",
+  "description": "Managed Desk B discovery universe. tier=core|growth|experimental drives screen vs prove symbol sets.",
   "selection_notes": [
-    "PCS with long/non-collapse bias wants names that trend or mean-revert without structural collapse.",
-    "Higher IV → richer credits, but also fatter tails; dual-cost holdout is the filter, not vibes.",
-    "Options liquidity (volume/OI) matters for live; proxy sim still runs thin names.",
-    "Capital fit: sleeve max_loss ~$300. Wide strikes on $200–$1000 names often need width=1–2 or fail gates.",
-    "SPCX is not a standard listed ticker (SpaceX private). Use TSLA/RKLB/ASTS proxies if space theme wanted."
+    "Screen phase uses tier=core only (fast reject).",
+    "Prove / densify around winners uses core+growth.",
+    "experimental stays active but is not in default screen/prove unless promoted to growth."
   ],
   "criteria": {
     "prefer": [
       "liquid equity or ETF options (tight spreads live)",
       "enough history for 5y train/holdout",
-      "defined-risk 1–3 wide PCS can fit max_loss_budget_usd",
-      "not pure binary event junk as the whole book"
+      "defined-risk 1–3 wide PCS can fit max_loss_budget_usd"
     ],
     "tags": {
-      "core": "proven or boring liquid book",
-      "ai_growth": "AI / semis / software growth — long-bias PCS theme",
-      "high_vol": "elevated realized/IV → fatter premium + tails",
+      "core": "screen book — liquid / proven",
+      "ai_growth": "AI / semis / software growth",
+      "high_vol": "elevated IV / fat tails",
       "mega_cap": "large cap liquid options",
       "etf": "index/sector ETF",
-      "levered": "levered product — use sparingly",
-      "experimental": "try for sim; easy to demote"
+      "levered": "levered product",
+      "experimental": "optional; not in default prove set"
     }
   },
   "symbols": {
     "BAC": {
       "status": "active",
+      "tier": "core",
       "tags": ["core", "liquid"],
       "notes": "F2 survivor; keep"
     },
     "KO": {
       "status": "active",
+      "tier": "core",
       "tags": ["core", "liquid"],
       "notes": "F2 survivor; keep"
     },
     "INTC": {
       "status": "active",
+      "tier": "core",
       "tags": ["core", "ai_growth", "high_vol"],
-      "notes": "Top F2 so far; semi + turnaround narrative"
+      "notes": "Top F2 so far"
     },
     "IWM": {
       "status": "active",
+      "tier": "core",
       "tags": ["core", "etf", "liquid"],
       "notes": "F2/paper; small-cap beta"
     },
     "AAPL": {
       "status": "active",
+      "tier": "core",
       "tags": ["core", "mega_cap", "liquid"],
-      "notes": "Liquid; lower premium than pure high-vol names"
+      "notes": "Liquid mega-cap"
+    },
+    "QQQ": {
+      "status": "active",
+      "tier": "core",
+      "tags": ["core", "etf", "liquid", "ai_growth"],
+      "notes": "Nasdaq beta for screen"
     },
     "XOM": {
       "status": "active",
+      "tier": "core",
       "tags": ["core", "liquid"],
       "notes": "Energy diversifier"
     },
     "NFLX": {
       "status": "active",
-      "tags": ["core", "high_vol", "liquid"],
-      "notes": "Premium + momentum name"
+      "tier": "growth",
+      "tags": ["high_vol", "liquid"],
+      "notes": "Premium + momentum — prove tier"
     },
     "PLTR": {
       "status": "active",
+      "tier": "growth",
       "tags": ["ai_growth", "high_vol"],
-      "notes": "AI software; already in book"
-    },
-    "F": {
-      "status": "active",
-      "tags": ["core", "liquid"],
-      "notes": "Cheap underlyings fit $300 ML easily; low F2 so far — demote if stays barren"
-    },
-    "SOFI": {
-      "status": "active",
-      "tags": ["high_vol", "experimental"],
-      "notes": "High vol fintech; demote if no train pass after denser grid"
-    },
-    "SMCI": {
-      "status": "active",
-      "tags": ["ai_growth", "high_vol"],
-      "notes": "AI hardware beta; fat tails"
-    },
-    "TSLL": {
-      "status": "active",
-      "tags": ["levered", "high_vol", "experimental"],
-      "notes": "2x Tesla product; Desk A familiarity; use sparingly for live"
+      "notes": "AI software"
     },
     "TSLA": {
       "status": "active",
+      "tier": "growth",
       "tags": ["ai_growth", "high_vol", "mega_cap", "liquid"],
-      "notes": "Add wave: liquid options, high premium; watch width/capital fit"
+      "notes": "High premium; prove/densify"
     },
     "NVDA": {
       "status": "active",
+      "tier": "growth",
       "tags": ["ai_growth", "high_vol", "mega_cap", "liquid"],
-      "notes": "Add wave: AI leader; high price → prefer narrow width in grid"
+      "notes": "AI leader; narrow width"
     },
     "AMD": {
       "status": "active",
+      "tier": "growth",
       "tags": ["ai_growth", "high_vol", "liquid"],
-      "notes": "Add wave: semi peer to NVDA/INTC"
+      "notes": "Semi peer"
     },
     "META": {
       "status": "active",
+      "tier": "growth",
       "tags": ["ai_growth", "mega_cap", "liquid"],
-      "notes": "Add wave: mega-cap AI spend + liquid options"
+      "notes": "Mega-cap AI"
     },
     "MSFT": {
       "status": "active",
+      "tier": "growth",
       "tags": ["ai_growth", "mega_cap", "liquid"],
-      "notes": "Add wave: lower vol than NVDA; solid long-bias PCS candidate"
+      "notes": "Lower vol mega-cap"
     },
     "AMZN": {
       "status": "active",
+      "tier": "growth",
       "tags": ["mega_cap", "liquid", "ai_growth"],
-      "notes": "Add wave: liquid mega-cap"
+      "notes": "Mega-cap"
     },
     "GOOGL": {
       "status": "active",
+      "tier": "growth",
       "tags": ["ai_growth", "mega_cap", "liquid"],
-      "notes": "Add wave: AI infra + ads"
+      "notes": "AI infra + ads"
     },
-    "QQQ": {
+    "SMCI": {
       "status": "active",
-      "tags": ["etf", "liquid", "ai_growth"],
-      "notes": "Add wave: nasdaq beta; capital fit easier than single mega names sometimes"
+      "tier": "growth",
+      "tags": ["ai_growth", "high_vol"],
+      "notes": "AI hardware beta"
+    },
+    "F": {
+      "status": "active",
+      "tier": "experimental",
+      "tags": ["liquid"],
+      "notes": "Cheap underlyings; low F2 — experimental"
+    },
+    "SOFI": {
+      "status": "active",
+      "tier": "experimental",
+      "tags": ["high_vol", "experimental"],
+      "notes": "High vol fintech"
+    },
+    "TSLL": {
+      "status": "active",
+      "tier": "experimental",
+      "tags": ["levered", "high_vol", "experimental"],
+      "notes": "2x Tesla; sparingly"
     },
     "SPY": {
       "status": "watch",
+      "tier": "growth",
       "tags": ["etf", "liquid"],
-      "notes": "Best liquidity; often fails $300 ML on typical widths — enable when width/grid allows"
+      "notes": "Capital-fit pain — watch"
     },
     "RKLB": {
       "status": "watch",
+      "tier": "experimental",
       "tags": ["experimental", "high_vol"],
-      "notes": "Space theme proxy (SpaceX private). Promote to active if you want space beta."
+      "notes": "Space proxy"
     },
     "ASTS": {
       "status": "watch",
+      "tier": "experimental",
       "tags": ["experimental", "high_vol"],
-      "notes": "Space/satcom speculative; optional theme name"
+      "notes": "Space/satcom"
     }
   }
 }

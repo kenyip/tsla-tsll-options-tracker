@@ -55,7 +55,15 @@ def _load_json(path: Path) -> dict[str, Any]:
 
 
 def _count_space(*, registry_path: Path) -> dict[str, int]:
-    seeds = list_seed_specs()
+    from trader_platform.research.discovery_loop import load_grid_config
+
+    cfg = load_grid_config()
+    all_seeds = list_seed_specs()
+    primary = [str(x) for x in (cfg.get("primary_seeds") or [])]
+    if primary:
+        seeds = [p for p in all_seeds if p.name in set(primary)] or all_seeds
+    else:
+        seeds = all_seeds
     grid = all_grid_mutants()
     total = len(seeds) * len(grid)
     known = known_ids(registry_path)
@@ -75,6 +83,7 @@ def _count_space(*, registry_path: Path) -> dict[str, int]:
         "remaining": remaining,
         "done": max(0, done),
         "registry_seats": len(reg.seats),
+        "wave": str(cfg.get("wave") or ""),
     }
 
 
@@ -389,11 +398,16 @@ def collect_progress(
         campaign = {
             "source": "discovery_state",
             "running": st.get("running"),
+            "wave": st.get("wave"),
             "gen_index": st.get("gen_index"),
             "grid_cursor": st.get("grid_cursor"),
             "total_eval": st.get("total_eval"),
             "no_progress_streak": st.get("no_progress_streak"),
             "n_symbols": st.get("n_symbols"),
+            "n_screen_symbols": st.get("n_screen_symbols"),
+            "n_prove_symbols": st.get("n_prove_symbols"),
+            "densify_queue_size": st.get("densify_queue_size"),
+            "bag_plans": st.get("bag_plans"),
             "last_seed": st.get("last_seed"),
             "last_progress_bits": st.get("last_progress_bits"),
             "stop_reason": st.get("stop_reason"),
@@ -503,10 +517,21 @@ def format_progress_text(
                 f"gen {camp.get('gen_index')}",
                 f"{camp.get('total_eval') or 0} evals this campaign",
             ]
-            if camp.get("n_symbols") is not None:
+            if camp.get("wave"):
+                parts.insert(0, f"wave {camp.get('wave')}")
+            n_scr = camp.get("n_screen_symbols")
+            n_prv = camp.get("n_prove_symbols")
+            if n_scr is not None:
+                if n_prv is not None and n_prv != n_scr:
+                    parts.append(f"screen {n_scr}/prove {n_prv} symbols")
+                else:
+                    parts.append(f"{n_scr} symbols")
+            elif camp.get("n_symbols") is not None:
                 parts.append(f"{camp.get('n_symbols')} symbols")
             if camp.get("grid_cursor") is not None:
                 parts.append(f"cursor {camp.get('grid_cursor')}")
+            if camp.get("densify_queue_size"):
+                parts.append(f"densify Q {camp.get('densify_queue_size')}")
             parts.append(f"stall streak {camp.get('no_progress_streak')}")
             lines.append(f"  Now: {' · '.join(str(p) for p in parts)}")
             # Parallel line (always visible while campaign running)

@@ -2,6 +2,17 @@
 
 ## Expand the simulation grid (knobs)
 
+**Default is Wave A (coarse screen)** — ~2–3k bag, hours not weeks.  
+Dense axes archived in `configs/discovery_grid_dense.json` (do not run full product).
+
+### Search policy (optimized)
+
+| Phase | What | Cost |
+|---|---|---|
+| **Screen** | Wave A grid × 2 primary seeds × **core** symbols | fast reject |
+| **Prove** | train survivors re-eval on **core+growth** (TSLA/NVDA/…) | holdout |
+| **Densify** | ±1-step neighbors of F1/F2 → exploit queue (~35% of gen slots) | focused |
+
 Edit **`configs/discovery_grid.json`** — no code change required:
 
 | Axis | Meaning |

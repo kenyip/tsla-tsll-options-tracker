@@ -79,22 +79,47 @@ def active_symbols(
     *,
     tags: Optional[Sequence[str]] = None,
     exclude_tags: Optional[Sequence[str]] = None,
+    tiers: Optional[Sequence[str]] = None,
 ) -> list[str]:
-    """Symbols with status=active, optionally filtered by tags (OR match)."""
+    """Symbols with status=active, optionally filtered by tags/tiers (OR match)."""
     data = load_discovery_universe(path)
     want = {t.lower() for t in (tags or [])}
     ban = {t.lower() for t in (exclude_tags or [])}
+    want_tiers = {t.lower() for t in (tiers or [])}
     out: list[str] = []
     for sym, entry in (data.get("symbols") or {}).items():
         if str(entry.get("status") or "") != "active":
             continue
         tags_e = {str(t).lower() for t in (entry.get("tags") or [])}
+        tier = str(entry.get("tier") or _infer_tier(tags_e)).lower()
+        if want_tiers and tier not in want_tiers:
+            continue
         if want and not (want & tags_e):
             continue
         if ban and (ban & tags_e):
             continue
         out.append(sym)
     return sorted(out)
+
+
+def _infer_tier(tags: set[str]) -> str:
+    if "core" in tags:
+        return "core"
+    if "experimental" in tags or "levered" in tags:
+        return "experimental"
+    return "growth"
+
+
+def screen_symbols(path: str | Path | None = None) -> list[str]:
+    """Fast-reject book (tier=core). Fallback: all active."""
+    core = active_symbols(path, tiers=["core"])
+    return core if core else active_symbols(path)
+
+
+def prove_symbols(path: str | Path | None = None) -> list[str]:
+    """Holdout / densify book (core + growth). Fallback: all active."""
+    both = active_symbols(path, tiers=["core", "growth"])
+    return both if both else active_symbols(path)
 
 
 def list_symbols(
@@ -108,11 +133,14 @@ def list_symbols(
         st = str(entry.get("status") or "watch")
         if status and st != status:
             continue
+        tags_e = list(entry.get("tags") or [])
+        tier = str(entry.get("tier") or _infer_tier({str(t).lower() for t in tags_e}))
         rows.append(
             {
                 "symbol": sym,
                 "status": st,
-                "tags": list(entry.get("tags") or []),
+                "tier": tier,
+                "tags": tags_e,
                 "notes": str(entry.get("notes") or ""),
             }
         )
@@ -201,12 +229,22 @@ def resolve_discovery_symbols(
     seed_symbols: Optional[Sequence[str]] = None,
     path: str | Path | None = None,
     tags: Optional[Sequence[str]] = None,
+    tiers: Optional[Sequence[str]] = None,
+    mode: str = "all",
 ) -> list[str]:
-    """Precedence: explicit override → active discovery universe → seed fallback."""
+    """Precedence: explicit override → universe (mode/tiers) → seed fallback.
+
+    ``mode``: ``all`` | ``screen`` (core) | ``prove`` (core+growth).
+    """
     if override:
         return sorted({s.upper().strip() for s in override if str(s).strip()})
     if use_universe:
-        active = active_symbols(path, tags=tags)
+        if mode == "screen":
+            active = screen_symbols(path)
+        elif mode == "prove":
+            active = prove_symbols(path)
+        else:
+            active = active_symbols(path, tags=tags, tiers=tiers)
         if active:
             return active
     if seed_symbols:
