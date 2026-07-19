@@ -96,7 +96,11 @@ No full unittest suite this ops wake (no code mutation). Behavioral ops path exe
 
 ## INTEGRATION
 
-(filled at commit)
+- commit: `d49ba50` (wake reports + paper_loop_LATEST; this INTEGRATION note may be `d49ba50` or immediate follow-up)
+- branch: `main` → `origin/main`
+- push: verified `HEAD == origin/main`
+- clean: true after integrate
+- secret-safe: reports only; no positions/env/creds
 
 ## LESSON
 
