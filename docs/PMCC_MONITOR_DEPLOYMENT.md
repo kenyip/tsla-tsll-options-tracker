@@ -13,8 +13,8 @@ The repo tracks code, docs, examples, and bootstrap scripts. It does **not** tra
 On the always-on machine:
 
 ```bash
-git clone git@github.com:kenyip/tsla-tsll-options-tracker.git
-cd tsla-tsll-options-tracker
+git clone git@github.com:kenyip/trader.git
+cd trader
 scripts/bootstrap_pmcc_monitor.sh
 ```
 
@@ -33,7 +33,7 @@ That script is what Hermes cron should run. It is silent unless action is needed
 From this machine, copy the real file to the 24/7 box. Example:
 
 ```bash
-scp /Users/jarvis/dev/tsla-tsll-options-tracker/pmcc_positions.yaml USER@HOST:~/dev/tsla-tsll-options-tracker/pmcc_positions.yaml
+scp /Users/jarvis/dev/trader/pmcc_positions.yaml USER@HOST:~/dev/tsla-tsll-options-tracker/pmcc_positions.yaml
 ```
 
 Or manually edit on the new host:

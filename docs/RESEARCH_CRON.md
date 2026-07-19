@@ -24,7 +24,7 @@ Example **launchd / cron** entry — **research only**:
 ```bash
 # Weekdays 16:30 America/Los_Angeles (after US cash close) — paper research
 # Doctrine default sleeve: $3000 Agentic pilot (not $5k)
-30 16 * * 1-5 cd /Users/jarvis/dev/tsla-tsll-options-tracker && \
+30 16 * * 1-5 cd /Users/jarvis/dev/trader && \
   .venv/bin/python -m trader_platform.research tick \
     --write-report \
     --sleeve-usd 3000 \
@@ -35,7 +35,7 @@ Example **launchd / cron** entry — **research only**:
 Optional second step (still paper, candidates only):
 
 ```bash
-35 16 * * 1-5 cd /Users/jarvis/dev/tsla-tsll-options-tracker && \
+35 16 * * 1-5 cd /Users/jarvis/dev/trader && \
   .venv/bin/python -m trader_platform.research promote-top \
     --top 5 --sleeve-usd 3000 \
     >> .cache/platform/research_cron.log 2>&1

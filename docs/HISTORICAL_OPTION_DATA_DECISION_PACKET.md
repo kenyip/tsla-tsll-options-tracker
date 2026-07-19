@@ -26,11 +26,12 @@ Conclusion: there is no verified free, local, no-credential source in this envir
 
 ## Options for Ken
 
-1. `DECLINE / FORWARD_ONLY` (default): spend $0; continue broad historical-underlying + proxy-option discovery at L0, while forward archives accumulate. No L1 from proxy evidence.
+1. `DECLINE / FORWARD_ONLY` (default for unpaid history): spend $0; continue broad historical-underlying + proxy-option discovery at L0, while forward archives accumulate. No L1 from proxy evidence.
 2. `SUPPLY_LICENSED_EXPORT`: Ken provides a legally usable historical option dataset already owned. Trader builds a read-only normalized adapter and coverage audit; no provider login required.
 3. `APPROVE_VENDOR_EVALUATION_ONLY`: authorize a separate comparison of named vendors, coverage, terms, and exact price—still no purchase, credentials, or terms acceptance.
 4. `APPROVE_PROVIDER_AND_BUDGET`: later specify provider, account owner, symbols/years, budget ceiling, and terms approval. This must be an explicit mandate before any integration requiring credentials or spend.
+5. **`SCHWAB_DEVELOPER_RESEARCH` (Ken-authorized 2026-07-18/19):** use Schwab developer APIs as a **read-only market-data** path for option quotes when local app credentials/token exist. Research only — no order placement, no live arm, no trading authority from quote access. See [SCHWAB_OPTION_DATA_PATH.md](SCHWAB_OPTION_DATA_PATH.md). Adapter scaffold: `trader_platform/research/schwab_option_quotes.py`.
 
-Recommendation: keep `FORWARD_ONLY` while proxy discovery remains productive. If a proxy family survives rigorous rolling-origin/regime/cost sensitivity and becomes worth observed validation, request `APPROVE_VENDOR_EVALUATION_ONLY` for a targeted multi-symbol sample before buying broad coverage.
+Recommendation: keep proxy L0 discovery running under the PCS income program. Use Schwab (or a licensed export) when a dual-cost proxy survivor needs observed bid/ask confirmation before any L1/capital-seat claim. Missing Schwab credentials must not block proxy search.
 
 Rollback: provider work remains a separate adapter behind the existing normalized observation boundary. Removing the adapter/config must leave proxy BUILD research and forward archives unchanged.

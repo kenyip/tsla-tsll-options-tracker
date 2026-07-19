@@ -1,0 +1,67 @@
+{
+  "candidate_id": "REGIME_ROUTER_INCOME_21D_PT50_V1",
+  "family_id": "REGIME_FIRST_DEFINED_RISK_INCOME",
+  "evaluation_mode": "regime_router",
+  "forecast_type": "regime_directed_non_collapse_or_range",
+  "economic_mechanism": "Regime classifies the dominant short-horizon risk: bullish non-collapse is monetized with put credit spreads, bearish non-rally with call credit spreads, and neutral elevated-IV ranges with iron condors; otherwise stand aside. Time decay plus 50% profit targets harvest swings inside a defined-risk envelope.",
+  "regime_envelope": "bullish→PCS; bearish→CCS; neutral with iv_rank≥15→IC; else stand_aside",
+  "stand_aside_rule": "Stand aside when regime is missing/unknown, neutral with low IV rank, credit/max-loss filters fail, or an open position already occupies the one-lot sleeve slot.",
+  "greek_intended": "net short premium with defined max loss; small directional delta by regime; theta harvest",
+  "greek_dangerous": "gap through short strike; vol expansion against short premium; IC two-sided risk",
+  "symbols": [
+    "BAC",
+    "F",
+    "SOFI",
+    "KO",
+    "INTC",
+    "XOM",
+    "PLTR",
+    "AAPL",
+    "IWM",
+    "TSLL",
+    "SMCI",
+    "NFLX"
+  ],
+  "period": "5y",
+  "train_fraction": 0.6,
+  "sleeve_usd": 3000.0,
+  "open_risk_budget_usd": 750.0,
+  "max_loss_budget_usd": 300.0,
+  "option_mark_provenance": "black_scholes_proxy",
+  "control_mode": "unconditional_same_management",
+  "management": {
+    "long_dte": 21,
+    "long_target_delta": 0.2,
+    "spread_width": 1.0,
+    "min_credit_pct": 0.08,
+    "profit_target": 0.5,
+    "defined_loss_exit_frac": 0.7,
+    "delta_breach": 0.4,
+    "dte_stop": 7,
+    "regime_flip_exit_enabled": true,
+    "max_loss_budget_usd": 300.0
+  },
+  "entry": {},
+  "structure_overrides": {
+    "put_credit_spread": {
+      "bear_dte": 0
+    },
+    "call_credit_spread": {
+      "call_in_bull_ok": false
+    },
+    "iron_condor": {
+      "iv_rank_min": 15.0,
+      "long_target_delta": 0.16,
+      "min_credit_pct": 0.1
+    }
+  },
+  "discovery_gates": {
+    "min_trades": 8,
+    "max_loss_usd": 300.0,
+    "max_dd_discovery_usd": 150.0,
+    "require_integrity": true,
+    "require_positive_pnl": true,
+    "require_control_beat": true
+  },
+  "notes": "Spine pilot: regime-first income stack. Control is unconditional PCS with same management (no routing). Proxy L0 only; cannot earn L1."
+}

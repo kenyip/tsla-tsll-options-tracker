@@ -3,7 +3,7 @@
 **Purpose:** One page so any `trader` session can resume the **research lab** without re-reading `GOAL.md` + `simulator/CLOSED_LOOP_STRATEGY_FINDER.md` + `NORTH_STAR_HANDOFF.md` from scratch.
 
 **Audience:** Hermes `trader` profile / Ken  
-**Repo:** `/Users/jarvis/dev/tsla-tsll-options-tracker`  
+**Repo:** `/Users/jarvis/dev/trader`  
 **Status:** Operator runbook (docs). Model path remains **shadow / lab only**.  
 **Related plan concepts:** Trader platform two-pillar split (Income Engine production vs Free Strategy Research lab) — see kanban `t_dea619b7` / `TRADER_PLATFORM_PLAN.md` if present in workspace; concepts restated below.
 
@@ -42,7 +42,7 @@ Capital order never changes: **protect capital first → asymmetric opportunity 
 From repo root:
 
 ```bash
-cd /Users/jarvis/dev/tsla-tsll-options-tracker
+cd /Users/jarvis/dev/trader
 just setup                    # if venv missing
 # Model lab needs LightGBM (not always in requirements.txt — install if missing):
 .venv/bin/python -c "import lightgbm" 2>/dev/null || .venv/bin/pip install lightgbm
@@ -331,7 +331,7 @@ Rules:
 ## 11. Quick “resume tomorrow” card
 
 ```text
-Repo: tsla-tsll-options-tracker
+Repo: trader
 Lab smoke: just lab-smoke   # or just model-verify && just scenarios
 Prefer Path A: analyze → rule ≤30 lines → validate_rule.py → scenarios → ship/null
 Path B: model-generate → train-focus → train → model-validate (flags OFF)

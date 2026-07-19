@@ -35,7 +35,7 @@ Shared goal map: [TRADER_LOOPS.md](TRADER_LOOPS.md)
 ```bash
 # Durable work
 hermes kanban --board trading-strategies create --assignee trader \
-  --workspace /Users/jarvis/dev/tsla-tsll-options-tracker \
+  --workspace /Users/jarvis/dev/trader \
   --created-by <you> \
   --body "Lane / files / gates / verify" "Short title"
 

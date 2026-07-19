@@ -27,7 +27,7 @@ just desk-brief
 Profile: trader
 Command: trader  (or hermes -p trader)
 Path: /Users/jarvis/.hermes/profiles/trader
-Default repo/cwd: /Users/jarvis/dev/tsla-tsll-options-tracker
+Default repo/cwd: /Users/jarvis/dev/trader
 SOUL: free self-evolving system operator
 Skills: trader-self-evolution, trading-partner, pmcc-strategy
 Gateway: ai.hermes.gateway-trader (cron-only; no Telegram — CoS sole Ken-facing GW)

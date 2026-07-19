@@ -1,50 +1,49 @@
-# TSLA / TSLL Options Premium Selling — Backtest Engine + Live Tracker
+# Trader — personal desk + Agentic autonomy engine
 
-A research harness for designing and validating short-premium options strategies on TSLA and TSLL, plus a live daily-recommendation engine.
+**Monorepo (dual desk).** Repo: [`kenyip/trader`](https://github.com/kenyip/trader) · local: `~/dev/trader` · package: `trader_platform`.
+
+| Desk | For | Do not |
+|---|---|---|
+| **A — Personal tracker** | Your positions, PMCC, TSLA/TSLL methods, AI coaching | Auto-trade main book |
+| **B — Agentic engine** | Find → evaluate → wait → paper → (Ken-armed) live on $3k sleeve | Live without arm |
+
+See [docs/TRADER_DUAL_DESK.md](docs/TRADER_DUAL_DESK.md) and [docs/TRADER_SPINE_ARCHITECTURE.md](docs/TRADER_SPINE_ARCHITECTURE.md).
 
 ## Quick start
 
 ```bash
-just setup                            # one-time: venv + deps (yfinance, scipy, pandas, pyyaml, …)
-just test                             # today's live recommendation for TSLA + TSLL
-just run                              # Streamlit dashboard (Today / Positions / Performance / Scenarios)
-just backtest                         # full 5y backtest on TSLA + TSLL with per-ticker config
-just scenarios                        # 12-regime stress-test (REQUIRED before/after strategy tweaks)
-just optimize                         # walk-forward grid search over StrategyConfig knobs
-just optimize -- --static             # walk-forward VALIDATION of current per-ticker defaults
-just sweep KNOB --values v1,v2,v3     # reusable single-knob sweep (the LLM-critic harness)
-just positions                        # status of open positions (per positions.yaml, gitignored)
-just positions example                # write a sample positions.yaml template
-just positions add ...                # append a position (see `just positions add --help`)
+just setup                            # one-time: venv + deps
+just positions                        # Desk A: your open positions (positions.yaml)
+just pmcc-manage                      # Desk A: PMCC / LEAPS desk
+just desk-brief                       # Desk A: daily gather for AI stance
+just test                             # Desk A: TSLA/TSLL live recommendation
+just run                              # Streamlit dashboard
 
-# Free strategy research lab (shadow only — see docs/FREE_STRATEGY_RESEARCH_RUNBOOK.md)
-just lab-smoke                        # model-verify + scenarios
-just model-verify                     # feature parity smoke
-just analyze                          # rule proposer (critic loop)
+# Desk B — self-sufficient loop (research/paper only; no live place)
+.venv/bin/python scripts/evaluate_strategy_spec.py \
+  --spec configs/strategy_specs/regime_router_income_v1.json \
+  --out .cache/platform/spine/eval_LATEST.json
+.venv/bin/python scripts/trader_evolve_specs.py --seed configs/strategy_specs/regime_router_income_v1.json --max-mutants 2
+.venv/bin/python scripts/trader_living_status.py
+.venv/bin/python scripts/trader_watcher.py          # NO_QUALIFIED_STRATEGY until F2 living seats
 
-# PMCC / LEAPS diagonal monitor
-just pmcc-manage                      # full PMCC dashboard: marks, premium clock, next action
-just pmcc-monitor                     # quiet monitor: silent unless action is needed
-
-# Income Engine desk brief (raw gather; agent synthesizes stance — docs/DESK_BRIEF.md)
-just desk-brief                       # session banner + PMCC monitor + short-premium live rec
-just desk-brief --full                # full pmcc-manage dashboard in the gather
+just backtest && just scenarios       # classic engine validation
+just analyze                          # critic loop (Desk A methods research)
 ```
 
 ## Source-of-truth documents
 
-These three files are kept current. Everything else in the repo is either code or legacy notes.
-
 | Doc | Covers |
 |---|---|
-| [**GOAL.md**](GOAL.md) | The end-state goal — data-driven critic loop, success criteria, sequenced milestones. Use as `/goal` input in new sessions. |
-| [**ENGINE.md**](ENGINE.md) | The backtest harness — modules, data flow, pricing assumptions, event loop semantics, known limitations, roadmap |
-| [**STRATEGY.md**](STRATEGY.md) | The trading rules — entry logic, exit ladder (incl. daily profit capture formula), `StrategyConfig` defaults, latest baseline results, next tuning targets |
-| [**docs/PMCC_MONITOR_DEPLOYMENT.md**](docs/PMCC_MONITOR_DEPLOYMENT.md) | PMCC always-on monitor deployment, live position file transfer, Hermes cron, and Telegram gateway setup |
-| [**docs/TRADER_AGENT_PROFILE.md**](docs/TRADER_AGENT_PROFILE.md) | Dedicated Hermes `trader` profile: trade-analysis operating principles, local bootstrap, Mac Mini migration path, and privacy boundaries |
-| [**docs/TRADER_KNOWLEDGE_MAP.md**](docs/TRADER_KNOWLEDGE_MAP.md) | Memory-vs-skill-vs-repo routing map for the Trader profile, including where recent PMCC learnings and dated playbooks live |
-| [**docs/DESK_BRIEF.md**](docs/DESK_BRIEF.md) | Income Engine daily desk brief playbook: one checklist for PMCC + short-premium + stance |
-| [**docs/FREE_STRATEGY_RESEARCH_RUNBOOK.md**](docs/FREE_STRATEGY_RESEARCH_RUNBOOK.md) | Cold-start free strategy research lab: production vs lab boundary, weekly loop, Path A/B promotion, exact `just` commands |
+| [**docs/TRADER_DUAL_DESK.md**](docs/TRADER_DUAL_DESK.md) | Personal tracker vs Agentic engine; rename decision |
+| [**docs/TRADER_PLATFORM_GOAL.md**](docs/TRADER_PLATFORM_GOAL.md) | Desk B product pin — research → paper → armed live |
+| [**docs/TRADER_SPINE_ARCHITECTURE.md**](docs/TRADER_SPINE_ARCHITECTURE.md) | StrategySpec → evaluate → living seats → watcher |
+| [**GOAL.md**](GOAL.md) | Legacy critic-loop engine goal (Desk A seed methods) |
+| [**ENGINE.md**](ENGINE.md) | Backtest harness modules and pricing assumptions |
+| [**STRATEGY.md**](STRATEGY.md) | Seed TSLA/TSLL trading rules and history |
+| [**docs/DESK_BRIEF.md**](docs/DESK_BRIEF.md) | Daily desk brief playbook |
+| [**docs/TRADER_AGENT_PROFILE.md**](docs/TRADER_AGENT_PROFILE.md) | Hermes `trader` profile |
+| [**docs/PMCC_MONITOR_DEPLOYMENT.md**](docs/PMCC_MONITOR_DEPLOYMENT.md) | PMCC monitor deployment |
 
 Both follow the same convention: **current state at the top, dated history at the bottom.**
 

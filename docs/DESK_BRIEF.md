@@ -2,7 +2,7 @@
 
 **Status:** production playbook (Income Engine stage **I1**)  
 **Owner profile:** `trader`  
-**Repo:** `/Users/jarvis/dev/tsla-tsll-options-tracker`  
+**Repo:** `/Users/jarvis/dev/trader`  
 **Date:** 2026-07-09  
 
 One coherent daily (or on-demand) status for Ken’s real-money sleeves: PMCC + short-premium + stance. Analysis and proposed tickets only — **never places trades**.
@@ -77,7 +77,7 @@ Never print full private YAML into git, Telegram, or commit messages. Summarize 
 ### C. Gather commands (raw inputs)
 
 ```bash
-cd /Users/jarvis/dev/tsla-tsll-options-tracker
+cd /Users/jarvis/dev/trader
 
 # Preferred single gather
 just desk-brief
@@ -245,7 +245,7 @@ Safe to commit: this doc, `scripts/desk_brief.py`, Justfile recipe, skill patche
 ## 8. Acceptance smoke (I1)
 
 ```bash
-cd /Users/jarvis/dev/tsla-tsll-options-tracker
+cd /Users/jarvis/dev/trader
 just desk-brief | head -100
 # Expect: DATA QUALITY banner, PMCC ACTION lines or empty-book note, short-premium live section
 ```

@@ -17,8 +17,9 @@ The adapter requires timezone-aware observation timestamps, expiration, type, st
 | Installed `yfinance` 1.5.1 (`Ticker.options`, `Ticker.option_chain`) | Yes, current snapshot when Yahoo serves it | No historical chain method exposed | Use only to start forward archival; never backfill B3/B4 |
 | User-supplied normalized CSV archive | Yes | Yes, only for timestamps actually archived | Supported by adapter; provenance must remain attached |
 | Existing OHLCV/Black-Scholes proxy sims | No | No | Sensitivity research only, not observed execution evidence |
-| Broker APIs | Potentially | Provider-dependent | Out of scope: no broker login in BUILD lab |
-| Paid option-data vendors | Provider-dependent | Usually | Blocked without Ken approval; do not enable/spend |
+| Schwab developer API (research) | Yes when credentials + transport configured | Entitlement-dependent; never invent history | Ken-authorized read-only market data; fail closed without credentials; no order placement (`docs/SCHWAB_OPTION_DATA_PATH.md`) |
+| Broker trading APIs | Potentially | Provider-dependent | Still out of scope for BUILD lab order placement |
+| Other paid option-data vendors | Provider-dependent | Usually | Still blocked without Ken approval; do not enable/spend
 
 Web inventory was unavailable in this wake because Hermes web search was not configured. The executable local finding is narrower and verified: installed yfinance 1.5.1 exposes only `_download_options`, `_options2df`, `option_chain`, and `options`; it does not expose a historical option-chain API.
 

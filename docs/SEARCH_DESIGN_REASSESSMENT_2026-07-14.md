@@ -108,7 +108,7 @@ Still external (not cleared here): Agentic funding, options level, Ken arm.
 Run zero-input:
 
 ```bash
-cd /Users/jarvis/dev/tsla-tsll-options-tracker
+cd /Users/jarvis/dev/trader
 just trader-build-lab
 ```
 

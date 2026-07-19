@@ -1,7 +1,7 @@
 # Trader BUILD Lab Environment — Dual-Model Income Research
 
 **Pinned:** 2026-07-10 (Ken)
-**Repo:** `/Users/jarvis/dev/tsla-tsll-options-tracker`
+**Repo:** `/Users/jarvis/dev/trader`
 **Profile:** Hermes `trader` (gateway-trader, cron-only; CoS stays Ken-facing)
 **Hard rule:** paper / research only. No live, no agentic arm, no shadow auto-promote.
 
@@ -75,7 +75,7 @@ See `docs/INCOME_STRATEGY_COVERAGE.md` for the structure matrix and gaps.
 ## How to run the lab
 
 ```bash
-cd /Users/jarvis/dev/tsla-tsll-options-tracker
+cd /Users/jarvis/dev/trader
 
 # Full dual-pass income discovery lab (Sol → Grok)
 just trader-build-lab

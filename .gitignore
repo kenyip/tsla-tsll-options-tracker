@@ -21,3 +21,6 @@ pmcc_positions.yaml
 # platform local runtime (paper ledger, audit, kill switch)
 agentic_kill.switch
 .cache/platform/
+
+# Desk B living registry runtime (local only)
+trader_platform/data/living_registry.json

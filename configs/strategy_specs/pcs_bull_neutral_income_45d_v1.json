@@ -1,0 +1,60 @@
+{
+  "candidate_id": "PCS_BULL_NEUTRAL_INCOME_45D_PT50_V1",
+  "family_id": "LONG_BIAS_PCS_REGIME_INCOME_LONGER_DTE",
+  "evaluation_mode": "regime_router",
+  "router_policy": "pcs_non_bear",
+  "forecast_type": "non_collapse_long_bias",
+  "economic_mechanism": "When regime is bullish or neutral, sell longer-dated put credit spreads to monetize non-collapse with defined risk; stand aside pure bear. Lower cadence than 21D entry mining; take 50% profits on swings.",
+  "regime_envelope": "bullish|neutral→PCS; bearish|unknown→stand_aside (no CCS/IC arm)",
+  "stand_aside_rule": "Stand aside on bearish/unknown regime, failed credit/max-loss filters, or occupied one-lot slot. Stand-aside is success.",
+  "greek_intended": "mild long-delta short put vertical; theta; defined max loss",
+  "greek_dangerous": "gap down through short put; prolonged bear after entry; slow recovery after assignment path",
+  "symbols": [
+    "BAC",
+    "F",
+    "SOFI",
+    "KO",
+    "INTC",
+    "XOM",
+    "PLTR",
+    "AAPL",
+    "IWM",
+    "TSLL",
+    "SMCI",
+    "NFLX"
+  ],
+  "period": "5y",
+  "train_fraction": 0.6,
+  "sleeve_usd": 3000.0,
+  "open_risk_budget_usd": 750.0,
+  "max_loss_budget_usd": 300.0,
+  "option_mark_provenance": "black_scholes_proxy",
+  "control_mode": "unconditional_same_management",
+  "management": {
+    "long_dte": 45,
+    "long_target_delta": 0.18,
+    "spread_width": 1.0,
+    "min_credit_pct": 0.1,
+    "profit_target": 0.5,
+    "defined_loss_exit_frac": 0.7,
+    "delta_breach": 0.4,
+    "dte_stop": 14,
+    "regime_flip_exit_enabled": true,
+    "max_loss_budget_usd": 300.0
+  },
+  "entry": {},
+  "structure_overrides": {
+    "put_credit_spread": {
+      "bear_dte": 0
+    }
+  },
+  "discovery_gates": {
+    "min_trades": 8,
+    "max_loss_usd": 300.0,
+    "max_dd_discovery_usd": 150.0,
+    "require_integrity": true,
+    "require_positive_pnl": true,
+    "require_control_beat": true
+  },
+  "notes": "Spine pilot: PCS-only long-bias regime arm at 45 DTE. Control is unconditional PCS (trades also in bear-eligible bars via put_credit_spread policy). Proxy L0 only."
+}

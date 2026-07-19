@@ -45,18 +45,41 @@ def default_structure_configs() -> dict[str, dict[str, Any]]:
     }
 
 
-def select_structure(row: pd.Series, configs: dict[str, dict[str, Any]]) -> str | None:
-    """Select from the current row only; neutral low-IV bars stand aside."""
+def select_structure(
+    row: pd.Series,
+    configs: dict[str, dict[str, Any]],
+    *,
+    policy: str = "router",
+) -> str | None:
+    """Select from the current row only; invalid/low-quality regimes stand aside."""
     regime = str(row.get("regime") or "").lower()
-    if regime == "bullish":
-        return "put_credit_spread"
-    if regime == "bearish":
-        return "call_credit_spread"
-    if regime == "neutral":
-        threshold = float(configs["iron_condor"].get("iv_rank_min", 15.0))
-        if float(row.get("iv_rank") or 0.0) >= threshold:
-            return "iron_condor"
-    return None
+    policy = str(policy or "router").strip().lower()
+
+    # PCS-only arm: long-biased income; stand aside pure bear (and unknown).
+    if policy in {"pcs_non_bear", "pcs_bull_neutral"}:
+        if regime in {"bullish", "neutral"}:
+            return "put_credit_spread"
+        return None
+
+    # PCS bullish-only: stricter long-bias; neutral/bear stand aside.
+    if policy in {"pcs_bull_only", "pcs_bullish_only"}:
+        if regime == "bullish":
+            return "put_credit_spread"
+        return None
+
+    # Full multi-structure income router.
+    if policy == "router":
+        if regime == "bullish":
+            return "put_credit_spread"
+        if regime == "bearish":
+            return "call_credit_spread"
+        if regime == "neutral":
+            threshold = float(configs["iron_condor"].get("iv_rank_min", 15.0))
+            if float(row.get("iv_rank") or 0.0) >= threshold:
+                return "iron_condor"
+        return None
+
+    raise ValueError(f"unknown select_structure policy {policy!r}")
 
 
 def _policy_structure(
@@ -64,8 +87,15 @@ def _policy_structure(
     policy: str,
     configs: dict[str, dict[str, Any]],
 ) -> str | None:
-    if policy == "router":
-        return select_structure(row, configs)
+    policy = str(policy or "router").strip().lower()
+    if policy in {
+        "router",
+        "pcs_non_bear",
+        "pcs_bull_neutral",
+        "pcs_bull_only",
+        "pcs_bullish_only",
+    }:
+        return select_structure(row, configs, policy=policy)
     if policy in STRUCTURES:
         return policy
     raise ValueError(f"unknown policy {policy!r}")
@@ -213,16 +243,35 @@ def run_regime_router_backtest(
         open_trade.closed = True
         trades.append(open_trade)
 
-    routing_violations = [
-        trade
-        for trade in trades
-        if policy == "router"
-        and not (
-            (trade.regime_at_entry == "bullish" and trade.right == "put")
-            or (trade.regime_at_entry == "bearish" and trade.right == "call")
-            or (trade.regime_at_entry == "neutral" and trade.right == "iron_condor")
-        )
-    ]
+    policy_norm = str(policy or "router").strip().lower()
+    if policy_norm == "router":
+        routing_violations = [
+            trade
+            for trade in trades
+            if not (
+                (trade.regime_at_entry == "bullish" and trade.right == "put")
+                or (trade.regime_at_entry == "bearish" and trade.right == "call")
+                or (trade.regime_at_entry == "neutral" and trade.right == "iron_condor")
+            )
+        ]
+    elif policy_norm in {"pcs_non_bear", "pcs_bull_neutral"}:
+        routing_violations = [
+            trade
+            for trade in trades
+            if not (
+                trade.right == "put"
+                and trade.regime_at_entry in {"bullish", "neutral"}
+            )
+        ]
+    elif policy_norm in {"pcs_bull_only", "pcs_bullish_only"}:
+        routing_violations = [
+            trade
+            for trade in trades
+            if not (trade.right == "put" and trade.regime_at_entry == "bullish")
+        ]
+    else:
+        routing_violations = []
+
     entry_funnel = {
         "selected": selected_counts,
         "accepted": accepted_counts,

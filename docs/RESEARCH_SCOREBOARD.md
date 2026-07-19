@@ -111,7 +111,7 @@ Recorded so future research compares against a dated re-run, not only the May 20
 |-------|--------|
 | Freeze task | `t_6a6f8980` |
 | Run timestamp | **2026-07-09 00:03 PDT** |
-| Host | local Mac; repo `/Users/jarvis/dev/tsla-tsll-options-tracker` |
+| Host | local Mac; repo `/Users/jarvis/dev/trader` |
 | Command env | `.venv/bin/python` via `just scenarios` + `just backtest` |
 | Strategy defaults changed? | **No** |
 | Model flags changed? | **No** (`enable_model_entry=False`, `enable_model_management=False`) |

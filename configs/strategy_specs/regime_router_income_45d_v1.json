@@ -1,0 +1,68 @@
+{
+  "candidate_id": "REGIME_ROUTER_INCOME_45D_PT50_V1",
+  "family_id": "REGIME_FIRST_DEFINED_RISK_INCOME_LONGER_DTE",
+  "evaluation_mode": "regime_router",
+  "router_policy": "router",
+  "forecast_type": "regime_directed_non_collapse_or_range",
+  "economic_mechanism": "Same regime-first income stack as 21D router, but longer 45-DTE credit verticals/condors reduce trade cadence and late-cycle gamma while still harvesting theta and taking 50% profits on favorable swings.",
+  "regime_envelope": "bullish→PCS; bearish→CCS; neutral with iv_rank≥15→IC; else stand_aside",
+  "stand_aside_rule": "Stand aside when regime is missing/unknown, neutral with low IV rank, credit/max-loss filters fail, or one-lot slot is occupied.",
+  "greek_intended": "slower theta harvest; defined-risk short premium; lower cadence",
+  "greek_dangerous": "gap risk over longer hold; vol expansion; IC two-sided risk",
+  "symbols": [
+    "BAC",
+    "F",
+    "SOFI",
+    "KO",
+    "INTC",
+    "XOM",
+    "PLTR",
+    "AAPL",
+    "IWM",
+    "TSLL",
+    "SMCI",
+    "NFLX"
+  ],
+  "period": "5y",
+  "train_fraction": 0.6,
+  "sleeve_usd": 3000.0,
+  "open_risk_budget_usd": 750.0,
+  "max_loss_budget_usd": 300.0,
+  "option_mark_provenance": "black_scholes_proxy",
+  "control_mode": "unconditional_same_management",
+  "management": {
+    "long_dte": 45,
+    "long_target_delta": 0.18,
+    "spread_width": 1.0,
+    "min_credit_pct": 0.1,
+    "profit_target": 0.5,
+    "defined_loss_exit_frac": 0.7,
+    "delta_breach": 0.4,
+    "dte_stop": 14,
+    "regime_flip_exit_enabled": true,
+    "max_loss_budget_usd": 300.0
+  },
+  "entry": {},
+  "structure_overrides": {
+    "put_credit_spread": {
+      "bear_dte": 0
+    },
+    "call_credit_spread": {
+      "call_in_bull_ok": false
+    },
+    "iron_condor": {
+      "iv_rank_min": 15.0,
+      "long_target_delta": 0.15,
+      "min_credit_pct": 0.12
+    }
+  },
+  "discovery_gates": {
+    "min_trades": 8,
+    "max_loss_usd": 300.0,
+    "max_dd_discovery_usd": 150.0,
+    "require_integrity": true,
+    "require_positive_pnl": true,
+    "require_control_beat": true
+  },
+  "notes": "Spine pilot: longer-DTE regime router. Distinct from closed 21D router family by DTE/management horizon only (materially different gamma/time profile). Proxy L0 only."
+}
