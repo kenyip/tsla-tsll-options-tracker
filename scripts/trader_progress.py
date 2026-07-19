@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Easy discovery progress: bar + strategies that passed."""
+"""Easy discovery progress: stats + top strategies that passed."""
 from __future__ import annotations
 
 import argparse
@@ -31,27 +31,40 @@ def main(argv: list[str] | None = None) -> int:
         default=None,
         help="Refresh every N seconds (default 5 if flag present)",
     )
-    p.add_argument("--no-f1", action="store_true", help="Hide train-only F1 list")
-    p.add_argument("--max-f2", type=int, default=40)
-    p.add_argument("--max-f1", type=int, default=15)
+    p.add_argument(
+        "--full",
+        action="store_true",
+        help="Longer lists (all F2 + F1 samples)",
+    )
+    p.add_argument(
+        "--top",
+        type=int,
+        default=5,
+        help="How many holdout-pass strategies to show (default 5)",
+    )
+    p.add_argument(
+        "--show-f1",
+        action="store_true",
+        help="Also list a few train-only F1 candidates",
+    )
     args = p.parse_args(argv)
 
     def once() -> None:
         snap = collect_progress(registry_path=args.registry)
         if args.json:
             print(json.dumps(snap.to_dict(), indent=2, sort_keys=True, allow_nan=False))
-        else:
-            text = format_progress_text(
-                snap,
-                show_f1=not args.no_f1,
-                max_f2=args.max_f2,
-                max_f1=args.max_f1,
-            )
-            if args.watch is not None:
-                # clear-ish screen for watch mode
-                sys.stdout.write("\033[2J\033[H")
-            sys.stdout.write(text)
-            sys.stdout.flush()
+            return
+        text = format_progress_text(
+            snap,
+            show_f1=bool(args.show_f1 or args.full),
+            max_f2=50 if args.full else max(1, int(args.top)),
+            max_f1=20 if args.full else (8 if args.show_f1 else 0),
+            full=bool(args.full),
+        )
+        if args.watch is not None:
+            sys.stdout.write("\033[2J\033[H")
+        sys.stdout.write(text)
+        sys.stdout.flush()
 
     if args.watch is None:
         once()

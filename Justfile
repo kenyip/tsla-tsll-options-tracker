@@ -420,10 +420,11 @@ trader-evolve *ARGS:
 trader-living:
     {{py}} scripts/trader_living_status.py
 
-# Easy progress bar + strategies that passed (F2 / F1)
+# Easy progress: stats + top holdout passes (plain English)
 #   just trader-progress
-#   just trader-progress --watch          # refresh every 5s
-#   just trader-progress --json
+#   just trader-progress --watch
+#   just trader-progress --top 5
+#   just trader-progress --full
 trader-progress *ARGS:
     {{py}} scripts/trader_progress.py {{ARGS}}
 

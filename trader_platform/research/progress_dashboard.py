@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 import os
-import time
+import re
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
@@ -18,7 +18,6 @@ from trader_platform.research.discovery_loop import (
 from trader_platform.research.evolve_strategy_spec import apply_mutant
 from trader_platform.research.living_registry import (
     DEFAULT_REGISTRY_PATH,
-    LivingRegistry,
     LivingSeat,
     load_living_registry,
 )
@@ -33,19 +32,14 @@ def _now() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 
 
-def progress_bar(done: int, total: int, width: int = 32) -> str:
+def progress_bar(done: int, total: int, width: int = 28) -> str:
     total = max(int(total), 1)
     done = max(0, min(int(done), total))
     filled = int(round(width * done / total))
     filled = min(width, max(0, filled))
     bar = "█" * filled + "░" * (width - filled)
     pct = 100.0 * done / total
-    return f"[{bar}] {pct:5.1f}%  {done}/{total}"
-
-
-def _short(s: str, n: int = 64) -> str:
-    s = str(s or "")
-    return s if len(s) <= n else s[: n - 1] + "…"
+    return f"[{bar}] {pct:5.1f}%  {done:,}/{total:,}"
 
 
 def _load_json(path: Path) -> dict[str, Any]:
@@ -58,23 +52,13 @@ def _load_json(path: Path) -> dict[str, Any]:
         return {}
 
 
-def _count_space(
-    *,
-    registry_path: Path,
-    cache: dict[str, Any] | None = None,
-) -> dict[str, int]:
-    """Finite search ceiling + remaining (cached counts are expensive to recompute)."""
+def _count_space(*, registry_path: Path) -> dict[str, int]:
     seeds = list_seed_specs()
     grid = all_grid_mutants()
     total = len(seeds) * len(grid)
     known = known_ids(registry_path)
-    # Approximate "seen" by unique candidate_ids in registry (one eval ≈ one candidate family seat)
     reg = load_living_registry(registry_path)
-    seen_candidates = {s.candidate_id for s in reg.seats}
-    # Remaining: walk grid only if small enough / use heuristic
     remaining = 0
-    # Fast path: if registry small relative to grid, sample exact remaining
-    # Full exact remaining is O(seeds*grid) apply_mutant — acceptable (~3.5k)
     for seed_path in seeds:
         seed = load_strategy_spec(seed_path)
         for plan in grid:
@@ -88,35 +72,8 @@ def _count_space(
         "total_combos": total,
         "remaining": remaining,
         "done": max(0, done),
-        "registry_candidates": len(seen_candidates),
         "registry_seats": len(reg.seats),
     }
-
-
-@dataclass
-class ProgressSnapshot:
-    generated_at: str
-    space: dict[str, int]
-    statuses: dict[str, int]
-    f2_seats: list[dict[str, Any]] = field(default_factory=list)
-    f1_seats: list[dict[str, Any]] = field(default_factory=list)
-    campaign: dict[str, Any] = field(default_factory=dict)
-    marathon_running: bool = False
-    marathon_pid: int | None = None
-
-    def to_dict(self) -> dict[str, Any]:
-        return {
-            "generated_at": self.generated_at,
-            "space": self.space,
-            "statuses": self.statuses,
-            "f2_count": len(self.f2_seats),
-            "f1_count": len(self.f1_seats),
-            "f2_seats": self.f2_seats,
-            "f1_seats": self.f1_seats,
-            "campaign": self.campaign,
-            "marathon_running": self.marathon_running,
-            "marathon_pid": self.marathon_pid,
-        }
 
 
 def _seat_row(seat: LivingSeat) -> dict[str, Any]:
@@ -149,6 +106,193 @@ def _marathon_pid(pid_path: Path) -> tuple[bool, int | None]:
         return False, pid
 
 
+def _policy_label(policy: str) -> str:
+    p = (policy or "").strip().lower()
+    return {
+        "pcs_bull_only": "PCS only when bullish",
+        "pcs_non_bear": "PCS when bullish/neutral",
+        "pcs_bull_neutral": "PCS when bullish/neutral",
+        "router": "regime router (PCS/CCS/IC)",
+        "put_credit_spread": "put credit spread only",
+    }.get(p, p or "default policy")
+
+
+def _describe_from_id(candidate_id: str) -> str:
+    """Human one-liner from encoded mutant suffix."""
+    cid = candidate_id or ""
+    bits: list[str] = []
+    m = re.search(r"_d(\d+)_", cid) or re.search(r"dte(\d+)", cid, re.I) or re.search(
+        r"__dte(\d+)", cid, re.I
+    )
+    # grid form g_d14_pt40_dl14_iv20_c8_pcs_bu
+    g = re.search(
+        r"g_d(\d+)_pt(\d+)_dl(\d+)_iv(\d+)_c(\d+)_([a-z0-9_]+)",
+        cid,
+        re.I,
+    )
+    if g:
+        dte, pt, dl, iv, cred, pol = g.groups()
+        pol_l = {
+            "pcs_bu": "bull-only PCS",
+            "pcs_no": "non-bear PCS",
+            "router": "full router",
+        }.get(pol[:6], pol)
+        bits.append(f"{dte}DTE put/credit style")
+        bits.append(f"take profit ~{pt}% of credit")
+        bits.append(f"delta~{int(dl)/100:.2f}")
+        if int(iv) > 0:
+            bits.append(f"IV rank≥{iv}")
+        bits.append(pol_l)
+        return "; ".join(bits)
+    if "bull_only" in cid:
+        bits.append("bullish-only put credit spreads")
+    if "iv" in cid.lower() and "rich" in cid.lower():
+        bits.append("prefer elevated IV")
+    if re.search(r"dte(\d+)|_d(\d+)", cid, re.I):
+        mm = re.search(r"dte(\d+)", cid, re.I) or re.search(r"_d(\d+)_", cid)
+        if mm:
+            bits.append(f"~{mm.group(1)} day options")
+    if "pt50" in cid or "pt_50" in cid:
+        bits.append("50% profit target")
+    if "pt40" in cid:
+        bits.append("40% profit target")
+    if "pt60" in cid:
+        bits.append("60% profit target")
+    if not bits:
+        if "IV_RICH" in cid:
+            bits.append("IV-rich non-collapse income seed")
+        elif "BULL_NEUTRAL" in cid:
+            bits.append("bull/neutral PCS income seed")
+        elif "ROUTER" in cid:
+            bits.append("regime-routed multi-structure seed")
+        else:
+            bits.append("defined-risk credit income variant")
+    return "; ".join(bits)
+
+
+def _holdout_metrics(row: dict[str, Any]) -> dict[str, Any]:
+    """Load holdout worst-axis pnl/n/dd for ranking and display."""
+    path = row.get("evidence_report_path") or ""
+    symbols = set(row.get("symbols") or [])
+    out = {
+        "worst_pnl": None,
+        "best_pnl": None,
+        "n_trades": None,
+        "dd": None,
+        "label": "",
+    }
+    p = Path(str(path)) if path else None
+    if not p or not p.exists():
+        return out
+    try:
+        report = json.loads(p.read_text(encoding="utf-8"))
+    except Exception:
+        return out
+    hold_rows = report.get("holdout_rows") or []
+    picked = None
+    for hr in hold_rows:
+        if symbols and str(hr.get("symbol") or "").upper() in symbols:
+            if hr.get("holdout_dual_cost_pass"):
+                picked = hr
+                break
+            picked = picked or hr
+    if picked is None and hold_rows:
+        # single-symbol seat_id may embed symbol
+        for hr in hold_rows:
+            if hr.get("holdout_dual_cost_pass"):
+                picked = hr
+                break
+        picked = picked or hold_rows[0]
+    if not picked:
+        return out
+    axes = picked.get("holdout") or {}
+    pnls = []
+    ns = []
+    dds = []
+    for ax in axes.values():
+        if not isinstance(ax, dict):
+            continue
+        if ax.get("pnl") is not None:
+            pnls.append(float(ax["pnl"]))
+        if ax.get("n_trades") is not None:
+            ns.append(int(ax["n_trades"]))
+        if ax.get("dd") is not None:
+            dds.append(float(ax["dd"]))
+    if not pnls:
+        return out
+    worst = min(pnls)
+    best = max(pnls)
+    out["worst_pnl"] = worst
+    out["best_pnl"] = best
+    out["n_trades"] = min(ns) if ns else None
+    out["dd"] = max(dds) if dds else None
+    n_s = f"n≈{out['n_trades']}" if out["n_trades"] is not None else ""
+    dd_s = f"maxDD≈${out['dd']:.0f}" if out["dd"] is not None else ""
+    out["label"] = (
+        f"holdout after costs: worst axis ${worst:+.0f}"
+        + (f", best ${best:+.0f}" if best != worst else "")
+        + (f", {n_s}" if n_s else "")
+        + (f", {dd_s}" if dd_s else "")
+    )
+    return out
+
+
+def _enrich_f2(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    enriched = []
+    for row in rows:
+        metrics = _holdout_metrics(row)
+        description = _describe_from_id(str(row.get("candidate_id") or ""))
+        policy = _policy_label(str(row.get("router_policy") or ""))
+        enriched.append(
+            {
+                **row,
+                "description": description,
+                "policy_label": policy,
+                "holdout_worst_pnl": metrics.get("worst_pnl"),
+                "holdout_label": metrics.get("label") or "holdout passed (metrics n/a)",
+                "holdout_n": metrics.get("n_trades"),
+                "holdout_dd": metrics.get("dd"),
+            }
+        )
+    # Best first: higher worst-axis holdout pnl, then lower DD
+    def sort_key(r: dict[str, Any]) -> tuple:
+        wp = r.get("holdout_worst_pnl")
+        dd = r.get("holdout_dd")
+        return (
+            -(float(wp) if wp is not None else -1e18),
+            float(dd) if dd is not None else 1e18,
+        )
+
+    enriched.sort(key=sort_key)
+    return enriched
+
+
+@dataclass
+class ProgressSnapshot:
+    generated_at: str
+    space: dict[str, int]
+    statuses: dict[str, int]
+    f2_seats: list[dict[str, Any]] = field(default_factory=list)
+    f1_seats: list[dict[str, Any]] = field(default_factory=list)
+    campaign: dict[str, Any] = field(default_factory=dict)
+    marathon_running: bool = False
+    marathon_pid: int | None = None
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "generated_at": self.generated_at,
+            "space": self.space,
+            "statuses": self.statuses,
+            "f2_count": len(self.f2_seats),
+            "f1_count": len(self.f1_seats),
+            "f2_seats": self.f2_seats,
+            "f1_seats": self.f1_seats,
+            "campaign": self.campaign,
+            "marathon_running": self.marathon_running,
+            "marathon_pid": self.marathon_pid,
+        }
+
+
 def collect_progress(
     *,
     registry_path: str | Path | None = None,
@@ -164,18 +308,12 @@ def collect_progress(
     for seat in reg.seats:
         statuses[seat.status] = statuses.get(seat.status, 0) + 1
 
-    f2 = sorted(
-        [_seat_row(s) for s in reg.seats if s.status in {"f2_holdout", "paper_eligible"}],
-        key=lambda r: (r.get("symbols") or [""])[0],
-    )
-    f1 = sorted(
-        [_seat_row(s) for s in reg.seats if s.status == "f1_train"],
-        key=lambda r: (r.get("symbols") or [""])[0],
-    )
+    f2_raw = [_seat_row(s) for s in reg.seats if s.status in {"f2_holdout", "paper_eligible"}]
+    f1 = [_seat_row(s) for s in reg.seats if s.status == "f1_train"]
+    f2 = _enrich_f2(f2_raw)
 
     space = _count_space(registry_path=registry_path)
-    campaign = _load_json(state_path) or _load_json(latest_path)
-    # Prefer live state fields when present
+    campaign: dict[str, Any] = {}
     if state_path.exists():
         st = _load_json(state_path)
         campaign = {
@@ -221,94 +359,110 @@ def collect_progress(
 def format_progress_text(
     snap: ProgressSnapshot,
     *,
-    show_f1: bool = True,
-    max_f2: int = 50,
-    max_f1: int = 20,
-    bar_width: int = 36,
+    show_f1: bool = False,
+    max_f2: int = 5,
+    max_f1: int = 0,
+    bar_width: int = 28,
+    full: bool = False,
 ) -> str:
+    """Compact by default: stats + top F2 with plain-English descriptions."""
+    if full:
+        max_f2 = max(max_f2, 50)
+        show_f1 = True
+        max_f1 = max(max_f1, 20)
+
     sp = snap.space
-    lines: list[str] = []
-    lines.append("Trader discovery progress")
-    lines.append("=" * 56)
-    lines.append(f"Updated: {snap.generated_at}")
-    run = "RUNNING" if snap.marathon_running else "idle"
-    if snap.marathon_pid:
-        run += f"  pid={snap.marathon_pid}"
-    lines.append(f"Campaign: {run}")
-    lines.append("")
-    lines.append("Search space (finite seed × mutant grid)")
-    lines.append(
-        progress_bar(int(sp.get("done") or 0), int(sp.get("total_combos") or 1), width=bar_width)
-    )
-    lines.append(
-        f"  seeds={sp.get('seeds')}  plans={sp.get('plans')}  "
-        f"remaining≈{sp.get('remaining')}  registry_seats={sp.get('registry_seats')}"
-    )
-    lines.append("")
-    lines.append("Registry outcomes")
     st = snap.statuses
+    f2_n = st.get("f2_holdout", 0) + st.get("paper_eligible", 0)
+    f1_n = st.get("f1_train", 0)
+    q_n = st.get("quarantined", 0)
+    total = int(sp.get("total_combos") or 1)
+    done = int(sp.get("done") or 0)
+    rem = int(sp.get("remaining") or 0)
+
+    lines: list[str] = []
+    lines.append("Trader discovery")
+    lines.append("─" * 48)
+    run = "● RUNNING" if snap.marathon_running else "○ idle"
+    if snap.marathon_pid:
+        run += f"  (pid {snap.marathon_pid})"
+    lines.append(run)
+    lines.append("")
+
+    # --- STATS FIRST ---
+    lines.append("STATS")
+    lines.append(progress_bar(done, total, width=bar_width))
     lines.append(
-        f"  F2/paper living: {st.get('f2_holdout', 0) + st.get('paper_eligible', 0)}   "
-        f"F1 train-only: {st.get('f1_train', 0)}   "
-        f"quarantined: {st.get('quarantined', 0)}"
+        f"  Search bag: {done:,} tried · {rem:,} left · {total:,} total"
     )
+    lines.append(
+        f"  Outcomes:   {f2_n} passed holdout (F2) · {f1_n} train-only (F1) · {q_n} rejected"
+    )
+    pass_rate = (100.0 * f2_n / done) if done else 0.0
+    lines.append(f"  Pass rate:  {pass_rate:.1f}% of tried became F2 living seats")
+
     camp = snap.campaign or {}
-    if camp:
+    if camp.get("running") is not None or camp.get("stop_reason"):
         lines.append("")
-        lines.append("Latest campaign")
-        if camp.get("running") is not None:
-            lines.append(f"  running={camp.get('running')}  gen={camp.get('gen_index')}  "
-                         f"eval_total={camp.get('total_eval')}  "
-                         f"no_progress_streak={camp.get('no_progress_streak')}")
-            if camp.get("last_progress_bits"):
-                bits = camp.get("last_progress_bits")
-                if isinstance(bits, list):
-                    lines.append(f"  last: {', '.join(str(b) for b in bits[:8])}")
-        if camp.get("stop_reason"):
+        if camp.get("running"):
             lines.append(
-                f"  last_stop={camp.get('stop_reason')}  "
-                f"elapsed_s={camp.get('elapsed_seconds')}  "
-                f"workers={camp.get('workers')}"
+                f"  Now: gen {camp.get('gen_index')} · "
+                f"{camp.get('total_eval') or 0} evals this campaign · "
+                f"stall streak {camp.get('no_progress_streak')}"
+            )
+            bits = camp.get("last_progress_bits")
+            if isinstance(bits, list) and bits:
+                # shorten CLOSED:/F1:/F2: tags
+                pretty = []
+                for b in bits[:4]:
+                    b = str(b)
+                    if b.startswith("F2:"):
+                        pretty.append("F2 win")
+                    elif b.startswith("F1:"):
+                        pretty.append("F1 train")
+                    elif b.startswith("CLOSED:"):
+                        pretty.append("reject")
+                    else:
+                        pretty.append(b[:20])
+                lines.append(f"  Last batch: {', '.join(pretty)}")
+        elif camp.get("stop_reason"):
+            lines.append(
+                f"  Last campaign stop: {camp.get('stop_reason')} "
+                f"({camp.get('elapsed_seconds')}s)"
             )
 
+    # --- TOP STRATEGIES ---
     lines.append("")
-    lines.append(f"Strategies that PASSED holdout (F2+) — {len(snap.f2_seats)}")
-    lines.append("-" * 56)
+    lines.append(f"TOP {min(max_f2, max(len(snap.f2_seats), 0))} HOLD-OUT PASSES (best first)")
     if not snap.f2_seats:
-        lines.append("  (none yet)")
+        lines.append("  None yet — discovery still searching.")
     else:
         for i, row in enumerate(snap.f2_seats[:max_f2], 1):
-            syms = ",".join(row.get("symbols") or []) or "?"
-            lines.append(
-                f"  {i:2d}. [{syms}] {_short(row.get('candidate_id'), 52)}"
-            )
-            lines.append(
-                f"      status={row.get('status')}  policy={row.get('router_policy') or '-'}  "
-                f"stage={row.get('funnel_stage')}"
-            )
-        if len(snap.f2_seats) > max_f2:
-            lines.append(f"  … +{len(snap.f2_seats) - max_f2} more")
+            syms = ", ".join(row.get("symbols") or []) or "?"
+            desc = row.get("description") or _describe_from_id(str(row.get("candidate_id")))
+            policy = row.get("policy_label") or _policy_label(str(row.get("router_policy") or ""))
+            hold = row.get("holdout_label") or "holdout passed"
+            lines.append(f"  {i}. {syms}")
+            lines.append(f"     What: {desc}")
+            lines.append(f"     When: {policy}")
+            lines.append(f"     Proof: {hold}")
+        extra = len(snap.f2_seats) - max_f2
+        if extra > 0:
+            lines.append(f"  … +{extra} more F2 seats (use --full to list all)")
 
-    if show_f1:
+    if show_f1 and max_f1 > 0 and snap.f1_seats:
         lines.append("")
-        lines.append(f"Train-only (F1, not holdout-proven) — {len(snap.f1_seats)}")
-        lines.append("-" * 56)
-        if not snap.f1_seats:
-            lines.append("  (none)")
-        else:
-            # collapse by candidate for readability
-            by_cand: dict[str, list[str]] = {}
-            for row in snap.f1_seats:
-                cid = str(row.get("candidate_id") or "")
-                by_cand.setdefault(cid, [])
-                by_cand[cid].extend(row.get("symbols") or [])
-            for i, (cid, syms) in enumerate(list(by_cand.items())[:max_f1], 1):
-                uniq = ",".join(sorted(set(syms)))
-                lines.append(f"  {i:2d}. [{uniq}] {_short(cid, 52)}")
-            if len(by_cand) > max_f1:
-                lines.append(f"  … +{len(by_cand) - max_f1} more candidates")
+        lines.append(f"F1 train-only (not proven) — showing {min(max_f1, len(snap.f1_seats))}/{len(snap.f1_seats)}")
+        by_cand: dict[str, list[str]] = {}
+        for row in snap.f1_seats:
+            cid = str(row.get("candidate_id") or "")
+            by_cand.setdefault(cid, []).extend(row.get("symbols") or [])
+        for i, (cid, syms) in enumerate(list(by_cand.items())[:max_f1], 1):
+            uniq = ", ".join(sorted(set(syms)))
+            lines.append(f"  {i}. {uniq}: {_describe_from_id(cid)}")
 
     lines.append("")
-    lines.append("Commands: just trader-progress | just trader-progress --watch")
-    lines.append("          just trader-living  | just trader-watch")
+    lines.append("just trader-progress          # this view")
+    lines.append("just trader-progress --watch  # refresh every 5s")
+    lines.append("just trader-progress --full   # long lists")
     return "\n".join(lines) + "\n"
