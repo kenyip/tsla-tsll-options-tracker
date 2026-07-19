@@ -133,6 +133,37 @@ def _load_frame(symbol: str, period: str) -> pd.DataFrame:
     return frame
 
 
+def window_days_for_spec(
+    spec: StrategySpec,
+    *,
+    config: Mapping[str, Any] | None = None,
+) -> int:
+    """Choose path-window length from strategy DTE so management can fire in-window.
+
+    Desk A scenarios used fixed 21 trading days (about one option month). That is
+    too short for 45-DTE income DNA: a trade can open near the end of a 21d
+    window and never hit dte_stop / full path risk. Default:
+
+        max(min_days, min(max_days, long_dte + dte_pad))
+
+    with long_dte from management (fallback 21).
+    """
+    cfg = dict(config or load_path_stress_config())
+    win = dict(cfg.get("window") or {})
+    base = int(win.get("base_days") or win.get("days") or 21)
+    if not bool(win.get("dte_aware", True)):
+        return base
+    mgmt = dict(spec.management or {})
+    try:
+        long_dte = int(float(mgmt.get("long_dte") or base))
+    except (TypeError, ValueError):
+        long_dte = base
+    pad = int(win.get("dte_pad_days") or 7)
+    min_days = int(win.get("min_days") or 21)
+    max_days = int(win.get("max_days") or 90)
+    return max(min_days, min(max_days, long_dte + pad))
+
+
 def resolve_regime_window(
     frame: pd.DataFrame,
     *,
@@ -142,8 +173,13 @@ def resolve_regime_window(
     discover_step: int = 5,
     prefer_canonical: bool = True,
 ) -> tuple[pd.DataFrame | None, dict[str, Any]]:
-    """Return (window_df or None, meta). Prefer frozen canonical when present."""
-    meta: dict[str, Any] = {"regime": regime, "symbol": symbol.upper(), "source": None}
+    """Return (window_df or None, meta). Prefer frozen canonical only when ~21d."""
+    meta: dict[str, Any] = {
+        "regime": regime,
+        "symbol": symbol.upper(),
+        "source": None,
+        "window_days": int(window_days),
+    }
     try:
         from scenarios import CANONICAL_SCENARIOS, canonical_window, discover, _sort_key_for
     except Exception as exc:  # pragma: no cover
@@ -151,7 +187,15 @@ def resolve_regime_window(
         return None, meta
 
     sym = symbol.upper()
-    if prefer_canonical and sym in CANONICAL_SCENARIOS and regime in CANONICAL_SCENARIOS.get(sym, {}):
+    # Canonical Desk A windows are frozen ~21 trading days. Only use them when
+    # the requested path length is in that band; longer DTE strategies discover.
+    use_canonical = (
+        prefer_canonical
+        and 18 <= int(window_days) <= 25
+        and sym in CANONICAL_SCENARIOS
+        and regime in CANONICAL_SCENARIOS.get(sym, {})
+    )
+    if use_canonical:
         w = canonical_window(frame, sym, regime)
         if w is not None and len(w) >= 10:
             meta.update(
@@ -167,11 +211,11 @@ def resolve_regime_window(
             )
             return w.copy(), meta
 
-    matches = discover(frame, window_days=window_days, step=discover_step)
+    matches = discover(frame, window_days=int(window_days), step=discover_step)
     hits = list(matches.get(regime) or [])
     if not hits:
         meta["source"] = "unavailable"
-        meta["reason"] = f"no {regime} window found in history"
+        meta["reason"] = f"no {regime} window found in history (window_days={window_days})"
         return None, meta
 
     key_fn, reverse = _sort_key_for(regime)
@@ -192,7 +236,6 @@ def resolve_regime_window(
         }
     )
     return w.copy(), meta
-
 
 def _run_spec_on_window(
     spec: StrategySpec,
@@ -318,7 +361,7 @@ def run_path_stress_pack(
     gates = dict(cfg.get("gates") or {})
     win_cfg = dict(cfg.get("window") or {})
     period = str(win_cfg.get("period") or "5y")
-    window_days = int(win_cfg.get("days") or 21)
+    window_days = window_days_for_spec(spec, config=cfg)
     discover_step = int(win_cfg.get("discover_step") or 5)
     prefer_canonical = bool(win_cfg.get("prefer_canonical", True))
     min_available = int(gates.get("min_available_regimes") or 1)
@@ -425,6 +468,7 @@ def run_path_stress_pack(
 
     notes = [
         f"pack={pack}",
+        f"window_days={window_days} (DTE-aware from management.long_dte + pad).",
         "Path stress uses real historical windows + BS proxy marks (L0).",
         "Zero trades (stand-aside) counts as pass when allow_zero_trades=true.",
         "Positive PnL is not required by default — management/risk bounds are.",
@@ -437,7 +481,7 @@ def run_path_stress_pack(
     if fail_rows:
         notes.append(f"{len(fail_rows)} available regime(s) failed risk/integrity gates.")
 
-    return PathStressReport(
+    report = PathStressReport(
         generated_at=_now(),
         pack=pack,
         candidate_id=spec.candidate_id,
@@ -452,6 +496,14 @@ def run_path_stress_pack(
         gates=gates,
         notes=notes,
     )
+    # Attach window policy for operators (not part of dataclass fields historically)
+    payload = report.to_dict()
+    payload["window_days"] = window_days
+    payload["long_dte"] = (spec.management or {}).get("long_dte")
+    # Return dataclass still; callers use to_dict — store on notes is enough.
+    # Re-build with window in notes already; also set a dynamic attr for tests.
+    report.window_days = window_days  # type: ignore[attr-defined]
+    return report
 
 
 def run_staged_path_stress(

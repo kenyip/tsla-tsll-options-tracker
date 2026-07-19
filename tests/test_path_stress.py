@@ -15,8 +15,9 @@ from trader_platform.research.path_stress import (
     regime_passes_gates,
     run_path_stress_pack,
     run_staged_path_stress,
+    window_days_for_spec,
 )
-from trader_platform.research.strategy_spec import load_strategy_spec
+from trader_platform.research.strategy_spec import load_strategy_spec, strategy_spec_from_mapping
 
 
 def _synth_frame(n: int = 80, trend: float = 0.0) -> pd.DataFrame:
@@ -66,6 +67,23 @@ class PathStressGatesTest(unittest.TestCase):
         self.assertIn("gap_shock", quick)
         self.assertLess(len(quick), len(full))
         self.assertIn("vol_expansion", full)
+
+    def test_window_days_scales_with_dte(self):
+        seed_45 = load_strategy_spec(
+            Path("configs/strategy_specs/pcs_bull_neutral_income_45d_v1.json")
+        )
+        seed_21 = load_strategy_spec(
+            Path("configs/strategy_specs/pcs_iv_rich_noncollapse_21d_v1.json")
+        )
+        d45 = window_days_for_spec(seed_45)
+        d21 = window_days_for_spec(seed_21)
+        # 45 DTE + pad 7 → 52; 21 + 7 → 28
+        self.assertGreaterEqual(d45, 45)
+        self.assertGreater(d45, d21)
+        raw = seed_45.to_dict()
+        raw["management"] = {**raw["management"], "long_dte": 7}
+        short = strategy_spec_from_mapping(raw)
+        self.assertEqual(window_days_for_spec(short), 21)  # min_days floor
 
     def test_zero_trades_pass_by_default(self):
         ok, issues = regime_passes_gates(

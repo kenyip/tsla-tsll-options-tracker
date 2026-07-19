@@ -44,9 +44,15 @@
     "notes": "Path stress is management/tail prep — zero trades (stand-aside) and losing windows can still pass if risk bounds hold. Pack fails if too few windows available."
   },
   "window": {
+    "base_days": 21,
     "days": 21,
     "discover_step": 5,
     "period": "5y",
-    "prefer_canonical": true
+    "prefer_canonical": true,
+    "dte_aware": true,
+    "dte_pad_days": 7,
+    "min_days": 21,
+    "max_days": 90,
+    "notes": "Window length should cover entry DTE + pad so management (profit target, dte_stop, defined loss) can fire inside the path. Canonical TSLA/TSLL 21d windows used only when prefer_canonical and window_days≈21."
   }
 }

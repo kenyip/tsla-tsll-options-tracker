@@ -146,7 +146,15 @@ StrategySpec
 (`huge_down`, `gap_shock`, …) — not synthetic Monte-Carlo. Default staging:
 
 1. **Quick pack** (`configs/path_stress.json`): `huge_down`, `huge_up`, `gap_shock`, `flat`  
+   (quieter names fall back to `normal_down` / `normal_up` / `vol_expansion`)  
 2. **Full suite** only if quick passes (or `--force-full`)
+
+**Window length is DTE-aware** (not fixed 21d):  
+`window_days ≈ clamp(long_dte + pad, min 21, max 90)`.  
+Desk A’s classic suite used **21 trading days** (~one month) for TSLA short-premium
+regression; that is too short for 45-DTE income DNA — management exits would not
+have room to fire. Canonical 21d windows are only reused when the requested length
+is still ~21d.
 
 Gates emphasize integrity / max loss / DD bounds; **positive PnL is not required**
 (stand-aside and losing dump windows can still pass). Operator: `just trader-path-stress`.
@@ -378,6 +386,7 @@ Agents invent and measure on the **primary** path first. Secondary DNA is option
 | 2026-07-19 | Phase 0: mark Desk B **StrategySpec spine as primary** vs StrategyDNA/scout secondary; discovery unit tests aligned to Wave A API. |
 | 2026-07-19 | Engine phases 1–4: `signal_catalog`, thesis files, shared opportunity emitter (watcher wired), premium/day score, coarse DNA diversify, `just trader-bootstrap`. |
 | 2026-07-19 | Staged **path stress** after F2: quick pack then full regime suite (`path_stress.py`, `just trader-path-stress`). |
+| 2026-07-19 | Path-stress **window length DTE-aware** (`long_dte + pad`, not fixed 21d). |
 
 ---
 
