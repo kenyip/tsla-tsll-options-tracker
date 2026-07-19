@@ -7,7 +7,7 @@
 | **A — Personal tracker** | Your positions, PMCC, TSLA/TSLL methods, AI coaching | Auto-trade main book |
 | **B — Agentic engine** | Find → evaluate → wait → paper → (Ken-armed) live on $3k sleeve | Live without arm |
 
-See [docs/TRADER_DUAL_DESK.md](docs/TRADER_DUAL_DESK.md) and [docs/TRADER_SPINE_ARCHITECTURE.md](docs/TRADER_SPINE_ARCHITECTURE.md).
+**Build / alignment (single doc):** [docs/TRADER_BUILD.md](docs/TRADER_BUILD.md) · **Doc library:** [docs/README.md](docs/README.md)
 
 ## Quick start
 
@@ -37,17 +37,16 @@ just analyze                          # critic loop (Desk A methods research)
 
 | Doc | Covers |
 |---|---|
-| [**docs/TRADER_DUAL_DESK.md**](docs/TRADER_DUAL_DESK.md) | Personal tracker vs Agentic engine; rename decision |
-| [**docs/TRADER_PLATFORM_GOAL.md**](docs/TRADER_PLATFORM_GOAL.md) | Desk B product pin — research → paper → armed live |
-| [**docs/TRADER_SPINE_ARCHITECTURE.md**](docs/TRADER_SPINE_ARCHITECTURE.md) | StrategySpec → evaluate → living seats → watcher |
-| [**GOAL.md**](GOAL.md) | Legacy critic-loop engine goal (Desk A seed methods) |
-| [**ENGINE.md**](ENGINE.md) | Backtest harness modules and pricing assumptions |
-| [**STRATEGY.md**](STRATEGY.md) | Seed TSLA/TSLL trading rules and history |
-| [**docs/DESK_BRIEF.md**](docs/DESK_BRIEF.md) | Daily desk brief playbook |
-| [**docs/TRADER_AGENT_PROFILE.md**](docs/TRADER_AGENT_PROFILE.md) | Hermes `trader` profile |
-| [**docs/PMCC_MONITOR_DEPLOYMENT.md**](docs/PMCC_MONITOR_DEPLOYMENT.md) | PMCC monitor deployment |
+| [**docs/TRADER_BUILD.md**](docs/TRADER_BUILD.md) | **Only build bible** — edge, pipeline, prove, authority, commands |
+| [**docs/README.md**](docs/README.md) | Full library map (detail vs research archive) |
+| [**docs/TRADER_SPINE_ARCHITECTURE.md**](docs/TRADER_SPINE_ARCHITECTURE.md) | Spine implementation detail |
+| [**docs/DISCOVERY_AND_PAPER_FASTTRACK.md**](docs/DISCOVERY_AND_PAPER_FASTTRACK.md) | Discovery / paper ops |
+| [**GOAL.md**](GOAL.md) | Legacy critic-loop / Desk A seed methods goal |
+| [**ENGINE.md**](ENGINE.md) | Classic backtest harness |
+| [**STRATEGY.md**](STRATEGY.md) | Seed TSLA/TSLL rules history |
+| [**docs/DESK_BRIEF.md**](docs/DESK_BRIEF.md) | Desk A daily brief |
 
-Both follow the same convention: **current state at the top, dated history at the bottom.**
+Convention: **current state at the top, dated history at the bottom.**
 
 ## Code map
 

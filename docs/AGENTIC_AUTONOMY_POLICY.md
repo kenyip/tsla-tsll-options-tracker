@@ -1,7 +1,7 @@
 # Agentic Autonomy Policy (anti-drift pin)
 
 > **Pinned 2026-07-09.** Ken’s standing intent for the **isolated Agentic Robinhood account**.
-> Product north star: [TRADER_PLATFORM_GOAL.md](TRADER_PLATFORM_GOAL.md).
+> Product / build: [TRADER_BUILD.md](TRADER_BUILD.md). Historical pin: [TRADER_PLATFORM_GOAL.md](TRADER_PLATFORM_GOAL.md).
 > Code: `trader_platform/risk_governor.py`, `trader_platform/execution/`, `trader_platform/autonomy_loop.py`.
 
 ---

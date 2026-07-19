@@ -1,10 +1,12 @@
 # Trader Restart Charter — anti-drift alignment
 
+> **Primary alignment surface is now [TRADER_BUILD.md](TRADER_BUILD.md).**  
+> Re-read that first. This charter remains useful for BUILD burst rules and historical directives.
+
 **Pinned:** 2026-07-14  
 **Audience:** Ken + Jarvis (control plane) + Trader (executor of strategy work)  
-**Status:** Durable alignment surface. Re-read before restarting BUILD density or changing doctrine.  
-**Does not replace:** `TRADER_PLATFORM_GOAL.md`, `configs/build_lab_free_goal.txt`, trader `SOUL.md`, `GO_LIVE_READINESS.md`.  
-**This file answers:** what we are optimizing for, standing directives, current gap, and whether to rebuild vs reframe.
+**Status:** Detail / historical — not the single build bible.  
+**Does not replace:** `TRADER_BUILD.md`, `configs/build_lab_free_goal.txt`, trader `SOUL.md`, `GO_LIVE_READINESS.md`.
 
 ---
 

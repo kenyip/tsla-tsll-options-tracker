@@ -1,9 +1,9 @@
 # Trader Spine Architecture (Desk B)
 
 **Pinned:** 2026-07-19  
-**Status:** Active primary architecture for the $3k Agentic income autonomy path.  
+**Status:** Detail — implementable spine for Desk B.  
+**Start here for build doctrine:** [TRADER_BUILD.md](TRADER_BUILD.md).  
 **Does not replace:** Layered Edge Doctrine, authority firewall, or legacy TSLA/TSLL desk code.  
-**Alignment / product north star:** [TRADER_NORTH_STAR.md](TRADER_NORTH_STAR.md) — signals → opportunity → structure → manage → prove → execute → learn.  
 **Supersedes as default discovery path:** ad-hoc `scripts/pcs_*_lab.py` proliferation, free MoA densify as the main progress engine, and entry-filter PCS mining without a shared evaluator.
 
 ---

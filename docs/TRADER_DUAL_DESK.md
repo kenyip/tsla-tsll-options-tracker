@@ -1,5 +1,8 @@
 # Trader dual desk — personal tracker + autonomous engine
 
+> **Build bible:** [TRADER_BUILD.md](TRADER_BUILD.md) · **Doc map:** [README.md](README.md)
+
+
 **Pinned:** 2026-07-19  
 **Decision:** **One monorepo**, two desks. Do **not** split into a greenfield repo for the autonomy engine. Soft-rename product identity now; optional GitHub rename later.
 
