@@ -19,11 +19,12 @@ just desk-brief                       # Desk A: daily gather for AI stance
 just test                             # Desk A: TSLA/TSLL live recommendation
 just run                              # Streamlit dashboard
 
-# Desk B — self-sufficient loop (research/paper only; no live place)
-just trader-desk-b-loop               # evolve → living → watch → paper handoff
-just trader-eval-iv-rich              # evaluate IV-rich non-collapse seed
+# Desk B — discovery is tight sims; opportunity wait is separate
+just trader-discover                  # tight multi-gen strategy search/proof
+just trader-opportunity               # patient watch + paper handoff (no evolve)
+just trader-eval-iv-rich              # evaluate IV-rich seed
 just trader-living                    # living seats
-just trader-watch                     # wait for setups
+just trader-watch                     # watch only
 just trader-paper-handoff             # dry-run paper intent when setup exists
 
 just backtest && just scenarios       # classic engine validation

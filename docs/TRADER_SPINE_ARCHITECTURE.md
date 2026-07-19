@@ -94,15 +94,27 @@ Management (DTE, profit target, stops) lives in StrategySpec `management`. Stand
 | `pcs_bull_neutral_income_45d_v1.json` (45D PCS non-bear) | FAMILY_CLOSED | No |
 | `pcs_iv_rich_noncollapse_21d_v1.json` (IV-rich non-collapse PCS) | seed for Desk B loop | evaluate via loop |
 
-### Operator loop (Desk B)
+### Operator loops (Desk B) — split by purpose
+
+| Loop | Cadence | Purpose |
+|---|---|---|
+| **Discovery** (`trader-discover`) | **Tight** sim generations until F2 / stall / budget | Find & prove strategies offline |
+| **Opportunity** (`trader-opportunity`) | Patient (hourly cron) | Wait for market setup → paper handoff |
 
 ```bash
-just trader-desk-b-loop          # evolve → living → watch → paper handoff
-just trader-paper-handoff        # watch → intent → risk (dry-run)
-just trader-eval-iv-rich         # evaluate IV-rich seed alone
+# Strategy search/proof — burn CPU, not calendar time
+just trader-discover
+just trader-discover --max-generations 50 --max-minutes 120
+
+# Market wait — only after living seats exist (or to confirm NO_QUALIFIED)
+just trader-opportunity
+just trader-paper-handoff
+just trader-eval-iv-rich
 ```
 
-Hermes cron: `trader-desk-b-loop` every 360m (script-only, research/paper).
+Hermes:
+- `trader-desk-b-loop` → `trader_discovery_cron.sh` every **30m** (kicks a campaign; skips if already running; up to ~90m work)
+- `trader-opportunity-loop` → watch/handoff every **60m**
 
 Scoreboard: `.cache/platform/spine/scoreboard_2026-07-19.json`.
 

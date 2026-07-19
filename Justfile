@@ -435,13 +435,23 @@ trader-loop-status:
 trader-paper-handoff *ARGS:
     {{py}} scripts/trader_paper_handoff.py {{ARGS}}
 
-# Full Desk B cycle: evolve → living → watch → paper handoff
-#   just trader-desk-b-loop
-#   just trader-desk-b-loop -- --skip-evolve --quiet-if-searching
-#   just trader-desk-b-loop -- --max-mutants 1 --symbols BAC,KO --train-only
+# Full Desk B cycle (legacy one-shot): evolve → living → watch → paper handoff
+# Prefer `trader-discover` for strategy search and `trader-opportunity` for market wait.
 trader-desk-b-loop *ARGS:
     {{py}} scripts/trader_desk_b_loop.py \
       --seed configs/strategy_specs/pcs_iv_rich_noncollapse_21d_v1.json {{ARGS}}
+
+# Tight simulation discovery campaign (strategy find/prove — not market-wait)
+#   just trader-discover
+#   just trader-discover --max-generations 50 --max-minutes 120 --summary-only
+#   just trader-discover --symbols BAC,KO,IWM --max-generations 10
+trader-discover *ARGS:
+    {{py}} scripts/trader_discover.py --summary-only {{ARGS}}
+
+# Patient opportunity loop only (watch + paper handoff; no evolve)
+#   just trader-opportunity
+trader-opportunity *ARGS:
+    {{py}} scripts/trader_opportunity_loop.py {{ARGS}}
 
 # Evaluate the IV-rich non-collapse seed
 trader-eval-iv-rich *ARGS:
