@@ -31,12 +31,51 @@ just trader-discover --until-f2 --keep-going --workers 9 --max-mutants-per-gen 1
 | Lever | How |
 |---|---|
 | **New forecast seeds** | Add `configs/strategy_specs/*.json` (new mechanism, not just knobs) |
-| **Symbols** | Change `symbols` array inside each seed (or pass `--symbols` for a faster subset) |
+| **Symbols / underlyings** | **`configs/discovery_universe.json`** (source of truth). CLI: `just trader-universe` |
 | **Cost axes** | Dual cost is fixed in `evaluate_proxy` (5% slip + $0.01/leg) — change there for harder proof |
 | **Holdout fraction** | `train_fraction` on each StrategySpec (default 0.6) |
 | **Gen feed rate** | `--max-mutants-per-gen` ≥ workers so the pool stays full |
 
 Finite bag size ≈ `(# seeds) × (# grid plans)`. Expanding JSON axes grows the bag.
+
+---
+
+## Symbols / underlyings
+
+Managed list: **`configs/discovery_universe.json`**. Discovery loads `status=active` by default (not each seed’s frozen list).
+
+```bash
+just trader-universe                         # counts
+just trader-universe list --status active
+just trader-universe add TSLA --tags ai_growth,high_vol,liquid --notes "wave2"
+just trader-universe demote SOFI --notes "no F1 after denser grid"
+just trader-universe activate RKLB           # promote watch → active
+just trader-universe remove F                # soft demote
+just trader-universe remove F --hard         # delete entry
+
+# one-off override (ignores universe for that run)
+just trader-discover --symbols KO,INTC,TSLA --until-f2 --keep-going --workers 9
+just trader-discover --no-universe           # fall back to seed JSON symbols
+```
+
+| Status | Effect |
+|---|---|
+| `active` | Evaluated in discovery |
+| `watch` | Noted only; not evaluated |
+| `demoted` | Soft-removed (kept for history) |
+| `banned` | Never use |
+
+**How to pick names (heuristic, not gospel):**
+
+1. **Liquidity** (live path) — options volume/OI, tight markets  
+2. **Premium / IV** — higher IV → richer credit *and* fatter tails; dual-cost holdout decides  
+3. **Directional bias fit** — long/non-collapse PCS likes names that don’t structurally die; AI/growth mega-caps fit the *theme* but still need holdout proof  
+4. **Capital fit** — `$300` max loss → prefer `$1–3` width viable; mega-priced names (NVDA/TSLA) need narrow wings or they fail gates  
+5. **Demote on evidence** — no train/F2 after meaningful bag share → `demote`
+
+**SPCX:** not a standard listed ticker (SpaceX private). Space beta proxies on the watch list: `RKLB`, `ASTS`. Activate if you want them in the sim.
+
+Restart discovery after large universe edits so new names get evaluated.
 
 ---
 

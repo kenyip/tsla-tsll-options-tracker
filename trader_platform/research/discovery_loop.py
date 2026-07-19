@@ -42,6 +42,7 @@ from trader_platform.research.strategy_spec import (
     save_strategy_spec,
     strategy_spec_from_mapping,
 )
+from trader_platform.research.discovery_universe import resolve_discovery_symbols
 
 _REPO = Path(__file__).resolve().parents[2]
 DEFAULT_SPEC_DIR = _REPO / "configs" / "strategy_specs"
@@ -419,6 +420,7 @@ def run_discovery_loop(
     max_seconds: float = 0.0,
     max_no_progress_generations: int = 3,
     symbols: Optional[list[str]] = None,
+    use_universe: bool = True,
     run_holdout: bool = True,
     stop_on_f2: bool = True,
     registry_path: str | Path | None = None,
@@ -435,6 +437,9 @@ def run_discovery_loop(
       - F2 living seat found (if stop_on_f2)
 
     ``workers`` > 1 evaluates mutants in a process pool (CPU parallel).
+
+    Symbols: explicit ``symbols`` override wins; else active names from
+    ``configs/discovery_universe.json`` when ``use_universe``; else seed list.
     """
     started = time.monotonic()
     out = Path(out_dir) if out_dir else DEFAULT_OUT
@@ -453,6 +458,13 @@ def run_discovery_loop(
             "error": "no seed StrategySpec files found",
             "trading_authority": False,
         }
+
+    # Resolve once for the campaign (same book on every seed/mutant).
+    symbols = resolve_discovery_symbols(
+        symbols,
+        use_universe=use_universe,
+        seed_symbols=None,
+    ) or None
 
     known = known_ids(registry_path)
     generations: list[dict[str, Any]] = []

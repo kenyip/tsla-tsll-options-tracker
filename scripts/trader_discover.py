@@ -61,7 +61,16 @@ def main(argv: list[str] | None = None) -> int:
         default=0,
         help="Parallel process workers for mutant evals (0 = auto: cpu-1)",
     )
-    p.add_argument("--symbols", default="", help="Optional comma symbol subset (faster)")
+    p.add_argument(
+        "--symbols",
+        default="",
+        help="Optional comma symbol subset (overrides discovery_universe.json)",
+    )
+    p.add_argument(
+        "--no-universe",
+        action="store_true",
+        help="Ignore configs/discovery_universe.json; use each seed's symbols list",
+    )
     p.add_argument(
         "--train-only",
         action="store_true",
@@ -116,6 +125,7 @@ def main(argv: list[str] | None = None) -> int:
         max_seconds=max_seconds,
         max_no_progress_generations=max_no_progress,
         symbols=symbols,
+        use_universe=not args.no_universe,
         run_holdout=not args.train_only,
         stop_on_f2=stop_on_f2,
         registry_path=args.registry,

@@ -437,6 +437,15 @@ trader-loop-status:
     {{py}} scripts/trader_living_status.py
     {{py}} scripts/trader_watcher.py
 
+# Discovery universe (add/remove/list underlyings)
+#   just trader-universe
+#   just trader-universe list --status active
+#   just trader-universe add NVDA --tags ai_growth,high_vol,liquid
+#   just trader-universe demote SOFI --notes "barren"
+#   just trader-universe activate RKLB
+trader-universe *ARGS:
+    {{py}} scripts/trader_universe.py {{ARGS}}
+
 # Promote top F2 living seats → paper_eligible (plumbing path)
 #   just trader-promote-paper
 #   just trader-promote-paper --top 5
