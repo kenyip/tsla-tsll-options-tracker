@@ -130,9 +130,69 @@ def _is_novel(candidate_id: str, family_id: str, known: set[str]) -> bool:
     return candidate_id not in known and family_id not in known
 
 
+def _combinatorial_mutants() -> list[MutantPlan]:
+    """Dense deterministic grid for continuous discovery (still finite, not free optimizer)."""
+    plans: list[MutantPlan] = []
+    dtes = (14, 21, 30, 45)
+    pts = (0.40, 0.50, 0.60)
+    deltas = (0.14, 0.18, 0.22)
+    ivs = (0.0, 20.0, 30.0, 40.0)
+    policies = ("pcs_non_bear", "pcs_bull_only", "router")
+    credits = (0.08, 0.12)
+    for dte in dtes:
+        for pt in pts:
+            for delta in deltas:
+                for iv in ivs:
+                    for pol in policies:
+                        for cred in credits:
+                            # Skip absurd combos: full router with high IV floor only on IC side is ok
+                            stop = max(3, dte // 3)
+                            suffix = (
+                                f"g_d{dte}_pt{int(pt*100)}_dl{int(delta*100)}"
+                                f"_iv{int(iv)}_c{int(cred*100)}_{pol[:6]}"
+                            )
+                            plans.append(
+                                MutantPlan(
+                                    suffix=suffix[:80],
+                                    management_patch={
+                                        "long_dte": dte,
+                                        "dte_stop": stop,
+                                        "profit_target": pt,
+                                        "long_target_delta": delta,
+                                        "iv_rank_min": iv,
+                                        "min_credit_pct": cred,
+                                    },
+                                    router_policy=pol,
+                                    notes="grid",
+                                )
+                            )
+    return plans
+
+
+# Full finite grid cached once
+_GRID_MUTANTS: list[MutantPlan] | None = None
+
+
+def all_grid_mutants() -> list[MutantPlan]:
+    global _GRID_MUTANTS
+    if _GRID_MUTANTS is None:
+        # waves first (human-curated), then dense grid
+        curated: list[MutantPlan] = []
+        for wave in WAVE_MUTANTS:
+            curated.extend(wave)
+        _GRID_MUTANTS = curated + _combinatorial_mutants()
+    return _GRID_MUTANTS
+
+
 def generation_mutants(gen_index: int, max_mutants: int) -> list[MutantPlan]:
-    wave = WAVE_MUTANTS[gen_index % len(WAVE_MUTANTS)]
-    return list(wave)[: max(1, int(max_mutants))]
+    """Slice the finite search space by generation for tight continuous runs."""
+    grid = all_grid_mutants()
+    n = max(1, int(max_mutants))
+    start = (gen_index * n) % len(grid)
+    out: list[MutantPlan] = []
+    for i in range(n):
+        out.append(grid[(start + i) % len(grid)])
+    return out
 
 
 def run_generation(

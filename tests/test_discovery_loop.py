@@ -18,8 +18,11 @@ class DiscoveryLoopTest(unittest.TestCase):
         b = generation_mutants(1, 2)
         self.assertEqual(len(a), 2)
         self.assertEqual(len(b), 2)
-        # waves differ
-        self.assertNotEqual(a[0].suffix, b[0].suffix)
+        # dense grid slices differ by generation offset
+        self.assertNotEqual(
+            (a[0].suffix, a[1].suffix),
+            (b[0].suffix, b[1].suffix),
+        )
 
     def test_list_seed_specs_finds_repo_configs(self):
         seeds = list_seed_specs()

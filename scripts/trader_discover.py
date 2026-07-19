@@ -26,7 +26,12 @@ def main(argv: list[str] | None = None) -> int:
         default="",
         help="Comma paths to StrategySpec JSON; default=all configs/strategy_specs/*.json",
     )
-    p.add_argument("--max-generations", type=int, default=30)
+    p.add_argument(
+        "--max-generations",
+        type=int,
+        default=30,
+        help="Generation cap (use high value with --until-f2 for marathon runs)",
+    )
     p.add_argument("--max-mutants-per-gen", type=int, default=3)
     p.add_argument(
         "--max-minutes",
@@ -39,6 +44,16 @@ def main(argv: list[str] | None = None) -> int:
         type=int,
         default=4,
         help="Stop after this many generations with zero novel evaluations",
+    )
+    p.add_argument(
+        "--until-f2",
+        action="store_true",
+        help="Marathon: high gen cap, long wall time, stop primarily on F2 or true stall",
+    )
+    p.add_argument(
+        "--keep-going",
+        action="store_true",
+        help="With --until-f2, do not stop on first F2 (keep filling living seats)",
     )
     p.add_argument("--symbols", default="", help="Optional comma symbol subset (faster)")
     p.add_argument(
@@ -73,17 +88,26 @@ def main(argv: list[str] | None = None) -> int:
         if args.symbols.strip()
         else None
     )
-    max_seconds = float(args.max_minutes) * 60.0 if args.max_minutes > 0 else 0.0
+    max_gens = args.max_generations
+    max_minutes = args.max_minutes
+    max_no_progress = args.max_no_progress
+    stop_on_f2 = not args.no_stop_on_f2
+    if args.until_f2:
+        max_gens = max(max_gens, 500)
+        max_minutes = max_minutes if max_minutes > 0 else 12 * 60  # 12h default marathon
+        max_no_progress = max(max_no_progress, 25)  # allow dense grid to drain
+        stop_on_f2 = not args.keep_going
+    max_seconds = float(max_minutes) * 60.0 if max_minutes > 0 else 0.0
 
     report = run_discovery_loop(
         seeds=seeds,
-        max_generations=args.max_generations,
+        max_generations=max_gens,
         max_mutants_per_gen=args.max_mutants_per_gen,
         max_seconds=max_seconds,
-        max_no_progress_generations=args.max_no_progress,
+        max_no_progress_generations=max_no_progress,
         symbols=symbols,
         run_holdout=not args.train_only,
-        stop_on_f2=not args.no_stop_on_f2,
+        stop_on_f2=stop_on_f2,
         registry_path=args.registry,
         out_dir=args.out_dir,
     )

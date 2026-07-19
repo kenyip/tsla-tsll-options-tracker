@@ -441,10 +441,11 @@ trader-desk-b-loop *ARGS:
     {{py}} scripts/trader_desk_b_loop.py \
       --seed configs/strategy_specs/pcs_iv_rich_noncollapse_21d_v1.json {{ARGS}}
 
-# Tight simulation discovery campaign (strategy find/prove — not market-wait)
+# Tight simulation discovery (PURE PYTHON SIMS — not LLM)
+# Mutate StrategySpec → dual-cost train/holdout → living registry
 #   just trader-discover
-#   just trader-discover --max-generations 50 --max-minutes 120 --summary-only
-#   just trader-discover --symbols BAC,KO,IWM --max-generations 10
+#   just trader-discover --until-f2              # marathon until F2 or grid stall
+#   just trader-discover --until-f2 --keep-going  # keep searching after first F2
 trader-discover *ARGS:
     {{py}} scripts/trader_discover.py --summary-only {{ARGS}}
 
