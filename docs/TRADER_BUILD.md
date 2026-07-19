@@ -138,8 +138,18 @@ StrategySpec
   → evaluate_proxy()     black-scholes proxy on daily bars
   → dual-cost train (60%) then sealed holdout (40%)
   → living registry seat if F2
+  → path stress (staged)  quick pack → full regime suite if pass
   → opportunity watcher → paper handoff → RiskGovernor
 ```
+
+**Path stress (management prep):** real historical windows labeled like Desk A scenarios
+(`huge_down`, `gap_shock`, …) — not synthetic Monte-Carlo. Default staging:
+
+1. **Quick pack** (`configs/path_stress.json`): `huge_down`, `huge_up`, `gap_shock`, `flat`  
+2. **Full suite** only if quick passes (or `--force-full`)
+
+Gates emphasize integrity / max loss / DD bounds; **positive PnL is not required**
+(stand-aside and losing dump windows can still pass). Operator: `just trader-path-stress`.
 
 ### Dual cost (must clear **both**)
 
@@ -280,6 +290,8 @@ just trader-universe              # managed underlyings add/remove
 just trader-promote-paper         # F2 → paper_eligible (symbol+DNA diversify)
 just trader-bootstrap             # re-prove shortlist → reports/bootstrap/
 just trader-bootstrap --candidates-only
+just trader-path-stress --spec … --symbols BAC   # quick→full path stress
+just trader-path-stress --spec … --quick-only
 just trader-paper-handoff         # dry handoff
 just trader-paper-handoff --plumbing-smoke
 just trader-opportunity           # watch + handoff (no evolve)
@@ -365,6 +377,7 @@ Agents invent and measure on the **primary** path first. Secondary DNA is option
 | 2026-07-19 | **Canonical build bible** created: consolidate north star, spine, dual desk, funnel, authority, commands, extensible scores (premium/day candidate). Other docs demoted to detail/research via [README.md](README.md). |
 | 2026-07-19 | Phase 0: mark Desk B **StrategySpec spine as primary** vs StrategyDNA/scout secondary; discovery unit tests aligned to Wave A API. |
 | 2026-07-19 | Engine phases 1–4: `signal_catalog`, thesis files, shared opportunity emitter (watcher wired), premium/day score, coarse DNA diversify, `just trader-bootstrap`. |
+| 2026-07-19 | Staged **path stress** after F2: quick pack then full regime suite (`path_stress.py`, `just trader-path-stress`). |
 
 ---
 

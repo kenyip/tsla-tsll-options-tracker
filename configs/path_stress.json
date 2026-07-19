@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "description": "Staged market-path stress for Desk B StrategySpec (after dual-cost F2).",
+  "packs": {
+    "quick": {
+      "regimes": [
+        {"want": "huge_down", "fallback": "normal_down"},
+        {"want": "huge_up", "fallback": "normal_up"},
+        {"want": "gap_shock", "fallback": "vol_expansion"},
+        "flat"
+      ],
+      "notes": "Small management-prep pack: dump, melt-up, gap/vol, grind. Quieter names fall back to normal_down/up when huge_* missing."
+    },
+    "full": {
+      "regimes": [
+        "huge_down",
+        "normal_down",
+        "flat",
+        "normal_up",
+        "huge_up",
+        "v_recovery",
+        "inverse_v",
+        "gap_shock",
+        "vol_crush",
+        "vol_expansion",
+        "chop_whipsaw",
+        "earnings_window"
+      ],
+      "notes": "Full 12-regime suite (Desk A scenarios vocabulary)."
+    }
+  },
+  "staging": {
+    "default": "quick",
+    "promote_to_full_if_quick_pass": true
+  },
+  "gates": {
+    "min_bars": 12,
+    "max_loss_usd": 300.0,
+    "max_dd_usd": 400.0,
+    "require_integrity": true,
+    "require_positive_pnl": false,
+    "allow_zero_trades": true,
+    "min_available_regimes": 2,
+    "notes": "Path stress is management/tail prep — zero trades (stand-aside) and losing windows can still pass if risk bounds hold. Pack fails if too few windows available."
+  },
+  "window": {
+    "days": 21,
+    "discover_step": 5,
+    "period": "5y",
+    "prefer_canonical": true
+  }
+}

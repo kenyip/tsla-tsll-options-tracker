@@ -458,6 +458,12 @@ trader-promote-paper *ARGS:
 trader-bootstrap *ARGS:
     {{py}} scripts/trader_bootstrap.py {{ARGS}}
 
+# Staged market-path stress (after dual-cost F2): quick pack → full suite if pass
+#   just trader-path-stress --spec configs/strategy_specs/pcs_bull_neutral_income_45d_v1.json --symbols BAC --quick-only
+#   just trader-path-stress --spec path/to/mutant.json --symbols AMZN
+trader-path-stress *ARGS:
+    {{py}} scripts/trader_path_stress.py {{ARGS}}
+
 # Paper handoff (dry-run default; plumbing-smoke forces one ledger order)
 #   just trader-paper-handoff
 #   just trader-paper-handoff --plumbing-smoke
