@@ -8,6 +8,7 @@
 > **Layered edge doctrine:** [TRADER_LAYERED_EDGE_DOCTRINE.md](TRADER_LAYERED_EDGE_DOCTRINE.md) — forecast → payoff → regime → risk → evidence before strategy advancement.
 > **Direct paper-watch path:** [TRADER_DIRECT_TO_PAPER_WATCH_PLAN.md](TRADER_DIRECT_TO_PAPER_WATCH_PLAN.md) — cheap candidate factory → reusable payoff validators → patient no-trade/opportunity watcher.
 > **Desk B spine (2026-07-19):** [TRADER_SPINE_ARCHITECTURE.md](TRADER_SPINE_ARCHITECTURE.md) — StrategySpec → evaluate_proxy → living F2 seats; default discovery path (not ad-hoc labs / densify volume).
+> **Living north star (2026-07-19):** [TRADER_NORTH_STAR.md](TRADER_NORTH_STAR.md) — signals → opportunity → structure → manage → prove → execute → learn; extensible score/gate catalog (e.g. premium/day).
 > **Dual desk:** [TRADER_DUAL_DESK.md](TRADER_DUAL_DESK.md) — personal tracker (A) + Agentic engine (B) in one monorepo; soft rename; keep positions/PMCC for Ken’s own trading.
 
 ---

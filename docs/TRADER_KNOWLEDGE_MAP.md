@@ -75,6 +75,7 @@ It should contain durable rules like:
 
 Repo code/docs are the right place for detailed playbooks and scripts:
 
+- `docs/TRADER_NORTH_STAR.md`: **living system alignment** — signals→opportunity→structure→manage→prove→execute→learn; extensible evaluation dimensions; anti-cartesian-search pin
 - `docs/TRADER_RESTART_CHARTER.md`: **anti-drift alignment** — north star, objectives, directives, snapshot vs goal, clean-start vs search-restart recommendation, pre-BUILD checklist
 - `docs/TRADER_PLATFORM_GOAL.md`: product north star + ranking / better-trades pins
 - `docs/BUILD_PROGRESS_AND_CONFIDENCE.md`: strategy-convergence scoreboard vs real-trade confidence ladder

@@ -3,6 +3,7 @@
 **Pinned:** 2026-07-19  
 **Status:** Active primary architecture for the $3k Agentic income autonomy path.  
 **Does not replace:** Layered Edge Doctrine, authority firewall, or legacy TSLA/TSLL desk code.  
+**Alignment / product north star:** [TRADER_NORTH_STAR.md](TRADER_NORTH_STAR.md) — signals → opportunity → structure → manage → prove → execute → learn.  
 **Supersedes as default discovery path:** ad-hoc `scripts/pcs_*_lab.py` proliferation, free MoA densify as the main progress engine, and entry-filter PCS mining without a shared evaluator.
 
 ---
@@ -12,6 +13,14 @@
 Self-learning **research → paper → shadow → (Ken-armed) live** income engine on the isolated **$3,000 Agentic sleeve**.
 
 Success = at least one durable, paper-testable edge **after costs** at **1-lot**, with stand-aside as a valid win.
+
+**Build-toward pipeline** (full principles in [TRADER_NORTH_STAR.md](TRADER_NORTH_STAR.md)):
+
+```text
+signals → opportunity → structure+manage → prove → execute → learn
+```
+
+Cartesian knob grids are a **proof tool for thin DNA**, not the primary edge engine. New scores (e.g. premium/day) enter via the north-star evaluation catalog.
 
 ---
 

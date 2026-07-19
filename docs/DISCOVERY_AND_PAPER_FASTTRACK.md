@@ -1,5 +1,7 @@
 # Expanding sims / knobs · parallel · paper fast-track
 
+**System alignment:** [TRADER_NORTH_STAR.md](TRADER_NORTH_STAR.md) — discovery grids are a **proof tool**, not the product north star. Prefer thesis × opportunity over unbounded cartesian search. New scores (e.g. premium/day) land in the north-star evaluation catalog first.
+
 ## Expand the simulation grid (knobs)
 
 **Default is Wave A (coarse screen)** — ~2–3k bag, hours not weeks.  
