@@ -21,6 +21,8 @@ just run                              # Streamlit dashboard
 
 # Desk B — discovery is tight sims; opportunity wait is separate
 just trader-discover                  # tight multi-gen strategy search/proof
+just trader-progress                  # progress bar + strategies that passed
+just trader-progress --watch          # live refresh every 5s
 just trader-opportunity               # patient watch + paper handoff (no evolve)
 just trader-eval-iv-rich              # evaluate IV-rich seed
 just trader-living                    # living seats

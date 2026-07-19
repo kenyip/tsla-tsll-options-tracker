@@ -420,6 +420,13 @@ trader-evolve *ARGS:
 trader-living:
     {{py}} scripts/trader_living_status.py
 
+# Easy progress bar + strategies that passed (F2 / F1)
+#   just trader-progress
+#   just trader-progress --watch          # refresh every 5s
+#   just trader-progress --json
+trader-progress *ARGS:
+    {{py}} scripts/trader_progress.py {{ARGS}}
+
 # Patient opportunity watcher (NO_QUALIFIED / NO_SETUP / PAPER_PACKET_READY)
 trader-watch *ARGS:
     {{py}} scripts/trader_watcher.py {{ARGS}}
