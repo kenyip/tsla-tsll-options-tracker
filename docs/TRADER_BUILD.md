@@ -319,12 +319,14 @@ just trader-opportunity           # watch + handoff (no evolve)
 just test
 ```
 
-Hermes (when gateway up):
+Hermes (when gateway up) — see **`docs/TRADER_CRON_LAYOUT.md`** (pinned 2026-07-19):
 
-- `trader-desk-b-loop` ~30m → discovery cron (skip if marathon live)  
-- `trader-opportunity-loop` ~60m → market wait  
+- **RTH:** `trader-rth-eval` (agent hourly) + `trader-paper-ops` (dry `trader-paper-loop`, no execute-paper)  
+- **BUILD:** sparse MoA slots (premarket / postclose / daily / evening / weekend / weekly) — zero-input `just trader-build-lab`  
+- **Removed:** `trader-continuous-densify` every 5m (not progress; densify winners only)  
+- **Not default:** 30m discovery marathon / dense bag drain  
 
-**Discovery** burns CPU offline. **Opportunity** waits on RTH/setup. Do not conflate them.
+**Discovery** burns CPU offline when deliberately run. **Opportunity/paper** waits on RTH/setup. Do not conflate them.
 
 Desk A (personal): `just positions`, `just pmcc-manage`, `just desk-brief`, Streamlit `just run`.
 
