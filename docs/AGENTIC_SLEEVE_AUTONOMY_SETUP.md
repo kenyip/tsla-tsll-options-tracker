@@ -7,49 +7,52 @@ This is the operator contract so Trader can **decide next steps autonomously**: 
 
 ---
 
-## RH MCP probe (2026-07-20 ~01:43 PT)
+### RH MCP probe (2026-07-20 ~01:43 PT) — superseded by re-probe below
 
-### Accounts (masked)
+### RH MCP re-probe (2026-07-20 after Ken L2 + $500)
 
 | Account | Nick | agentic_allowed | Type | Options | Capital |
 |---|---|---|---|---|---|
-| ••••8507 | **Agentic** | **true** | cash | **none (empty)** | **$0** |
-| ••••5223 | Individual (default) | **false** | margin | option_level_3 | ~main book — **do not trade via agent** |
+| ••••8507 | **Agentic** | **true** | **cash** (not margin) | **option_level_2** | **$500** cash / BP; pending_deposits $500 |
+| ••••5223 | Individual (default) | **false** | margin | option_level_3 | main book — **do not trade via agent** |
 
-Isolation: **PASS** — main is non-agentic to this agent; Agentic is the only mutable target once armed.
+Isolation: **PASS**. Options level: **PASS (L2)**. Funded test tier: **PASS ($500)**. Margin conversion: **not required** for T0.5 / first MCP-native live (CSP + long options).
 
 ### What works on MCP today (read path — verified)
 
 | Capability | Status |
 |---|---|
-| `get_accounts` | OK |
-| Agentic portfolio / BP | OK (zeros) |
-| Equity quotes (SPY/IWM/AMZN) | OK (after-hours marks) |
-| Option chains (IWM expiries) | OK |
-| Equity/option positions list | OK (empty on Agentic) |
-| Options upgrade URL | OK |
+| `get_accounts` | OK — L2 on Agentic |
+| Agentic portfolio / BP | OK — $500 |
+| Equity quotes | OK |
+| Option chains | OK |
+| Equity/option positions list | OK (empty) |
 
 ### Critical gaps for “prime time”
 
 | Gap | Impact | Owner |
 |---|---|---|
-| Agentic **unfunded** | No live risk capacity | Ken deposit |
-| Agentic **no options level** | Cannot open options even if funded | Ken: upgrade link below |
-| MCP **options place = single-leg only** | No native multi-leg PCS/IC via MCP | Strategy design + future RH |
-| Platform `RobinhoodMcpBroker.place_*` | Still **fail-closed NotImplemented** until dedicated wire+arm task | Trader BUILD after paper/shadow |
+| Agentic still **cash** not margin | Expected RH behavior for many new/agentic sleeves; GFV/settlement rules apply; spreads still blocked by MCP single-leg + L2 scope | Accept for v1; optional margin later in app if RH allows |
+| Only **$500** test capital | Not $3k income sleeve; size for plumbing / tiny probes only | Ken transfers $3k at LIVE_PACKET |
+| MCP **options place = single-leg only** | No native multi-leg PCS/IC via MCP | Strategy design |
+| Platform `RobinhoodMcpBroker.place_*` | Still **fail-closed NotImplemented** until wire+arm | Trader BUILD |
 | `agentic.enabled: false` | Soft kill (correct) | Ken arm day only |
-| Multi-session paper + shadow + kill drill | Not done for a quality TOP_HYP | Trader continuum |
+| Multi-session paper + shadow + kill drill + TOP_HYP | Not done | Trader continuum |
+
+### Cash vs margin (Ken note)
+
+Cash Agentic is **compatible** with first-live plan:
+
+- **Cash-secured puts** — native L2 + cash collateral (fits MCP single-leg)
+- **Long calls/puts** — native L2 (defined debit risk)
+- **Covered calls** — need long shares first
+- **Credit spreads / IC** — need multi-leg MCP (missing) and usually margin/L3; stay **paper research** for now
+
+Do **not** block progress waiting on margin. If RH later allows margin on this account in-app, nice-to-have; not a gate for CSP/single-leg arm.
 
 ### Options upgrade (Agentic only)
 
-Complete in Robinhood app:
-
-https://applink.robinhood.com/upgrade_options?account_number=987168507
-
-**Target level:** at least **option_level_2** (long options, CSP, covered calls).  
-Level 3 on the *account* does not unlock multi-leg **via MCP** — MCP place is still single-leg even on L3.
-
-After approval, ask Trader to re-run `get_accounts` (do not trust cached option_level).
+**Done 2026-07-20:** option_level_2 confirmed via MCP.
 
 ---
 
@@ -74,16 +77,15 @@ Do **not** arm multi-leg PCS as “live autonomous” until place path can expre
 
 ## Funding plan (Ken)
 
-### Phase T0.5 — plumbing test (recommended first)
+### Phase T0.5 — plumbing test (DONE 2026-07-20)
 
 | Item | Value |
 |---|---|
-| Deposit | **$300–$500** to Agentic only |
-| Purpose | Settled cash, options application, **no** expectation of income |
+| Deposit | **$500** on Agentic |
+| Options | **option_level_2** |
+| Account type | **cash** (margin not required for v1) |
+| Pending | `pending_deposits` may show until fully settled — prefer settled cash before any live probe |
 | Live trading | **Still off** (`agentic.enabled=false`) |
-| Optional later | One **Ken-supervised** dry review of equity limit (not required) |
-
-This proves deposits clear and options level attaches. It is **not** strategy readiness.
 
 ### Phase T1 — prime-time capital
 
@@ -150,11 +152,12 @@ WHEN Ken arms agentic_live (once)
 
 ### Ken (this week)
 
-- [ ] Open options upgrade link for Agentic; get **L2+**  
-- [ ] Deposit **$300–$500** test cash to Agentic (optional but useful)  
-- [ ] Leave main account non-agentic  
+- [x] Open options upgrade link for Agentic; get **L2+**  
+- [x] Deposit **$300–$500** test cash to Agentic  
+- [x] Leave main account non-agentic  
 - [ ] Keep trader Hermes **gateway running**  
 - [ ] Do **not** ask to arm live yet  
+- [ ] Optional later: margin conversion in RH app if offered (not a v1 gate)  
 
 ### Trader (autonomous)
 
