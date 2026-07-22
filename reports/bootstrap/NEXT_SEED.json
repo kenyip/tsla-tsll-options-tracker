@@ -1,7 +1,6 @@
 {
   "detail": {
-    "hint": "RTH manage: HOLD BAC+PLTR by order_id; PLTR elevated_watch (~27% ml used, short still ~$4 OTM); STAND_ASIDE new (2/2, open_risk$359); learn_tick on close; quality_worker continues rotated B3/B4",
-    "marks_et": "12:33",
+    "hint": "RTH: mark/manage paper; learn_tick; stand-aside if no new capital-fit OPEN_*. PLTR elevated_watch (~32% ml, short still ~$2.2 OTM).",
     "open_orders": [
       {
         "max_loss_usd": 162.64,
@@ -9,9 +8,7 @@
         "status": "working",
         "strategy_id": "hyp_dna_bac_put_credit_spread_88f03c89",
         "structure": "put_credit_spread",
-        "symbol": "BAC",
-        "mtm_usd_approx": 6.4,
-        "decision": "HOLD"
+        "symbol": "BAC"
       },
       {
         "max_loss_usd": 196.54,
@@ -19,13 +16,16 @@
         "status": "working",
         "strategy_id": "hyp_dna_pltr_put_credit_spread_033dfdc8",
         "structure": "put_credit_spread",
-        "symbol": "PLTR",
-        "mtm_usd_approx": -54.0,
-        "decision": "HOLD_elevated_watch"
+        "symbol": "PLTR"
       }
-    ]
+    ],
+    "marks_et": "13:31",
+    "bac_mtm_usd": 4.4,
+    "pltr_mtm_usd": -62.8,
+    "pltr_ml_frac": 0.32,
+    "pltr_short_otm_usd": 2.205
   },
-  "generated_at": "2026-07-22T16:33:30+00:00",
+  "generated_at": "2026-07-22T17:33:00+00:00",
   "ken_only_for": [
     "gateway_up",
     "LIVE_PACKET_arm",
@@ -35,7 +35,7 @@
   "live_authority": false,
   "next_action": "manage_open_paper_campaign",
   "paper_campaign_execute": true,
-  "source": "rth_eval_2026-07-22T1230",
-  "stamp": "20260722T1633",
+  "source": "trader_rth_eval",
+  "stamp": "20260722T173300",
   "trading_authority": false
 }
