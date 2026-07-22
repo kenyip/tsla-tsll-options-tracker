@@ -3,6 +3,14 @@
 
 Used by continuum coach and (optionally) quality residual after stress.
 Never touches live/arm. Does not rewrite hypotheses.yaml (worker owns that).
+
+Capital-path policy (risk profile, not vanity full-history SHIP $):
+  - B3 regime_hold required
+  - B4 cost_hold not false
+  - Soft NULL@5% with missing/≤0 slip PnL is NOT capital-path (edge vanished)
+  - Full-history non-positive PnL is NOT capital-path
+  - Extreme dense-neg + high window DD rejected vs leader bar
+  - Rank: dense_neg → max_dd → slip verdict quality → slip5 pnl → full pnl
 """
 from __future__ import annotations
 
@@ -16,6 +24,9 @@ _REPO = Path(__file__).resolve().parents[1]
 _LEDGER = _REPO / "reports" / "bootstrap" / "STRESS_ROTATION.json"
 _SHORTLIST = _REPO / "reports" / "bootstrap" / "QUALITY_SHORTLIST.json"
 
+# Soft NULL with edge essentially gone (survives_5pct_slip + pnl~0 trap).
+_SLIP_EDGE_EPS = 0.01
+
 
 def _now() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
@@ -28,6 +39,87 @@ def _load_json(path: Path) -> dict[str, Any]:
         return json.loads(path.read_text(encoding="utf-8"))
     except Exception:
         return {}
+
+
+def _f(x: Any, default: float | None = None) -> float | None:
+    if x is None:
+        return default
+    try:
+        return float(x)
+    except (TypeError, ValueError):
+        return default
+
+
+def capital_path_decision(
+    *,
+    b3: bool,
+    b4: bool | None,
+    slip5_v: Any,
+    slip5_pnl: Any,
+    dense_neg: Any,
+    max_dd: Any,
+    full_pnl: Any,
+) -> tuple[bool, str | None]:
+    """Return (capital_path_ok, reject_reason). Pure; safe to re-run on ledger rows."""
+    slip5_pnl_f = _f(slip5_pnl)
+    full_pnl_f = _f(full_pnl)
+    dense = int(dense_neg or 0)
+    dd = _f(max_dd, 0.0) or 0.0
+    slip_v = str(slip5_v or "").upper() or None
+
+    if not b3:
+        return False, f"B3 hold=false dense_neg={dense_neg} dd={max_dd}"
+    if b4 is False:
+        return False, f"B4 cost_hold=false slip5={slip5_v} pnl={slip5_pnl}"
+    if full_pnl_f is not None and full_pnl_f <= 0:
+        return False, f"full_history non-positive pnl={full_pnl_f}"
+    # Soft cost_hold can still be soft_loss / vanished edge under 5% slip.
+    if slip_v == "NULL":
+        if slip5_pnl_f is None or slip5_pnl_f <= _SLIP_EDGE_EPS:
+            return (
+                False,
+                f"B4 slip5 NULL/~0 pnl={slip5_pnl} (soft cost only; edge vanished)",
+            )
+        if slip5_pnl_f < 0:
+            return False, f"B4 slip5 NULL/neg pnl={slip5_pnl} (soft cost only)"
+    if dense >= 4 and dd > 200:
+        return (
+            False,
+            f"risk profile worse than leader bar: dense_neg={dense_neg} dd={max_dd}",
+        )
+    if b4 is False:  # pragma: no cover - already handled
+        return False, "B4 cost_hold=false"
+    return True, None
+
+
+def apply_capital_path_fields(entry: dict[str, Any]) -> dict[str, Any]:
+    """Mutate entry with reject_reason + capital_path_ok from stored metrics."""
+    ok, reason = capital_path_decision(
+        b3=bool(entry.get("b3_hold")),
+        b4=entry.get("b4_cost_hold") if entry.get("b4_cost_hold") is not None else None,
+        slip5_v=entry.get("b4_slip5_verdict"),
+        slip5_pnl=entry.get("b4_slip5_pnl"),
+        dense_neg=entry.get("dense_neg_ge3"),
+        max_dd=entry.get("max_dd"),
+        full_pnl=entry.get("full_pnl"),
+    )
+    entry["reject_reason"] = reason
+    entry["capital_path_ok"] = bool(ok and reason is None)
+    return entry
+
+
+def _slip_verdict_rank(v: Any) -> int:
+    """Lower is better for shortlist rank."""
+    s = str(v or "").upper()
+    if s == "SHIP":
+        return 0
+    if s == "NEEDS_MORE_DATA":
+        return 1
+    if s == "NULL":
+        return 2
+    if s in ("REJECT", "FAIL"):
+        return 4
+    return 3
 
 
 def ingest_pair(regime_path: Path, cost_path: Path, *, source: str = "coach") -> dict[str, Any]:
@@ -84,20 +176,6 @@ def ingest_pair(regime_path: Path, cost_path: Path, *, source: str = "coach") ->
         b4 = bool(cs.get("cost_hold")) if cs.get("cost_hold") is not None else None
         slip5_v = cs.get("slip_5_verdict")
         slip5_pnl = cs.get("slip_5_pnl")
-        # Hard quality rejects
-        reject_reason = None
-        if not b3:
-            reject_reason = f"B3 hold=false dense_neg={s.get('n_negative_n_ge_3')} dd={s.get('max_dd_across_windows')}"
-        elif b4 is False:
-            reject_reason = f"B4 cost_hold=false slip5={slip5_v} pnl={slip5_pnl}"
-        elif slip5_v == "NULL" and (slip5_pnl is not None and float(slip5_pnl) < 0):
-            # soft cost_hold can still be soft_loss — treat as fragile for capital path
-            reject_reason = f"B4 slip5 NULL/neg pnl={slip5_pnl} (soft cost only)"
-        elif int(s.get("n_negative_n_ge_3") or 0) >= 4 and float(s.get("max_dd_across_windows") or 0) > 200:
-            reject_reason = (
-                f"risk profile worse than leader bar: dense_neg={s.get('n_negative_n_ge_3')} "
-                f"dd={s.get('max_dd_across_windows')}"
-            )
 
         entry = {
             "hyp_id": hid,
@@ -119,9 +197,8 @@ def ingest_pair(regime_path: Path, cost_path: Path, *, source: str = "coach") ->
             "b4_slip5_verdict": slip5_v,
             "b4_slip5_pnl": slip5_pnl,
             "b4_note": cs.get("note"),
-            "reject_reason": reject_reason,
-            "capital_path_ok": reject_reason is None and b3 and b4 is not False,
         }
+        apply_capital_path_fields(entry)
         by_id[hid] = entry
         rows_out.append(entry)
 
@@ -143,24 +220,76 @@ def ingest_pair(regime_path: Path, cost_path: Path, *, source: str = "coach") ->
     return {"ledger_path": str(_LEDGER), "rows": rows_out, "n_ledger": len(by_id)}
 
 
+def rescore_ledger(*, source: str = "coach_rescore") -> dict[str, Any]:
+    """Re-apply capital-path policy to every ledger row (no new B3/B4 sims)."""
+    ledger = _load_json(_LEDGER)
+    by_id: dict[str, Any] = dict(ledger.get("by_hyp_id") or {})
+    n_flipped_off = 0
+    n_flipped_on = 0
+    for hid, entry in list(by_id.items()):
+        if not isinstance(entry, dict):
+            continue
+        prev_ok = bool(entry.get("capital_path_ok"))
+        apply_capital_path_fields(entry)
+        entry["rescored_at"] = _now()
+        entry["rescore_source"] = source
+        by_id[hid] = entry
+        now_ok = bool(entry.get("capital_path_ok"))
+        if prev_ok and not now_ok:
+            n_flipped_off += 1
+        elif not prev_ok and now_ok:
+            n_flipped_on += 1
+
+    n_ok = sum(1 for e in by_id.values() if isinstance(e, dict) and e.get("capital_path_ok"))
+    ledger = {
+        "generated_at": _now(),
+        "schema_version": 1,
+        "note": "Rotation ledger for quality-cycle B3/B4 — prevents re-stress thrash; not TOP_HYP.",
+        "last_rescore": {
+            "source": source,
+            "n": len(by_id),
+            "n_capital_path_ok": n_ok,
+            "n_flipped_off": n_flipped_off,
+            "n_flipped_on": n_flipped_on,
+        },
+        "last_ingest": ledger.get("last_ingest"),
+        "by_hyp_id": by_id,
+    }
+    _LEDGER.parent.mkdir(parents=True, exist_ok=True)
+    _LEDGER.write_text(json.dumps(ledger, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return {
+        "ledger_path": str(_LEDGER),
+        "n_ledger": len(by_id),
+        "n_capital_path_ok": n_ok,
+        "n_flipped_off": n_flipped_off,
+        "n_flipped_on": n_flipped_on,
+    }
+
+
 def refresh_shortlist_from_ledger() -> dict[str, Any]:
     ledger = _load_json(_LEDGER)
     by_id = dict(ledger.get("by_hyp_id") or {})
+    # Ensure current policy is applied even if ledger rows predate gate tightening.
+    for hid, e in list(by_id.items()):
+        if isinstance(e, dict):
+            apply_capital_path_fields(e)
+            by_id[hid] = e
     prev = _load_json(_SHORTLIST)
 
-    # Rank capital-path-ok multi-leg by risk profile (BAC-style bar)
+    # Rank capital-path-ok multi-leg by risk profile (not vanity SHIP $)
     def rank_key(e: dict[str, Any]) -> tuple:
-        # lower dense_neg, lower max_dd, higher slip5 pnl, higher full pnl
         dense = int(e.get("dense_neg_ge3") or 99)
         dd = float(e.get("max_dd") or 1e9)
         slip = float(e.get("b4_slip5_pnl") or -1e9)
         pnl = float(e.get("full_pnl") or -1e9)
-        return (-int(bool(e.get("capital_path_ok"))), dense, dd, -slip, -pnl)
+        vrank = _slip_verdict_rank(e.get("b4_slip5_verdict"))
+        return (-int(bool(e.get("capital_path_ok"))), dense, dd, vrank, -slip, -pnl)
 
     multi = [
         e
         for e in by_id.values()
-        if e.get("structure") in ("put_credit_spread", "call_credit_spread", "iron_condor")
+        if isinstance(e, dict)
+        and e.get("structure") in ("put_credit_spread", "call_credit_spread", "iron_condor")
     ]
     multi_sorted = sorted(multi, key=rank_key)
 
@@ -181,7 +310,9 @@ def refresh_shortlist_from_ledger() -> dict[str, Any]:
         hid = e["hyp_id"]
         if e.get("reject_reason") or not e.get("capital_path_ok"):
             if hid not in seen_reject:
-                rejected.append({"hyp_id": hid, "reason": e.get("reject_reason") or "failed quality bar"})
+                rejected.append(
+                    {"hyp_id": hid, "reason": e.get("reject_reason") or "failed quality bar"}
+                )
                 seen_reject.add(hid)
             continue
         # stress_priority: top 2 capital-path ok
@@ -199,13 +330,19 @@ def refresh_shortlist_from_ledger() -> dict[str, Any]:
                 "max_dd": e.get("max_dd"),
                 "max_loss_usd_approx": e.get("max_loss_usd"),
                 "b4_cost_hold": e.get("b4_cost_hold"),
-                "b4_note": f"{e.get('b4_slip5_verdict')}@5pct pnl~{e.get('b4_slip5_pnl')} {e.get('b4_note') or ''}".strip(),
+                "b4_note": (
+                    f"{e.get('b4_slip5_verdict')}@5pct pnl~{e.get('b4_slip5_pnl')} "
+                    f"{e.get('b4_note') or ''}"
+                ).strip(),
                 "why": (
                     "Best risk profile among rotated B3/B4"
                     if i == 0
                     else "Rotated stress survivor; secondary to tighter-DD leader"
                 ),
-                "caveat": "Proxy BS + B3/B4 only. Multi-leg not MCP placeable. Not pack multi-symbol quality_pass.",
+                "caveat": (
+                    "Proxy BS + B3/B4 only. Multi-leg not MCP placeable. "
+                    "Not pack multi-symbol quality_pass."
+                ),
                 "stress_source": e.get("source"),
                 "stressed_at": e.get("stressed_at"),
             }
@@ -213,7 +350,6 @@ def refresh_shortlist_from_ledger() -> dict[str, Any]:
         if len(shortlist) >= 6:
             break
 
-    # Prefer known paper leaders BAC/PLTR if still on shortlist — ensure paper campaign symbols stay first if equal
     # Append MCP toys (capped)
     for r in mcp_prev[:3]:
         if not any(x.get("hyp_id") == r.get("hyp_id") for x in shortlist):
@@ -225,7 +361,8 @@ def refresh_shortlist_from_ledger() -> dict[str, Any]:
         "authority": "research_paper_only",
         "honesty": (
             "Proxy BS sims + B3/B4 only. Not TOP_HYP. Multi-leg not MCP-live. "
-            "Stress rotation ledger drives shortlist; quality_cycle mixes leaders+fresh."
+            "Stress rotation ledger drives shortlist; quality_cycle mixes leaders+fresh. "
+            "Soft NULL@~0 slip and non-positive full PnL are capital-path rejects."
         ),
         "agentic": prev.get("agentic")
         or {
@@ -243,32 +380,64 @@ def refresh_shortlist_from_ledger() -> dict[str, Any]:
         or "CSP ATM rarely fits $500 cash; $3k at LIVE_PACKET.",
         "next": [
             "Manage open paper campaign (BAC/PLTR) through multi-session B6",
-            "Quality cycles now rotate unstressed multi-leg SHIPs into B3/B4",
+            "Quality cycles rotate unstressed multi-leg SHIPs into B3/B4",
+            "Shortlist prefers SHIP@5% / positive slip edge over soft-NULL~0",
             "Do not arm multi-leg; MCP lane remains CSP sized to cash",
             "No densify bag thrash",
         ],
     }
     _SHORTLIST.write_text(json.dumps(out, indent=2, sort_keys=False) + "\n", encoding="utf-8")
-    return {"shortlist_path": str(_SHORTLIST), "n_shortlist": len(shortlist), "n_rejected": len(rejected)}
+    return {
+        "shortlist_path": str(_SHORTLIST),
+        "n_shortlist": len(shortlist),
+        "n_rejected": len(rejected),
+        "top_ids": [r.get("hyp_id") for r in shortlist[:6]],
+    }
 
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--regime", required=True, type=Path)
-    ap.add_argument("--cost", required=True, type=Path)
+    ap.add_argument("--regime", type=Path, default=None)
+    ap.add_argument("--cost", type=Path, default=None)
     ap.add_argument("--source", default="coach")
+    ap.add_argument(
+        "--rescore-only",
+        action="store_true",
+        help="Re-apply capital-path policy to existing ledger rows (no new stress).",
+    )
     ap.add_argument("--refresh-shortlist", action="store_true")
     ap.add_argument("--json", action="store_true")
     args = ap.parse_args(argv)
-    res = ingest_pair(args.regime, args.cost, source=args.source)
+
+    res: dict[str, Any] = {}
+    if args.rescore_only:
+        res = rescore_ledger(source=args.source or "coach_rescore")
+    else:
+        if not args.regime or not args.cost:
+            ap.error("--regime and --cost are required unless --rescore-only")
+        res = ingest_pair(args.regime, args.cost, source=args.source)
+
     if args.refresh_shortlist:
-        res["shortlist"] = refresh_shortlist_from_ledger()
+        # Persist any in-memory rescoring done during refresh when ledger path used.
+        if args.rescore_only:
+            # already wrote ledger; refresh re-applies policy again (idempotent)
+            res["shortlist"] = refresh_shortlist_from_ledger()
+        else:
+            res["shortlist"] = refresh_shortlist_from_ledger()
+
     if args.json:
         print(json.dumps(res, indent=2, sort_keys=True))
     else:
-        print(f"ledger n={res['n_ledger']} wrote {res['ledger_path']}")
+        if args.rescore_only:
+            print(
+                f"rescore n={res.get('n_ledger')} ok={res.get('n_capital_path_ok')} "
+                f"flipped_off={res.get('n_flipped_off')} wrote {res.get('ledger_path')}"
+            )
+        else:
+            print(f"ledger n={res['n_ledger']} wrote {res['ledger_path']}")
         if "shortlist" in res:
-            print(f"shortlist n={res['shortlist']['n_shortlist']}")
+            sl = res["shortlist"]
+            print(f"shortlist n={sl.get('n_shortlist')} top={sl.get('top_ids')}")
     return 0
 
 

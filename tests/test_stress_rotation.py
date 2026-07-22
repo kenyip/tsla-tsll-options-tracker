@@ -84,7 +84,7 @@ def test_ingest_marks_rejects_and_ranks_leader(tmp_path: Path, monkeypatch):
                 "summary": {
                     "regime_hold": True,
                     "n_negative_n_ge_3": 1,
-                    "max_dd_across_windows": 100,
+                    "max_dd_across_windows": 58,
                     "worst_window_pnl": -20,
                 },
             },
@@ -98,6 +98,43 @@ def test_ingest_marks_rejects_and_ranks_leader(tmp_path: Path, monkeypatch):
                     "n_negative_n_ge_3": 5,
                     "max_dd_across_windows": 270,
                     "worst_window_pnl": -180,
+                },
+            },
+            {
+                "hyp_id": "hyp_c_smci_softnull",
+                "symbol": "SMCI",
+                "structure": "call_credit_spread",
+                "full_history": {"pnl": 218, "n_trades": 30, "verdict": "SHIP", "max_loss_usd": 170},
+                "summary": {
+                    "regime_hold": True,
+                    "n_negative_n_ge_3": 1,
+                    "max_dd_across_windows": 51,
+                    "worst_window_pnl": -10,
+                },
+            },
+            {
+                "hyp_id": "hyp_d_smci_negfull",
+                "symbol": "SMCI",
+                "structure": "call_credit_spread",
+                "full_history": {"pnl": -10.79, "n_trades": 20, "verdict": "NULL", "max_loss_usd": 80},
+                "summary": {
+                    "regime_hold": True,
+                    "n_negative_n_ge_3": 1,
+                    "max_dd_across_windows": 65,
+                    "worst_window_pnl": -20,
+                },
+            },
+            {
+                "hyp_id": "hyp_e_nflx_null_pos",
+                "symbol": "NFLX",
+                "structure": "call_credit_spread",
+                "full_history": {"pnl": 860, "n_trades": 40, "verdict": "SHIP", "max_loss_usd": 180},
+                "summary": {
+                    "regime_hold": True,
+                    "n_negative_n_ge_3": 1,
+                    # Same dens; slightly worse DD than BAC — SHIP@5% BAC must still lead
+                    "max_dd_across_windows": 59,
+                    "worst_window_pnl": -15,
                 },
             },
         ]
@@ -118,6 +155,27 @@ def test_ingest_marks_rejects_and_ranks_leader(tmp_path: Path, monkeypatch):
                 "slip_5_pnl": -600,
                 "note": "fragile_at_5pct_slip",
             },
+            {
+                "hyp": "hyp_c_smci_softnull",
+                "cost_hold": True,
+                "slip_5_verdict": "NULL",
+                "slip_5_pnl": 0.0,
+                "note": "survives_5pct_slip",
+            },
+            {
+                "hyp": "hyp_d_smci_negfull",
+                "cost_hold": True,
+                "slip_5_verdict": "NULL",
+                "slip_5_pnl": 0.0,
+                "note": "survives_5pct_slip",
+            },
+            {
+                "hyp": "hyp_e_nflx_null_pos",
+                "cost_hold": True,
+                "slip_5_verdict": "NULL",
+                "slip_5_pnl": 80.47,
+                "note": "survives_5pct_slip",
+            },
         ]
     }
     rp = tmp_path / "regime.json"
@@ -131,11 +189,80 @@ def test_ingest_marks_rejects_and_ranks_leader(tmp_path: Path, monkeypatch):
     (bootstrap / "QUALITY_SHORTLIST.json").write_text(json.dumps({"shortlist": []}), encoding="utf-8")
 
     res = ing.ingest_pair(rp, cp, source="test")
-    assert res["n_ledger"] == 2
+    assert res["n_ledger"] == 5
+    ledger = json.loads((bootstrap / "STRESS_ROTATION.json").read_text(encoding="utf-8"))
+    assert ledger["by_hyp_id"]["hyp_a_bac"]["capital_path_ok"] is True
+    assert ledger["by_hyp_id"]["hyp_b_mu"]["capital_path_ok"] is False
+    assert ledger["by_hyp_id"]["hyp_c_smci_softnull"]["capital_path_ok"] is False
+    assert "NULL/~0" in (ledger["by_hyp_id"]["hyp_c_smci_softnull"].get("reject_reason") or "")
+    assert ledger["by_hyp_id"]["hyp_d_smci_negfull"]["capital_path_ok"] is False
+    assert ledger["by_hyp_id"]["hyp_e_nflx_null_pos"]["capital_path_ok"] is True
+
     sl = ing.refresh_shortlist_from_ledger()
     data = json.loads((bootstrap / "QUALITY_SHORTLIST.json").read_text(encoding="utf-8"))
     ids = [r["hyp_id"] for r in data["shortlist"]]
     assert "hyp_a_bac" in ids
+    assert "hyp_e_nflx_null_pos" in ids
     assert "hyp_b_mu" not in ids
+    assert "hyp_c_smci_softnull" not in ids
+    assert "hyp_d_smci_negfull" not in ids
     assert any(r.get("hyp_id") == "hyp_b_mu" for r in data["rejected_tonight"])
+    assert any(r.get("hyp_id") == "hyp_c_smci_softnull" for r in data["rejected_tonight"])
+    # SHIP@5% BAC ranks above NULL@positive NFLX when dens/dd comparable-ish
+    assert data["shortlist"][0]["hyp_id"] == "hyp_a_bac"
     assert data["shortlist"][0]["stress_priority"] is True
+
+
+def test_rescore_flips_soft_null_zero(tmp_path: Path, monkeypatch):
+    import scripts.trader_ingest_stress_rotation as ing
+
+    repo = tmp_path
+    bootstrap = repo / "reports" / "bootstrap"
+    bootstrap.mkdir(parents=True)
+    ledger = {
+        "by_hyp_id": {
+            "hyp_soft": {
+                "hyp_id": "hyp_soft",
+                "symbol": "SMCI",
+                "structure": "call_credit_spread",
+                "b3_hold": True,
+                "b4_cost_hold": True,
+                "b4_slip5_verdict": "NULL",
+                "b4_slip5_pnl": 0.0,
+                "dense_neg_ge3": 1,
+                "max_dd": 50,
+                "full_pnl": 200,
+                "capital_path_ok": True,
+                "reject_reason": None,
+            },
+            "hyp_ship": {
+                "hyp_id": "hyp_ship",
+                "symbol": "BAC",
+                "structure": "put_credit_spread",
+                "b3_hold": True,
+                "b4_cost_hold": True,
+                "b4_slip5_verdict": "SHIP",
+                "b4_slip5_pnl": 100,
+                "dense_neg_ge3": 1,
+                "max_dd": 70,
+                "full_pnl": 400,
+                "capital_path_ok": True,
+                "reject_reason": None,
+            },
+        }
+    }
+    (bootstrap / "STRESS_ROTATION.json").write_text(json.dumps(ledger), encoding="utf-8")
+    (bootstrap / "QUALITY_SHORTLIST.json").write_text(json.dumps({"shortlist": []}), encoding="utf-8")
+    monkeypatch.setattr(ing, "_REPO", repo)
+    monkeypatch.setattr(ing, "_LEDGER", bootstrap / "STRESS_ROTATION.json")
+    monkeypatch.setattr(ing, "_SHORTLIST", bootstrap / "QUALITY_SHORTLIST.json")
+
+    res = ing.rescore_ledger(source="test")
+    assert res["n_flipped_off"] == 1
+    data = json.loads((bootstrap / "STRESS_ROTATION.json").read_text(encoding="utf-8"))
+    assert data["by_hyp_id"]["hyp_soft"]["capital_path_ok"] is False
+    assert data["by_hyp_id"]["hyp_ship"]["capital_path_ok"] is True
+    ing.refresh_shortlist_from_ledger()
+    sl = json.loads((bootstrap / "QUALITY_SHORTLIST.json").read_text(encoding="utf-8"))
+    ids = [r["hyp_id"] for r in sl["shortlist"]]
+    assert ids == ["hyp_ship"]

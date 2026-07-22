@@ -1,11 +1,26 @@
 {
   "detail": {
-    "hint": "RTH: mark/manage paper; learn_tick; stand-aside if no new capital-fit OPEN_*",
-    "marks_asof_et": "15:32",
+    "hint": "After close: HOLD open BAC+PLTR paper by order_id through multi-session B6; quality_worker continues stress rotation with hardened capital-path gates (soft NULL@~0 + non-pos full_pnl rejected). Next stress slots: CCL PCS + NFLX CCS leaders + unstressed multi-leg (PLTR/BAC/AAL/SMCI PCS). No densify thrash. No live/arm.",
+    "coach_20260722T1504": {
+      "flipped_off_capital_path": 35,
+      "n_capital_path_ok": 69,
+      "n_ledger": 290,
+      "shortlist_top": [
+        "hyp_dna_ccl_put_credit_spread_c901235d",
+        "hyp_dna_nflx_call_credit_spread_5141ccf8",
+        "hyp_dna_bac_put_credit_spread_3954107b",
+        "hyp_dna_ccl_call_credit_spread_ee09043e",
+        "hyp_dna_bac_put_credit_spread_4fb68257",
+        "hyp_dna_tsll_call_credit_spread_1987d036"
+      ],
+      "removed_from_priority": [
+        "hyp_dna_smci_call_credit_spread_9c5c963f",
+        "hyp_dna_smci_call_credit_spread_dc6e78da"
+      ]
+    },
     "open_orders": [
       {
         "max_loss_usd": 162.64,
-        "mtm_usd_approx": 2.4,
         "order_id": "paper_2f78815a0614",
         "status": "working",
         "strategy_id": "hyp_dna_bac_put_credit_spread_88f03c89",
@@ -14,10 +29,7 @@
       },
       {
         "max_loss_usd": 196.54,
-        "mtm_usd_approx": -61.5,
-        "ml_used_frac_approx": 0.31,
         "order_id": "paper_c80aaa1cab46",
-        "short_otm_usd": 2.25,
         "status": "working",
         "strategy_id": "hyp_dna_pltr_put_credit_spread_033dfdc8",
         "structure": "put_credit_spread",
@@ -25,7 +37,7 @@
       }
     ]
   },
-  "generated_at": "2026-07-22T19:33:00+00:00",
+  "generated_at": "2026-07-22T22:04:30+00:00",
   "ken_only_for": [
     "gateway_up",
     "LIVE_PACKET_arm",
@@ -35,7 +47,7 @@
   "live_authority": false,
   "next_action": "manage_open_paper_campaign",
   "paper_campaign_execute": true,
-  "source": "rth_eval_2026-07-22T1232",
-  "stamp": "20260722T1232",
+  "source": "continuum_judgment_coach",
+  "stamp": "20260722T1504",
   "trading_authority": false
 }
