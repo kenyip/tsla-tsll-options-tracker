@@ -1,0 +1,232 @@
+{
+  "agentic_enabled": false,
+  "blockers": [
+    "shadow window not done",
+    "need more multi-session paper evidence",
+    "test sleeve cash $500 \u2014 CSP ATM rarely fits; $3k at LIVE_PACKET",
+    "MCP place = single-leg only (multi-leg BAC/PLTR = paper/research until RH multi-leg)",
+    "place_* blocked until Ken LIVE_PACKET arm"
+  ],
+  "continuum": {
+    "autonomous_action": "no_survivor_quality_residual",
+    "autonomous_tick_age_h": 0.56,
+    "autonomous_tick_at": "2026-07-22T06:20:25+00:00",
+    "handoff_status": "NO_QUALIFIED_STRATEGY",
+    "paper_campaign_age_h": 0.02,
+    "paper_campaign_at": "2026-07-22T06:53:06+00:00",
+    "paper_campaign_next": "manage_open_paper_campaign",
+    "quality_residual_at": "2026-07-22T06:20:25+00:00"
+  },
+  "generated_at": "2026-07-22T06:54:00+00:00",
+  "ken_only_for": [
+    "gateway_up",
+    "LIVE_PACKET_arm",
+    "fund_3k_at_packet"
+  ],
+  "ken_required": false,
+  "next_action": "manage_open_paper_campaign",
+  "opportunity": [
+    {
+      "detail": "evaluate at RTH via rth-eval/scout",
+      "id": "C1",
+      "name": "regime matches (day-of)",
+      "status": "NA"
+    },
+    {
+      "detail": "doctrine default 1 lot",
+      "id": "C2",
+      "name": "size 1-lot",
+      "status": "PASS"
+    },
+    {
+      "detail": "cash\u2248500.0 open_risk=$359.18",
+      "id": "C3",
+      "name": "BP free / no pile-on",
+      "status": "PASS"
+    },
+    {
+      "detail": "risk_limits present; live stop wire later",
+      "id": "C4",
+      "name": "daily loss stop configured",
+      "status": "PARTIAL"
+    }
+  ],
+  "option_level": "option_level_2",
+  "overall_label": "PAPER_PROGRESS",
+  "overall_pct": 66.0,
+  "paper": {
+    "closedish": 1,
+    "filled": 0,
+    "ledger_path": "/Users/jarvis/dev/trader/.cache/platform/paper_ledger.json",
+    "open": [
+      {
+        "max_loss_usd": 162.64,
+        "order_id": "paper_2f78815a0614",
+        "status": "working",
+        "strategy_id": "hyp_dna_bac_put_credit_spread_88f03c89",
+        "structure": "put_credit_spread",
+        "symbol": "BAC"
+      },
+      {
+        "max_loss_usd": 196.54,
+        "order_id": "paper_c80aaa1cab46",
+        "status": "working",
+        "strategy_id": "hyp_dna_pltr_put_credit_spread_033dfdc8",
+        "structure": "put_credit_spread",
+        "symbol": "PLTR"
+      }
+    ],
+    "open_risk_usd": 359.18,
+    "real_orders": 3,
+    "session_days": 1,
+    "working": 2
+  },
+  "path_to_live": [
+    "1. Paper campaign multi-session (manage BAC/PLTR; learn_tick) \u2014 IN PROGRESS",
+    "2. Promote one hyp to pack-grade TOP_HYP (B3+B4 + thicker n + quality_pass)",
+    "3. Shadow window + kill drill (no broker mutate)",
+    "4. First-live DNA must be MCP single-leg capital-fit (or multi-leg when RH supports)",
+    "5. Draft LIVE_PACKET \u2192 Ken arms \u2192 place_* on Agentic only"
+  ],
+  "phase": "PAPER",
+  "platform": [
+    {
+      "detail": "venv present",
+      "id": "A1",
+      "name": "smoke / platform runnable",
+      "status": "PASS"
+    },
+    {
+      "detail": "max_open_risk=0.0",
+      "id": "A2",
+      "name": "risk limits sleeve-aware",
+      "status": "PARTIAL"
+    },
+    {
+      "detail": "real_orders=3 working=2 open_risk=$359.18",
+      "id": "A3",
+      "name": "paper path durable",
+      "status": "PASS"
+    },
+    {
+      "detail": "no multi-session shadow window logged yet",
+      "id": "A4",
+      "name": "shadow path exercised",
+      "status": "FAIL"
+    },
+    {
+      "detail": "policy docs exist; kill drill not yet run as packet evidence",
+      "id": "A5",
+      "name": "kill switch documented",
+      "status": "PARTIAL"
+    },
+    {
+      "detail": "doctrine + hygiene",
+      "id": "A6",
+      "name": "secrets not in git",
+      "status": "PASS"
+    },
+    {
+      "detail": "agentic.enabled=False",
+      "id": "A7",
+      "name": "live disarmed until Ken arm",
+      "status": "PASS"
+    }
+  ],
+  "shortlist_top": [
+    {
+      "hyp_id": "hyp_dna_bac_put_credit_spread_88f03c89",
+      "lane": "paper_research",
+      "notes": "Best risk profile among stressed PCS: tight DD, few dense-neg, cost survives 5%, now testing + scoutable.",
+      "stress_priority": true,
+      "structure": "put_credit_spread",
+      "symbol": "BAC"
+    },
+    {
+      "hyp_id": "hyp_dna_pltr_put_credit_spread_033dfdc8",
+      "lane": "paper_research",
+      "notes": "Dense SHIP + cost hold; higher path DD than BAC leader.",
+      "stress_priority": true,
+      "structure": "put_credit_spread",
+      "symbol": "PLTR"
+    },
+    {
+      "hyp_id": "hyp_dna_pltr_put_credit_spread_6729c611",
+      "lane": "paper_research",
+      "notes": "New DR SHIP; denser trades but worse dense-neg and thin slip edge vs BAC.",
+      "stress_priority": false,
+      "structure": "put_credit_spread",
+      "symbol": "PLTR"
+    },
+    {
+      "hyp_id": "hyp_dna_nflx_call_credit_spread_15ecde71",
+      "lane": "paper_research",
+      "notes": "CCS direction-bias SHIP; secondary to BAC PCS risk profile.",
+      "stress_priority": false,
+      "structure": "call_credit_spread",
+      "symbol": "NFLX"
+    },
+    {
+      "hyp_id": "hyp_dna_nflx_cash_secured_put_0d3e1748",
+      "lane": "mcp_native_live_candidate_path",
+      "notes": "MCP single-leg class; evolve SHIP.",
+      "stress_priority": false,
+      "structure": "cash_secured_put",
+      "symbol": "NFLX"
+    },
+    {
+      "hyp_id": "hyp_dna_tsll_cash_secured_put_5fbf0a81",
+      "lane": "mcp_native_live_candidate_path",
+      "notes": "Cheapest liquid MCP CSP class among SHIPs; levered ETF.",
+      "stress_priority": false,
+      "structure": "cash_secured_put",
+      "symbol": "TSLL"
+    }
+  ],
+  "sleeve_cash_usd": 500.0,
+  "sleeve_plan_usd": 3000,
+  "strategy": [
+    {
+      "detail": "leader=hyp_dna_bac_put_credit_spread_88f03c89 plan_sleeve=3000 cash\u2248500.0 (multi-leg paper OK; MCP first-live single-leg needs fit)",
+      "id": "B1",
+      "name": "capital fit \u2264 sleeve",
+      "status": "PARTIAL"
+    },
+    {
+      "detail": "shortlist leaders exist; densify n\u22489 still thin \u2014 quality_pass=false on engine densify",
+      "id": "B2",
+      "name": "ship bar / not thin vanity",
+      "status": "PARTIAL"
+    },
+    {
+      "detail": "leader=hyp_dna_bac_put_credit_spread_88f03c89",
+      "id": "B3",
+      "name": "regime stress (B3)",
+      "status": "PASS"
+    },
+    {
+      "detail": "leader=hyp_dna_bac_put_credit_spread_88f03c89",
+      "id": "B4",
+      "name": "cost/slip stress (B4)",
+      "status": "PASS"
+    },
+    {
+      "detail": "DNA present on shortlist hyps; management path still paper-learning",
+      "id": "B5",
+      "name": "entry+exit DNA explicit",
+      "status": "PARTIAL"
+    },
+    {
+      "detail": "session_days=1 real_orders=3 working=2",
+      "id": "B6",
+      "name": "multi-session paper sample",
+      "status": "PARTIAL"
+    },
+    {
+      "detail": "not started",
+      "id": "B7",
+      "name": "shadow window clean",
+      "status": "FAIL"
+    }
+  ]
+}

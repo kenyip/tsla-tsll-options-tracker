@@ -402,6 +402,21 @@ trader-rth-ops:
 trader-paper-campaign:
     bash scripts/trader_paper_campaign.sh
 
+# Go-live funnel (progress toward real trades — not densify bag %).
+#   just trader-status
+#   just trader-status --watch 10
+#   just trader-status --json
+trader-status *ARGS:
+    {{py}} scripts/trader_go_live_status.py {{ARGS}}
+
+# Trigger continuum residual now + print go-live funnel.
+#   just trader-run-now              # full autonomous tick
+#   just trader-run-now campaign     # paper campaign only (faster)
+#   just trader-run-now quality      # quality residual
+#   just trader-run-now status       # funnel only
+trader-run-now *ARGS:
+    bash scripts/trader_run_now.sh {{ARGS}}
+
 # Fail-closed clean/main/origin completion check (BUILD wrapper runs this automatically).
 trader-run-gate mode="preflight" *ARGS:
     {{py}} scripts/trader_run_completion_gate.py {{mode}} --repo . {{ARGS}}
