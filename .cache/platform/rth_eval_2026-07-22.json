@@ -1,0 +1,65 @@
+{
+  "stamp": "20260722T0735",
+  "generated_at": "2026-07-22T14:35:00+00:00",
+  "session": "RTH",
+  "et_approx": "10:30-10:35",
+  "phase": "PAPER",
+  "decision": {
+    "BAC_paper_2f78815a0614": "HOLD",
+    "PLTR_paper_c80aaa1cab46": "HOLD_WATCH",
+    "new_entries": "STAND_ASIDE",
+    "live_arm": false
+  },
+  "spots": {
+    "SPY": 747.28,
+    "QQQ": 706.995,
+    "IWM": 295.11,
+    "BAC": 61.50,
+    "PLTR": 127.40,
+    "NFLX": 70.32
+  },
+  "open_paper": [
+    {
+      "order_id": "paper_2f78815a0614",
+      "symbol": "BAC",
+      "short": 60.0,
+      "long": 58.0,
+      "credit": 0.37,
+      "ml": 162.64,
+      "short_mark": 0.575,
+      "long_mark": 0.205,
+      "close_debit_approx": 0.37,
+      "mtm_usd_approx": 0.0,
+      "otm_cushion": 1.5
+    },
+    {
+      "order_id": "paper_c80aaa1cab46",
+      "symbol": "PLTR",
+      "short": 122.5,
+      "long": 120.0,
+      "credit": 0.53,
+      "ml": 196.54,
+      "short_mark_synth": 5.85,
+      "long_mark": 4.85,
+      "close_debit_approx": 1.0,
+      "mtm_usd_approx": -47.0,
+      "otm_cushion": 4.9
+    }
+  ],
+  "open_risk_usd": 359.18,
+  "concurrent_working": 2,
+  "campaign": {
+    "stamp": "20260722T143139",
+    "rc": 0,
+    "placed": [],
+    "scout_n_intents": 8
+  },
+  "rth_ops": {
+    "scout_rc": 1,
+    "scout_note": "yaml thrash ScannerError",
+    "autonomy_n_proposals": 0
+  },
+  "quality_worker": "ON",
+  "ken_required": false,
+  "next_action": "manage_open_paper_campaign"
+}
