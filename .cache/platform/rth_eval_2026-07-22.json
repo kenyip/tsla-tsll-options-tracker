@@ -1,63 +1,76 @@
 {
-  "stamp": "2026-07-22T0835",
+  "stamp": "2026-07-22T1132",
   "session": "RTH",
-  "et": "2026-07-22T11:30-11:35",
+  "et": "2026-07-22T14:31-14:35",
   "phase": "PAPER",
   "decision": {
     "BAC_paper_2f78815a0614": "HOLD",
     "PLTR_paper_c80aaa1cab46": "HOLD_elevated_watch",
     "new_entries": "STAND_ASIDE",
-    "reason_new": "concurrent_2_of_2_open_risk_359_of_500"
+    "reason_new": "concurrent_2_of_2_open_risk_359_of_500_campaign_thrash_stand_aside"
   },
   "marks": {
-    "asof_et": "11:33",
+    "asof_et": "14:31",
     "BAC": {
-      "spot": 61.71,
+      "spot": 61.59,
       "prev_close": 61.22,
+      "chg_pct": 0.6,
       "short_k": 60.0,
       "long_k": 58.0,
-      "short_mark": 0.515,
-      "long_mark": 0.205,
-      "entry_credit": 0.37,
-      "close_debit": 0.31,
-      "mtm_usd_approx": 6.0,
+      "exp": "2026-08-07",
+      "short_mark": 0.545,
+      "long_mark": 0.195,
+      "entry_credit": 0.374,
+      "close_debit": 0.35,
+      "mtm_usd_approx": 2.4,
       "max_loss_usd": 162.64,
-      "short_otm_usd": 1.71
+      "short_otm_usd": 1.59
     },
     "PLTR": {
-      "spot": 126.83,
+      "spot": 123.8,
       "prev_close": 132.66,
+      "chg_pct": -6.7,
       "short_k": 122.5,
       "long_k": 120.0,
-      "short_mark_synthetic": 6.025,
-      "long_mark": 4.975,
-      "entry_credit": 0.53,
-      "close_debit": 1.05,
-      "mtm_usd_approx": -52.0,
+      "exp": "2026-08-07",
+      "short_mark_synthetic": 7.375,
+      "short_122": 7.125,
+      "short_123": 7.625,
+      "long_mark": 6.175,
+      "entry_credit": 0.535,
+      "close_debit": 1.2,
+      "mtm_usd_approx": -66.5,
       "max_loss_usd": 196.54,
-      "short_otm_usd": 4.33,
-      "ml_used_frac_approx": 0.26
+      "short_otm_usd": 1.3,
+      "ml_used_frac_approx": 0.34
     },
-    "SPY": 749.39,
-    "QQQ": 709.25
+    "SPY": 748.2,
+    "QQQ": 706.63,
+    "CCL": 26.36,
+    "SMCI": 30.89,
+    "TSLL": 11.03,
+    "note_smci": "SMCI still +21% vs prior close — adverse for shortlist CCS leader; book full so no new action"
   },
   "campaign": {
-    "stamp": "20260722T153510",
-    "learn_rc": 0,
-    "campaign_rc": 0,
+    "stamp_prior_green": "20260722T182830",
+    "attempts": ["20260722T1831", "20260722T1832"],
+    "learn_rc": "0_or_1_under_thrash",
+    "campaign_rc": 1,
+    "errors": "yaml ScannerError truncated stream; KeyError shortlist leaders; 0-byte hyp yaml flash",
     "placed": [],
     "open_risk": 359.18,
     "working": 2,
-    "scout_n_intents_retry": 0,
-    "scout_n_intents_prior": 8
+    "scout_n_intents_prior": 8,
+    "hold_by": "order_id ledger"
   },
   "ops": {
     "quality_worker": "ON",
-    "cycles": 123,
-    "hyp_yaml_thrash": "0byte_transient_then_recover",
-    "rth_ops": "timeout_once_fallback_campaign_rh"
+    "cycles": 165,
+    "hb_age_h": 0.01,
+    "hyp_yaml_thrash": "ScannerError mid-write + 0-byte flash + KeyError leaders; poll settle; no git restore"
   },
   "next_action": "manage_open_paper_campaign",
   "ken_required": false,
-  "live_authority": false
+  "live_authority": false,
+  "generated_at": "2026-07-22T18:35:00+00:00"
 }
