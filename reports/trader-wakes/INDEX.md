@@ -1,3 +1,4 @@
+- 2026-07-22T0908-continuum-judgment — Coach: fix quality-cycle B3/B4 thrash (only BAC+PLTR); select+ingest stress rotation; reject NFLX CCS/MU PCS vanity; BAC still paper leader; HOLD open paper; tests green
 - 2026-07-22T0835-rth — Late-morning RTH: HOLD BAC+PLTR PCS (BAC ~+$6; PLTR ~-$52 vs ml$197 still OTM~$4.3); STAND_ASIDE new (2/2, open_risk$359); worker thrash 0-byte recover; no live/arm
 - 2026-07-22T0735-rth — Mid-RTH: HOLD BAC+PLTR PCS (BAC flat; PLTR ~-$47 vs ml$197 still OTM~$5); STAND_ASIDE new (2/2, open_risk$359); worker ON thrash; no live/arm
 - 2026-07-22T0634-rth — RTH open: HOLD BAC+PLTR PCS paper (MTM flat/soft OTM); STAND_ASIDE new risk (2/2 concurrent, open_risk$359); worker ON; no live/arm

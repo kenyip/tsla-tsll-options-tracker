@@ -67,6 +67,34 @@ def _run(cmd: list[str], log_path: Path, timeout: int | None = None) -> dict[str
 
 
 def _shortlist_hyps(limit: int = 6) -> str:
+    """Mix shortlist leaders + unstressed multi-leg SHIPs (anti re-stress thrash)."""
+    selector = _REPO / "scripts" / "trader_select_stress_hyps.py"
+    if selector.is_file():
+        try:
+            # Import as path load without package install
+            import importlib.util
+
+            spec = importlib.util.spec_from_file_location("trader_select_stress_hyps", selector)
+            if spec and spec.loader:
+                mod = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(mod)
+                n_leaders = int(os.environ.get("TRADER_QC_STRESS_LEADERS", "2"))
+                res = mod.select_stress_hyps(limit=limit, n_leaders=n_leaders)
+                csv = str(res.get("csv") or "")
+                if csv:
+                    # persist selection receipt for coach wakes
+                    try:
+                        _OUT.mkdir(parents=True, exist_ok=True)
+                        (_OUT / "stress_selection_LATEST.json").write_text(
+                            json.dumps(res, indent=2, sort_keys=True) + "\n",
+                            encoding="utf-8",
+                        )
+                    except Exception:
+                        pass
+                    return csv
+        except Exception:
+            pass
+    # Legacy fallback: shortlist stress_priority multi-leg only
     if not _SHORTLIST.is_file():
         return ""
     try:
@@ -85,7 +113,6 @@ def _shortlist_hyps(limit: int = 6) -> str:
             ids.append(str(hid))
         if len(ids) >= limit:
             break
-    # fallback: any multi-leg
     if not ids:
         for row in d.get("shortlist") or []:
             hid = row.get("hyp_id") or row.get("id")
@@ -200,6 +227,29 @@ def run_cycle(*, sleeve: int = 3000) -> dict[str, Any]:
             results["phases"][name] = fut.result()
 
     results["shortlist_hyps"] = hyps
+
+    # Ingest B3/B4 into rotation ledger + refresh shortlist (no hyp yaml write)
+    if hyps and "regime_stress" in results["phases"] and "cost_stress" in results["phases"]:
+        reg_out = out / f"regime_{stamp}.json"
+        cost_out = out / f"cost_{stamp}.json"
+        ingest = _REPO / "scripts" / "trader_ingest_stress_rotation.py"
+        if ingest.is_file() and reg_out.is_file() and cost_out.is_file():
+            results["phases"]["stress_ingest"] = _run(
+                [
+                    py,
+                    str(ingest),
+                    "--regime",
+                    str(reg_out),
+                    "--cost",
+                    str(cost_out),
+                    "--source",
+                    f"quality_cycle_{stamp}",
+                    "--refresh-shortlist",
+                    "--json",
+                ],
+                out / f"stress_ingest_{stamp}.log",
+                timeout=60,
+            )
 
     # --- phase 4: paper path ---
     results["phases"]["paper_loop"] = _run(

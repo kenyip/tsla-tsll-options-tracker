@@ -1,6 +1,6 @@
 {
   "detail": {
-    "hint": "RTH: mark/manage paper; learn_tick; stand-aside if no new capital-fit OPEN_*",
+    "hint": "RTH: mark/manage paper; learn_tick; stand-aside if no new capital-fit OPEN_*. Quality worker now rotates B3/B4 onto unstressed multi-leg SHIPs (STRESS_ROTATION.json).",
     "open_orders": [
       {
         "max_loss_usd": 162.64,
@@ -18,9 +18,18 @@
         "structure": "put_credit_spread",
         "symbol": "PLTR"
       }
-    ]
+    ],
+    "coach": {
+      "stamp": "20260722T0908",
+      "loop": "stress_rotation",
+      "rejected": [
+        "hyp_dna_nflx_call_credit_spread_9545399b",
+        "hyp_dna_mu_put_credit_spread_1340cefb"
+      ],
+      "leader": "hyp_dna_bac_put_credit_spread_88f03c89"
+    }
   },
-  "generated_at": "2026-07-22T15:35:22+00:00",
+  "generated_at": "2026-07-22T16:08:30+00:00",
   "ken_only_for": [
     "gateway_up",
     "LIVE_PACKET_arm",
@@ -30,7 +39,7 @@
   "live_authority": false,
   "next_action": "manage_open_paper_campaign",
   "paper_campaign_execute": true,
-  "source": "trader_paper_campaign",
-  "stamp": "20260722T153510",
+  "source": "continuum_judgment_coach",
+  "stamp": "20260722T160830",
   "trading_authority": false
 }

@@ -49,9 +49,14 @@ set +e
 rc_evolve_csp=$?
 set -e
 
-# Best-effort: stress a shortlist file if present; else skip.
-SHORTLIST="$REPO/reports/bootstrap/QUALITY_SHORTLIST.json"
-if [[ -f "$SHORTLIST" ]]; then
+# Best-effort B3/B4: mix shortlist leaders + unstressed multi-leg SHIPs
+# (see scripts/trader_select_stress_hyps.py — avoids re-stress thrash on 2 leaders only).
+hyps=""
+if [[ -f "$REPO/scripts/trader_select_stress_hyps.py" ]]; then
+  hyps="$("$PY" "$REPO/scripts/trader_select_stress_hyps.py" --limit 6 --n-leaders 2 2>/dev/null || true)"
+fi
+if [[ -z "${hyps:-}" && -f "$REPO/reports/bootstrap/QUALITY_SHORTLIST.json" ]]; then
+  SHORTLIST="$REPO/reports/bootstrap/QUALITY_SHORTLIST.json"
   hyps="$("$PY" - "$SHORTLIST" <<'PY'
 import json, sys
 from pathlib import Path
@@ -66,17 +71,18 @@ for row in d.get("shortlist") or []:
 print(",".join(ids[:6]))
 PY
 )"
-  if [[ -n "${hyps:-}" ]]; then
-    set +e
-    "$PY" "$REPO/scripts/pcs_regime_stress.py" --hyps "$hyps" \
-      --out "$OUT_DIR/regime_${STAMP}.json"
-    r1=$?
-    "$PY" "$REPO/scripts/pcs_cost_stress.py" --hyps "$hyps" \
-      --out "$OUT_DIR/cost_${STAMP}.json"
-    r2=$?
-    rc_stress=$(( r1 != 0 || r2 != 0 ? 1 : 0 ))
-    set -e
-  fi
+fi
+if [[ -n "${hyps:-}" ]]; then
+  set +e
+  "$PY" "$REPO/scripts/pcs_regime_stress.py" --hyps "$hyps" \
+    --out "$OUT_DIR/regime_${STAMP}.json"
+  r1=$?
+  "$PY" "$REPO/scripts/pcs_cost_stress.py" --hyps "$hyps" \
+    --out "$OUT_DIR/cost_${STAMP}.json"
+  r2=$?
+  rc_stress=$(( r1 != 0 || r2 != 0 ? 1 : 0 ))
+  set -e
+  echo "stress_hyps=$hyps rc_stress=$rc_stress"
 fi
 
 set +e
