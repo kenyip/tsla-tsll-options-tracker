@@ -1,3 +1,4 @@
+- 2026-07-23T0733-rth.md — RTH manage HOLD BAC+PLTR · STAND_ASIDE full book · campaign KeyError shortlist drift
 - 2026-07-23T0636-rth — RTH open: HOLD BAC flat (+$0.4); PLTR HOLD elevated (-$69/~35% ml, short OTM $0.24); STAND_ASIDE new (2/2); SPY-1%/QQQ-1.4%; campaign ok after yaml thrash; no live/arm
 - 2026-07-22T2340-status-simplify.md — status EDGE/ROBOT/ARM simplify + session_days fix
 - 2026-07-22T2103-continuum-judgment — Coach: reject soft-loss@5%; rank SHIP verdict before DD; skip score<=0 unstressed; flipped_off=13; shortlist BAC/CCL SHIP leaders; HOLD paper; tests 4p
