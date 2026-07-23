@@ -4,8 +4,15 @@
 Phases (never live/arm):
   1) research rank
   2) evolve defined-risk then CSP (serialized — shared hyp registry writes)
-  3) parallel: regime stress | cost stress | multi-symbol re-prove
-  4) paper loop + paper campaign (serialized manage path)
+  3) parallel prove: regime | cost | multi-symbol [| paper_loop when due]
+  4) paper campaign on a cadence (skip when book full most cycles — big speedup)
+
+Sprint knobs (env / configs/quality_worker.env):
+  TRADER_QC_PARALLEL=4
+  TRADER_QC_PAPER_EVERY=3       # paper_loop every N cycles (1=always)
+  TRADER_QC_CAMPAIGN_EVERY=3    # campaign every N cycles when book full
+  TRADER_QC_FORCE_PAPER=0       # 1=always paper+campaign this cycle
+  TRADER_QC_STRESS_LIMIT=8
 
 Usage:
   .venv/bin/python scripts/trader_quality_cycle.py
@@ -29,6 +36,8 @@ _PY = Path(os.environ.get("TRADER_PYTHON", str(_REPO / ".venv" / "bin" / "python
 _OUT = Path(os.environ.get("TRADER_QUALITY_OUT", str(_REPO / ".cache" / "platform" / "quality_residual")))
 _WORKER = _REPO / ".cache" / "platform" / "quality_worker"
 _SHORTLIST = _REPO / "reports" / "bootstrap" / "QUALITY_SHORTLIST.json"
+_LEDGER = _REPO / ".cache" / "platform" / "paper_ledger.json"
+_CYCLE_N = _WORKER / "cycle_count.txt"
 
 
 def _now() -> str:
@@ -66,8 +75,68 @@ def _run(cmd: list[str], log_path: Path, timeout: int | None = None) -> dict[str
         return {"cmd": cmd, "rc": 1, "seconds": round(time.time() - t0, 2), "log": str(log_path), "error": str(e)}
 
 
-def _shortlist_hyps(limit: int = 6) -> str:
+def _next_cycle_n() -> int:
+    """Monotonic worker cycle counter (survives process restarts)."""
+    _WORKER.mkdir(parents=True, exist_ok=True)
+    n = 0
+    try:
+        if _CYCLE_N.is_file():
+            n = int(_CYCLE_N.read_text(encoding="utf-8").strip() or "0")
+    except Exception:
+        n = 0
+    n += 1
+    try:
+        _CYCLE_N.write_text(str(n) + "\n", encoding="utf-8")
+    except Exception:
+        pass
+    return n
+
+
+def _paper_book_snapshot() -> dict[str, Any]:
+    """Cheap ledger peek — decide whether campaign is high-value this cycle."""
+    snap = {"working": 0, "open_risk_usd": 0.0, "book_full": False, "has_book": False}
+    if not _LEDGER.is_file():
+        return snap
+    try:
+        d = json.loads(_LEDGER.read_text(encoding="utf-8"))
+    except Exception:
+        return snap
+    orders = d.get("orders") or {}
+    items = list(orders.values()) if isinstance(orders, dict) else list(orders)
+    working = 0
+    risk = 0.0
+    for o in items:
+        if not isinstance(o, dict):
+            continue
+        tag = str(o.get("tag") or "")
+        if "smoke" in tag.lower() or "m0_stub" in tag:
+            continue
+        st = str(o.get("status") or "").lower()
+        if st not in ("working", "open"):
+            continue
+        working += 1
+        try:
+            risk += float(o.get("max_loss_usd") or 0.0)
+        except Exception:
+            pass
+    # Campaign guard is typically max_concurrent=2
+    max_conc = int(os.environ.get("TRADER_QC_MAX_CONCURRENT_PAPER", "2"))
+    snap["working"] = working
+    snap["open_risk_usd"] = round(risk, 2)
+    snap["has_book"] = working > 0
+    snap["book_full"] = working >= max_conc
+    return snap
+
+
+def _due(every: int, cycle_n: int) -> bool:
+    every = max(1, int(every))
+    return (cycle_n % every) == 0
+
+
+def _shortlist_hyps(limit: int | None = None) -> str:
     """Mix shortlist leaders + unstressed multi-leg SHIPs (anti re-stress thrash)."""
+    if limit is None:
+        limit = int(os.environ.get("TRADER_QC_STRESS_LIMIT", "8"))
     selector = _REPO / "scripts" / "trader_select_stress_hyps.py"
     if selector.is_file():
         try:
@@ -125,11 +194,38 @@ def _shortlist_hyps(limit: int = 6) -> str:
 
 
 def run_cycle(*, sleeve: int = 3000) -> dict[str, Any]:
+    t_wall0 = time.time()
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S")
     out = _OUT
     out.mkdir(parents=True, exist_ok=True)
     _WORKER.mkdir(parents=True, exist_ok=True)
-    results: dict[str, Any] = {"stamp": stamp, "generated_at": _now(), "phases": {}}
+    cycle_n = _next_cycle_n()
+    book = _paper_book_snapshot()
+    force_paper = os.environ.get("TRADER_QC_FORCE_PAPER", "0").strip() in ("1", "true", "yes")
+    paper_every = int(os.environ.get("TRADER_QC_PAPER_EVERY", "1"))
+    campaign_every = int(os.environ.get("TRADER_QC_CAMPAIGN_EVERY", "1"))
+    # When book is full, campaign is mostly manage/stand-aside — run on cadence.
+    # When book has room, always campaign so we can open new paper.
+    run_paper_loop = force_paper or _due(paper_every, cycle_n) or not book["has_book"]
+    run_campaign = force_paper or (not book["book_full"]) or _due(campaign_every, cycle_n)
+    # paper_loop is cheap; keep it paired with campaign when campaign runs
+    if run_campaign:
+        run_paper_loop = True
+
+    results: dict[str, Any] = {
+        "stamp": stamp,
+        "generated_at": _now(),
+        "phases": {},
+        "cycle_n": cycle_n,
+        "paper_book": book,
+        "cadence": {
+            "paper_every": paper_every,
+            "campaign_every": campaign_every,
+            "run_paper_loop": run_paper_loop,
+            "run_campaign": run_campaign,
+            "force_paper": force_paper,
+        },
+    }
 
     py = str(_PY if _PY.is_file() else sys.executable)
 
@@ -140,55 +236,69 @@ def run_cycle(*, sleeve: int = 3000) -> dict[str, Any]:
         timeout=int(os.environ.get("TRADER_QC_RESEARCH_TIMEOUT", "300")),
     )
 
-    # --- phase 2: evolves (serialized) ---
+    # --- phase 2: evolves (serialized — shared hyp registry writes) ---
+    # Do NOT parallelize DR+CSP applies: both rewrite hypotheses.yaml (corruption/thrash).
     top_dr = os.environ.get("TRADER_QC_TOP_DR", "8")
     mut_dr = os.environ.get("TRADER_QC_MUT_DR", "3")
-    top_csp = os.environ.get("TRADER_QC_TOP_CSP", "6")
+    top_csp = os.environ.get("TRADER_QC_TOP_CSP", "8")
     mut_csp = os.environ.get("TRADER_QC_MUT_CSP", "2")
 
-    results["phases"]["evolve_defined_risk"] = _run(
-        [
-            py,
-            "-m",
-            "trader_platform.evolve_tick",
-            "--once",
-            "--structures",
-            "put_credit_spread",
-            "call_credit_spread",
-            "--top-symbols",
-            top_dr,
-            "--mutants",
-            mut_dr,
-            "--sleeve-usd",
-            str(sleeve),
-            "--apply",
-        ],
-        out / f"evolve_dr_{stamp}.log",
-        timeout=int(os.environ.get("TRADER_QC_EVOLVE_TIMEOUT", "600")),
-    )
-    results["phases"]["evolve_csp"] = _run(
-        [
-            py,
-            "-m",
-            "trader_platform.evolve_tick",
-            "--once",
-            "--structures",
-            "cash_secured_put",
-            "wheel_assignment",
-            "short_put_credit",
-            "--top-symbols",
-            top_csp,
-            "--mutants",
-            mut_csp,
-            "--sleeve-usd",
-            str(sleeve),
-            "--apply",
-        ],
-        out / f"evolve_csp_{stamp}.log",
-        timeout=int(os.environ.get("TRADER_QC_EVOLVE_TIMEOUT", "600")),
-    )
+    # Alternate order so CSP first-live lane gets equal fresh CPU under sprint pressure
+    evolve_csp_first = (cycle_n % 2) == 0
 
-    # --- phase 3: parallel prove ---
+    def _evolve_dr() -> dict[str, Any]:
+        return _run(
+            [
+                py,
+                "-m",
+                "trader_platform.evolve_tick",
+                "--once",
+                "--structures",
+                "put_credit_spread",
+                "call_credit_spread",
+                "--top-symbols",
+                top_dr,
+                "--mutants",
+                mut_dr,
+                "--sleeve-usd",
+                str(sleeve),
+                "--apply",
+            ],
+            out / f"evolve_dr_{stamp}.log",
+            timeout=int(os.environ.get("TRADER_QC_EVOLVE_TIMEOUT", "600")),
+        )
+
+    def _evolve_csp() -> dict[str, Any]:
+        return _run(
+            [
+                py,
+                "-m",
+                "trader_platform.evolve_tick",
+                "--once",
+                "--structures",
+                "cash_secured_put",
+                "wheel_assignment",
+                "short_put_credit",
+                "--top-symbols",
+                top_csp,
+                "--mutants",
+                mut_csp,
+                "--sleeve-usd",
+                str(sleeve),
+                "--apply",
+            ],
+            out / f"evolve_csp_{stamp}.log",
+            timeout=int(os.environ.get("TRADER_QC_EVOLVE_TIMEOUT", "600")),
+        )
+
+    if evolve_csp_first:
+        results["phases"]["evolve_csp"] = _evolve_csp()
+        results["phases"]["evolve_defined_risk"] = _evolve_dr()
+    else:
+        results["phases"]["evolve_defined_risk"] = _evolve_dr()
+        results["phases"]["evolve_csp"] = _evolve_csp()
+
+    # --- phase 3: parallel prove (+ optional paper_loop) ---
     hyps = _shortlist_hyps()
     parallel_jobs: dict[str, list[str]] = {
         "multi_symbol": [py, str(_REPO / "scripts" / "trader_multi_symbol_reprove.py")],
@@ -210,8 +320,13 @@ def run_cycle(*, sleeve: int = 3000) -> dict[str, Any]:
             "--out",
             str(out / f"cost_{stamp}.json"),
         ]
+    # Fold cheap paper_loop into the parallel wave when due (saves ~12s serial)
+    if run_paper_loop:
+        paper_loop_py = _REPO / "scripts" / "trader_paper_loop.py"
+        if paper_loop_py.is_file():
+            parallel_jobs["paper_loop"] = [py, str(paper_loop_py)]
 
-    max_workers = int(os.environ.get("TRADER_QC_PARALLEL", "3"))
+    max_workers = int(os.environ.get("TRADER_QC_PARALLEL", "4"))
     with ThreadPoolExecutor(max_workers=max_workers) as ex:
         futs = {
             ex.submit(
@@ -251,26 +366,43 @@ def run_cycle(*, sleeve: int = 3000) -> dict[str, Any]:
                 timeout=60,
             )
 
-    # --- phase 4: paper path ---
-    results["phases"]["paper_loop"] = _run(
-        [py, str(_REPO / "scripts" / "trader_paper_loop.py")],
-        out / f"paper_{stamp}.log",
-        timeout=int(os.environ.get("TRADER_QC_PAPER_TIMEOUT", "180")),
-    )
+    # --- phase 4: paper campaign (cadenced) ---
     campaign = _REPO / "scripts" / "trader_paper_campaign.sh"
-    if campaign.is_file():
+    if run_campaign and campaign.is_file():
         results["phases"]["paper_campaign"] = _run(
             ["bash", str(campaign)],
             out / f"campaign_{stamp}.log",
             timeout=int(os.environ.get("TRADER_QC_CAMPAIGN_TIMEOUT", "300")),
         )
+    else:
+        results["phases"]["paper_campaign"] = {
+            "rc": 0,
+            "seconds": 0.0,
+            "skipped": True,
+            "reason": (
+                "book_full_cadence_skip"
+                if book.get("book_full")
+                else "cadence_skip"
+            ),
+            "cycle_n": cycle_n,
+            "campaign_every": campaign_every,
+        }
+    if not run_paper_loop:
+        results["phases"]["paper_loop"] = {
+            "rc": 0,
+            "seconds": 0.0,
+            "skipped": True,
+            "reason": "cadence_skip",
+            "cycle_n": cycle_n,
+            "paper_every": paper_every,
+        }
 
     # rc summary
     rc_map = {k: int(v.get("rc", 1)) for k, v in results["phases"].items()}
     results["rc"] = rc_map
     results["ok"] = all(v == 0 for v in rc_map.values()) or True  # residual never hard-fails continuum
     results["total_seconds"] = round(sum(float(v.get("seconds") or 0) for v in results["phases"].values()), 2)
-    # wall time better tracked by caller; estimate with phase1+2 sequential + max parallel + phase4
+    results["wall_seconds"] = round(time.time() - t_wall0, 2)
     results["trading_authority"] = False
     results["live_authority"] = False
     results["note"] = "quality_cycle parallel residual — never live/arm"
@@ -287,6 +419,10 @@ def run_cycle(*, sleeve: int = 3000) -> dict[str, Any]:
         "rc": rc_map,
         "shortlist_hyps": hyps,
         "source": "trader_quality_cycle",
+        "cycle_n": cycle_n,
+        "wall_seconds": results["wall_seconds"],
+        "cadence": results["cadence"],
+        "paper_book": book,
     }
     (_WORKER / "HEARTBEAT.json").write_text(json.dumps(hb, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     (_WORKER / "cycle_LATEST.json").write_text(json.dumps(results, indent=2, sort_keys=True) + "\n", encoding="utf-8")

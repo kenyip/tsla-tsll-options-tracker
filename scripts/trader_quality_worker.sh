@@ -12,13 +12,22 @@
 #   just trader-quality-worker ensure   # cron: restart if dead
 #
 # Env:
-#   TRADER_QUALITY_SLEEP=20          seconds between cycles (default 20)
+#   configs/quality_worker.env       optional sprint knobs (sourced if present)
+#   TRADER_QUALITY_SLEEP=20          seconds between cycles (sprint default 5)
 #   TRADER_QUALITY_MAX_CYCLES=0      0 = forever
-#   TRADER_QC_PARALLEL=3
+#   TRADER_QC_PARALLEL=4
+#   TRADER_QC_CAMPAIGN_EVERY=3       skip full paper campaign when book full
 set -euo pipefail
 
 REPO="${TRADER_REPO:-/Users/jarvis/dev/trader}"
 cd "$REPO"
+# Load sprint/defaults without overriding explicit env
+if [[ -f "$REPO/configs/quality_worker.env" ]]; then
+  set -a
+  # shellcheck disable=SC1091
+  source "$REPO/configs/quality_worker.env"
+  set +a
+fi
 PY="${TRADER_PYTHON:-$REPO/.venv/bin/python}"
 STATE="$REPO/.cache/platform/quality_worker"
 PIDFILE="$STATE/worker.pid"
@@ -27,7 +36,7 @@ LOGDIR="$STATE/logs"
 LOCK="$STATE/worker.lock"
 HEARTBEAT="$STATE/HEARTBEAT.json"
 CYCLE_PY="$REPO/scripts/trader_quality_cycle.py"
-SLEEP_S="${TRADER_QUALITY_SLEEP:-20}"
+SLEEP_S="${TRADER_QUALITY_SLEEP:-5}"
 MAX_CYCLES="${TRADER_QUALITY_MAX_CYCLES:-0}"
 CMD="${1:-status}"
 

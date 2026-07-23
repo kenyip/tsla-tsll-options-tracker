@@ -22,6 +22,8 @@ Ken’s ongoing job is **not** to prompt every wake. Ken’s job is: keep gatewa
 
 **Tight-loop pin (2026-07-21 night):** programmatic search runs as a **non-stop quality worker** (parallel cycles), not only hourly cron. LLM wakes **coach** the worker results and own RTH opportunity/management — they do not replace the worker.
 
+**Sprint pin (2026-07-23):** `configs/quality_worker.env` — sleep 5s; `TRADER_QC_PARALLEL=4`; when paper book is full, run heavy `paper_campaign` every 3rd cycle (always when seats free). Evolves stay **serialized** (shared `hypotheses.yaml`). Prove phase parallel: regime | cost | multi | paper_loop.
+
 ## Architecture (two layers)
 
 ```text
