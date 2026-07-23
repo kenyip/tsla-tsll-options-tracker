@@ -1,33 +1,36 @@
 {
   "detail": {
-    "hint": "RTH: mark/manage paper; HOLD BAC; HOLD_elevated PLTR (~36% ml); stand-aside new while 2/2. Off-hours: quality cycles use dens0 shortlist leaders + 24h leader TTL skip + min_fresh_trades=6.",
+    "hint": "RTH: mark/manage paper; learn_tick; stand-aside if no new capital-fit OPEN_*",
+    "marks_et": "2026-07-23T12:31",
     "open_orders": [
       {
+        "action": "HOLD",
         "max_loss_usd": 162.64,
+        "mtm_usd_approx": -3.1,
         "order_id": "paper_2f78815a0614",
+        "pct_ml_approx": 1.9,
+        "short_vs_spot": "+1.08 OTM",
         "status": "working",
         "strategy_id": "hyp_dna_bac_put_credit_spread_88f03c89",
         "structure": "put_credit_spread",
-        "symbol": "BAC",
-        "action": "HOLD"
+        "symbol": "BAC"
       },
       {
+        "action": "HOLD_elevated",
         "max_loss_usd": 196.54,
+        "mtm_usd_approx": -75.3,
         "order_id": "paper_c80aaa1cab46",
+        "pct_ml_approx": 38.3,
+        "short_vs_spot": "-0.76 ITM",
         "status": "working",
         "strategy_id": "hyp_dna_pltr_put_credit_spread_033dfdc8",
         "structure": "put_credit_spread",
-        "symbol": "PLTR",
-        "action": "HOLD_elevated"
+        "symbol": "PLTR"
       }
     ],
-    "shortlist_leaders": [
-      "hyp_dna_aal_put_credit_spread_972ca6be",
-      "hyp_dna_bac_put_credit_spread_5575695d"
-    ],
-    "coach_fix": "dense_neg=0 falsy rank + leader 24h TTL + min_fresh_trades=6"
+    "ops_note": "paper_campaign failed under quality_worker hyp yaml thrash (KeyError + ScannerError); HOLD by ledger order_id"
   },
-  "generated_at": "2026-07-23T16:06:50+00:00",
+  "generated_at": "2026-07-23T19:32:00+00:00",
   "ken_only_for": [
     "gateway_up",
     "LIVE_PACKET_arm",
@@ -37,7 +40,7 @@
   "live_authority": false,
   "next_action": "manage_open_paper_campaign",
   "paper_campaign_execute": true,
-  "source": "continuum_judgment_2026-07-23T0906",
-  "stamp": "20260723T0906",
+  "source": "trader_rth_eval_2026-07-23T1231",
+  "stamp": "20260723T1231",
   "trading_authority": false
 }
