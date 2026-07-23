@@ -49,3 +49,23 @@ def test_campaign_skip_when_book_full(monkeypatch):
     for cycle_n, expect_campaign in [(1, False), (2, False), (3, True), (4, False)]:
         run_campaign = force or (not book["book_full"]) or qc._due(campaign_every, cycle_n)
         assert run_campaign is expect_campaign, cycle_n
+
+
+def test_paper_campaign_manage_only_gate():
+    """Mirror paper_campaign book-full fast path predicate (no scout/dry under capacity)."""
+    max_conc = 2
+    max_risk = 500.0
+    # 2 working orders → manage_only
+    real_open = [{"order_id": "a"}, {"order_id": "b"}]
+    open_risk = 359.0
+    book_full = len(real_open) >= max_conc
+    risk_blocked = open_risk >= max_risk
+    manage_only = book_full or risk_blocked
+    assert book_full is True
+    assert manage_only is True
+    # room for new → not manage_only
+    real_open1 = [{"order_id": "a"}]
+    open_risk1 = 160.0
+    assert (len(real_open1) >= max_conc or open_risk1 >= max_risk) is False
+    # risk headroom gone alone
+    assert (1 >= max_conc or 500.0 >= max_risk) is True

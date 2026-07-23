@@ -95,26 +95,8 @@ for r in rows:
 leaders.sort(key=lambda r: (0 if r.get("stress_priority") else 1))
 
 reg = HypothesisRegistry()
-# Ensure leaders are at least testing so scout sees them
-promoted = []
-for r in leaders[:4]:
-    hid = r.get("hyp_id") or r.get("id")
-    if not hid:
-        continue
-    h = reg.get(str(hid))
-    if h is None:
-        continue
-    if h.status == "candidate":
-        try:
-            reg.transition(
-                str(hid),
-                "testing",
-                evidence_link=f"paper_campaign:{stamp}:auto_testing_for_scout",
-            )
-            promoted.append(str(hid))
-        except Exception as e:
-            promoted.append(f"{hid}:err:{e}")
-
+# Promote leaders to testing only when we might scout/place (not under full book).
+# Full-book path skips promote to avoid mid-cycle hyp yaml thrash under quality_worker.
 broker = get_broker("paper")
 canceled = []
 for o in list(broker.list_open_orders()):
@@ -153,6 +135,37 @@ for o in open_orders:
 port = broker.portfolio_snapshot() if hasattr(broker, "portfolio_snapshot") else None
 open_risk = float(getattr(port, "open_risk", 0.0) or 0.0) if port else 0.0
 
+# Cap concurrent campaign risk ~500 (prefer 1–2 lots of quality leaders, not spray)
+MAX_OPEN_RISK = float(os.environ.get("TRADER_PAPER_CAMPAIGN_MAX_OPEN_RISK", "500"))
+MAX_NEW = int(os.environ.get("TRADER_PAPER_CAMPAIGN_MAX_NEW", "1"))
+MAX_LOSS_CAP = float(os.environ.get("TRADER_PAPER_CAMPAIGN_MAX_LOSS", "250"))
+MAX_CONCURRENT = int(os.environ.get("TRADER_PAPER_CAMPAIGN_MAX_CONCURRENT", "2"))
+
+# Early capacity gate (before registry promote / scout)
+_early_book_full = len(real_open) >= MAX_CONCURRENT
+_early_risk_blocked = open_risk >= MAX_OPEN_RISK
+_early_manage_only = _early_book_full or _early_risk_blocked
+
+promoted = []
+if not _early_manage_only:
+    for r in leaders[:4]:
+        hid = r.get("hyp_id") or r.get("id")
+        if not hid:
+            continue
+        h = reg.get(str(hid))
+        if h is None:
+            continue
+        if h.status == "candidate":
+            try:
+                reg.transition(
+                    str(hid),
+                    "testing",
+                    evidence_link=f"paper_campaign:{stamp}:auto_testing_for_scout",
+                )
+                promoted.append(str(hid))
+            except Exception as e:
+                promoted.append(f"{hid}:err:{e}")
+
 # Symbols from leaders
 symbols: list[str] = []
 for r in leaders:
@@ -162,55 +175,82 @@ for r in leaders:
 if not symbols:
     symbols = ["BAC", "PLTR", "IWM", "KO"]
 
-# Cap concurrent campaign risk ~500 (prefer 1–2 lots of quality leaders, not spray)
-MAX_OPEN_RISK = float(os.environ.get("TRADER_PAPER_CAMPAIGN_MAX_OPEN_RISK", "500"))
-MAX_NEW = int(os.environ.get("TRADER_PAPER_CAMPAIGN_MAX_NEW", "1"))
-MAX_LOSS_CAP = float(os.environ.get("TRADER_PAPER_CAMPAIGN_MAX_LOSS", "250"))
-MAX_CONCURRENT = int(os.environ.get("TRADER_PAPER_CAMPAIGN_MAX_CONCURRENT", "2"))
-
 already_ids = {o["strategy_id"] for o in real_open}
 actions: list[dict[str, Any]] = []
 placed = []
 dry_ready = []
-
-# Always scout
 scout_summary = None
-try:
-    # premium_scout CLI module entry
-    import subprocess
-
-    scout_path = out_dir / f"scout_{stamp}.json"
-    cmd = [
-        sys.executable,
-        "-m",
-        "trader_platform.premium_scout",
-        "--symbols",
-        *symbols[:10],
-        "--json",
-        "--max-intents",
-        "8",
-        "--event",
-        "paper_campaign",
-    ]
-    proc = subprocess.run(cmd, cwd=str(Path.cwd()), capture_output=True, text=True)
-    scout_raw = proc.stdout
-    try:
-        scout_summary = json.loads(scout_raw[scout_raw.find("{") :])
-    except Exception:
-        scout_summary = {"raw_tail": scout_raw[-2000:], "rc": proc.returncode, "err": proc.stderr[-1000:]}
-    scout_path.write_text(json.dumps(scout_summary, indent=2)[:500000], encoding="utf-8")
-except Exception as e:
-    scout_summary = {"error": str(e)}
+book_full = _early_book_full
+risk_blocked = _early_risk_blocked
+# Book-full / no-capacity fast path: do NOT scout or dry run_tick.
+# Those hangs were timing out quality_cycle at 300s every cadence hit while 2/2 open
+# (observed 2026-07-23 continuum coach: wall ~600s vs ~300s on skip cycles).
+manage_only = _early_manage_only
+if manage_only:
+    actions.append(
+        {
+            "action": "book_full_manage_fast_path",
+            "working": len(real_open),
+            "max_concurrent": MAX_CONCURRENT,
+            "open_risk": open_risk,
+            "max_open_risk": MAX_OPEN_RISK,
+            "book_full": book_full,
+            "risk_blocked": risk_blocked,
+            "hint": "skip scout+dry_tick; RTH/eval marks open paper; EDGE continues off-book",
+        }
+    )
+    scout_summary = {
+        "skipped": True,
+        "reason": "book_full_manage_fast_path",
+        "n_intents": 0,
+        "working": len(real_open),
+        "open_risk": open_risk,
+    }
+    (out_dir / f"scout_{stamp}.json").write_text(
+        json.dumps(scout_summary, indent=2) + "\n", encoding="utf-8"
+    )
 
 # Decide paper place: only if execute and capacity
 can_place = (
     execute
+    and (not manage_only)
     and open_risk < MAX_OPEN_RISK
     and MAX_NEW > 0
     and len(real_open) < MAX_CONCURRENT
 )
 new_count = 0
 if can_place:
+    # Scout only when we might place — avoids multi-minute hangs under full book.
+    try:
+        import subprocess
+
+        scout_path = out_dir / f"scout_{stamp}.json"
+        cmd = [
+            sys.executable,
+            "-m",
+            "trader_platform.premium_scout",
+            "--symbols",
+            *symbols[:10],
+            "--json",
+            "--max-intents",
+            "8",
+            "--event",
+            "paper_campaign",
+        ]
+        proc = subprocess.run(cmd, cwd=str(Path.cwd()), capture_output=True, text=True)
+        scout_raw = proc.stdout
+        try:
+            scout_summary = json.loads(scout_raw[scout_raw.find("{") :])
+        except Exception:
+            scout_summary = {
+                "raw_tail": scout_raw[-2000:],
+                "rc": proc.returncode,
+                "err": proc.stderr[-1000:],
+            }
+        scout_path.write_text(json.dumps(scout_summary, indent=2)[:500000], encoding="utf-8")
+    except Exception as e:
+        scout_summary = {"error": str(e)}
+
     # Prefer leader hyps not already open — one symbol attempt, one place max
     for r in leaders:
         if new_count >= MAX_NEW or len(real_open) + new_count >= MAX_CONCURRENT:
@@ -295,8 +335,9 @@ if can_place:
         # One leader decision per run after first non-already_open attempt
         if placed_this or any(a.get("hyp_id") == hid and a.get("action") != "already_open" for a in actions):
             break
-else:
-    # Dry autonomy for visibility
+elif not manage_only:
+    # Dry autonomy for visibility only when book has room but execute is off.
+    # Never dry-tick under full book — that path was the 300s quality_cycle timeout.
     try:
         summary = run_tick(
             mode=Mode.PAPER,
@@ -379,7 +420,9 @@ receipt = {
     "generated_at": now,
     "stamp": stamp,
     "execute": execute,
-    "promoted_to_testing": promoted,
+    "manage_only": manage_only,
+    "book_full": book_full,
+    "promoted_to_testing": promoted if not manage_only else [],
     "canceled_residue": canceled,
     "leaders": [
         {"hyp_id": r.get("hyp_id"), "symbol": r.get("symbol"), "structure": r.get("structure")}
@@ -401,6 +444,7 @@ receipt = {
     "scout_n_intents": (scout_summary or {}).get("n_intents")
     if isinstance(scout_summary, dict)
     else None,
+    "scout_skipped": bool(isinstance(scout_summary, dict) and scout_summary.get("skipped")),
     "next_seed_path": str(next_seed_path),
     "next_action": next_action,
     "trading_authority": False,

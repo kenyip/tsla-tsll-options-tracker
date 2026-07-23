@@ -9,6 +9,7 @@ Capital-path policy (risk profile, not vanity full-history SHIP $):
   - B4 cost_hold not false
   - Soft NULL@5% with missing/≤0 slip PnL is NOT capital-path (edge vanished)
   - Soft-loss at 5% (slip5_pnl < 0 even if cost_hold/NEEDS_MORE_DATA) is NOT capital-path
+  - NEEDS_MORE_DATA @5% is NOT capital-path (require SHIP@5%)
   - Full-history non-positive PnL is NOT capital-path
   - Extreme dense-neg + high window DD rejected vs leader bar
   - Rank: dense_neg → slip verdict quality (SHIP < NEEDS < NULL) → max_dd → slip5 pnl → full pnl
@@ -88,6 +89,13 @@ def capital_path_decision(
                 False,
                 f"B4 slip5 NULL/~0 pnl={slip5_pnl} (soft cost only; edge vanished)",
             )
+    # NEEDS_MORE_DATA @5% is discovery residue, not capital-path (coach 2026-07-23).
+    # Require SHIP@5% so thin/fragile slip edges cannot inflate capital_path_ok.
+    if slip_v == "NEEDS_MORE_DATA":
+        return (
+            False,
+            f"B4 slip5 NEEDS_MORE_DATA pnl={slip5_pnl} (not SHIP@5%; not capital-path)",
+        )
     if dense >= 4 and dd > 200:
         return (
             False,

@@ -277,6 +277,20 @@ def test_rescore_flips_soft_null_zero(tmp_path: Path, monkeypatch):
                 "capital_path_ok": True,
                 "reject_reason": None,
             },
+            "hyp_needs_pos": {
+                "hyp_id": "hyp_needs_pos",
+                "symbol": "PLTR",
+                "structure": "put_credit_spread",
+                "b3_hold": True,
+                "b4_cost_hold": True,
+                "b4_slip5_verdict": "NEEDS_MORE_DATA",
+                "b4_slip5_pnl": 6.33,
+                "dense_neg_ge3": 1,
+                "max_dd": 198,
+                "full_pnl": 963,
+                "capital_path_ok": True,
+                "reject_reason": None,
+            },
             "hyp_ship": {
                 "hyp_id": "hyp_ship",
                 "symbol": "BAC",
@@ -300,15 +314,44 @@ def test_rescore_flips_soft_null_zero(tmp_path: Path, monkeypatch):
     monkeypatch.setattr(ing, "_SHORTLIST", bootstrap / "QUALITY_SHORTLIST.json")
 
     res = ing.rescore_ledger(source="test")
-    assert res["n_flipped_off"] == 2
+    assert res["n_flipped_off"] == 3
     data = json.loads((bootstrap / "STRESS_ROTATION.json").read_text(encoding="utf-8"))
     assert data["by_hyp_id"]["hyp_soft"]["capital_path_ok"] is False
     assert data["by_hyp_id"]["hyp_softloss"]["capital_path_ok"] is False
+    assert data["by_hyp_id"]["hyp_needs_pos"]["capital_path_ok"] is False
     assert data["by_hyp_id"]["hyp_ship"]["capital_path_ok"] is True
     ing.refresh_shortlist_from_ledger()
     sl = json.loads((bootstrap / "QUALITY_SHORTLIST.json").read_text(encoding="utf-8"))
     ids = [r["hyp_id"] for r in sl["shortlist"]]
     assert ids == ["hyp_ship"]
+
+
+def test_capital_path_requires_ship_at_5pct():
+    import scripts.trader_ingest_stress_rotation as ing
+
+    ok, reason = ing.capital_path_decision(
+        b3=True,
+        b4=True,
+        slip5_v="NEEDS_MORE_DATA",
+        slip5_pnl=6.33,
+        dense_neg=1,
+        max_dd=198,
+        full_pnl=900,
+    )
+    assert ok is False
+    assert "NEEDS_MORE_DATA" in (reason or "")
+
+    ok2, reason2 = ing.capital_path_decision(
+        b3=True,
+        b4=True,
+        slip5_v="SHIP",
+        slip5_pnl=300.72,
+        dense_neg=0,
+        max_dd=35,
+        full_pnl=390,
+    )
+    assert ok2 is True
+    assert reason2 is None
 
 
 def test_select_skips_negative_score_shipish(tmp_path: Path, monkeypatch):
