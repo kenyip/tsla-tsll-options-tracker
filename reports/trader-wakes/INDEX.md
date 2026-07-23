@@ -1,3 +1,4 @@
+- 2026-07-23T1131-rth.md — RTH manage: HOLD BAC (−$14/~8% ml OTM); PLTR HOLD_elevated first short ITM (−$79/~40% ml); STAND_ASIDE full book; risk-off SPY-1.6%/QQQ-2.5%; campaign KeyError shortlist drift
 - 2026-07-23T0733-rth.md — RTH manage HOLD BAC+PLTR · STAND_ASIDE full book · campaign KeyError shortlist drift
 - 2026-07-23T0636-rth — RTH open: HOLD BAC flat (+$0.4); PLTR HOLD elevated (-$69/~35% ml, short OTM $0.24); STAND_ASIDE new (2/2); SPY-1%/QQQ-1.4%; campaign ok after yaml thrash; no live/arm
 - 2026-07-22T2340-status-simplify.md — status EDGE/ROBOT/ARM simplify + session_days fix

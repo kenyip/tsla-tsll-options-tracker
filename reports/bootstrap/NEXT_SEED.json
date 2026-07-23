@@ -1,43 +1,45 @@
 {
-  "generated_at": "2026-07-23T14:33:21.643700+00:00",
-  "ken_required": false,
+  "detail": {
+    "hint": "RTH: mark/manage paper; elevated PLTR (short ITM); HOLD BAC; learn_tick; stand-aside if no new capital-fit OPEN_* / book full",
+    "marks_et": "2026-07-23T11:32",
+    "open_orders": [
+      {
+        "max_loss_usd": 162.64,
+        "mtm_usd_approx": -13.64,
+        "order_id": "paper_2f78815a0614",
+        "spot": 60.74,
+        "status": "working",
+        "strategy_id": "hyp_dna_bac_put_credit_spread_88f03c89",
+        "structure": "put_credit_spread",
+        "symbol": "BAC",
+        "vs_short": "OTM_+0.74",
+        "action": "HOLD"
+      },
+      {
+        "max_loss_usd": 196.54,
+        "mtm_usd_approx": -79.04,
+        "order_id": "paper_c80aaa1cab46",
+        "spot": 120.84,
+        "status": "working",
+        "strategy_id": "hyp_dna_pltr_put_credit_spread_033dfdc8",
+        "structure": "put_credit_spread",
+        "symbol": "PLTR",
+        "vs_short": "ITM_-1.67",
+        "action": "HOLD_elevated"
+      }
+    ]
+  },
+  "generated_at": "2026-07-23T15:35:00+00:00",
   "ken_only_for": [
     "gateway_up",
     "LIVE_PACKET_arm",
     "fund_3k_at_packet"
   ],
+  "ken_required": false,
   "live_authority": false,
-  "trading_authority": false,
   "next_action": "manage_open_paper_campaign",
   "paper_campaign_execute": true,
-  "source": "rth_eval_wake",
-  "stamp": "20260723T0733",
-  "detail": {
-    "hint": "RTH: mark/manage paper; HOLD while short OTM and MTM<<ml; STAND_ASIDE new while 2/2 full; off-hours fix shortlist/registry drift",
-    "open_orders": [
-      {
-        "order_id": "paper_2f78815a0614",
-        "symbol": "BAC",
-        "structure": "put_credit_spread",
-        "status": "working",
-        "max_loss_usd": 162.64,
-        "strategy_id": "hyp_dna_bac_put_credit_spread_88f03c89",
-        "mtm_usd_approx": -6.64,
-        "action": "HOLD"
-      },
-      {
-        "order_id": "paper_c80aaa1cab46",
-        "symbol": "PLTR",
-        "structure": "put_credit_spread",
-        "status": "working",
-        "max_loss_usd": 196.54,
-        "strategy_id": "hyp_dna_pltr_put_credit_spread_033dfdc8",
-        "mtm_usd_approx": -63.54,
-        "action": "HOLD"
-      }
-    ],
-    "new_entries": "STAND_ASIDE_book_full",
-    "campaign_blocker": "KeyError shortlist hyp missing from registry (AAL CCS) \u2014 HOLD by ledger order_id",
-    "sessions": "2/3"
-  }
+  "source": "rth_eval_2026-07-23T1131",
+  "stamp": "20260723T153500",
+  "trading_authority": false
 }
