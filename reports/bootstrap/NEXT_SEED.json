@@ -1,43 +1,34 @@
 {
   "detail": {
-    "hint": "RTH: mark/manage paper; STAND_ASIDE new while 2/2; HOLD BAC; HOLD_elevated PLTR (~34% ml, short OTM); watch PLTR if short breaches",
-    "marks": {
-      "BAC": {
-        "mtm_usd": 3.86,
-        "order_id": "paper_2f78815a0614",
-        "short_otm": 1.43,
-        "action": "HOLD"
-      },
-      "PLTR": {
-        "mtm_usd": -66.54,
-        "pct_ml": 33.9,
-        "order_id": "paper_c80aaa1cab46",
-        "short_otm": 1.08,
-        "action": "HOLD_elevated",
-        "note": "synthetic short 122.5 via avg(122p,123p)"
-      }
-    },
+    "hint": "RTH: mark/manage paper; HOLD BAC (healthy OTM); HOLD_elevated PLTR (~34% ml, short ~$0.41 OTM); stand-aside new while 2/2; learn_tick via campaign",
+    "marks_et": "2026-07-24T10:31",
     "open_orders": [
       {
         "max_loss_usd": 162.64,
+        "mtm_usd_approx": 10.36,
         "order_id": "paper_2f78815a0614",
+        "short_otm_usd": 1.755,
         "status": "working",
         "strategy_id": "hyp_dna_bac_put_credit_spread_88f03c89",
         "structure": "put_credit_spread",
-        "symbol": "BAC"
+        "symbol": "BAC",
+        "action": "HOLD"
       },
       {
         "max_loss_usd": 196.54,
+        "mtm_usd_approx": -66.04,
         "order_id": "paper_c80aaa1cab46",
+        "pct_ml": 33.6,
+        "short_otm_usd": 0.41,
         "status": "working",
         "strategy_id": "hyp_dna_pltr_put_credit_spread_033dfdc8",
         "structure": "put_credit_spread",
-        "symbol": "PLTR"
+        "symbol": "PLTR",
+        "action": "HOLD_elevated"
       }
-    ],
-    "rth_ops": "timeout_120s_fallback_mcp_marks"
+    ]
   },
-  "generated_at": "2026-07-24T13:34:00+00:00",
+  "generated_at": "2026-07-24T14:31:52+00:00",
   "ken_only_for": [
     "gateway_up",
     "LIVE_PACKET_arm",
@@ -47,7 +38,7 @@
   "live_authority": false,
   "next_action": "manage_open_paper_campaign",
   "paper_campaign_execute": true,
-  "source": "rth_eval_2026-07-24T0634",
-  "stamp": "20260724T0634",
+  "source": "rth_eval_2026-07-24T0731",
+  "stamp": "20260724T143152",
   "trading_authority": false
 }

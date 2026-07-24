@@ -1,3 +1,4 @@
+- 2026-07-24T0731-rth.md — RTH manage: HOLD BAC (+$10.4 OTM $1.76); PLTR HOLD_elevated (-$66/~34% ml short OTM $0.41); STAND_ASIDE 2/2; QQQ soft; worker ON
 - 2026-07-24T0634-rth.md — RTH manage: HOLD BAC (+$3.9 OTM); PLTR HOLD_elevated (−$66.5/~34% ml short OTM $1.08); STAND_ASIDE 2/2; rth-ops timeout→MCP marks; worker ON
 - 2026-07-23T2106-continuum-judgment.md — Coach: campaign skip-learn under full book (~0.06s vs 300s); selector metric-twin dedupe + NFLX CCS family cool; HOLD BAC+PLTR; 14 tests
 - 2026-07-23T1505-continuum-judgment.md — Coach: campaign book-full fast path (~8s vs 300s timeout) + capital_path require SHIP@5% (flipped 94); shortlist dens0 AAL/BAC; HOLD BAC+PLTR paper
