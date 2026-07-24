@@ -1,3 +1,4 @@
+- 2026-07-24T1131-rth.md — RTH manage: HOLD BAC (+$12 OTM $1.95); PLTR HOLD (−$63/~32% ml short OTM $1.27 rebuilt); STAND_ASIDE 2/2; QQQ−1%/TSLL−8% off-book; worker ON
 - 2026-07-24T1032-rth.md — RTH manage: HOLD BAC (+$13 OTM $1.95); PLTR HOLD_elev (−$64/~33% ml short OTM $0.85); STAND_ASIDE 2/2; TSLL−6%/CCL+5% off-book; worker ON
 - 2026-07-24T0931-rth.md — RTH manage: HOLD BAC (+$15.9 OTM $2.10); PLTR HOLD_elevated (−$65/~33% ml short OTM $1.21); STAND_ASIDE 2/2; SPY+0.6%/QQQ−0.2%; worker ON
 - 2026-07-24T0907-continuum-judgment.md — Coach: vanity SHIP score≤0 no longer registers; shortlist ≤3/sym → TSLL+CCL dens0; empty stress queue still refreshes shortlist; 12 tests
