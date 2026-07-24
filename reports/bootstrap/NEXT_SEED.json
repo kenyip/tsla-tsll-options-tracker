@@ -1,27 +1,33 @@
 {
   "detail": {
-    "hint": "Next open: re-mark PLTR first (weekend gap); mark/manage paper; stand-aside if no new capital-fit OPEN_*",
+    "hint": "Weekend→Mon RTH: mark/manage open BAC+PLTR paper; stand-aside new if book full. Worker stress queue unblocked via cooled-family challenge slot.",
     "open_orders": [
       {
-        "order_id": "paper_2f78815a0614",
-        "symbol": "BAC",
-        "structure": "put_credit_spread",
-        "status": "working",
         "max_loss_usd": 162.64,
-        "strategy_id": "hyp_dna_bac_put_credit_spread_88f03c89"
+        "order_id": "paper_2f78815a0614",
+        "status": "working",
+        "strategy_id": "hyp_dna_bac_put_credit_spread_88f03c89",
+        "structure": "put_credit_spread",
+        "symbol": "BAC"
       },
       {
-        "order_id": "paper_c80aaa1cab46",
-        "symbol": "PLTR",
-        "structure": "put_credit_spread",
-        "status": "working",
         "max_loss_usd": 196.54,
-        "strategy_id": "hyp_dna_pltr_put_credit_spread_033dfdc8"
+        "order_id": "paper_c80aaa1cab46",
+        "status": "working",
+        "strategy_id": "hyp_dna_pltr_put_credit_spread_033dfdc8",
+        "structure": "put_credit_spread",
+        "symbol": "PLTR"
       }
     ],
-    "mtm_note": "2026-07-24T15:31ET BAC +9.4 OTM1.85; PLTR -61.5 OTM1.03 HOLD"
+    "coach_20260724T1507": {
+      "selector_fix": "cooled_family_challenge_slot=1",
+      "stressed": "20260724T220537",
+      "capital_path_ok": 0,
+      "challenged": 6,
+      "note": "NFLX/XOM/PLTR/TSLL/SMCI/SNAP challenges falsified mostly B4"
+    }
   },
-  "generated_at": "2026-07-24T19:32:58+00:00",
+  "generated_at": "2026-07-24T22:07:00+00:00",
   "ken_only_for": [
     "gateway_up",
     "LIVE_PACKET_arm",
@@ -31,7 +37,7 @@
   "live_authority": false,
   "next_action": "manage_open_paper_campaign",
   "paper_campaign_execute": true,
-  "source": "trader_rth_eval",
-  "stamp": "20260724T1231",
+  "source": "continuum_judgment_20260724T1507",
+  "stamp": "20260724T1507",
   "trading_authority": false
 }

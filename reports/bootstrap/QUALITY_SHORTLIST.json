@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-24T16:07:58+00:00",
+  "generated_at": "2026-07-24T22:06:23+00:00",
   "phase": "BUILD_PAPER_SEARCH",
   "authority": "research_paper_only",
   "honesty": "Proxy BS sims + B3/B4 only. Not TOP_HYP. Multi-leg not MCP-live. Stress rotation ledger drives shortlist; quality_cycle mixes leaders+fresh. Capital-path rejects: soft NULL@~0, soft-loss/neg@5%, non-pos full PnL. Rank dens \u2192 slip verdict (SHIP>NEEDS>NULL) \u2192 dd \u2192 slip pnl. Multi-leg shortlist caps \u22643 per symbol so non-leader names can surface.",
@@ -27,8 +27,8 @@
       "b4_note": "SHIP@5pct pnl~195.14 survives_5pct_slip",
       "why": "Best risk profile among rotated B3/B4",
       "caveat": "Proxy BS + B3/B4 only. Multi-leg not MCP placeable. Not pack multi-symbol quality_pass.",
-      "stress_source": "quality_cycle_20260724T154510",
-      "stressed_at": "2026-07-24T15:51:55+00:00"
+      "stress_source": "quality_cycle_20260724T215712",
+      "stressed_at": "2026-07-24T22:03:12+00:00"
     },
     {
       "hyp_id": "hyp_dna_bac_put_credit_spread_e1c7d338",
@@ -46,8 +46,8 @@
       "b4_note": "SHIP@5pct pnl~152.0 survives_5pct_slip",
       "why": "Rotated stress survivor; secondary to tighter-DD leader",
       "caveat": "Proxy BS + B3/B4 only. Multi-leg not MCP placeable. Not pack multi-symbol quality_pass.",
-      "stress_source": "quality_cycle_20260724T154510",
-      "stressed_at": "2026-07-24T15:51:55+00:00"
+      "stress_source": "quality_cycle_20260724T215712",
+      "stressed_at": "2026-07-24T22:03:12+00:00"
     },
     {
       "hyp_id": "hyp_dna_bac_put_credit_spread_5575695d",

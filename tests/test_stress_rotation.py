@@ -562,7 +562,7 @@ def test_metric_twin_key_and_dedupe(tmp_path, monkeypatch):
 
 
 def test_family_recent_fail_cooled(tmp_path, monkeypatch):
-    """Symbol×structure with recent fails and zero capital_ok is cooled."""
+    """Cooled family allows one highest-score challenge; further clones stay blocked."""
     repo = tmp_path
     bootstrap = repo / "reports" / "bootstrap"
     bootstrap.mkdir(parents=True)
@@ -597,8 +597,11 @@ def test_family_recent_fail_cooled(tmp_path, monkeypatch):
     log_dir.mkdir(parents=True)
     (log_dir / "evolve_dr_cool.log").write_text(
         "SHIP                 475.65     46  call_credit_spread/NFLX  positive_sim\n"
+        "SHIP                 200.00     20  call_credit_spread/NFLX  positive_sim\n"
         "SHIP                 300.00     30  put_credit_spread/AAL  positive_sim\n"
-        "created: hyp_dna_nflx_call_credit_spread_freshx,hyp_dna_aal_put_credit_spread_freshy\n",
+        "created: hyp_dna_nflx_call_credit_spread_freshx,"
+        "hyp_dna_nflx_call_credit_spread_fresh_low,"
+        "hyp_dna_aal_put_credit_spread_freshy\n",
         encoding="utf-8",
     )
     monkeypatch.setattr(sel, "_REPO", repo)
@@ -619,9 +622,14 @@ def test_family_recent_fail_cooled(tmp_path, monkeypatch):
         family_fail_window_hours=6.0,
         family_fail_min=2,
     )
-    assert "hyp_dna_nflx_call_credit_spread_freshx" not in res["hyp_ids"]
-    assert "hyp_dna_aal_put_credit_spread_freshy" in res["hyp_ids"]
-    assert "hyp_dna_nflx_call_credit_spread_freshx" in res.get("skipped_family_cooled", [])
+    # One challenge on cooled NFLX (highest score) + non-cooled AAL.
+    assert "hyp_dna_nflx_call_credit_spread_freshx" in res["hyp_ids"], res
+    assert "hyp_dna_aal_put_credit_spread_freshy" in res["hyp_ids"], res
+    assert "hyp_dna_nflx_call_credit_spread_fresh_low" not in res["hyp_ids"]
+    assert "hyp_dna_nflx_call_credit_spread_fresh_low" in res.get("skipped_family_cooled", [])
+    assert any("NFLX:call_credit_spread:" in c for c in res.get("challenged_cooled_families") or [])
+    nflx_ids = [h for h in res["hyp_ids"] if "nflx_call_credit_spread" in h]
+    assert len(nflx_ids) == 1, res
 
 
 def test_shortlist_caps_per_symbol_for_diversity(tmp_path: Path, monkeypatch):

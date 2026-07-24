@@ -1,3 +1,4 @@
+- 2026-07-24T1507-continuum-judgment.md — Coach: cooled-family challenge slot unblocks empty stress queue; 6 multi-leg challenges all fail capital_path (B4); shortlist dens0 BAC+TSLL+CCL; 12 tests
 - 2026-07-24T1231-rth.md — RTH manage last-hour: HOLD BAC (+$9 OTM $1.85); PLTR HOLD (−$62/~31% ml short OTM $1.03); STAND_ASIDE 2/2; QQQ−1.2%/TSLL−6% off-book; worker ON
 - 2026-07-24T1131-rth.md — RTH manage: HOLD BAC (+$12 OTM $1.95); PLTR HOLD (−$63/~32% ml short OTM $1.27 rebuilt); STAND_ASIDE 2/2; QQQ−1%/TSLL−8% off-book; worker ON
 - 2026-07-24T1032-rth.md — RTH manage: HOLD BAC (+$13 OTM $1.95); PLTR HOLD_elev (−$64/~33% ml short OTM $0.85); STAND_ASIDE 2/2; TSLL−6%/CCL+5% off-book; worker ON

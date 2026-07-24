@@ -128,6 +128,11 @@ def _family_recent_fail_cooled(
 
     Observed 2026-07-24 coach: NFLX CCS 32 fails / 0 ok in 6h while selector kept
     queueing score-twin clones (n=46 score=475.65 × many hyp_ids).
+
+    Cool means *spray block*, not permanent quarantine: select_stress_hyps still
+    allows one highest-score unstressed challenge per cooled family so evolve SHIP
+    progress is not starved (2026-07-24T1500 coach: queue n=0 while XOM/PLTR/NFLX
+    positive multi-leg SHIPs sat only on cooled families).
     """
     if not symbol or not structure or window_hours <= 0 or min_fails <= 0:
         return False
@@ -428,6 +433,7 @@ def select_stress_hyps(
     skipped_fresh_leaders: list[str] = []
     skipped_metric_twins: list[str] = []
     skipped_family_cooled: list[str] = []
+    challenged_cooled_families: list[str] = []
     for r in leaders:
         hid = r["hyp_id"]
         if _leader_freshly_capital_ok(hid, ttl_hours=leader_ttl_hours):
@@ -483,6 +489,7 @@ def select_stress_hyps(
 
     per_sym: dict[str, int] = defaultdict(int)
     per_family: dict[tuple[str, str], int] = defaultdict(int)
+    cooled_challenge_used: set[tuple[str, str]] = set()
     # count leaders toward diversity soft-cap
     for r in rows:
         per_sym[str(r.get("symbol") or "?")] += 1
@@ -497,19 +504,27 @@ def select_stress_hyps(
         sym = str(r.get("symbol") or "?")
         st = str(r.get("structure") or "")
         fam = (sym.upper(), st)
-        if _family_recent_fail_cooled(
+        cooled = _family_recent_fail_cooled(
             sym,
             st,
             window_hours=family_fail_window_hours,
             min_fails=family_fail_min,
-        ):
-            skipped_family_cooled.append(hid)
-            exclude.add(hid)
-            return False
+        )
+        if cooled:
+            # One challenge per cooled family (fresh is score-desc) — else spray-block.
+            if fam in cooled_challenge_used:
+                skipped_family_cooled.append(hid)
+                exclude.add(hid)
+                return False
+            # challenge slot reserved below if other caps pass
         if per_sym[sym] >= max_per_sym:
             return False
         if st and per_family[fam] >= max_per_family:
             return False
+        if cooled:
+            cooled_challenge_used.add(fam)
+            challenged_cooled_families.append(f"{fam[0]}:{fam[1]}:{hid}")
+            r = {**r, "cooled_family_challenge": True}
         ids.append(hid)
         rows.append(r)
         exclude.add(hid)
@@ -525,6 +540,7 @@ def select_stress_hyps(
 
     # Pass 2: allow a second slot per symbol/family only after breadth fill
     # (leaders + one unstressed same-family still OK; metric-twin dedupe blocks clones)
+    # Cooled families stay at 1 total via cooled_challenge_used.
     for r in fresh:
         if len(ids) >= limit:
             break
@@ -539,6 +555,7 @@ def select_stress_hyps(
         "skipped_fresh_leaders": skipped_fresh_leaders,
         "skipped_metric_twins": skipped_metric_twins[:40],
         "skipped_family_cooled": sorted(set(skipped_family_cooled))[:40],
+        "challenged_cooled_families": challenged_cooled_families[:40],
         "policy": {
             "limit": limit,
             "n_leaders": n_leaders,
@@ -547,10 +564,12 @@ def select_stress_hyps(
             "min_fresh_trades": min_fresh_trades,
             "family_fail_window_hours": family_fail_window_hours,
             "family_fail_min": family_fail_min,
+            "cooled_family_challenge_slots": 1,
             "note": (
                 "mix shortlist leaders (skip fresh capital_path_ok within TTL) + "
                 "unstressed multi-leg SHIPs score>0 / n>=min_fresh when known; "
-                "dedupe evolve metric twins; cool symbol×structure after recent fail streak; "
+                "dedupe evolve metric twins; cool symbol×structure after recent fail streak "
+                "but allow 1 highest-score unstressed challenge per cooled family; "
                 "no densify bag"
             ),
         },
