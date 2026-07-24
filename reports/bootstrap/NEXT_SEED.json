@@ -1,21 +1,6 @@
 {
   "detail": {
     "hint": "RTH: mark/manage paper; learn_tick; stand-aside if no new capital-fit OPEN_*",
-    "marks": {
-      "BAC": {
-        "mtm_usd": 15.9,
-        "short_otm": 2.1,
-        "decision": "HOLD",
-        "order_id": "paper_2f78815a0614"
-      },
-      "PLTR": {
-        "mtm_usd": -65.3,
-        "short_otm": 1.21,
-        "decision": "HOLD_elevated",
-        "order_id": "paper_c80aaa1cab46",
-        "ml_frac": 0.33
-      }
-    },
     "open_orders": [
       {
         "max_loss_usd": 162.64,
@@ -34,13 +19,13 @@
         "symbol": "PLTR"
       }
     ],
-    "regime": {
-      "SPY_chg_pct": 0.61,
-      "QQQ_chg_pct": -0.21,
-      "note": "mixed; BAC firm PLTR flat"
-    }
+    "marks_et": "2026-07-24T13:32",
+    "bac_mtm_usd": 12.9,
+    "pltr_mtm_usd": -64.0,
+    "pltr_short_otm_usd": 0.85,
+    "decision": "HOLD both; STAND_ASIDE new (2/2)"
   },
-  "generated_at": "2026-07-24T16:31:30+00:00",
+  "generated_at": "2026-07-24T17:33:00+00:00",
   "ken_only_for": [
     "gateway_up",
     "LIVE_PACKET_arm",
@@ -51,6 +36,6 @@
   "next_action": "manage_open_paper_campaign",
   "paper_campaign_execute": true,
   "source": "trader_rth_eval",
-  "stamp": "20260724T1631",
+  "stamp": "20260724T1032",
   "trading_authority": false
 }
