@@ -1,14 +1,9 @@
-## C-row coach 2026-07-24T0907
-- search repair: vanity SHIP score<=0 not registered; shortlist BAC×3+TSLL+CCL dens0; stress queue empty handled; paper still 2/2 HOLD path; no live/arm
-
-## C-row RTH 2026-07-24T0831
-- paper open=2 BAC+PLTR HOLD; book full STAND_ASIDE new; MTM BAC +15 / PLTR -61 (~31% ml); no live/arm
-
-# Readiness snapshot — 2026-07-23 continuum coach ~21:06 PDT
+# Readiness snapshot — 2026-07-24 RTH ~09:31 PDT
 
 PHASE: PAPER  
-EDGE: searching (worker ON) — dens0 shortlist AAL/BAC PCS SHIP@5%; selector now cools NFLX CCS fail-streak + metric twins; still no pack-grade multi-symbol quality_pass  
-ROBOT: paper 3/3 sessions · open=2 · risk=$359 · HOLD BAC+PLTR · campaign **skip-learn manage path** (~0.06s vs 300s timeout)  
+EDGE: searching (worker ON) — dens0 shortlist BAC×3 + TSLL + CCL; no pack-grade multi-symbol quality_pass  
+ROBOT: paper 3/3 sessions · open=2 · risk=$359 · HOLD BAC (+$16) / HOLD_elevated PLTR (−$65/~33% ml, short OTM $1.21) · campaign manage_fast_path  
 ARM: Ken only — live_armed=false · test cash≈$500  
 
-C-row: coach shipped learn-skip under full book + stress family cool/twin dedupe; EDGE B3/B4 budget redirected off cooled NFLX CCS clones; no live/arm.
+C-row RTH 2026-07-24T0931:
+- paper open=2 BAC+PLTR HOLD; book full STAND_ASIDE new; MTM BAC +16 / PLTR -65 (~33% ml); no live/arm
