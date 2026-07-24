@@ -1,6 +1,22 @@
 {
   "detail": {
-    "hint": "RTH: mark/manage paper; learn_tick only when book has room; stand-aside if no new capital-fit OPEN_*. Off-hours: worker EDGE with twin-dedupe + family cool selector.",
+    "hint": "RTH: mark/manage paper; STAND_ASIDE new while 2/2; HOLD BAC; HOLD_elevated PLTR (~34% ml, short OTM); watch PLTR if short breaches",
+    "marks": {
+      "BAC": {
+        "mtm_usd": 3.86,
+        "order_id": "paper_2f78815a0614",
+        "short_otm": 1.43,
+        "action": "HOLD"
+      },
+      "PLTR": {
+        "mtm_usd": -66.54,
+        "pct_ml": 33.9,
+        "order_id": "paper_c80aaa1cab46",
+        "short_otm": 1.08,
+        "action": "HOLD_elevated",
+        "note": "synthetic short 122.5 via avg(122p,123p)"
+      }
+    },
     "open_orders": [
       {
         "max_loss_usd": 162.64,
@@ -19,9 +35,9 @@
         "symbol": "PLTR"
       }
     ],
-    "coach_note": "2026-07-23T2106: campaign skip-learn under full book; selector cools NFLX CCS fail streak + metric twins"
+    "rth_ops": "timeout_120s_fallback_mcp_marks"
   },
-  "generated_at": "2026-07-24T04:06:00+00:00",
+  "generated_at": "2026-07-24T13:34:00+00:00",
   "ken_only_for": [
     "gateway_up",
     "LIVE_PACKET_arm",
@@ -31,7 +47,7 @@
   "live_authority": false,
   "next_action": "manage_open_paper_campaign",
   "paper_campaign_execute": true,
-  "source": "continuum_judgment_coach",
-  "stamp": "20260723T2106",
+  "source": "rth_eval_2026-07-24T0634",
+  "stamp": "20260724T0634",
   "trading_authority": false
 }
