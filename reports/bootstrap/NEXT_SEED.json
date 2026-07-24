@@ -1,46 +1,37 @@
 {
-  "detail": {
-    "hint": "RTH: mark/manage paper; learn_tick; stand-aside if no new capital-fit OPEN_*",
-    "open_orders": [
-      {
-        "max_loss_usd": 162.64,
-        "order_id": "paper_2f78815a0614",
-        "status": "working",
-        "strategy_id": "hyp_dna_bac_put_credit_spread_88f03c89",
-        "structure": "put_credit_spread",
-        "symbol": "BAC",
-        "mtm_usd_approx": 15.36,
-        "short_otm_usd": 2.155,
-        "decision": "HOLD"
-      },
-      {
-        "max_loss_usd": 196.54,
-        "order_id": "paper_c80aaa1cab46",
-        "status": "working",
-        "strategy_id": "hyp_dna_pltr_put_credit_spread_033dfdc8",
-        "structure": "put_credit_spread",
-        "symbol": "PLTR",
-        "mtm_usd_approx": -61.04,
-        "pct_ml_approx": 31.1,
-        "short_otm_usd": 1.6,
-        "decision": "HOLD"
-      }
-    ],
-    "book_full": true,
-    "open_risk_usd": 359.18,
-    "marks_asof_et": "2026-07-24T11:31"
-  },
-  "generated_at": "2026-07-24T15:31:30+00:00",
+  "generated_at": "2026-07-24T16:07:59+00:00",
+  "ken_required": false,
+  "live_authority": false,
+  "trading_authority": false,
+  "next_action": "manage_open_paper_campaign",
+  "paper_campaign_execute": true,
+  "source": "continuum_judgment_20260724T0907",
+  "stamp": "20260724T0907",
   "ken_only_for": [
     "gateway_up",
     "LIVE_PACKET_arm",
     "fund_3k_at_packet"
   ],
-  "ken_required": false,
-  "live_authority": false,
-  "next_action": "manage_open_paper_campaign",
-  "paper_campaign_execute": true,
-  "source": "rth_eval_2026-07-24T0831",
-  "stamp": "20260724T153130",
-  "trading_authority": false
+  "detail": {
+    "hint": "RTH: mark/manage paper; coach shipped vanity-SHIP filter + shortlist diversity. Worker evolves; stand-aside new if book full.",
+    "coach": "apply_results score<=0 SHIP skipped; shortlist max 3/symbol; empty stress queue refreshes shortlist",
+    "open_orders": [
+      {
+        "order_id": "paper_2f78815a0614",
+        "symbol": "BAC",
+        "structure": "put_credit_spread",
+        "max_loss_usd": 162.64,
+        "status": "working",
+        "strategy_id": "hyp_dna_bac_put_credit_spread_88f03c89"
+      },
+      {
+        "order_id": "paper_c80aaa1cab46",
+        "symbol": "PLTR",
+        "structure": "put_credit_spread",
+        "max_loss_usd": 196.54,
+        "status": "working",
+        "strategy_id": "hyp_dna_pltr_put_credit_spread_033dfdc8"
+      }
+    ]
+  }
 }

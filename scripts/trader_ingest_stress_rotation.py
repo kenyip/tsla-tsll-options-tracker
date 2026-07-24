@@ -327,7 +327,15 @@ def refresh_shortlist_from_ledger() -> dict[str, Any]:
         in ("cash_secured_put", "wheel_assignment", "short_put_credit")
     ]
 
-    for i, e in enumerate(multi_sorted):
+    # Cap multi-leg per symbol so dens0 non-BAC survivors (TSLL/CCL/…) surface.
+    # Observed 2026-07-24 coach: 20 dens0 BAC PCS clones filled all 6 slots while
+    # dens0 TSLL PCS + CCL CCS never appeared — shortlist looked like monoculture.
+    max_per_symbol = 3
+    multi_cap = 6
+    per_sym: dict[str, int] = {}
+    multi_added = 0
+
+    for e in multi_sorted:
         hid = e["hyp_id"]
         if e.get("reject_reason") or not e.get("capital_path_ok"):
             if hid not in seen_reject:
@@ -336,15 +344,18 @@ def refresh_shortlist_from_ledger() -> dict[str, Any]:
                 )
                 seen_reject.add(hid)
             continue
-        # stress_priority: top 2 capital-path ok
+        sym_u = str(e.get("symbol") or "?").upper()
+        if per_sym.get(sym_u, 0) >= max_per_symbol:
+            continue
+        # stress_priority: first 2 *accepted* capital-path rows (still rank-ordered)
         shortlist.append(
             {
                 "hyp_id": hid,
                 "structure": e.get("structure"),
                 "symbol": e.get("symbol"),
-                "status": "testing" if i < 2 else "candidate",
+                "status": "testing" if multi_added < 2 else "candidate",
                 "lane": "paper_research",
-                "stress_priority": i < 2,
+                "stress_priority": multi_added < 2,
                 "b3_hold": e.get("b3_hold"),
                 "dense_neg_ge3": e.get("dense_neg_ge3"),
                 "full_pnl": e.get("full_pnl"),
@@ -357,7 +368,7 @@ def refresh_shortlist_from_ledger() -> dict[str, Any]:
                 ).strip(),
                 "why": (
                     "Best risk profile among rotated B3/B4"
-                    if i == 0
+                    if multi_added == 0
                     else "Rotated stress survivor; secondary to tighter-DD leader"
                 ),
                 "caveat": (
@@ -368,7 +379,9 @@ def refresh_shortlist_from_ledger() -> dict[str, Any]:
                 "stressed_at": e.get("stressed_at"),
             }
         )
-        if len(shortlist) >= 6:
+        per_sym[sym_u] = per_sym.get(sym_u, 0) + 1
+        multi_added += 1
+        if multi_added >= multi_cap:
             break
 
     # Append MCP toys (capped)
@@ -384,7 +397,8 @@ def refresh_shortlist_from_ledger() -> dict[str, Any]:
             "Proxy BS sims + B3/B4 only. Not TOP_HYP. Multi-leg not MCP-live. "
             "Stress rotation ledger drives shortlist; quality_cycle mixes leaders+fresh. "
             "Capital-path rejects: soft NULL@~0, soft-loss/neg@5%, non-pos full PnL. "
-            "Rank dens → slip verdict (SHIP>NEEDS>NULL) → dd → slip pnl."
+            "Rank dens → slip verdict (SHIP>NEEDS>NULL) → dd → slip pnl. "
+            "Multi-leg shortlist caps ≤3 per symbol so non-leader names can surface."
         ),
         "agentic": prev.get("agentic")
         or {
@@ -434,10 +448,13 @@ def main(argv: list[str] | None = None) -> int:
     res: dict[str, Any] = {}
     if args.rescore_only:
         res = rescore_ledger(source=args.source or "coach_rescore")
-    else:
-        if not args.regime or not args.cost:
-            ap.error("--regime and --cost are required unless --rescore-only")
+    elif args.regime and args.cost:
         res = ingest_pair(args.regime, args.cost, source=args.source)
+    elif args.refresh_shortlist:
+        # Ledger-only shortlist rebuild (empty stress queue / coach diversity pass).
+        res = {"mode": "refresh_shortlist_only"}
+    else:
+        ap.error("--regime and --cost are required unless --rescore-only or --refresh-shortlist alone")
 
     if args.refresh_shortlist:
         # Persist any in-memory rescoring done during refresh when ledger path used.

@@ -1,0 +1,59 @@
+"""Vanity SHIP (score<=0) must not occupy evolve --apply registry create slots."""
+from __future__ import annotations
+
+from pathlib import Path
+
+from trader_platform.evolve_tick import SimVerdict, apply_results
+from trader_platform.hypothesis_registry import HypothesisRegistry
+from trader_platform.strategy_dna import dna_from_structure
+
+
+def _verdict(sym: str, score: float, verdict: str = "SHIP") -> SimVerdict:
+    dna = dna_from_structure("put_credit_spread", [sym])
+    return SimVerdict(
+        dna=dna,
+        ok=True,
+        skipped=False,
+        reason="positive_sim",
+        n_trades=40,
+        metrics={"pnl": 100.0 if score > 0 else 50.0, "max_dd": 200.0},
+        score=score,
+        verdict=verdict,
+        evidence_path="",
+    )
+
+
+def test_apply_skips_negative_score_ship(tmp_path: Path):
+    hyps = tmp_path / "hypotheses.yaml"
+    hyps.write_text(
+        "version: 1\nhypotheses: []\n",
+        encoding="utf-8",
+    )
+    reg = HypothesisRegistry(hyps)
+    # max_create would fill with vanity SHIPs first if rank only used verdict.
+    results = [
+        _verdict("PLTR", -49.0),
+        _verdict("SMCI", -74.0),
+        _verdict("XOM", -127.0),
+        _verdict("BAC", 7.8),
+        _verdict("AAL", -200.0),
+    ]
+    created, updated = apply_results(results, registry=reg, max_create=5, ship_only=False)
+    assert updated == []
+    assert len(created) == 1
+    assert any("bac" in c for c in created)
+    assert not any(x in " ".join(created) for x in ("pltr", "smci", "xom", "aal"))
+
+
+def test_apply_ship_only_also_skips_vanity(tmp_path: Path):
+    hyps = tmp_path / "hypotheses.yaml"
+    hyps.write_text("version: 1\nhypotheses: []\n", encoding="utf-8")
+    reg = HypothesisRegistry(hyps)
+    created, _ = apply_results(
+        [_verdict("PLTR", -10.0), _verdict("BAC", 12.0)],
+        registry=reg,
+        max_create=5,
+        ship_only=True,
+    )
+    assert len(created) == 1
+    assert "bac" in created[0]

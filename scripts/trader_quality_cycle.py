@@ -365,6 +365,25 @@ def run_cycle(*, sleeve: int = 3000) -> dict[str, Any]:
                 out / f"stress_ingest_{stamp}.log",
                 timeout=60,
             )
+    else:
+        # Stress queue empty (leaders TTL + cooled families + no score>0 fresh SHIP).
+        # Still refresh shortlist from ledger so per-symbol diversity / rescoring apply
+        # without waiting for the next successful B3/B4 pair (2026-07-24 coach).
+        ingest = _REPO / "scripts" / "trader_ingest_stress_rotation.py"
+        if ingest.is_file():
+            results["phases"]["shortlist_refresh"] = _run(
+                [
+                    py,
+                    str(ingest),
+                    "--refresh-shortlist",
+                    "--json",
+                ],
+                out / f"shortlist_refresh_{stamp}.log",
+                timeout=60,
+            )
+            results["phases"]["shortlist_refresh"]["note"] = (
+                "stress_queue_empty; ledger-only shortlist refresh"
+            )
 
     # --- phase 4: paper campaign (cadenced) ---
     campaign = _REPO / "scripts" / "trader_paper_campaign.sh"

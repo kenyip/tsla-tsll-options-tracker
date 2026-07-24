@@ -622,3 +622,87 @@ def test_family_recent_fail_cooled(tmp_path, monkeypatch):
     assert "hyp_dna_nflx_call_credit_spread_freshx" not in res["hyp_ids"]
     assert "hyp_dna_aal_put_credit_spread_freshy" in res["hyp_ids"]
     assert "hyp_dna_nflx_call_credit_spread_freshx" in res.get("skipped_family_cooled", [])
+
+
+def test_shortlist_caps_per_symbol_for_diversity(tmp_path: Path, monkeypatch):
+    """≤3 multi-leg rows per symbol so dens0 non-leader names surface."""
+    import scripts.trader_ingest_stress_rotation as ing
+
+    repo = tmp_path
+    bootstrap = repo / "reports" / "bootstrap"
+    bootstrap.mkdir(parents=True)
+    by = {}
+    # 5 dens0 BAC clones would previously fill the entire 6-slot shortlist.
+    for i in range(5):
+        hid = f"hyp_bac_{i}"
+        by[hid] = {
+            "hyp_id": hid,
+            "symbol": "BAC",
+            "structure": "put_credit_spread",
+            "capital_path_ok": True,
+            "reject_reason": None,
+            "b3_hold": True,
+            "b4_cost_hold": True,
+            "dense_neg_ge3": 0,
+            "max_dd": 40.0 + i,
+            "b4_slip5_verdict": "SHIP",
+            "b4_slip5_pnl": 200.0 - i,
+            "full_pnl": 500.0 - i,
+            "max_loss_usd": 80.0,
+            "source": "test",
+            "stressed_at": "2026-07-24T12:00:00+00:00",
+        }
+    by["hyp_tsll_dens0"] = {
+        "hyp_id": "hyp_tsll_dens0",
+        "symbol": "TSLL",
+        "structure": "put_credit_spread",
+        "capital_path_ok": True,
+        "reject_reason": None,
+        "b3_hold": True,
+        "b4_cost_hold": True,
+        "dense_neg_ge3": 0,
+        "max_dd": 103.0,
+        "b4_slip5_verdict": "SHIP",
+        "b4_slip5_pnl": 74.0,
+        "full_pnl": 300.0,
+        "max_loss_usd": 200.0,
+        "source": "test",
+        "stressed_at": "2026-07-24T12:00:00+00:00",
+    }
+    by["hyp_ccl_dens0"] = {
+        "hyp_id": "hyp_ccl_dens0",
+        "symbol": "CCL",
+        "structure": "call_credit_spread",
+        "capital_path_ok": True,
+        "reject_reason": None,
+        "b3_hold": True,
+        "b4_cost_hold": True,
+        "dense_neg_ge3": 0,
+        "max_dd": 108.0,
+        "b4_slip5_verdict": "SHIP",
+        "b4_slip5_pnl": 113.0,
+        "full_pnl": 250.0,
+        "max_loss_usd": 176.0,
+        "source": "test",
+        "stressed_at": "2026-07-24T12:00:00+00:00",
+    }
+    (bootstrap / "STRESS_ROTATION.json").write_text(
+        json.dumps({"by_hyp_id": by}), encoding="utf-8"
+    )
+    (bootstrap / "QUALITY_SHORTLIST.json").write_text(
+        json.dumps({"shortlist": []}), encoding="utf-8"
+    )
+    monkeypatch.setattr(ing, "_REPO", repo)
+    monkeypatch.setattr(ing, "_LEDGER", bootstrap / "STRESS_ROTATION.json")
+    monkeypatch.setattr(ing, "_SHORTLIST", bootstrap / "QUALITY_SHORTLIST.json")
+
+    ing.refresh_shortlist_from_ledger()
+    data = json.loads((bootstrap / "QUALITY_SHORTLIST.json").read_text(encoding="utf-8"))
+    multi = [r for r in data["shortlist"] if r.get("lane") == "paper_research"]
+    bac_n = sum(1 for r in multi if str(r.get("symbol")).upper() == "BAC")
+    syms = {str(r.get("symbol")).upper() for r in multi}
+    assert bac_n <= 3, multi
+    assert "TSLL" in syms, multi
+    assert "CCL" in syms, multi
+    assert multi[0]["stress_priority"] is True
+    assert multi[0]["symbol"] == "BAC"

@@ -1,3 +1,6 @@
+## C-row coach 2026-07-24T0907
+- search repair: vanity SHIP score<=0 not registered; shortlist BAC×3+TSLL+CCL dens0; stress queue empty handled; paper still 2/2 HOLD path; no live/arm
+
 ## C-row RTH 2026-07-24T0831
 - paper open=2 BAC+PLTR HOLD; book full STAND_ASIDE new; MTM BAC +15 / PLTR -61 (~31% ml); no live/arm
 

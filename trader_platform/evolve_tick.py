@@ -767,7 +767,13 @@ def apply_results(
     max_create: int = 5,
     ship_only: bool = False,
 ) -> tuple[list[str], list[str]]:
-    """Write SHIP (and optionally strong NEEDS_MORE_DATA) as candidates with DNA."""
+    """Write SHIP (and optionally strong NEEDS_MORE_DATA) as candidates with DNA.
+
+    Vanity SHIP (positive_sim / dense enough but composite score <= 0 from DD
+    penalties) is discovery noise only: do not create or update registry rows.
+    Stress selector already refuses score<=0 for B3/B4; registering them burned
+    max_create slots and starved the stress queue (2026-07-24 continuum coach).
+    """
     created: list[str] = []
     updated: list[str] = []
     reg = registry
@@ -779,23 +785,36 @@ def apply_results(
         # SHIP before NEEDS_MORE_DATA/NULL even if raw score is lower.
         return (VERDICT_RANK.get(r.verdict, 0), _finite(r.score, default=-1e9))
 
+    def _eligible_for_registry(r: SimVerdict) -> bool:
+        # Vanity SHIP: positive_sim bar cleared but composite <= 0 — not capital-path DNA.
+        if r.verdict == "SHIP" and _finite(r.score, default=-1e9) <= 0:
+            return False
+        return True
+
     ranked = sorted(
         [
             r
             for r in results
-            if r.verdict in {"SHIP", "NEEDS_MORE_DATA"}
-            or (
-                not ship_only
-                and r.verdict == "NULL"
-                and r.n_trades >= MIN_TRADES_SIGNAL
-                and _finite(r.score) > 0
+            if _eligible_for_registry(r)
+            and (
+                r.verdict in {"SHIP", "NEEDS_MORE_DATA"}
+                or (
+                    not ship_only
+                    and r.verdict == "NULL"
+                    and r.n_trades >= MIN_TRADES_SIGNAL
+                    and _finite(r.score) > 0
+                )
             )
         ],
         key=_rank_key,
         reverse=True,
     )
     if ship_only:
-        ranked = [r for r in results if r.verdict == "SHIP"]
+        ranked = [
+            r
+            for r in results
+            if r.verdict == "SHIP" and _eligible_for_registry(r)
+        ]
         ranked.sort(key=_rank_key, reverse=True)
 
     for r in ranked[:max_create]:
