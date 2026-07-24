@@ -1,3 +1,6 @@
+## C-row RTH 2026-07-24T0831
+- paper open=2 BAC+PLTR HOLD; book full STAND_ASIDE new; MTM BAC +15 / PLTR -61 (~31% ml); no live/arm
+
 # Readiness snapshot — 2026-07-23 continuum coach ~21:06 PDT
 
 PHASE: PAPER  

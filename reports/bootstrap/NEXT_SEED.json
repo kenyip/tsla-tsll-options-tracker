@@ -1,34 +1,36 @@
 {
   "detail": {
-    "hint": "RTH: mark/manage paper; HOLD BAC (healthy OTM); HOLD_elevated PLTR (~34% ml, short ~$0.41 OTM); stand-aside new while 2/2; learn_tick via campaign",
-    "marks_et": "2026-07-24T10:31",
+    "hint": "RTH: mark/manage paper; learn_tick; stand-aside if no new capital-fit OPEN_*",
     "open_orders": [
       {
         "max_loss_usd": 162.64,
-        "mtm_usd_approx": 10.36,
         "order_id": "paper_2f78815a0614",
-        "short_otm_usd": 1.755,
         "status": "working",
         "strategy_id": "hyp_dna_bac_put_credit_spread_88f03c89",
         "structure": "put_credit_spread",
         "symbol": "BAC",
-        "action": "HOLD"
+        "mtm_usd_approx": 15.36,
+        "short_otm_usd": 2.155,
+        "decision": "HOLD"
       },
       {
         "max_loss_usd": 196.54,
-        "mtm_usd_approx": -66.04,
         "order_id": "paper_c80aaa1cab46",
-        "pct_ml": 33.6,
-        "short_otm_usd": 0.41,
         "status": "working",
         "strategy_id": "hyp_dna_pltr_put_credit_spread_033dfdc8",
         "structure": "put_credit_spread",
         "symbol": "PLTR",
-        "action": "HOLD_elevated"
+        "mtm_usd_approx": -61.04,
+        "pct_ml_approx": 31.1,
+        "short_otm_usd": 1.6,
+        "decision": "HOLD"
       }
-    ]
+    ],
+    "book_full": true,
+    "open_risk_usd": 359.18,
+    "marks_asof_et": "2026-07-24T11:31"
   },
-  "generated_at": "2026-07-24T14:31:52+00:00",
+  "generated_at": "2026-07-24T15:31:30+00:00",
   "ken_only_for": [
     "gateway_up",
     "LIVE_PACKET_arm",
@@ -38,7 +40,7 @@
   "live_authority": false,
   "next_action": "manage_open_paper_campaign",
   "paper_campaign_execute": true,
-  "source": "rth_eval_2026-07-24T0731",
-  "stamp": "20260724T143152",
+  "source": "rth_eval_2026-07-24T0831",
+  "stamp": "20260724T153130",
   "trading_authority": false
 }
